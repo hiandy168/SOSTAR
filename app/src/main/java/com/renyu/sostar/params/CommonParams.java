@@ -11,14 +11,14 @@ import java.io.File;
 public class CommonParams {
 
     // 腾讯bugly appId
-    public static String BUGLY_APPID="95c4c316f5";
+    public static final String BUGLY_APPID="95c4c316f5";
 
     // 项目根目录
-    public static String ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+ File.separator + "sostar";
+    public static final String ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+ File.separator + "sostar";
     // 项目图片目录
-    public static String IMAGE_PATH= ROOT_PATH + File.separator + "image";
+    public static final String IMAGE_PATH= ROOT_PATH + File.separator + "image";
     // 项目文件目录
-    public static String FILE_PATH= ROOT_PATH + File.separator + "file";
+    public static final String FILE_PATH= ROOT_PATH + File.separator + "file";
     // 项目热修复目录
-    public static String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
+    public static final String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
 }
