@@ -7,6 +7,8 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.support.multidex.MultiDex;
 
+import com.blankj.utilcode.utils.FileUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.utils.CommonUtils;
 import com.tencent.bugly.Bugly;
@@ -30,10 +32,14 @@ public class APPLike extends DefaultApplicationLike {
 
         String processName=CommonUtils.getProcessName(android.os.Process.myPid());
         if (processName.equals(getApplication().getPackageName())) {
+
+            Utils.init(getApplication());
+
             // 设置是否为上报进程
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplication());
             strategy.setUploadProcess(processName == null || processName.equals(getApplication().getPackageName()));
             Bugly.init(getApplication(), CommonParams.BUGLY_APPID, true, strategy);
+
         }
     }
 
