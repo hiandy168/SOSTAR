@@ -1,9 +1,4 @@
-package com.renyu.sostar.utils;
-
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+package com.renyu.commonlibrary.commonutils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +7,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class ChannelUtil {
 	

@@ -1,12 +1,10 @@
-package com.renyu.sostar.utils;
+package com.renyu.commonlibrary.commonutils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
-import com.renyu.sostar.params.CommonParams;
 
 /**
  * Created by renyu on 16/2/23.
@@ -53,6 +51,6 @@ public class PermissionsUtils {
      * @param permissions
      */
     public static void requestPermissions(Context context, String... permissions) {
-        ActivityCompat.requestPermissions((Activity) context, permissions, CommonParams.RESULT_PERMISSION);
+        ActivityCompat.requestPermissions((Activity) context, permissions, 1000);
     }
 }

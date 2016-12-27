@@ -21,6 +21,4 @@ public class CommonParams {
     public static String FILE_PATH= ROOT_PATH + File.separator + "file";
     // 项目热修复目录
     public static String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
-
-    public final static int RESULT_PERMISSION=1000;
 }

@@ -1,4 +1,4 @@
-package com.renyu.sostar.utils;
+package com.renyu.commonlibrary.commonutils;
 
 import android.text.TextUtils;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by renyu on 2016/12/26.
  */
 
-public class CommonUtils {
+public class Utils {
 
     /**
      * 获取进程号对应的进程名

@@ -11,10 +11,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.renyu.sostar.utils.PermissionsUtils;
+import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by renyu on 2016/12/27.
@@ -42,6 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(initViews());
+        ButterKnife.bind(this);
+
         initParams();
         loadData();
     }
@@ -77,22 +81,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                     AlertDialog.Builder builder=new AlertDialog.Builder(BaseActivity.this);
                     builder.setTitle("提示")
                             .setMessage(deniedDesp)
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    intent.setData(Uri.parse("package:" + getPackageName()));
-                                    startActivity(intent);
+                            .setPositiveButton("确定", (dialog, which) -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
 
-                                    isCheckAgain=true;
-                                }
+                                isCheckAgain=true;
                             })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (listener!=null) {
-                                        listener.denied();
-                                    }
+                            .setNegativeButton("取消", (dialog, which) -> {
+                                if (listener!=null) {
+                                    listener.denied();
                                 }
                             }).setCancelable(false).show();
                 }

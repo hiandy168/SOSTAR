@@ -4,11 +4,10 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.blankj.utilcode.utils.Utils;
+import com.renyu.commonlibrary.commonutils.ChannelUtil;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
-import com.renyu.sostar.utils.ChannelUtil;
-import com.renyu.sostar.utils.CommonUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -21,10 +20,10 @@ public class SostarApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        String processName=CommonUtils.getProcessName(android.os.Process.myPid());
+        String processName= Utils.getProcessName(android.os.Process.myPid());
         if (processName.equals(getPackageName())) {
 
-            Utils.init(this);
+            com.blankj.utilcode.utils.Utils.init(this);
 
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
