@@ -5,9 +5,10 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.blankj.utilcode.utils.Utils;
+import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
+import com.renyu.sostar.utils.ChannelUtil;
 import com.renyu.sostar.utils.CommonUtils;
-import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -25,11 +26,15 @@ public class SostarApp extends MultiDexApplication {
 
             Utils.init(this);
 
-            // 设置是否为上报进程
+            // 设置开发设备
+            CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+            strategy.setAppChannel(ChannelUtil.getChannel(this));
+            strategy.setAppVersion(BuildConfig.VERSION_NAME);
+            strategy.setAppPackageName(getPackageName());
+            // 设置是否为上报进程
             strategy.setUploadProcess(processName == null || processName.equals(getPackageName()));
-            Bugly.init(this, CommonParams.BUGLY_APPID, true, strategy);
-
+            CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
         }
     }
 
