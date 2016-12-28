@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".application.SostarApp"
@@ -24,6 +27,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" android:screenOrientation="portrait"></activity>
+        <!-- 百度地图相关 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="OoGTpMBFWDSq8KZrUnnGdkwScG1hKupj" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":baidumap" >
+        </service>
     </application>
 
 </manifest>

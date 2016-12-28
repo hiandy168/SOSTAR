@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.alipay.euler.andfix.patch.PatchManager;
+import com.baidu.mapapi.SDKInitializer;
 import com.renyu.commonlibrary.commonutils.ChannelUtil;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
@@ -38,9 +39,12 @@ public class SostarApp extends MultiDexApplication {
             strategy.setUploadProcess(processName == null || processName.equals(getPackageName()));
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
-
+            // AndFix初始化
             mPatchManager = new PatchManager(this);
             mPatchManager.init(BuildConfig.VERSION_NAME);
+
+            // 百度地图初始化
+            SDKInitializer.initialize(this);
         }
     }
 
