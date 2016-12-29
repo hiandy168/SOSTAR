@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
             return false;
         });
         mClusterManager.setOnClusterItemClickListener(item -> {
-            Log.d("MainActivity", "点击单个Item" + item.getPosition().latitude + " " + item.getPosition().longitude);
+            Log.d("MainActivity", "点击单个Item" + item.getTitle());
             return false;
         });
         // 定位初始化
@@ -111,22 +111,24 @@ public class MainActivity extends BaseActivity {
         LatLng llG = new LatLng(39.996965, 116.411394);
 
         List<MyMarkerOptions> items = new ArrayList<MyMarkerOptions>();
-        items.add(new MyMarkerOptions(llA));
-        items.add(new MyMarkerOptions(llB));
-        items.add(new MyMarkerOptions(llC));
-        items.add(new MyMarkerOptions(llD));
-        items.add(new MyMarkerOptions(llE));
-        items.add(new MyMarkerOptions(llF));
-        items.add(new MyMarkerOptions(llG));
+        items.add(new MyMarkerOptions(llA, "llA"));
+        items.add(new MyMarkerOptions(llB, "llA"));
+        items.add(new MyMarkerOptions(llC, "llA"));
+        items.add(new MyMarkerOptions(llD, "llA"));
+        items.add(new MyMarkerOptions(llE, "llA"));
+        items.add(new MyMarkerOptions(llF, "llA"));
+        items.add(new MyMarkerOptions(llG, "llA"));
 
         mClusterManager.addItems(items);
     }
 
     public class MyMarkerOptions implements ClusterItem {
         private final LatLng mPosition;
+        private final String mTitle;
 
-        public MyMarkerOptions(LatLng latLng) {
+        public MyMarkerOptions(LatLng latLng, String title) {
             mPosition = latLng;
+            mTitle = title;
         }
 
         @Override
@@ -138,6 +140,12 @@ public class MainActivity extends BaseActivity {
         public BitmapDescriptor getBitmapDescriptor() {
             return BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
         }
+
+        @Override
+        public String getTitle() {
+            return mTitle;
+        }
+
     }
 
     /**

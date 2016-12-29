@@ -792,11 +792,11 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
                         MarkerOptions markerOptions = new MarkerOptions();
                         if (animateFrom != null) {
                             markerOptions.position(animateFrom);
-                            markerOptions.icon(item.getBitmapDescriptor());
                         } else {
                             markerOptions.position(item.getPosition());
-                            markerOptions.icon(item.getBitmapDescriptor());
                         }
+                        markerOptions.title(item.getTitle());
+                        markerOptions.icon(item.getBitmapDescriptor());
                         onBeforeClusterItemRendered(item, markerOptions);
                         marker = mClusterManager.getMarkerCollection().addMarker(markerOptions);
                         markerWithPosition = new MarkerWithPosition(marker);
