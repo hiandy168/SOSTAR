@@ -1,12 +1,10 @@
 package com.renyu.sostar.activity;
 
 import android.Manifest;
-import android.content.Intent;
 
 import com.blankj.utilcode.utils.FileUtils;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
-import com.renyu.sostar.MainActivity;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.base.BaseActivity;
 import com.renyu.sostar.application.SostarApp;
@@ -55,8 +53,6 @@ public class SplashActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
 
             @Override

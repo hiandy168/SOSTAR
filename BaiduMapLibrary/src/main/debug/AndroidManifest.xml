@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.baidu.mapapi">
+
+    <application android:allowBackup="true" android:label="@string/app_name"
+        android:supportsRtl="true">
+        <!-- 小车轨迹平滑移动 -->
+        <activity android:name=".demo.TrackShowDemoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <!-- 覆盖物功能 -->
+        <activity android:name=".demo.OverlayDemoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+    </application>
+
+</manifest>
