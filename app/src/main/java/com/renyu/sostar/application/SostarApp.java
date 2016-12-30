@@ -14,6 +14,8 @@ import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by renyu on 2016/12/26.
  */
@@ -51,6 +53,10 @@ public class SostarApp extends MultiDexApplication {
 
             // 百度地图初始化
             SDKInitializer.initialize(this);
+
+            // 初始化 JPush
+            JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+            JPushInterface.init(this);
         }
 
     }

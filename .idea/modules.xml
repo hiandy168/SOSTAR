@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BaiduMapLibrary/BaiduMapLibrary.iml" filepath="$PROJECT_DIR$/BaiduMapLibrary/BaiduMapLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/CommonLibrary/CommonLibrary.iml" filepath="$PROJECT_DIR$/CommonLibrary/CommonLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JPushLibrary/JPushLibrary.iml" filepath="$PROJECT_DIR$/JPushLibrary/JPushLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/SOSTAR.iml" filepath="$PROJECT_DIR$/SOSTAR.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
