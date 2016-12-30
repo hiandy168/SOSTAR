@@ -6,6 +6,8 @@ import android.support.multidex.MultiDexApplication;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.renyu.commonlibrary.commonutils.ChannelUtil;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
@@ -39,6 +41,10 @@ public class SostarApp extends MultiDexApplication {
             strategy.setUploadProcess(processName == null || processName.equals(getPackageName()));
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
+            //初始化fresco
+            ImagePipelineConfig config = ImagePipelineConfig.newBuilder(getApplicationContext()).setDownsampleEnabled(true).build();
+            Fresco.initialize(this, config);
+
             // AndFix初始化
             mPatchManager = new PatchManager(this);
             mPatchManager.init(BuildConfig.VERSION_NAME);
@@ -46,6 +52,7 @@ public class SostarApp extends MultiDexApplication {
             // 百度地图初始化
             SDKInitializer.initialize(this);
         }
+
     }
 
     @Override
