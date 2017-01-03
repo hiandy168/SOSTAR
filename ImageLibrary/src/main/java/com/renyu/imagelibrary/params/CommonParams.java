@@ -17,8 +17,7 @@ public class CommonParams {
 
     public final static String EXTRA_SHOW_GIF = "SHOW_GIF";
 
-    public final static int RESULT_TAKECAMERA=1004;
-    public final static int RESULT_CHOICEPIC=1005;
-    public final static int RESULT_CROP=1006;
-    public final static int RESULT_ALUMNI=1007;
+
+    public final static int RESULT_TAKECAMERA=1000;
+    public final static int RESULT_CROP=1002;
 }

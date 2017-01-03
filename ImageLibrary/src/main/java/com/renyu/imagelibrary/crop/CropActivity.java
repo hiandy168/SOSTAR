@@ -37,6 +37,7 @@ public class CropActivity extends BaseActivity {
 	TextView nav_right_text;
 	@BindView(R2.id.cropImg)
 	CropImageView mCropImage=null;
+
 	Bitmap bmp=null;
 	Bitmap cropBmp=null;
 	String sourcePath;
@@ -54,7 +55,7 @@ public class CropActivity extends BaseActivity {
 			}
 		});
 		nav_left_image.setVisibility(View.VISIBLE);
-		nav_left_image.setImageResource(R.mipmap.icon_back);
+		nav_left_image.setImageResource(R.mipmap.icon_back_white);
 		nav_right_text.setText("完成");
 		nav_right_text.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -62,6 +63,7 @@ public class CropActivity extends BaseActivity {
 				crop();
 			}
 		});
+		nav_right_text.setTextColor(Color.WHITE);
 		nav_right_text.setVisibility(View.VISIBLE);
 		mCropImage.setFixedAspectRatio(true);
 		mCropImage.setImageBitmap(bmp);

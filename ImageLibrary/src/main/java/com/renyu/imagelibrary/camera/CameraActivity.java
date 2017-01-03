@@ -25,22 +25,6 @@ public class CameraActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-
-    }
-
-    @Override
-    public int setStatusBarColor() {
-        return 0;
-    }
-
-    @Override
-    public int setStatusBarTranslucent() {
-        return 1;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         checkPermission(permissions, getResources().getString(R.string.permission_camera), new OnPermissionCheckedListener() {
             @Override
             public void checked(boolean flag) {
@@ -59,6 +43,22 @@ public class CameraActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public int setStatusBarColor() {
+        return 0;
+    }
+
+    @Override
+    public int setStatusBarTranslucent() {
+        return 1;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
     }
 
     public void backTo(String filePath) {

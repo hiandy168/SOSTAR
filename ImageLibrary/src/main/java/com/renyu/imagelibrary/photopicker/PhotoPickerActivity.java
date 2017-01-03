@@ -110,7 +110,7 @@ public class PhotoPickerActivity extends BaseActivity {
 
         maxNum=getIntent().getExtras().getInt("maxNum");
 
-        nav_left_image.setImageResource(R.mipmap.icon_back);
+        nav_left_image.setImageResource(R.mipmap.icon_back_black);
         nav_left_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
