@@ -1,13 +1,11 @@
 package com.renyu.sostar.activity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 
 import com.blankj.utilcode.utils.FileUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
-import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.application.SostarApp;
@@ -56,7 +54,6 @@ public class SplashActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-                Utils.choicePic(SplashActivity.this, 9, CommonParams.RESULT_ALUMNI);
             }
 
             @Override
