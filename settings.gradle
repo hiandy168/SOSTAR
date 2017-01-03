@@ -1,1 +1,1 @@
-include ':app', ':CommonLibrary', ':BaiduMapLibrary', ':JPushLibrary'
+include ':app', ':CommonLibrary', ':BaiduMapLibrary', ':JPushLibrary', ':ImageLibrary'

@@ -62,4 +62,5 @@ dependencies {
     compile project(':CommonLibrary')
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
+    compile project(':ImageLibrary')
 }

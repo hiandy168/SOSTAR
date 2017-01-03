@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 25
@@ -26,7 +28,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile project(':CommonLibrary')
+    // CircleIndicator  A lightweight viewpager indicator like in nexus 5 launcher
+    compile 'me.relex:circleindicator:1.2.2'
+    // PhotoDraweeView  PhotoView For Fresco
+    compile 'me.relex:photodraweeview:1.1.2'
+    // cropper  Android widget for cropping and rotating an image.
+    compile 'com.edmodo:cropper:2.0.0'
+    // butterknife
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
