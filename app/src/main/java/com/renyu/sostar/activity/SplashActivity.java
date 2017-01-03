@@ -1,12 +1,13 @@
 package com.renyu.sostar.activity;
 
 import android.Manifest;
+import android.support.v4.content.ContextCompat;
 
 import com.blankj.utilcode.utils.FileUtils;
+import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
-import com.renyu.sostar.activity.base.BaseActivity;
 import com.renyu.sostar.application.SostarApp;
 import com.renyu.sostar.params.CommonParams;
 
@@ -70,5 +71,15 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void loadData() {
 
+    }
+
+    @Override
+    public int setStatusBarColor() {
+        return ContextCompat.getColor(this, R.color.colorPrimaryDark);
+    }
+
+    @Override
+    public int setStatusBarTranslucent() {
+        return 0;
     }
 }

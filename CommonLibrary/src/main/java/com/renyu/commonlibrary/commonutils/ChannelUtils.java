@@ -13,7 +13,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ChannelUtil {
+public class ChannelUtils {
 	
 	private static final String CHANNEL_KEY = "cztchannel";
 	private static final String CHANNEL_VERSION_KEY = "cztchannel_version";

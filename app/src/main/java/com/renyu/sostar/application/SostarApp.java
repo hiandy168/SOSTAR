@@ -8,7 +8,7 @@ import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.renyu.commonlibrary.commonutils.ChannelUtil;
+import com.renyu.commonlibrary.commonutils.ChannelUtils;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
@@ -36,7 +36,7 @@ public class SostarApp extends MultiDexApplication {
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
-            strategy.setAppChannel(ChannelUtil.getChannel(this));
+            strategy.setAppChannel(ChannelUtils.getChannel(this));
             strategy.setAppVersion(BuildConfig.VERSION_NAME);
             strategy.setAppPackageName(getPackageName());
             // 设置是否为上报进程
@@ -55,7 +55,7 @@ public class SostarApp extends MultiDexApplication {
             SDKInitializer.initialize(this);
 
             // 初始化 JPush
-            JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+            JPushInterface.setDebugMode(false); 	// 设置开启日志,发布时请关闭日志
             JPushInterface.init(this);
         }
 

@@ -1,4 +1,4 @@
-package com.renyu.sostar.activity.base;
+package com.renyu.commonlibrary.baseact;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 
 import java.util.Arrays;
@@ -38,6 +39,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract void initParams();
     public abstract int initViews();
     public abstract void loadData();
+    public abstract int setStatusBarColor();
+    public abstract int setStatusBarTranslucent();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(initViews());
         ButterKnife.bind(this);
+
+        //设置沉浸式，二选一
+        if (setStatusBarColor()!=0) {
+            BarUtils.setColor(this, setStatusBarColor());
+        }
+        if (setStatusBarTranslucent()!=0) {
+            BarUtils.setTranslucent(this);
+        }
 
         initParams();
         loadData();
@@ -127,22 +138,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 AlertDialog.Builder builder=new AlertDialog.Builder(BaseActivity.this);
                 builder.setTitle("提示")
                         .setMessage(deniedDesp)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.parse("package:" + getPackageName()));
-                                startActivity(intent);
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
 
-                                isCheckAgain=true;
-                            }
+                            isCheckAgain=true;
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (listener!=null) {
-                                    listener.denied();
-                                }
+                        .setNegativeButton("取消", (dialog, which) -> {
+                            if (listener!=null) {
+                                listener.denied();
                             }
                         }).show();
             }
