@@ -1,11 +1,8 @@
 package com.renyu.sostar.activity;
 
 import android.Manifest;
-import android.content.IntentFilter;
 import android.support.v4.content.ContextCompat;
 
-import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.receiver.BaiduMapSDKReceiver;
 import com.blankj.utilcode.utils.FileUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -73,13 +70,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        // 注册 SDK 广播监听者
-        IntentFilter iFilter = new IntentFilter();
-        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
-        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
-        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
-        BaiduMapSDKReceiver mReceiver = new BaiduMapSDKReceiver();
-        registerReceiver(mReceiver, iFilter);
+
     }
 
     @Override
