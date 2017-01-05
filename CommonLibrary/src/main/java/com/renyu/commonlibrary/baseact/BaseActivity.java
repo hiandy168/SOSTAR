@@ -2,7 +2,6 @@ package com.renyu.commonlibrary.baseact;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -57,8 +56,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(initViews());
-        ButterKnife.bind(this);
+        if (initViews()!=0) {
+            setContentView(initViews());
+            ButterKnife.bind(this);
+        }
 
         //设置沉浸式，二选一
         if (setStatusBarColor()!=0) {
