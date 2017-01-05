@@ -12,6 +12,8 @@ public class CommonParams {
 
     // 腾讯bugly appId
     public static final String BUGLY_APPID="95c4c316f5";
+    // 微信支付
+    public static final String WX_APP_ID="";
 
     // 项目根目录
     public static final String ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+ File.separator + "sostar";

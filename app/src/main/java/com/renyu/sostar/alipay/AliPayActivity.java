@@ -1,4 +1,4 @@
-package com.renyu.sostar.activity.pay;
+package com.renyu.sostar.alipay;
 
 import android.os.Handler;
 import android.os.Message;
