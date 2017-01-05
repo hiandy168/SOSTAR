@@ -58,7 +58,6 @@ public class SostarApp extends MultiDexApplication {
             JPushInterface.setDebugMode(false); 	// 设置开启日志,发布时请关闭日志
             JPushInterface.init(this);
         }
-
     }
 
     @Override
