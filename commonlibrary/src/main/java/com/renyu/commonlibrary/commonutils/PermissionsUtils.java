@@ -40,9 +40,9 @@ public class PermissionsUtils {
             }
         }
         if (count==permissions.length) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
