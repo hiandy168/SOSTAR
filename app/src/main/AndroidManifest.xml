@@ -44,5 +44,7 @@
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
         </receiver>
+        <!-- 通知栏 -->
+        <activity android:name=".activity.other.NotificationActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"></activity>
     </application>
 </manifest>
