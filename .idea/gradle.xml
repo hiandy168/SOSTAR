@@ -14,9 +14,6 @@
             <option value="$PROJECT_DIR$/ImageLibrary" />
             <option value="$PROJECT_DIR$/JPushLibrary" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/../runtime" />
-            <option value="$PROJECT_DIR$/../runtime/runtime" />
-            <option value="$PROJECT_DIR$/../runtime/runtime-no-op" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
