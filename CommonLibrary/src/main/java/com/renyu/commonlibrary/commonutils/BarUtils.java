@@ -3,6 +3,7 @@ package com.renyu.commonlibrary.commonutils;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -99,5 +100,19 @@ public class BarUtils {
         LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) nav_top_layout.getLayoutParams();
         params.height=statusBarHeight;
         nav_top_layout.setLayoutParams(params);
+    }
+
+    /**
+     * 为DrawerLayout添加状态栏变色
+     * @param activity 需要设置的activity
+     * @param drawerLayout DrawerLayout
+     * @param color 状态栏颜色值
+     */
+    public static void setColorForDrawerLayout(Activity activity, DrawerLayout drawerLayout, int color) {
+        ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
+        View view=new View(activity);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.utils.BarUtils.getStatusBarHeight(activity)));
+        view.setBackgroundColor(calculateStatusColor(color, 0));
+        contentLayout.addView(view, 0);
     }
 }

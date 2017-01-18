@@ -56,12 +56,7 @@ public class OKHttpUtils {
 //        setCertificates(okbuilder);
         //https默认信任全部证书
         HttpsUtils.SSLParams sslParams=HttpsUtils.getSslSocketFactory(null, null, null);
-        okbuilder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        }).sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+        okbuilder.hostnameVerifier((hostname, session) -> true).sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
         okHttpClient=okbuilder.build();
     }
 

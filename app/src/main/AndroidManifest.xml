@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"></activity>
+        <!-- 定位上报服务 -->
+        <service android:name=".service.LocationService" android:process=":locationservice"></service>
         <!-- 支付宝支付相关 -->
         <activity android:name=".alipay.AliPayActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".alipay.AliH5PayActivity" android:screenOrientation="portrait"></activity>
