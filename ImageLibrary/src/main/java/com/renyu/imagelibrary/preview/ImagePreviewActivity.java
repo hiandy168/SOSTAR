@@ -23,12 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import me.relex.circleindicator.CircleIndicator;
 import me.relex.photodraweeview.OnPhotoTapListener;
 import me.relex.photodraweeview.PhotoDraweeView;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by renyu on 16/1/31.
@@ -97,9 +96,9 @@ public class ImagePreviewActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+                Observable.timer(300, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void accept(Long aLong) throws Exception {
                         if (position-1>=0&&point.containsKey(""+(position-1))) {
                             photoDraweeViews.get((position-1)).update(point.get(""+(position-1)).getWidth(), point.get(""+(position-1)).getHeight());
                         }

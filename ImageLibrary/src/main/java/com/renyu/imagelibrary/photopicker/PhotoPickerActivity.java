@@ -37,10 +37,11 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME;
@@ -70,13 +71,13 @@ public class PhotoPickerActivity extends BaseActivity {
     DictAdapter dictAdapter;
 
     //全部文件
-    LinkedHashMap<String, PhotoDirectory> hashMap;
+    LinkedHashMap<String, PhotoDirectory> allHashMap;
     //列表加载图片
     ArrayList<Photo> models;
     //列表加载文件夹
     ArrayList<PhotoDirectory> dictModels;
     ArrayList<String> bucketIds;
-    Subscriber subscriber;
+    ObservableEmitter<LinkedHashMap<String, PhotoDirectory>> observableEmitter;
     //最大可选图片数量
     int maxNum=0;
     //选中的图片
@@ -102,7 +103,7 @@ public class PhotoPickerActivity extends BaseActivity {
 
     @Override
     public void initParams() {
-        hashMap=new LinkedHashMap<>();
+        allHashMap=new LinkedHashMap<>();
         models=new ArrayList<>();
         dictModels=new ArrayList<>();
         bucketIds=new ArrayList<>();
@@ -270,19 +271,19 @@ public class PhotoPickerActivity extends BaseActivity {
     }
 
     private void loadImages() {
-        Observable.create(new Observable.OnSubscribe<LinkedHashMap<String, PhotoDirectory>>() {
+        Observable.create(new ObservableOnSubscribe<LinkedHashMap<String, PhotoDirectory>>() {
             @Override
-            public void call(Subscriber<? super LinkedHashMap<String, PhotoDirectory>> subscriber) {
-                PhotoPickerActivity.this.subscriber=subscriber;
+            public void subscribe(ObservableEmitter<LinkedHashMap<String, PhotoDirectory>> e) throws Exception {
+                PhotoPickerActivity.this.observableEmitter=e;
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<LinkedHashMap<String, PhotoDirectory>>() {
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<LinkedHashMap<String, PhotoDirectory>>() {
             @Override
-            public void call(LinkedHashMap<String, PhotoDirectory> hashMap) {
-                PhotoPickerActivity.this.hashMap=hashMap;
-                if (hashMap.containsKey("0")) {
+            public void accept(LinkedHashMap<String, PhotoDirectory> stringPhotoDirectoryLinkedHashMap) throws Exception {
+                PhotoPickerActivity.this.allHashMap=stringPhotoDirectoryLinkedHashMap;
+                if (stringPhotoDirectoryLinkedHashMap.containsKey("0")) {
                     updateData("0");
 
-                    Iterator iterator=hashMap.entrySet().iterator();
+                    Iterator iterator=stringPhotoDirectoryLinkedHashMap.entrySet().iterator();
                     while (iterator.hasNext()) {
                         Map.Entry entry= (Map.Entry) iterator.next();
                         if (entry.getKey().toString().equals("0")) {
@@ -291,7 +292,7 @@ public class PhotoPickerActivity extends BaseActivity {
                         dictModels.add((PhotoDirectory) entry.getValue());
                         bucketIds.add((String) entry.getKey());
                     }
-                    dictModels.add(0, hashMap.get("0"));
+                    dictModels.add(0, stringPhotoDirectoryLinkedHashMap.get("0"));
                     bucketIds.add(0, "0");
                     dictAdapter=new DictAdapter(PhotoPickerActivity.this, dictModels);
                     popupWindow.setAdapter(dictAdapter);
@@ -338,9 +339,8 @@ public class PhotoPickerActivity extends BaseActivity {
                 if (photoDirectoryAll.getPhotos().size() > 0) {
                     photoDirectoryAll.setCoverPath(photoDirectoryAll.getPhotos().get(0).getPath());
                 }
-                photoDirectoryAll.addPhoto(0, -1, "");
                 hashMap.put("0", photoDirectoryAll);
-                subscriber.onNext(hashMap);
+                observableEmitter.onNext(hashMap);
             }
 
             @Override
@@ -353,7 +353,7 @@ public class PhotoPickerActivity extends BaseActivity {
     private void updateData(String key) {
         ((GridLayoutManager) photopicker_rv.getLayoutManager()).scrollToPositionWithOffset(0, 0);
         models.clear();
-        List<Photo> photos=hashMap.get(key).getPhotos();
+        List<Photo> photos=allHashMap.get(key).getPhotos();
         for (Photo photo : photos) {
             if (imagePaths.contains(photo.getPath())) {
                 photo.setSelect(true);

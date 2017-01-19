@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by renyu on 2016/12/27.
@@ -62,6 +62,7 @@ public class SplashActivity extends BaseActivity {
                 // 延时跳转
                 Observable.timer(3, TimeUnit.SECONDS).subscribe(aLong -> {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
                 });
             }
 

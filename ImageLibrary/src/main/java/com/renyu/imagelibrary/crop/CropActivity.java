@@ -22,10 +22,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class CropActivity extends BaseActivity {
 
@@ -90,21 +92,26 @@ public class CropActivity extends BaseActivity {
 	}
 
 	public void crop() {
-		Observable.create(new Observable.OnSubscribe<String>() {
+		Observable.create(new ObservableOnSubscribe<String>() {
 			@Override
-			public void call(Subscriber<? super String> subscriber) {
+			public void subscribe(ObservableEmitter<String> e) throws Exception {
 				try {
 					cropBmp=mCropImage.getCroppedImage();
 					String path=writeImage(cropBmp, CommonParams.IMAGECACHE+"/"+System.currentTimeMillis()+".png", 100);
-					subscriber.onNext(path);
-				} catch (Exception e) {
-					subscriber.onError(new Exception(getResources().getString(R.string.image_small_error)));
+					e.onNext(path);
+				} catch (Exception e1) {
+					e.onError(new Exception(getResources().getString(R.string.image_small_error)));
 				}
 			}
-		}).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
+		}).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<String>() {
 			@Override
-			public void onCompleted() {
-
+			public void onNext(String value) {
+				Intent intent=getIntent();
+				Bundle bundle=new Bundle();
+				bundle.putString("path", value);
+				intent.putExtras(bundle);
+				setResult(RESULT_OK, intent);
+				finish();
 			}
 
 			@Override
@@ -113,13 +120,8 @@ public class CropActivity extends BaseActivity {
 			}
 
 			@Override
-			public void onNext(String s) {
-				Intent intent=getIntent();
-				Bundle bundle=new Bundle();
-				bundle.putString("path", s);
-				intent.putExtras(bundle);
-				setResult(RESULT_OK, intent);
-				finish();
+			public void onComplete() {
+
 			}
 		});
 	}

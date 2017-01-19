@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.renyu.imagelibrary.camera.CameraActivity;
 import com.renyu.imagelibrary.crop.CropActivity;
-import com.renyu.imagelibrary.params.CommonParams;
 import com.renyu.imagelibrary.photopicker.PhotoPickerActivity;
 
 /**

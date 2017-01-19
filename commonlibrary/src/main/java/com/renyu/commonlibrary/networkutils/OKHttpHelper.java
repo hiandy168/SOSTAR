@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Response;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by RG on 2015/10/15.
@@ -39,43 +39,28 @@ public class OKHttpHelper {
         if (startListener!=null) {
             startListener.onStart();
         }
-        OKHttpUtils.getInstance().asyncPost(url, params, new OKHttpUtils.OnSuccessListener() {
-            @Override
-            public void onResponse(Response response) {
-                try {
-                    String string = response.body().string();
-                    Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onSuccess(s);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onError();
-                            }
-                        }
-                    });
-                }
-            }
-        }, new OKHttpUtils.OnErrorListener() {
-            @Override
-            public void onFailure() {
-                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onError();
-                        }
+        OKHttpUtils.getInstance().asyncPost(url, params, response -> {
+            try {
+                String string = response.body().string();
+                Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onSuccess(s);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onError();
                     }
                 });
             }
+        }, () -> {
+            Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                if (requestListener != null) {
+                    requestListener.onError();
+                }
+            });
         });
     }
 
@@ -91,44 +76,27 @@ public class OKHttpHelper {
         if (startListener!=null) {
             startListener.onStart();
         }
-        OKHttpUtils.getInstance().asyncPost(url, params, heads, new OKHttpUtils.OnSuccessListener() {
-            @Override
-            public void onResponse(Response response) {
-                try {
-                    String string = response.body().string();
-                    Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onSuccess(s);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onError();
-                            }
-                        }
-                    });
-                }
-            }
-        }, new OKHttpUtils.OnErrorListener() {
-            @Override
-            public void onFailure() {
-                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onError();
-                        }
+        OKHttpUtils.getInstance().asyncPost(url, params, heads, response -> {
+            try {
+                String string = response.body().string();
+                Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onSuccess(s);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onError();
                     }
                 });
             }
-        });
+        }, () -> Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+            if (requestListener != null) {
+                requestListener.onError();
+            }
+        }));
     }
 
     public Response syncPostRequest(String url, HashMap<String, String> params) {
@@ -149,43 +117,28 @@ public class OKHttpHelper {
         if (startListener!=null) {
             startListener.onStart();
         }
-        OKHttpUtils.getInstance().get(url, new OKHttpUtils.OnSuccessListener() {
-            @Override
-            public void onResponse(Response response) {
-                try {
-                    String string = response.body().string();
-                    Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onSuccess(s);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onError();
-                            }
-                        }
-                    });
-                }
-            }
-        }, new OKHttpUtils.OnErrorListener() {
-            @Override
-            public void onFailure() {
-                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onError();
-                        }
+        OKHttpUtils.getInstance().get(url, response -> {
+            try {
+                String string = response.body().string();
+                Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onSuccess(s);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onError();
                     }
                 });
             }
+        }, () -> {
+            Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                if (requestListener != null) {
+                    requestListener.onError();
+                }
+            });
         });
     }
 
@@ -193,44 +146,27 @@ public class OKHttpHelper {
         if (startListener!=null) {
             startListener.onStart();
         }
-        OKHttpUtils.getInstance().asyncUpload(url, params, files, new OKHttpUtils.OnSuccessListener() {
-            @Override
-            public void onResponse(Response response) {
-                try {
-                    String string = response.body().string();
-                    Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onSuccess(s);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            if (requestListener != null) {
-                                requestListener.onError();
-                            }
-                        }
-                    });
-                }
-            }
-        }, new OKHttpUtils.OnErrorListener() {
-            @Override
-            public void onFailure() {
-                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onError();
-                        }
+        OKHttpUtils.getInstance().asyncUpload(url, params, files, response -> {
+            try {
+                String string = response.body().string();
+                Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onSuccess(s);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onError();
                     }
                 });
             }
-        });
+        }, () -> Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+            if (requestListener != null) {
+                requestListener.onError();
+            }
+        }));
     }
 
     public Response syncUpload(HashMap<String, File> files, String url, HashMap<String, String> params) {
@@ -245,43 +181,33 @@ public class OKHttpHelper {
         OKHttpUtils.getInstance().download(url, dirPath, new OKHttpUtils.OnDownloadListener() {
             @Override
             public void onSuccess(String filePath) {
-                Observable.just(filePath).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onSuccess(s);
-                        }
+                Observable.just(filePath).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onSuccess(s);
                     }
                 });
             }
 
             @Override
             public void onError() {
-                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (requestListener != null) {
-                            requestListener.onError();
-                        }
+                Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
+                    if (requestListener != null) {
+                        requestListener.onError();
                     }
                 });
             }
-        }, new OKHttpUtils.ProgressListener() {
-            @Override
-            public void update(final long bytesRead, final long contentLength, final boolean done) {
+        }, (bytesRead, contentLength, done) -> {
 //                System.out.println(bytesRead);
 //                System.out.println(contentLength);
 //                System.out.println(done);
 //                Log.d("OKHttpHelper", (100 * bytesRead) / contentLength + " " + done);
-                Observable.just("").onBackpressureBuffer().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
+            Flowable.just("").onBackpressureDrop()
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
                         if (progressListener!=null) {
                             progressListener.updateprogress((int) ((100 * bytesRead) / contentLength), bytesRead, contentLength);
                         }
-                    }
-                });
-            }
+                    });
         });
     }
 
