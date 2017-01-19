@@ -30,8 +30,7 @@
         android:protectionLevel="signature" />
 
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:supportsRtl="true">
+    <application>
 
         <!-- Rich push 核心功能 since 2.0.6-->
         <activity

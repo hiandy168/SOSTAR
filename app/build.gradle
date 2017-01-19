@@ -69,5 +69,6 @@ dependencies {
     compile project(':JPushLibrary')
     compile project(':ImageLibrary')
     compile project(':HyphenateLibrary')
-//    debugCompile project(":runtime:runtime")
+    //    debugCompile project(":runtime:runtime")
+    compile project(':QRCodeLibrary')
 }

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/HyphenateLibrary/HyphenateLibrary.iml" filepath="$PROJECT_DIR$/HyphenateLibrary/HyphenateLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/ImageLibrary/ImageLibrary.iml" filepath="$PROJECT_DIR$/ImageLibrary/ImageLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/JPushLibrary/JPushLibrary.iml" filepath="$PROJECT_DIR$/JPushLibrary/JPushLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/QRCodeLibrary/QRCodeLibrary.iml" filepath="$PROJECT_DIR$/QRCodeLibrary/QRCodeLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/SOSTAR.iml" filepath="$PROJECT_DIR$/SOSTAR.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

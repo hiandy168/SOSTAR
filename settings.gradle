@@ -1,4 +1,4 @@
-include ':app', ':CommonLibrary', ':BaiduMapLibrary', ':JPushLibrary', ':ImageLibrary', ':HyphenateLibrary'
+include ':app', ':CommonLibrary', ':BaiduMapLibrary', ':JPushLibrary', ':ImageLibrary', ':HyphenateLibrary', ':QRCodeLibrary'
 //includeFlat 'runtime'
 //include ':runtime:runtime'
 //include ':runtime:runtime-no-op'
