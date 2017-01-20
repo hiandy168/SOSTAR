@@ -11,7 +11,7 @@
     	android:layout_height="wrap_content"
     	android:textSize="14sp"
 		android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
-    	android:layout_marginLeft="20dip" />
+    	android:layout_marginStart="20dip" />
     <LinearLayout
     	android:orientation="horizontal"
     	android:layout_width="fill_parent"
@@ -24,13 +24,13 @@
 			style="@style/notification_progress_style"
 			android:max="100"
 			android:layout_marginTop="5dip"
-			android:layout_marginLeft="20dip"/>
+			android:layout_marginStart="20dip"/>
 		<TextView
 			android:id="@+id/no_pb_num"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textSize="12sp"
 			android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
-			android:layout_marginLeft="20dip"/>
+			android:layout_marginStart="20dip"/>
     </LinearLayout>
 </LinearLayout>

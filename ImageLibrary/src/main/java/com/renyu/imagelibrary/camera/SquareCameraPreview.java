@@ -18,7 +18,6 @@ import java.util.List;
 public class SquareCameraPreview extends SurfaceView {
 
     public static final String TAG = SquareCameraPreview.class.getSimpleName();
-    private static final int INVALID_POINTER_ID = -1;
 
     private static final int ZOOM_OUT = 0;
     private static final int ZOOM_IN = 1;
@@ -36,8 +35,6 @@ public class SquareCameraPreview extends SurfaceView {
 
     // For scaling
     private int mMaxZoom;
-    private boolean mIsZoomSupported;
-    private int mActivePointerId = INVALID_POINTER_ID;
     private int mScaleFactor = 1;
     private ScaleGestureDetector mScaleDetector;
 
@@ -100,8 +97,7 @@ public class SquareCameraPreview extends SurfaceView {
 
         if (camera != null) {
             Camera.Parameters params = camera.getParameters();
-            mIsZoomSupported = params.isZoomSupported();
-            if (mIsZoomSupported) {
+            if (params.isZoomSupported()) {
                 mMaxZoom = params.getMaxZoom();
             }
         }
@@ -119,14 +115,12 @@ public class SquareCameraPreview extends SurfaceView {
                 mLastTouchX = event.getX();
                 mLastTouchY = event.getY();
 
-                mActivePointerId = event.getPointerId(0);
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 if (mIsFocus) {
                     handleFocus(mCamera.getParameters());
                 }
-                mActivePointerId = INVALID_POINTER_ID;
                 break;
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
@@ -135,7 +129,6 @@ public class SquareCameraPreview extends SurfaceView {
                 break;
             }
             case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
                 break;
             }
         }

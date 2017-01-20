@@ -112,9 +112,7 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
     private final ViewModifier mViewModifier = new ViewModifier();
 
     private ClusterManager.OnClusterClickListener<T> mClickListener;
-    private ClusterManager.OnClusterInfoWindowClickListener<T> mInfoWindowClickListener;
     private ClusterManager.OnClusterItemClickListener<T> mItemClickListener;
-    private ClusterManager.OnClusterItemInfoWindowClickListener<T> mItemInfoWindowClickListener;
 
     public DefaultClusterRenderer(Context context, BaiduMap map, ClusterManager<T> clusterManager) {
         mMap = map;
@@ -433,7 +431,6 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
     @Override
     public void setOnClusterInfoWindowClickListener(ClusterManager
                                                                 .OnClusterInfoWindowClickListener<T> listener) {
-        mInfoWindowClickListener = listener;
     }
 
     @Override
@@ -444,7 +441,6 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
     @Override
     public void setOnClusterItemInfoWindowClickListener(ClusterManager
                                                                     .OnClusterItemInfoWindowClickListener<T> listener) {
-        mItemInfoWindowClickListener = listener;
     }
 
     private static double distanceSquared(Point a, Point b) {

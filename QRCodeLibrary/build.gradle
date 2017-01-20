@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -34,7 +34,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     // zxing
-    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.google.zxing:core:3.3.0'
     // BGAQRCode-Android  扫描二维码、扫描条形码、相册获取图片后识别、生成带Logo二维码、支持微博微信、QQ、二维码扫描样式
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
