@@ -40,6 +40,7 @@ public class SplashActivity extends BaseActivity {
                 FileUtils.createOrExistsDir(CommonParams.IMAGE_PATH);
                 FileUtils.createOrExistsDir(CommonParams.HOTFIX_PATH);
                 FileUtils.createOrExistsDir(CommonParams.FILE_PATH);
+                FileUtils.createOrExistsDir(CommonParams.LOG_PATH);
 
                 if (ACache.get(SplashActivity.this).getAsString("hotfix_version")!=null &&
                         !ACache.get(SplashActivity.this).getAsString("hotfix_version").equals(BuildConfig.VERSION_NAME)) {
@@ -64,6 +65,8 @@ public class SplashActivity extends BaseActivity {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 });
+
+                openLog(CommonParams.LOG_PATH);
             }
 
             @Override
@@ -71,6 +74,7 @@ public class SplashActivity extends BaseActivity {
 
             }
         });
+        openLog(CommonParams.LOG_PATH);
     }
 
     @Override

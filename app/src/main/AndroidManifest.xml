@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.other.WebActivity" android:screenOrientation="portrait" android:process=":webview"></activity>
         <!-- 定位上报服务 -->
         <service android:name=".service.LocationService" android:process=":locationservice"></service>
         <!-- 支付宝支付相关 -->

@@ -1,5 +1,6 @@
 package com.renyu.commonlibrary.baseact;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -18,6 +19,8 @@ import android.view.WindowManager;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.tencent.mars.xlog.Log;
+import com.tencent.mars.xlog.Xlog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -73,6 +76,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         initParams();
         loadData();
+    }
+
+    public void openLog(String path) {
+        String[] permissionsSD={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (!PermissionsUtils.lacksPermissions(this, permissionsSD)) {
+            // 初始化xlog
+            Xlog.open(true, Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, "", path, "sostar_log");
+            Xlog.setConsoleLogOpen(true);
+            Log.setLogImp(new Xlog());
+
+        }
     }
 
     @Override
@@ -234,5 +248,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 关闭xlog，生成日志
+        Log.appenderClose();
     }
 }

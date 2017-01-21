@@ -23,10 +23,6 @@ public class CommonParams {
     public static final String FILE_PATH= ROOT_PATH + File.separator + "file";
     // 项目热修复目录
     public static final String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
-
-    // 回调参数
-    public final static int RESULT_TAKECAMERA=1000;
-    public final static int RESULT_CHOICEPIC=1001;
-    public final static int RESULT_CROP=1002;
-    public final static int RESULT_ALUMNI=1003;
+    // 项目日志目录
+    public static final String LOG_PATH= ROOT_PATH + File.separator + "log";
 }

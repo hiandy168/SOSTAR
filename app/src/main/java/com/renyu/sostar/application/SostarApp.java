@@ -54,7 +54,7 @@ public class SostarApp extends MultiDexApplication {
             // 百度地图初始化
             SDKInitializer.initialize(this);
 
-            // 初始化 JPush
+            // 初始化JPush
             JPushInterface.setDebugMode(false); 	// 设置开启日志,发布时请关闭日志
             JPushInterface.init(this);
         }
