@@ -50,7 +50,7 @@ dependencies {
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     // okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     // rxandroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     // rxbinding
@@ -65,6 +65,6 @@ dependencies {
     //SwipyRefreshLayout  A SwipeRefreshLayout extension that allows to swipe in both direction
     compile 'com.github.orangegangsters:swipy:1.2.3'
     // butterknife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

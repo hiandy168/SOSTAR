@@ -40,5 +40,5 @@ dependencies {
     // cropper  Android widget for cropping and rotating an image.
     compile 'com.edmodo:cropper:2.0.0'
     // butterknife
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.5.1'
 }
