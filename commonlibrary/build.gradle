@@ -51,6 +51,10 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     // okhttp
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    // retrofit2
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     // rxandroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     // rxbinding
