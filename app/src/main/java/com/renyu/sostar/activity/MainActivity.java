@@ -61,8 +61,6 @@ public class MainActivity extends BaseActivity {
             }
         });
         BarUtils.setColorForDrawerLayout(this, main_dl, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-
-        Utils.cropImage(Environment.getExternalStorageDirectory().getPath()+"/bg_splash.png", this, 200);
     }
 
     @Override
