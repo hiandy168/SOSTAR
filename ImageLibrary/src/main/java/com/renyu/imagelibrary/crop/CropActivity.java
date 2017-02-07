@@ -2,7 +2,6 @@ package com.renyu.imagelibrary.crop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.FileUtils;
 import com.edmodo.cropper.CropImageView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.imagelibrary.R;
@@ -22,10 +22,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import butterknife.BindView;
+import id.zelory.compressor.Compressor;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -42,12 +45,10 @@ public class CropActivity extends BaseActivity {
 
 	Bitmap bmp=null;
 	Bitmap cropBmp=null;
-	String sourcePath;
 
 	@Override
 	public void initParams() {
-		sourcePath=getIntent().getExtras().getString("path");
-		bmp=BitmapFactory.decodeFile(sourcePath);
+		FileUtils.createOrExistsDir(CommonParams.IMAGECACHE);
 
 		nav_layout.setBackgroundColor(Color.parseColor("#80000000"));
 		nav_left_image.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +69,6 @@ public class CropActivity extends BaseActivity {
 		nav_right_text.setTextColor(Color.WHITE);
 		nav_right_text.setVisibility(View.VISIBLE);
 		mCropImage.setFixedAspectRatio(true);
-		mCropImage.setImageBitmap(bmp);
 	}
 
 	@Override
@@ -78,7 +78,21 @@ public class CropActivity extends BaseActivity {
 
 	@Override
 	public void loadData() {
-
+		Observable.just(getIntent().getExtras().getString("path")).map(new Function<String, Bitmap>() {
+			@Override
+			public Bitmap apply(String s) throws Exception {
+				return new Compressor.Builder(CropActivity.this)
+						.setCompressFormat(Bitmap.CompressFormat.JPEG)
+						.build()
+						.compressToBitmap(new File(s));
+			}
+		}).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Bitmap>() {
+			@Override
+			public void accept(Bitmap bmp) throws Exception {
+				CropActivity.this.bmp=bmp;
+				mCropImage.setImageBitmap(bmp);
+			}
+		});
 	}
 
 	@Override
@@ -97,7 +111,7 @@ public class CropActivity extends BaseActivity {
 			public void subscribe(ObservableEmitter<String> e) throws Exception {
 				try {
 					cropBmp=mCropImage.getCroppedImage();
-					String path=writeImage(cropBmp, CommonParams.IMAGECACHE+"/"+System.currentTimeMillis()+".png", 100);
+					String path=writeImage(cropBmp, CommonParams.IMAGECACHE+"/"+System.currentTimeMillis()+".jpg", 100);
 					e.onNext(path);
 				} catch (Exception e1) {
 					e.onError(new Exception(getResources().getString(R.string.image_small_error)));
@@ -157,6 +171,5 @@ public class CropActivity extends BaseActivity {
 			cropBmp.recycle();
 			cropBmp=null;
 		}
-		new File(sourcePath).delete();
 	}
 }

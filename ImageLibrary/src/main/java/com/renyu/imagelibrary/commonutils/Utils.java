@@ -1,12 +1,17 @@
 package com.renyu.imagelibrary.commonutils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.renyu.imagelibrary.camera.CameraActivity;
 import com.renyu.imagelibrary.crop.CropActivity;
 import com.renyu.imagelibrary.photopicker.PhotoPickerActivity;
+
+import java.io.File;
 
 /**
  * Created by renyu on 2017/1/3.
@@ -54,5 +59,26 @@ public class Utils {
         bundle.putInt("maxNum", maxNum);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 拍照后刷新系统相册
+     * @param context
+     * @param newFile
+     */
+    public static void refreshAlbum(Context context, String newFile, String dirPath) {
+        //刷新文件夹
+        if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.KITKAT) {
+            MediaScannerConnection.scanFile(context, new String[]{dirPath}, null, null);
+        }
+        else {
+            Intent scan_dir=new Intent(Intent.ACTION_MEDIA_MOUNTED);
+            scan_dir.setData(Uri.fromFile(new File(dirPath)));
+            context.sendBroadcast(scan_dir);
+        }
+        //刷新文件
+        Intent intent_scan=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent_scan.setData(Uri.fromFile(new File(newFile)));
+        context.sendBroadcast(intent_scan);
     }
 }

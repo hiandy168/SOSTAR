@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.imagelibrary.R;
+import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.imagelibrary.params.CommonParams;
 
 public class CameraActivity extends BaseActivity {

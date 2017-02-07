@@ -1,6 +1,7 @@
 package com.renyu.sostar.activity;
 
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.service.LocationService;
 
@@ -59,6 +61,8 @@ public class MainActivity extends BaseActivity {
             }
         });
         BarUtils.setColorForDrawerLayout(this, main_dl, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+
+        Utils.cropImage(Environment.getExternalStorageDirectory().getPath()+"/bg_splash.png", this, 200);
     }
 
     @Override

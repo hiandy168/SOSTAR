@@ -63,6 +63,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     // butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
+    // Compressor An android image compression library.
+    compile ('id.zelory:compressor:1.0.4') {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
     // fresco
     compile 'com.facebook.fresco:fresco:1.0.1'
     compile 'com.facebook.fresco:animated-gif:1.0.1'
