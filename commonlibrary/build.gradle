@@ -61,13 +61,15 @@ dependencies {
     compile 'com.github.JakeWharton.RxBinding:rxbinding:31e02dcaca'
     // gson
     compile 'com.google.code.gson:gson:2.8.0'
+    // butterknife
+    compile 'com.jakewharton:butterknife:8.5.1'
     // fresco
     compile 'com.facebook.fresco:fresco:1.0.1'
     compile 'com.facebook.fresco:animated-gif:1.0.1'
+    compile 'com.facebook.fresco:animated-webp:1.0.1'
+    compile 'com.facebook.fresco:webpsupport:1.0.1'
     //CircleImageView  A circular ImageView for Android
     compile 'de.hdodenhof:circleimageview:2.1.0'
     //SwipyRefreshLayout  A SwipeRefreshLayout extension that allows to swipe in both direction
     compile 'com.github.orangegangsters:swipy:1.2.3'
-    // butterknife
-    compile 'com.jakewharton:butterknife:8.5.1'
 }

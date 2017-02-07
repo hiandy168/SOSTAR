@@ -2,9 +2,9 @@ package com.renyu.sostar.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 
 import com.blankj.utilcode.utils.FileUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
 import io.reactivex.Observable;
 
 /**
@@ -24,6 +25,9 @@ import io.reactivex.Observable;
  */
 
 public class SplashActivity extends BaseActivity {
+
+    @BindView(R.id.splash_image)
+    SimpleDraweeView splash_image;
 
     @Override
     public void initParams() {
@@ -89,11 +93,11 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public int setStatusBarColor() {
-        return ContextCompat.getColor(this, R.color.colorPrimaryDark);
+        return 0;
     }
 
     @Override
     public int setStatusBarTranslucent() {
-        return 0;
+        return 1;
     }
 }

@@ -44,8 +44,9 @@ public class SostarApp extends MultiDexApplication {
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
             //初始化fresco
-            ImagePipelineConfig config = ImagePipelineConfig.newBuilder(getApplicationContext()).setDownsampleEnabled(true).build();
-            Fresco.initialize(this, config);
+            Fresco.initialize(this, ImagePipelineConfig.newBuilder(this)
+                    .setDownsampleEnabled(true)
+                    .build());
 
             // AndFix初始化
             mPatchManager = new PatchManager(this);
