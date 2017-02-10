@@ -3,14 +3,14 @@ apply plugin: 'me.tatarka.retrolambda'
 //apply plugin: 'com.antfortune.freeline'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.renyu.sostar"
-        minSdkVersion 17
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0.0"
+        applicationId rootProject.ext.app.applicationId
+        minSdkVersion rootProject.ext.app.minSdkVersion
+        targetSdkVersion rootProject.ext.app.targetSdkVersion
+        versionCode rootProject.ext.app.versionCode
+        versionName rootProject.ext.app.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
