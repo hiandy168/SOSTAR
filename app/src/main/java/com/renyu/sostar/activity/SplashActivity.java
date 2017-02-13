@@ -75,7 +75,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void denied() {
-
+                finish();
             }
         });
         openLog(CommonParams.LOG_PATH);

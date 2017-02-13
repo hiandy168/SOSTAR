@@ -35,11 +35,11 @@ public class PermissionsUtils {
     public static boolean hasDelayAllPermissions(Activity activity, String... permissions) {
         int count=0;
         for (String permission : permissions) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ContextCompat.checkSelfPermission(activity, permission)== PackageManager.PERMISSION_DENIED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                 count++;
             }
         }
-        if (count==permissions.length) {
+        if (count!=0) {
             return false;
         }
         return true;

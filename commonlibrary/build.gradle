@@ -65,6 +65,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     // butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
+    // eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
     // Compressor An android image compression library.
     compile ('id.zelory:compressor:1.0.4') {
         exclude group: 'io.reactivex', module: 'rxjava'

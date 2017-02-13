@@ -40,6 +40,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/alllayout/signin',
+                    'src/main/res/alllayout/base',
+                    'src/main/res/alllayout/index',
+                    'src/main/res'
+            ]
+        }
+    }
     lintOptions {
         abortOnError false
     }
