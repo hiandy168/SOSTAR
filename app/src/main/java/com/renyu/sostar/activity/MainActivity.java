@@ -1,9 +1,9 @@
 package com.renyu.sostar.activity;
 
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.service.LocationService;
 
@@ -29,6 +28,8 @@ public class MainActivity extends BaseActivity {
     ImageView nav_left_image;
     @BindView(R.id.main_menu_layout)
     LinearLayout main_menu_layout;
+    @BindView(R.id.main_menu_grid)
+    GridLayout main_menu_grid;
 
     @Override
     public void initParams() {
@@ -61,6 +62,17 @@ public class MainActivity extends BaseActivity {
             }
         });
         BarUtils.setColorForDrawerLayout(this, main_dl, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+
+        main_menu_grid.post(() -> {
+            int height=main_menu_grid.getMeasuredHeight();
+            int width=main_menu_grid.getMeasuredWidth();
+            for (int i=0;i<main_menu_grid.getChildCount();i++) {
+                View view=main_menu_grid.getChildAt(i);
+                GridLayout.LayoutParams params= (GridLayout.LayoutParams) view.getLayoutParams();
+                params.width=width/3;
+                params.height=height/2;
+            }
+        });
     }
 
     @Override
