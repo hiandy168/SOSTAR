@@ -1,7 +1,8 @@
-package com.renyu.sostar.activity;
+package com.renyu.sostar.activity.sign;
 
 import android.Manifest;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.blankj.utilcode.utils.FileUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -9,6 +10,7 @@ import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.MainActivity;
 import com.renyu.sostar.application.SostarApp;
 import com.renyu.sostar.params.CommonParams;
 
@@ -66,8 +68,16 @@ public class SplashActivity extends BaseActivity {
 
                 // 延时跳转
                 Observable.timer(3, TimeUnit.SECONDS).subscribe(aLong -> {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
+                    // 判断当前用户是否已经登录
+                    if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_PHONE)) ||
+                            TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_PASSWORD))) {
+                        ACache.get(SplashActivity.this).remove(CommonParams.USER_PHONE);
+                        ACache.get(SplashActivity.this).remove(CommonParams.USER_PASSWORD);
+                        startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                    }
+                    else {
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    }
                 });
 
                 openLog(CommonParams.LOG_PATH);
@@ -99,5 +109,26 @@ public class SplashActivity extends BaseActivity {
     @Override
     public int setStatusBarTranslucent() {
         return 1;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.INDEX) {
+            startActivityForResult(new Intent(SplashActivity.this, MainActivity.class), CommonParams.RESULT_SPLASH);
+        }
+        if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.CUSTOMER_STATE) {
+            startActivityForResult(new Intent(SplashActivity.this, CustomerStateActivity.class), CommonParams.RESULT_SPLASH);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 选择雇员雇主状态直接退出APP
+        // 选择退出登录直接退出APP
+        if (requestCode==CommonParams.RESULT_SPLASH && resultCode==RESULT_CANCELED) {
+            finish();
+        }
     }
 }

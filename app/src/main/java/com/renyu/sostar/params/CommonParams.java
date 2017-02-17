@@ -25,4 +25,17 @@ public class CommonParams {
     public static final String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
     // 项目日志目录
     public static final String LOG_PATH= ROOT_PATH + File.separator + "log";
+
+    public static final String USER_PHONE="user_phone";
+    public static final String USER_PASSWORD="user_password";
+    // 启动页跳转流程
+    public static final String FROM="from";
+    // 跳转到首页
+    public static final int INDEX=1;
+    // 跳转到用户身份
+    public static final int CUSTOMER_STATE=2;
+
+    public static final int RESULT_MODIFY_PWD=1000;
+    public static final int RESULT_SIGNUP=1001;
+    public static final int RESULT_SPLASH=1002;
 }

@@ -96,4 +96,10 @@ public class MainActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED, new Intent());
+        finish();
+    }
 }
