@@ -46,6 +46,7 @@ android {
                     'src/main/res/alllayout/signin',
                     'src/main/res/alllayout/base',
                     'src/main/res/alllayout/index',
+                    'src/main/res/alllayout/user',
                     'src/main/res'
             ]
         }

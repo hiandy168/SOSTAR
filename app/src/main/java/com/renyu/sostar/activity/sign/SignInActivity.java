@@ -77,6 +77,7 @@ public class SignInActivity extends BaseActivity {
                 break;
             case R.id.signin_signin:
                 Intent intent_splash=new Intent(this, SplashActivity.class);
+                intent_splash.putExtra("state", 1);
                 intent_splash.putExtra(CommonParams.FROM, CommonParams.INDEX);
                 intent_splash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent_splash);

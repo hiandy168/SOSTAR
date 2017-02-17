@@ -1,4 +1,4 @@
-package com.renyu.sostar.activity;
+package com.renyu.sostar.activity.index;
 
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -13,12 +13,15 @@ import android.widget.RelativeLayout;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.user.EmployeeInfoActivity;
+import com.renyu.sostar.activity.user.EmployerInfoActivity;
+import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class EmployerMainActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
@@ -58,7 +61,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.d("MainActivity", "newState:" + newState);
+                Log.d("EmployerMainActivity", "newState:" + newState);
             }
         });
         BarUtils.setColorForDrawerLayout(this, main_dl, ContextCompat.getColor(this, R.color.colorPrimaryDark));
@@ -95,7 +98,7 @@ public class MainActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.nav_left_image})
+    @OnClick({R.id.nav_left_image, R.id.main_menu_personinfo})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nav_left_image:
@@ -106,6 +109,9 @@ public class MainActivity extends BaseActivity {
                     main_dl.openDrawer(main_menu_layout);
                 }
                 break;
+            case R.id.main_menu_personinfo:
+                startActivityForResult(new Intent(EmployerMainActivity.this, EmployerInfoActivity.class), CommonParams.RESULT_UPDATEUSREINFO);
+                break;
         }
     }
 
@@ -113,5 +119,13 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         setResult(RESULT_CANCELED, new Intent());
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==CommonParams.RESULT_UPDATEUSREINFO && resultCode==RESULT_OK) {
+
+        }
     }
 }

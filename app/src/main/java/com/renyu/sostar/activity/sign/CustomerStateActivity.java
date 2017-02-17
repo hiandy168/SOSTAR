@@ -45,17 +45,18 @@ public class CustomerStateActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.state_employer:
-                gotoIndex();
+                gotoIndex(1);
                 break;
             case R.id.state_employee:
-                gotoIndex();
+                gotoIndex(2);
                 break;
         }
     }
 
-    private void gotoIndex() {
+    private void gotoIndex(int state) {
         Intent intent_splash=new Intent(this, SplashActivity.class);
         intent_splash.putExtra(CommonParams.FROM, CommonParams.INDEX);
+        intent_splash.putExtra("state", state);
         intent_splash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent_splash);
     }

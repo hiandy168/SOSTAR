@@ -10,7 +10,8 @@ import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
-import com.renyu.sostar.activity.MainActivity;
+import com.renyu.sostar.activity.index.EmployeeMainActivity;
+import com.renyu.sostar.activity.index.EmployerMainActivity;
 import com.renyu.sostar.application.SostarApp;
 import com.renyu.sostar.params.CommonParams;
 
@@ -76,7 +77,7 @@ public class SplashActivity extends BaseActivity {
                         startActivity(new Intent(SplashActivity.this, SignInActivity.class));
                     }
                     else {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, EmployerMainActivity.class));
                     }
                 });
 
@@ -115,7 +116,12 @@ public class SplashActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.INDEX) {
-            startActivityForResult(new Intent(SplashActivity.this, MainActivity.class), CommonParams.RESULT_SPLASH);
+            if (intent.getIntExtra("state", -1)==1) {
+                startActivityForResult(new Intent(SplashActivity.this, EmployerMainActivity.class), CommonParams.RESULT_SPLASH);
+            }
+            else {
+                startActivityForResult(new Intent(SplashActivity.this, EmployeeMainActivity.class), CommonParams.RESULT_SPLASH);
+            }
         }
         if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.CUSTOMER_STATE) {
             startActivityForResult(new Intent(SplashActivity.this, CustomerStateActivity.class), CommonParams.RESULT_SPLASH);
