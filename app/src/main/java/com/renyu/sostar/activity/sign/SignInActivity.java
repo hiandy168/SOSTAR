@@ -101,7 +101,7 @@ public class SignInActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .signin(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(background()).subscribe(new Observer<SigninResponse>() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 

@@ -1,9 +1,21 @@
 package com.renyu.commonlibrary.networkutils;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.renyu.commonlibrary.networkutils.params.NetworkException;
+import com.renyu.commonlibrary.networkutils.params.Response;
+import com.renyu.commonlibrary.networkutils.params.ResponseList;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -55,4 +67,59 @@ public class Retrofit2Utils {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         return RequestBody.create(JSON, json);
     }
+
+    public static <T> ObservableTransformer background() {
+        return upstream -> upstream
+                .flatMap(new Function<Response<T>, ObservableSource<T>>() {
+                    @Override
+                    public ObservableSource<T> apply(Response<T> response) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<T>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<T> e) throws Exception {
+                                if (response.getResult()==1) {
+                                    e.onNext(response.getData());
+                                    e.onComplete();
+                                }
+                                else {
+                                    NetworkException exception=new NetworkException();
+                                    exception.setMessage(response.getMessage());
+                                    exception.setResult(response.getResult());
+                                    e.onError(exception);
+                                }
+
+                            }
+                        });
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static  <T> ObservableTransformer backgroundList() {
+        return upstream -> upstream
+                .flatMap(new Function<ResponseList<T>, ObservableSource<List<T>>>() {
+                    @Override
+                    public ObservableSource<List<T>> apply(ResponseList<T> response) throws Exception {
+                        return Observable.create(new ObservableOnSubscribe<List<T>>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<List<T>> e) throws Exception {
+                                if (response.getResult()==1) {
+                                    e.onNext(response.getData());
+                                    e.onComplete();
+                                }
+                                else {
+                                    NetworkException exception=new NetworkException();
+                                    exception.setMessage(response.getMessage());
+                                    exception.setResult(response.getResult());
+                                    e.onError(exception);
+                                }
+
+                            }
+                        });
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

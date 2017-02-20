@@ -20,8 +20,6 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
-import com.renyu.commonlibrary.networkutils.params.NetworkException;
-import com.renyu.commonlibrary.networkutils.params.Response;
 import com.tencent.mars.xlog.Log;
 import com.tencent.mars.xlog.Xlog;
 
@@ -31,14 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 /**
@@ -90,33 +80,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         initParams();
         loadData();
-    }
-
-    public <T> ObservableTransformer background() {
-        return upstream -> upstream
-                .flatMap(new Function<Response<T>, ObservableSource<T>>() {
-                    @Override
-                    public ObservableSource<T> apply(Response<T> response) throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<T>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<T> e) throws Exception {
-                                if (response.getResult()==1) {
-                                    e.onNext(response.getData());
-                                    e.onComplete();
-                                }
-                                else {
-                                    NetworkException exception=new NetworkException();
-                                    exception.setMessage(response.getMessage());
-                                    exception.setResult(response.getResult());
-                                    e.onError(exception);
-                                }
-
-                            }
-                        });
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void openLog(String path) {
