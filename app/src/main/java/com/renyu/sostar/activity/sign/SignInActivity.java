@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
@@ -15,7 +15,6 @@ import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.views.ClearEditText;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
-import com.renyu.sostar.bean.Response;
 import com.renyu.sostar.bean.SigninRequest;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -23,13 +22,8 @@ import com.renyu.sostar.params.CommonParams;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 
 /**
  * Created by renyu on 2017/2/13.
@@ -105,26 +99,9 @@ public class SignInActivity extends BaseActivity {
         paramBean.setPassword(signin_pwd.getText().toString());
         paramBean.setPhone(signin_phone.getText().toString());
         request.setParam(paramBean);
-        Gson gson=new Gson();
-        Observable<Response<SigninResponse>> observable=retrofit.create(RetrofitImpl.class)
-                .signin(Retrofit2Utils.postJsonPrepare(gson.toJson(request)));
-        observable.flatMap(new Function<Response<SigninResponse>, ObservableSource<SigninResponse>>() {
-            @Override
-            public ObservableSource<SigninResponse> apply(Response<SigninResponse> signinResponseResponse) throws Exception {
-                return Observable.create(new ObservableOnSubscribe<SigninResponse>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<SigninResponse> e) throws Exception {
-                        if (signinResponseResponse.getResult()==1) {
-                            e.onNext(signinResponseResponse.getData());
-                        }
-                        else {
-                            e.onError(new Exception(signinResponseResponse.getMessage()));
-                        }
-
-                    }
-                });
-            }
-        }).compose(background()).subscribe(new Observer<SigninResponse>() {
+        retrofit.create(RetrofitImpl.class)
+                .signin(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(background()).subscribe(new Observer<SigninResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -132,8 +109,6 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onNext(SigninResponse value) {
-                Log.d("SignInActivity", value.getUserId());
-
                 Intent intent_splash=new Intent(SignInActivity.this, SplashActivity.class);
                 intent_splash.putExtra("state", 1);
                 intent_splash.putExtra(CommonParams.FROM, CommonParams.INDEX);
@@ -143,7 +118,7 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

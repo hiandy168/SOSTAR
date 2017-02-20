@@ -1,6 +1,6 @@
 package com.renyu.sostar.impl;
 
-import com.renyu.sostar.bean.Response;
+import com.renyu.commonlibrary.networkutils.params.Response;
 import com.renyu.sostar.bean.SigninResponse;
 
 import io.reactivex.Observable;

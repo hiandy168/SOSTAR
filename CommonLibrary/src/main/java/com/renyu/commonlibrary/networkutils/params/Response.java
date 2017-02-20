@@ -1,20 +1,19 @@
-package com.renyu.sostar.bean;
-
-import java.util.List;
+package com.renyu.commonlibrary.networkutils.params;
 
 /**
- * Created by renyu on 15/12/25.
+ * Created by renyu on 15/12/16.
  */
-public class ResponseList<T> {
-    List<T> data;
+public class Response<T> {
+
+    T data;
     int result;
     String message;
 
-    public List<T> getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(List<T> data) {
+    public void setData(T data) {
         this.data = data;
     }
 
