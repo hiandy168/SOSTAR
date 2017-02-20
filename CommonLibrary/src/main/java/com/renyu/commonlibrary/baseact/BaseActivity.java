@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.tencent.mars.xlog.Log;
 import com.tencent.mars.xlog.Xlog;
 
@@ -28,6 +29,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 /**
  * Created by renyu on 2016/12/27.
@@ -54,6 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // 网络请求
     public OKHttpHelper httpHelper = null;
+    public Retrofit retrofit=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,9 +79,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         httpHelper = new OKHttpHelper();
+        retrofit = Retrofit2Utils.getInstance("http://114.215.18.160:8080/");
 
         initParams();
         loadData();
+    }
+
+    public static <T> ObservableTransformer <T, T> background() {
+        return upstream -> upstream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void openLog(String path) {
@@ -85,7 +97,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             Xlog.open(true, Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, "", path, "sostar_log");
             Xlog.setConsoleLogOpen(true);
             Log.setLogImp(new Xlog());
-
         }
     }
 

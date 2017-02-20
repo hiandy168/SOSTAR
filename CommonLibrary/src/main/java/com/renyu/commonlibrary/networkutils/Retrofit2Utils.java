@@ -4,7 +4,9 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -42,5 +44,15 @@ public class Retrofit2Utils {
             }
         }
         return retrofit;
+    }
+
+    /**
+     * post方式提交json数据
+     * @param json
+     * @return
+     */
+    public static RequestBody postJsonPrepare(String json) {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        return RequestBody.create(JSON, json);
     }
 }
