@@ -1,6 +1,8 @@
 package com.renyu.sostar.activity.sign;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -33,32 +35,38 @@ public class CustomerStateActivity extends BaseActivity {
 
     @Override
     public int setStatusBarColor() {
-        return ContextCompat.getColor(this, R.color.colorPrimary);
+        return 0;
     }
 
     @Override
     public int setStatusBarTranslucent() {
-        return 0;
+        return 1;
     }
 
-    @OnClick({R.id.state_employer, R.id.state_employee})
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
+    }
+
+    @OnClick({R.id.layout_state_employer, R.id.layout_state_employee})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.state_employer:
+            case R.id.layout_state_employer:
                 gotoIndex(1);
                 break;
-            case R.id.state_employee:
+            case R.id.layout_state_employee:
                 gotoIndex(2);
                 break;
         }
     }
 
     private void gotoIndex(int state) {
-        Intent intent_splash=new Intent(this, SplashActivity.class);
-        intent_splash.putExtra(CommonParams.FROM, CommonParams.INDEX);
-        intent_splash.putExtra("state", state);
-        intent_splash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent_splash);
+        Intent intent_sisu=new Intent(this, SignInSignUpActivity.class);
+        intent_sisu.putExtra(CommonParams.FROM, CommonParams.INDEX);
+        intent_sisu.putExtra("state", state);
+        intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent_sisu);
     }
 
     @Override

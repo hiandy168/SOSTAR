@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,10 +37,10 @@ public class CropActivity extends BaseActivity {
 
 	@BindView(R2.id.nav_layout)
 	RelativeLayout nav_layout;
-	@BindView(R2.id.nav_left_image)
-	ImageView nav_left_image;
-	@BindView(R2.id.nav_right_text)
-	TextView nav_right_text;
+	@BindView(R2.id.ib_nav_left)
+	ImageButton ib_nav_left;
+	@BindView(R2.id.tv_nav_right)
+	TextView tv_nav_right;
 	@BindView(R2.id.cropImg)
 	CropImageView mCropImage=null;
 
@@ -51,23 +52,23 @@ public class CropActivity extends BaseActivity {
 		FileUtils.createOrExistsDir(CommonParams.IMAGECACHE);
 
 		nav_layout.setBackgroundColor(Color.parseColor("#80000000"));
-		nav_left_image.setOnClickListener(new View.OnClickListener() {
+		ib_nav_left.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		nav_left_image.setVisibility(View.VISIBLE);
-		nav_left_image.setImageResource(R.mipmap.icon_back_white);
-		nav_right_text.setText("完成");
-		nav_right_text.setOnClickListener(new View.OnClickListener() {
+		ib_nav_left.setVisibility(View.VISIBLE);
+		ib_nav_left.setImageResource(R.mipmap.icon_back_white);
+		tv_nav_right.setText("完成");
+		tv_nav_right.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				crop();
 			}
 		});
-		nav_right_text.setTextColor(Color.WHITE);
-		nav_right_text.setVisibility(View.VISIBLE);
+		tv_nav_right.setTextColor(Color.WHITE);
+		tv_nav_right.setVisibility(View.VISIBLE);
 		mCropImage.setFixedAspectRatio(true);
 	}
 

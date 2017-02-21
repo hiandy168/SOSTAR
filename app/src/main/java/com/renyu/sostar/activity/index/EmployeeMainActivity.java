@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,8 +31,8 @@ public class EmployeeMainActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.main_dl)
     DrawerLayout main_dl;
-    @BindView(R.id.nav_left_image)
-    ImageView nav_left_image;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.main_menu_layout)
     LinearLayout main_menu_layout;
     @BindView(R.id.main_menu_grid)
@@ -43,7 +44,7 @@ public class EmployeeMainActivity extends BaseActivity {
         startService(new Intent(this, LocationService.class));
 
         nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        nav_left_image.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        ib_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
 
         main_dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         main_dl.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -101,10 +102,10 @@ public class EmployeeMainActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.nav_left_image, R.id.main_menu_personinfo})
+    @OnClick({R.id.ib_nav_left, R.id.main_menu_personinfo})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.nav_left_image:
+            case R.id.ib_nav_left:
                 if (main_dl.isDrawerOpen(main_menu_layout)) {
                     main_dl.closeDrawer(main_menu_layout);
                 }

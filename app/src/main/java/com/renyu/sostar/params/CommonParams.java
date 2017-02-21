@@ -28,15 +28,20 @@ public class CommonParams {
 
     public static final String USER_PHONE="user_phone";
     public static final String USER_PASSWORD="user_password";
+    public static final String USER_TYPE="user_type";
+    public static final String USER_ID="user_id";
     // 启动页跳转流程
     public static final String FROM="from";
     // 跳转到首页
     public static final int INDEX=1;
     // 跳转到用户身份
     public static final int CUSTOMER_STATE=2;
+    // 跳转到登录页
+    public static final int SIGNIN=3;
+    // 调转到注册页
+    public static final int SIGNUP=4;
 
     public static final int RESULT_MODIFY_PWD=1000;
-    public static final int RESULT_SIGNUP=1001;
     public static final int RESULT_SPLASH=1002;
     public static final int RESULT_UPDATEUSREINFO=1003;
 }

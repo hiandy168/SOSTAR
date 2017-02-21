@@ -89,10 +89,10 @@ public class WebActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.nav_left_image})
+    @OnClick({R.id.ib_nav_left})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.nav_left_image:
+            case R.id.ib_nav_left:
                 finish();
                 break;
         }

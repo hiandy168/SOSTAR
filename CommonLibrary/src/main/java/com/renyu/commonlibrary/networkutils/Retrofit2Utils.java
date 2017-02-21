@@ -92,6 +92,7 @@ public class Retrofit2Utils {
                     }
                 })
                 .subscribeOn(Schedulers.io())
+                .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -119,6 +120,7 @@ public class Retrofit2Utils {
                     }
                 })
                 .subscribeOn(Schedulers.io())
+                .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

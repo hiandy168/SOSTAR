@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
     <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/splash_image"
+        android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        fresco:placeholderImage="@mipmap/ic_launcher"
+        fresco:placeholderImage="@mipmap/bg_splash"
         fresco:placeholderImageScaleType="centerCrop"
-        fresco:retryImage="@mipmap/ic_launcher"
+        fresco:retryImage="@mipmap/bg_splash"
         fresco:retryImageScaleType="focusCrop"
-        fresco:failureImage="@mipmap/ic_launcher"
+        fresco:failureImage="@mipmap/bg_splash"
         fresco:failureImageScaleType="focusCrop"/>
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginBottom="48dip"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/tv_splash_version"
+            android:text="VERSION："
+            android:textSize="13sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"/>
+        <TextView
+            android:text="COPYRIGHT 2016-2017 SOSTAR"
+            android:textSize="13sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

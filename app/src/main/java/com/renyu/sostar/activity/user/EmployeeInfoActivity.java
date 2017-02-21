@@ -18,12 +18,12 @@ import butterknife.OnClick;
 
 public class EmployeeInfoActivity extends BaseActivity {
 
-    @BindView(R.id.nav_right_text)
-    TextView nav_right_text;
+    @BindView(R.id.tv_nav_right)
+    TextView tv_nav_right;
 
     @Override
     public void initParams() {
-        nav_right_text.setText("编辑");
+        tv_nav_right.setText("编辑");
     }
 
     @Override
@@ -46,10 +46,10 @@ public class EmployeeInfoActivity extends BaseActivity {
         return 0;
     }
 
-    @OnClick({R.id.nav_right_text})
+    @OnClick({R.id.tv_nav_right})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.nav_right_text:
+            case R.id.tv_nav_right:
                 startActivityForResult(new Intent(EmployeeInfoActivity.this, UpdateEmployeeInfoActivity.class), CommonParams.RESULT_UPDATEUSREINFO);
                 break;
         }

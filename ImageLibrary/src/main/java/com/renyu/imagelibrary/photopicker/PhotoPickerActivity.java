@@ -54,12 +54,12 @@ import static android.provider.MediaStore.MediaColumns.DATE_ADDED;
  */
 public class PhotoPickerActivity extends BaseActivity {
 
-    @BindView(R2.id.nav_left_image)
-    ImageView nav_left_image;
-    @BindView(R2.id.nav_title)
-    TextView nav_title;
-    @BindView(R2.id.nav_right_text)
-    TextView nav_right_text;
+    @BindView(R2.id.ib_nav_left)
+    ImageView ib_nav_left;
+    @BindView(R2.id.tv_nav_title)
+    TextView tv_nav_title;
+    @BindView(R2.id.tv_nav_right)
+    TextView tv_nav_right;
     @BindView(R2.id.photopicker_rv)
     RecyclerView photopicker_rv;
     PhotoPickerAdapter adapter;
@@ -111,19 +111,19 @@ public class PhotoPickerActivity extends BaseActivity {
 
         maxNum=getIntent().getExtras().getInt("maxNum");
 
-        nav_left_image.setImageResource(R.mipmap.icon_back_black);
-        nav_left_image.setOnClickListener(new View.OnClickListener() {
+        ib_nav_left.setImageResource(R.mipmap.icon_back_black);
+        ib_nav_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        nav_title.setTextColor(Color.parseColor("#333333"));
-        nav_title.setText("图片");
-        nav_right_text.setText("完成");
-        nav_right_text.setTextColor(Color.parseColor("#999999"));
-        nav_right_text.setEnabled(false);
-        nav_right_text.setOnClickListener(new View.OnClickListener() {
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        tv_nav_title.setText("图片");
+        tv_nav_right.setText("完成");
+        tv_nav_right.setTextColor(Color.parseColor("#999999"));
+        tv_nav_right.setEnabled(false);
+        tv_nav_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
@@ -143,9 +143,9 @@ public class PhotoPickerActivity extends BaseActivity {
                 if (!imagePaths.contains(path)) {
                     imagePaths.add(path);
 
-                    nav_right_text.setText("完成("+imagePaths.size()+"/"+maxNum+")");
-                    nav_right_text.setTextColor(getResources().getColor(R.color.colorAccent));
-                    nav_right_text.setEnabled(true);
+                    tv_nav_right.setText("完成("+imagePaths.size()+"/"+maxNum+")");
+                    tv_nav_right.setTextColor(getResources().getColor(R.color.colorAccent));
+                    tv_nav_right.setEnabled(true);
                     photopicker_preview.setText("预览("+imagePaths.size()+")");
                 }
             }
@@ -155,15 +155,15 @@ public class PhotoPickerActivity extends BaseActivity {
                 imagePaths.remove(path);
 
                 if (imagePaths.size()==0) {
-                    nav_right_text.setText("完成");
-                    nav_right_text.setTextColor(Color.parseColor("#999999"));
-                    nav_right_text.setEnabled(false);
+                    tv_nav_right.setText("完成");
+                    tv_nav_right.setTextColor(Color.parseColor("#999999"));
+                    tv_nav_right.setEnabled(false);
                     photopicker_preview.setText("预览");
                 }
                 else {
-                    nav_right_text.setText("完成("+imagePaths.size()+"/"+maxNum+")");
-                    nav_right_text.setTextColor(getResources().getColor(R.color.colorAccent));
-                    nav_right_text.setEnabled(true);
+                    tv_nav_right.setText("完成("+imagePaths.size()+"/"+maxNum+")");
+                    tv_nav_right.setTextColor(getResources().getColor(R.color.colorAccent));
+                    tv_nav_right.setEnabled(true);
                     photopicker_preview.setText("预览("+imagePaths.size()+")");
                 }
             }

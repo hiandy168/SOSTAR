@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.sign.SignInActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.sign.SignInSignUpActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.sign.SignInActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan|stateAlwaysHidden"></activity>
         <activity android:name=".activity.sign.SignUpActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.FindPasswordActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.CustomerStateActivity" android:screenOrientation="portrait"></activity>
