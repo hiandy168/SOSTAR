@@ -22,7 +22,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
-import com.renyu.sostar.activity.user.EmployeeInfoActivity;
+import com.renyu.sostar.activity.user.UserInfoActivity;
 import com.renyu.sostar.bean.MyCenterRequest;
 import com.renyu.sostar.bean.MyCenterResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.main_menu_personinfo})
+    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -135,8 +135,8 @@ public class MainActivity extends BaseActivity {
                     main_dl.openDrawer(main_menu_layout);
                 }
                 break;
-            case R.id.main_menu_personinfo:
-                startActivityForResult(new Intent(MainActivity.this, EmployeeInfoActivity.class), CommonParams.RESULT_UPDATEUSREINFO);
+            case R.id.layout_main_menu_mycenter_info:
+                startActivityForResult(new Intent(MainActivity.this, UserInfoActivity.class), CommonParams.RESULT_UPDATEUSREINFO);
                 break;
         }
     }

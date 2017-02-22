@@ -25,10 +25,7 @@
         <activity android:name=".activity.sign.CustomerStateActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.ProtocalActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.index.MainActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.user.EmployeeInfoActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.user.UpdateEmployeeInfoActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.user.UpdateEmployerInfoActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.UserInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.other.WebActivity" android:screenOrientation="portrait" android:process=":webview"></activity>
         <!-- 定位上报服务 -->
         <service android:name=".service.LocationService" android:process=":locationservice"></service>

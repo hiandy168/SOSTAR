@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <RelativeLayout
-                android:id="@+id/main_menu_personinfo"
                 android:layout_width="match_parent"
                 android:layout_height="205dip" >
                 <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
@@ -215,6 +214,7 @@
                 android:orientation="vertical"
                 android:background="@android:color/white">
                 <LinearLayout
+                    android:id="@+id/layout_main_menu_mycenter_info"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
                     android:gravity="center_vertical"

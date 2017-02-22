@@ -44,6 +44,8 @@ public class CommonParams {
     public static final int FINISH=5;
 
     public static final int RESULT_MODIFY_PWD=1000;
-    public static final int RESULT_SPLASH=1002;
-    public static final int RESULT_UPDATEUSREINFO=1003;
+    public static final int RESULT_UPDATEUSREINFO=1001;
+    public static final int RESULT_TAKEPHOTO=1002;
+    public static final int RESULT_ALUMNI=1003;
+
 }

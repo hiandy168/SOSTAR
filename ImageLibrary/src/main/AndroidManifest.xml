@@ -7,10 +7,10 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application>
-        <activity android:name=".camera.CameraActivity" android:screenOrientation="portrait" android:theme="@style/BlackTheme"></activity>
-        <activity android:name=".crop.CropActivity" android:screenOrientation="portrait" android:theme="@style/BlackTheme"></activity>
-        <activity android:name=".preview.ImagePreviewActivity" android:screenOrientation="portrait" android:theme="@style/BlackTheme"></activity>
-        <activity android:name=".photopicker.PhotoPickerActivity" android:screenOrientation="portrait" android:theme="@style/WhiteTheme"></activity>
+        <activity android:name=".camera.CameraActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
+        <activity android:name=".crop.CropActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
+        <activity android:name=".preview.ImagePreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
+        <activity android:name=".photopicker.PhotoPickerActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
