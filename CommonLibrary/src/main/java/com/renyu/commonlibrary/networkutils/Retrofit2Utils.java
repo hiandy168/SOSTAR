@@ -1,6 +1,7 @@
 package com.renyu.commonlibrary.networkutils;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.NetworkException;
 import com.renyu.commonlibrary.networkutils.params.Response;
 import com.renyu.commonlibrary.networkutils.params.ResponseList;
@@ -77,6 +78,9 @@ public class Retrofit2Utils {
                             @Override
                             public void subscribe(ObservableEmitter<T> e) throws Exception {
                                 if (response.getResult()==1) {
+                                    if (response.getData() instanceof EmptyResponse) {
+                                        ((EmptyResponse) response.getData()).setMessage(response.getMessage());
+                                    }
                                     e.onNext(response.getData());
                                     e.onComplete();
                                 }
@@ -86,7 +90,6 @@ public class Retrofit2Utils {
                                     exception.setResult(response.getResult());
                                     e.onError(exception);
                                 }
-
                             }
                         });
                     }

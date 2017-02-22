@@ -40,6 +40,8 @@ public class CommonParams {
     public static final int SIGNIN=3;
     // 调转到注册页
     public static final int SIGNUP=4;
+    // 关闭
+    public static final int FINISH=5;
 
     public static final int RESULT_MODIFY_PWD=1000;
     public static final int RESULT_SPLASH=1002;

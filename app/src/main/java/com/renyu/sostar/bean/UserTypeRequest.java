@@ -7,10 +7,10 @@ import com.renyu.sostar.BuildConfig;
  * Created by renyu on 2017/2/22.
  */
 
-public class VCodeRequest {
+public class UserTypeRequest {
     /**
      * deviceId : string
-     * param : {"phone":"string"}
+     * param : {"phone":"string","userId":"string","userType":"string"}
      * ver : string
      */
 
@@ -29,9 +29,13 @@ public class VCodeRequest {
     public static class ParamBean {
         /**
          * phone : string
+         * userId : string
+         * userType : string
          */
 
         private String phone;
+        private String userId;
+        private String userType;
 
         public String getPhone() {
             return phone;
@@ -39,6 +43,22 @@ public class VCodeRequest {
 
         public void setPhone(String phone) {
             this.phone = phone;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
         }
     }
 }

@@ -7,10 +7,10 @@ import com.renyu.sostar.BuildConfig;
  * Created by renyu on 2017/2/22.
  */
 
-public class VCodeRequest {
+public class MyCenterRequest {
     /**
      * deviceId : string
-     * param : {"phone":"string"}
+     * param : {"userId":"string"}
      * ver : string
      */
 
@@ -28,17 +28,17 @@ public class VCodeRequest {
 
     public static class ParamBean {
         /**
-         * phone : string
+         * userId : string
          */
 
-        private String phone;
+        private String userId;
 
-        public String getPhone() {
-            return phone;
+        public String getUserId() {
+            return userId;
         }
 
-        public void setPhone(String phone) {
-            this.phone = phone;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
     }
 }

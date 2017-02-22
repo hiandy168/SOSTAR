@@ -15,10 +15,8 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.views.ClearEditText;
-import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.SigninRequest;
 import com.renyu.sostar.bean.SigninResponse;
@@ -135,8 +133,6 @@ public class SignInActivity extends BaseActivity {
 
     private void signin() {
         SigninRequest request=new SigninRequest();
-        request.setDeviceId(Utils.getUniquePsuedoID());
-        request.setVer(""+BuildConfig.VERSION_CODE);
         SigninRequest.ParamBean paramBean=new SigninRequest.ParamBean();
         paramBean.setPassword(signin_pwd.getText().toString());
         paramBean.setPhone(signin_phone.getText().toString());
@@ -151,6 +147,9 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onNext(SigninResponse value) {
+                ACache.get(SignInActivity.this).put(CommonParams.USER_PHONE, signin_phone.getText().toString());
+                ACache.get(SignInActivity.this).put(CommonParams.USER_PASSWORD, signin_pwd.getText().toString());
+                ACache.get(SignInActivity.this).put(CommonParams.USER_ID, value.getUserId());
                 // 如果没有用户身份类型，进入选择身份类型页面
                 if (TextUtils.isEmpty(value.getUserType())) {
                     Intent intent_sisu=new Intent(SignInActivity.this, SignInSignUpActivity.class);
@@ -159,16 +158,12 @@ public class SignInActivity extends BaseActivity {
                     startActivity(intent_sisu);
                 }
                 else {
+                    ACache.get(SignInActivity.this).put(CommonParams.USER_TYPE, value.getUserType());
                     Intent intent_sisu=new Intent(SignInActivity.this, SignInSignUpActivity.class);
-                    intent_sisu.putExtra("state", value.getUserType());
                     intent_sisu.putExtra(CommonParams.FROM, CommonParams.INDEX);
                     intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent_sisu);
-                    ACache.get(SignInActivity.this).put(CommonParams.USER_TYPE, value.getUserType());
                 }
-                ACache.get(SignInActivity.this).put(CommonParams.USER_PHONE, signin_phone.getText().toString());
-                ACache.get(SignInActivity.this).put(CommonParams.USER_PASSWORD, signin_pwd.getText().toString());
-                ACache.get(SignInActivity.this).put(CommonParams.USER_ID, value.getUserId());
             }
 
             @Override

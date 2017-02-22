@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -14,13 +13,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ClearEditText;
-import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.ResetPasswordRequest;
-import com.renyu.sostar.bean.ResetPasswordResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -119,8 +116,6 @@ public class FindPasswordActivity extends BaseActivity {
         }
         else {
             ResetPasswordRequest request=new ResetPasswordRequest();
-            request.setDeviceId(Utils.getUniquePsuedoID());
-            request.setVer(""+ BuildConfig.VERSION_CODE);
             ResetPasswordRequest.ParamBean paramBean=new ResetPasswordRequest.ParamBean();
             paramBean.setPhone(et_findpwd_phone.getText().toString());
             paramBean.setCaptcha(et_findpwd_vcode.getText().toString());
@@ -128,14 +123,15 @@ public class FindPasswordActivity extends BaseActivity {
             request.setParam(paramBean);
             retrofit.create(RetrofitImpl.class)
                     .resetPwd(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                    .compose(Retrofit2Utils.background()).subscribe(new Observer<ResetPasswordResponse>() {
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     network_disposable=d;
                 }
 
                 @Override
-                public void onNext(ResetPasswordResponse value) {
+                public void onNext(EmptyResponse value) {
+                    Toast.makeText(FindPasswordActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                     ACache.get(FindPasswordActivity.this).put(CommonParams.USER_PASSWORD,
                             et_findpwd_pwd.getText().toString());
                     Intent intent=new Intent();

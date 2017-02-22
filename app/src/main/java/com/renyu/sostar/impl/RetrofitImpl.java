@@ -1,10 +1,10 @@
 package com.renyu.sostar.impl;
 
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.Response;
-import com.renyu.sostar.bean.ResetPasswordResponse;
+import com.renyu.sostar.bean.MyCenterResponse;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.SignupResponse;
-import com.renyu.sostar.bean.VCodeResponse;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -23,7 +23,7 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/verification/get")
-    Observable<Response<VCodeResponse>> getVcode(@Body RequestBody requestBody);
+    Observable<Response<EmptyResponse>> getVcode(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/register")
@@ -31,5 +31,14 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/resetpass")
-    Observable<Response<ResetPasswordResponse>> resetPwd(@Body RequestBody requestBody);
+    Observable<Response<EmptyResponse>> resetPwd(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/center")
+    Observable<Response<MyCenterResponse>> getMyCenter(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/user/setUserType")
+    Observable<Response<EmptyResponse>> setUserState(@Body RequestBody requestBody);
+
 }

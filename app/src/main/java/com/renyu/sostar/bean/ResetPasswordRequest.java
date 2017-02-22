@@ -1,5 +1,8 @@
 package com.renyu.sostar.bean;
 
+import com.renyu.commonlibrary.commonutils.Utils;
+import com.renyu.sostar.BuildConfig;
+
 /**
  * Created by renyu on 2017/2/22.
  */
@@ -11,17 +14,9 @@ public class ResetPasswordRequest {
      * ver : string
      */
 
-    private String deviceId;
+    private String deviceId = Utils.getUniquePsuedoID();
     private ParamBean param;
-    private String ver;
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
+    private String ver = BuildConfig.VERSION_NAME;
 
     public ParamBean getParam() {
         return param;
@@ -29,14 +24,6 @@ public class ResetPasswordRequest {
 
     public void setParam(ParamBean param) {
         this.param = param;
-    }
-
-    public String getVer() {
-        return ver;
-    }
-
-    public void setVer(String ver) {
-        this.ver = ver;
     }
 
     public static class ParamBean {

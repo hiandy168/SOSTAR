@@ -24,8 +24,7 @@
         <activity android:name=".activity.sign.FindPasswordActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.CustomerStateActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.ProtocalActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.index.EmployeeMainActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.index.EmployerMainActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.index.MainActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployeeInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.UpdateEmployeeInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -16,15 +15,13 @@ import com.blankj.utilcode.utils.SizeUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ClearEditText;
-import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.SignupRequest;
 import com.renyu.sostar.bean.SignupResponse;
 import com.renyu.sostar.bean.VCodeRequest;
-import com.renyu.sostar.bean.VCodeResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -144,21 +141,20 @@ public class SignUpActivity extends BaseActivity {
         }
         else {
             VCodeRequest request=new VCodeRequest();
-            request.setDeviceId(Utils.getUniquePsuedoID());
-            request.setVer(""+ BuildConfig.VERSION_CODE);
             VCodeRequest.ParamBean paramBean=new VCodeRequest.ParamBean();
             paramBean.setPhone(signup_phone.getText().toString());
             request.setParam(paramBean);
             retrofit.create(RetrofitImpl.class)
                     .getVcode(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                    .compose(Retrofit2Utils.background()).subscribe(new Observer<VCodeResponse>() {
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     network_disposable=d;
                 }
 
                 @Override
-                public void onNext(VCodeResponse value) {
+                public void onNext(EmptyResponse value) {
+                    Toast.makeText(SignUpActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                     btn_signup_getvcode.setEnabled(false);
                     vcode_disposable= Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
                             .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
@@ -195,8 +191,6 @@ public class SignUpActivity extends BaseActivity {
         }
         else {
             SignupRequest request=new SignupRequest();
-            request.setDeviceId(Utils.getUniquePsuedoID());
-            request.setVer(""+BuildConfig.VERSION_CODE);
             SignupRequest.ParamBean paramBean=new SignupRequest.ParamBean();
             paramBean.setPhone(signup_phone.getText().toString());
             paramBean.setPassword(signup_pwd.getText().toString());

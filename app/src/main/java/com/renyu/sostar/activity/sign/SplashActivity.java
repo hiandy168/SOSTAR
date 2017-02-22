@@ -11,8 +11,7 @@ import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
-import com.renyu.sostar.activity.index.EmployeeMainActivity;
-import com.renyu.sostar.activity.index.EmployerMainActivity;
+import com.renyu.sostar.activity.index.MainActivity;
 import com.renyu.sostar.application.SostarApp;
 import com.renyu.sostar.params.CommonParams;
 
@@ -89,14 +88,9 @@ public class SplashActivity extends BaseActivity {
                             intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
                             startActivities(intents);
                         }
-                        else if (ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                        else {
                             intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                            intents[1]=new Intent(SplashActivity.this, EmployerMainActivity.class);
-                            startActivities(intents);
-                        }
-                        else if (ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE).equals("2")) {
-                            intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                            intents[1]=new Intent(SplashActivity.this, EmployeeMainActivity.class);
+                            intents[1]=new Intent(SplashActivity.this, MainActivity.class);
                             startActivities(intents);
                         }
                     }
