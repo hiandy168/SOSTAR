@@ -4,7 +4,6 @@ import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.Response;
 import com.renyu.sostar.bean.MyCenterResponse;
 import com.renyu.sostar.bean.SigninResponse;
-import com.renyu.sostar.bean.SignupResponse;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -27,7 +26,7 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/register")
-    Observable<Response<SignupResponse>> signup(@Body RequestBody requestBody);
+    Observable<Response<SigninResponse>> signup(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/resetpass")
@@ -41,4 +40,11 @@ public interface RetrofitImpl {
     @POST("sostar/api/user/setUserType")
     Observable<Response<EmptyResponse>> setUserState(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/setStaffInfo")
+    Observable<Response<EmptyResponse>> setStaffInfo(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/setStaffAuthentica")
+    Observable<Response<EmptyResponse>> setStaffAuthentica(@Body RequestBody requestBody);
 }

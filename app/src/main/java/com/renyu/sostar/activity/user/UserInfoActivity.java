@@ -2,23 +2,44 @@ package com.renyu.sostar.activity.user;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
-import com.renyu.commonlibrary.views.wheelview.ActionSheetFragment;
+import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.wheelview.WheelViewUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
+import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.MyCenterResponse;
+import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/2/17.
@@ -30,11 +51,70 @@ public class UserInfoActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
+    @BindView(R.id.tv_employeeinfo_name)
+    TextView tv_employeeinfo_name;
+    @BindView(R.id.tv_employeeinfo_summary)
+    TextView tv_employeeinfo_summary;
+    @BindView(R.id.tv_employeeinfo_age)
+    TextView tv_employeeinfo_age;
+    @BindView(R.id.tv_employeeinfo_evaluate)
+    TextView tv_employeeinfo_evaluate;
+    @BindView(R.id.tv_employeeinfo_completionrate)
+    TextView tv_employeeinfo_completionrate;
+    @BindView(R.id.iv_employeeinfo_avatar)
+    SimpleDraweeView iv_employeeinfo_avatar;
+    @BindView(R.id.tv_employeeinfo_auth)
+    TextView tv_employeeinfo_auth;
+
+    MyCenterResponse myCenterResponse;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
+        myCenterResponse= (MyCenterResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人信息");
+
+        if (!TextUtils.isEmpty(myCenterResponse.getPicPath())) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getPicPath())).setAutoPlayAnimations(true).build();
+            iv_employeeinfo_avatar.setController(draweeController);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getNickName())) {
+            tv_employeeinfo_name.setText(myCenterResponse.getNickName());
+        }
+        else {
+            tv_employeeinfo_name.setText("暂无");
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getIntroduction())) {
+            tv_employeeinfo_summary.setText(myCenterResponse.getIntroduction());
+        }
+        else {
+            tv_employeeinfo_summary.setText("暂无");
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getAge())) {
+            tv_employeeinfo_age.setText(myCenterResponse.getAge());
+        }
+        else {
+            tv_employeeinfo_age.setText("暂无");
+        }
+        if (TextUtils.isEmpty(myCenterResponse.getAuthentication())) {
+            tv_employeeinfo_auth.setText("未认证");
+        }
+        else {
+            if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
+                tv_employeeinfo_auth.setText("未认证");
+            }
+            else if (myCenterResponse.getAuthentication().equals("1")) {
+                tv_employeeinfo_auth.setText("已认证");
+            }
+            else if (myCenterResponse.getAuthentication().equals("2")) {
+                tv_employeeinfo_auth.setText("认证中");
+            }
+        }
+        tv_employeeinfo_evaluate.setText(TextUtils.isEmpty(myCenterResponse.getEvaluateLevel())?"0":myCenterResponse.getEvaluateLevel());
+        tv_employeeinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0":myCenterResponse.getCloseRate());
     }
 
     @Override
@@ -57,15 +137,16 @@ public class UserInfoActivity extends BaseActivity {
         return 0;
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.layout_employeeinfo_age, R.id.layout_employeeinfo_avatar})
+    @OnClick({R.id.ib_nav_left, R.id.layout_employeeinfo_age, R.id.layout_employeeinfo_avatar,
+            R.id.layout_employeeinfo_name, R.id.layout_employeeinfo_summary, R.id.layout_employeeinfo_auth})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
-                finish();
+                onBackPressed();
                 break;
             case R.id.layout_employeeinfo_age:
                 WheelViewUtils.showDate(UserInfoActivity.this.getSupportFragmentManager(),
-                        "年龄",
+                        "生日",
                         "取消",
                         "完成",
                         value -> {
@@ -73,7 +154,7 @@ public class UserInfoActivity extends BaseActivity {
                             String year = string.split("-")[0];
                             String month = Integer.parseInt(string.split("-")[1]) < 10 ? "0" + string.split("-")[1] : string.split("-")[1];
                             String day = Integer.parseInt(string.split("-")[2]) < 10 ? "0" + string.split("-")[2] : string.split("-")[2];
-                            Log.d("UserInfoActivity", (year + "-" + month + "-" + day));
+                            updateTextInfo("age", year + "-" + month + "-" + day);
                         }, () -> {
 
                         }
@@ -93,6 +174,23 @@ public class UserInfoActivity extends BaseActivity {
 
                         });
                 break;
+            case R.id.layout_employeeinfo_name:
+                Intent intent_updatename=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
+                intent_updatename.putExtra("title", "昵称");
+                intent_updatename.putExtra("param", "nickName");
+                startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
+            case R.id.layout_employeeinfo_summary:
+                Intent intent_summary=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
+                intent_summary.putExtra("title", "简介");
+                intent_summary.putExtra("param", "introduction");
+                startActivityForResult(intent_summary, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
+            case R.id.layout_employeeinfo_auth:
+                Intent intent_info=new Intent(UserInfoActivity.this, UserAuthActivity.class);
+                intent_info.putExtra("response", myCenterResponse);
+                startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
         }
     }
 
@@ -106,10 +204,124 @@ public class UserInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
-
+            String path=data.getExtras().getString("path");
+            Utils.cropImage(path, UserInfoActivity.this, CommonParams.RESULT_CROP);
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
-
+            ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
+            if (filePaths==null) {
+                return;
+            }
+            if (filePaths.size()!=1) {
+                return;
+            }
+            Utils.cropImage(filePaths.get(0), UserInfoActivity.this, CommonParams.RESULT_CROP);
         }
+        if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
+            String path=data.getExtras().getString("path");
+            uploadFile(path);
+        }
+        if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
+            if (TextUtils.isEmpty(data.getStringExtra("param"))) {
+                myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
+                if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
+                    tv_employeeinfo_auth.setText("未认证");
+                }
+                else if (myCenterResponse.getAuthentication().equals("1")) {
+                    tv_employeeinfo_auth.setText("已认证");
+                }
+                else if (myCenterResponse.getAuthentication().equals("2")) {
+                    tv_employeeinfo_auth.setText("认证中");
+                }
+            }
+            else if (data.getStringExtra("param").equals("nickName")) {
+                tv_employeeinfo_name.setText(data.getStringExtra("value"));
+                myCenterResponse.setNickName(data.getStringExtra("value"));
+            }
+            else if (data.getStringExtra("param").equals("introduction")) {
+                tv_employeeinfo_summary.setText(data.getStringExtra("value"));
+                myCenterResponse.setIntroduction(data.getStringExtra("value"));
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent();
+        intent.putExtra("value", myCenterResponse);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    private void updateTextInfo(String param, String paramValue) {
+        try {
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("deviceId", com.renyu.commonlibrary.commonutils.Utils.getUniquePsuedoID());
+            jsonObject.put("ver", BuildConfig.VERSION_NAME);
+            JSONObject childJsonObject=new JSONObject();
+            childJsonObject.put(param, paramValue);
+            childJsonObject.put("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
+            jsonObject.put("param", childJsonObject);
+            retrofit.create(RetrofitImpl.class)
+                    .setStaffInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    disposable=d;
+                }
+
+                @Override
+                public void onNext(EmptyResponse value) {
+                    Toast.makeText(UserInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (param.equals("picPath")) {
+                        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                                .setUri(Uri.parse(paramValue)).setAutoPlayAnimations(true).build();
+                        iv_employeeinfo_avatar.setController(draweeController);
+                    }
+                    if (param.equals("age")) {
+                        tv_employeeinfo_age.setText(paramValue);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(UserInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void uploadFile(String path) {
+        HashMap<String, File> fileHashMap=new HashMap<>();
+        fileHashMap.put("image", new File(path));
+        OKHttpHelper helper=new OKHttpHelper();
+        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), new OKHttpHelper.StartListener() {
+            @Override
+            public void onStart() {
+
+            }
+        }, new OKHttpHelper.RequestListener() {
+            @Override
+            public void onSuccess(String string) {
+                Gson gson=new Gson();
+                UploadResponse response=gson.fromJson(string, UploadResponse.class);
+                String imageUrl="http://114.215.18.160:8081/"+response.getFid();
+                updateTextInfo("picPath", imageUrl);
+                myCenterResponse.setPicPath(imageUrl);
+            }
+
+            @Override
+            public void onError() {
+                Toast.makeText(UserInfoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

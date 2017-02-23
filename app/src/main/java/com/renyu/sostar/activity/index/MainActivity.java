@@ -2,6 +2,7 @@ package com.renyu.sostar.activity.index;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayout;
@@ -10,11 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -52,6 +57,22 @@ public class MainActivity extends BaseActivity {
     GridLayout main_menu_grid;
     @BindView(R.id.tv_main_menu_name)
     TextView tv_main_menu_name;
+    @BindView(R.id.iv_main_menu_avatar)
+    SimpleDraweeView iv_main_menu_avatar;
+    @BindView(R.id.tv_main_menu_auth)
+    TextView tv_main_menu_auth;
+    @BindView(R.id.iv_main_menu_auth)
+    ImageView iv_main_menu_auth;
+    @BindView(R.id.iv_main_menu_evaluatelevel)
+    TextView iv_main_menu_evaluatelevel;
+    @BindView(R.id.iv_main_menu_finishorder)
+    TextView iv_main_menu_finishorder;
+    @BindView(R.id.iv_main_menu_closerate)
+    TextView iv_main_menu_closerate;
+    @BindView(R.id.tv_main_menu_auth2)
+    TextView tv_main_menu_auth2;
+
+    MyCenterResponse myCenterResponse;
 
     @Override
     public void initParams() {
@@ -136,7 +157,9 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.layout_main_menu_mycenter_info:
-                startActivityForResult(new Intent(MainActivity.this, UserInfoActivity.class), CommonParams.RESULT_UPDATEUSREINFO);
+                Intent intent_info=new Intent(MainActivity.this, UserInfoActivity.class);
+                intent_info.putExtra("response", myCenterResponse);
+                startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
         }
     }
@@ -152,8 +175,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==CommonParams.RESULT_UPDATEUSREINFO && resultCode==RESULT_OK) {
-
+        if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
+            myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
+            updateMyCenter(myCenterResponse);
         }
     }
 
@@ -175,8 +199,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onNext(MyCenterResponse value) {
-                tv_main_menu_name.setText(value.getName());
-
+                myCenterResponse=value;
+                updateMyCenter(myCenterResponse);
             }
 
             @Override
@@ -189,5 +213,37 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void updateMyCenter(MyCenterResponse value) {
+        if (!TextUtils.isEmpty(value.getNickName())) {
+            tv_main_menu_name.setText(value.getNickName());
+        }
+        else {
+            tv_main_menu_name.setText("暂无");
+        }
+        if (!TextUtils.isEmpty(value.getPicPath())) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(value.getPicPath())).setAutoPlayAnimations(true).build();
+            iv_main_menu_avatar.setController(draweeController);
+        }
+        if (TextUtils.isEmpty(value.getAuthentication()) || value.getAuthentication().equals("0")) {
+            tv_main_menu_auth.setText("未认证");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_mynoauth);
+            tv_main_menu_auth2.setText("未认证");
+        }
+        else if (value.getAuthentication().equals("1")) {
+            tv_main_menu_auth.setText("已认证");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_myauth);
+            tv_main_menu_auth2.setText("已认证");
+        }
+        else if (value.getAuthentication().equals("2")) {
+            tv_main_menu_auth.setText("认证中");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_myauth);
+            tv_main_menu_auth2.setText("认证中");
+        }
+        iv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
+        iv_main_menu_finishorder.setText(""+value.getFinishedOrders());
+        iv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
     }
 }

@@ -1,20 +1,24 @@
 package com.renyu.sostar.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by renyu on 2017/2/22.
  */
 
-public class MyCenterResponse {
+public class MyCenterResponse implements Serializable {
     /**
      * age : string
      * authentication : string
      * closeRate : string
      * evaluateLevel : string
      * finishedOrders : 0
+     * introduction : string
      * name : string
+     * nickName : string
      * picPath : string
+     * rangeArea : 0
      * sex : string
-     * staffId : string
      */
 
     private String age;
@@ -22,10 +26,12 @@ public class MyCenterResponse {
     private String closeRate;
     private String evaluateLevel;
     private int finishedOrders;
+    private String introduction;
     private String name;
+    private String nickName;
     private String picPath;
+    private int rangeArea;
     private String sex;
-    private String staffId;
 
     public String getAge() {
         return age;
@@ -67,12 +73,28 @@ public class MyCenterResponse {
         this.finishedOrders = finishedOrders;
     }
 
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPicPath() {
@@ -83,19 +105,19 @@ public class MyCenterResponse {
         this.picPath = picPath;
     }
 
+    public int getRangeArea() {
+        return rangeArea;
+    }
+
+    public void setRangeArea(int rangeArea) {
+        this.rangeArea = rangeArea;
+    }
+
     public String getSex() {
         return sex;
     }
 
     public void setSex(String sex) {
         this.sex = sex;
-    }
-
-    public String getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
     }
 }

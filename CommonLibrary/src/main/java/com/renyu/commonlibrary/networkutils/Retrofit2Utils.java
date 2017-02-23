@@ -33,8 +33,9 @@ public class Retrofit2Utils {
 
     private OkHttpClient.Builder okBuilder;
     private static Retrofit retrofit;
+    private static Retrofit retrofit_uploadimage=null;
 
-    private Retrofit2Utils(String baseUrl) {
+    private Retrofit2Utils(String baseUrl, String uploadUrl) {
         okBuilder=new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
@@ -46,17 +47,28 @@ public class Retrofit2Utils {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okBuilder.build()).baseUrl(baseUrl).build();
+        retrofit_uploadimage=new Retrofit.Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okBuilder.build()).baseUrl(uploadUrl).build();
     }
 
-    public static Retrofit getInstance(String baseUrl) {
+    public static void getInstance(String baseUrl, String uploadUrl) {
         if (retrofit2Utils==null) {
             synchronized (Retrofit2Utils.class) {
                 if (retrofit2Utils==null) {
-                    retrofit2Utils=new Retrofit2Utils(baseUrl);
+                    retrofit2Utils=new Retrofit2Utils(baseUrl, uploadUrl);
                 }
             }
         }
+    }
+
+    public static Retrofit getBaseRetrofit() {
         return retrofit;
+    }
+
+    public static Retrofit getImageUploadRetrofit() {
+        return retrofit_uploadimage;
     }
 
     /**
@@ -126,5 +138,4 @@ public class Retrofit2Utils {
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 }

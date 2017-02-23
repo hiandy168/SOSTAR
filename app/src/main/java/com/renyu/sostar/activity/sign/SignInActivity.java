@@ -151,7 +151,7 @@ public class SignInActivity extends BaseActivity {
                 ACache.get(SignInActivity.this).put(CommonParams.USER_PASSWORD, signin_pwd.getText().toString());
                 ACache.get(SignInActivity.this).put(CommonParams.USER_ID, value.getUserId());
                 // 如果没有用户身份类型，进入选择身份类型页面
-                if (TextUtils.isEmpty(value.getUserType())) {
+                if (TextUtils.isEmpty(value.getUserType()) || value.getUserType().equals("-1")) {
                     Intent intent_sisu=new Intent(SignInActivity.this, SignInSignUpActivity.class);
                     intent_sisu.putExtra(CommonParams.FROM, CommonParams.CUSTOMER_STATE);
                     intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

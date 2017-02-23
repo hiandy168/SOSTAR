@@ -14,13 +14,14 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ClearEditText;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.SignupRequest;
-import com.renyu.sostar.bean.SignupResponse;
 import com.renyu.sostar.bean.VCodeRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -198,14 +199,18 @@ public class SignUpActivity extends BaseActivity {
             request.setParam(paramBean);
             retrofit.create(RetrofitImpl.class)
                     .signup(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                    .compose(Retrofit2Utils.background()).subscribe(new Observer<SignupResponse>() {
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
 
                 }
 
                 @Override
-                public void onNext(SignupResponse value) {
+                public void onNext(SigninResponse value) {
+                    ACache.get(SignUpActivity.this).put(CommonParams.USER_PHONE, signup_phone.getText().toString());
+                    ACache.get(SignUpActivity.this).put(CommonParams.USER_PASSWORD, signup_pwd.getText().toString());
+                    ACache.get(SignUpActivity.this).put(CommonParams.USER_ID, value.getUserId());
+
                     Intent intent_sisu=new Intent(SignUpActivity.this, SignInSignUpActivity.class);
                     intent_sisu.putExtra(CommonParams.FROM, CommonParams.CUSTOMER_STATE);
                     intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

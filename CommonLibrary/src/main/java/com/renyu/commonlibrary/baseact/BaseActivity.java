@@ -57,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     // 网络请求
     public OKHttpHelper httpHelper = null;
     public Retrofit retrofit=null;
+    public Retrofit retrofit_uploadimage=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +77,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         httpHelper = new OKHttpHelper();
-        retrofit = Retrofit2Utils.getInstance("http://114.215.18.160:8080/");
+        Retrofit2Utils.getInstance("http://114.215.18.160:8080/", "http://114.215.18.160:9333/");
+        retrofit = Retrofit2Utils.getBaseRetrofit();
+        retrofit_uploadimage = Retrofit2Utils.getImageUploadRetrofit();
 
         initParams();
         loadData();

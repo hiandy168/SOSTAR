@@ -139,7 +139,7 @@
                 android:layout_marginStart="12dip"
                 android:textSize="14sp"
                 android:textColor="#333333"
-                android:text="年龄"/>
+                android:text="生日"/>
             <TextView
                 android:id="@+id/tv_employeeinfo_age"
                 android:layout_width="match_parent"
@@ -246,7 +246,6 @@
         android:orientation="vertical"
         android:background="@android:color/white">
         <LinearLayout
-            android:id="@+id/layout_employeeinfo_evaluate"
             android:layout_width="match_parent"
             android:layout_height="45dip"
             android:gravity="center_vertical"
@@ -277,7 +276,6 @@
 
         </View>
         <LinearLayout
-            android:id="@+id/layout_employeeinfo_completionrate"
             android:layout_width="match_parent"
             android:layout_height="45dip"
             android:gravity="center_vertical"
