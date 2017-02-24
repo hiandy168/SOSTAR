@@ -116,34 +116,66 @@ public class UpdateTextInfoActivity extends BaseActivity {
             childJsonObject.put(getIntent().getStringExtra("param"), et_updatetextinfo.getText().toString());
             childJsonObject.put("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
             jsonObject.put("param", childJsonObject);
-            retrofit.create(RetrofitImpl.class)
-                    .setStaffInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
-                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
-                @Override
-                public void onSubscribe(Disposable d) {
-                    disposable=d;
-                }
+            if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                retrofit.create(RetrofitImpl.class)
+                        .setEmployerInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
+                        .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable=d;
+                    }
 
-                @Override
-                public void onNext(EmptyResponse value) {
-                    Toast.makeText(UpdateTextInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent();
-                    intent.putExtra("param", getIntent().getStringExtra("param"));
-                    intent.putExtra("value", et_updatetextinfo.getText().toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                    @Override
+                    public void onNext(EmptyResponse value) {
+                        Toast.makeText(UpdateTextInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent intent=new Intent();
+                        intent.putExtra("param", getIntent().getStringExtra("param"));
+                        intent.putExtra("value", et_updatetextinfo.getText().toString());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
 
-                @Override
-                public void onError(Throwable e) {
-                    Toast.makeText(UpdateTextInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(UpdateTextInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-                @Override
-                public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                }
-            });
+                    }
+                });
+            }
+            else {
+                retrofit.create(RetrofitImpl.class)
+                        .setStaffInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
+                        .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable=d;
+                    }
+
+                    @Override
+                    public void onNext(EmptyResponse value) {
+                        Toast.makeText(UpdateTextInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent intent=new Intent();
+                        intent.putExtra("param", getIntent().getStringExtra("param"));
+                        intent.putExtra("value", et_updatetextinfo.getText().toString());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(UpdateTextInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

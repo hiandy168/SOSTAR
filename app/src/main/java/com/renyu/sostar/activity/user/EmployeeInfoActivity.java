@@ -25,7 +25,7 @@ import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
-import com.renyu.sostar.bean.MyCenterResponse;
+import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -46,7 +46,7 @@ import io.reactivex.disposables.Disposable;
  * Created by renyu on 2017/2/17.
  */
 
-public class UserInfoActivity extends BaseActivity {
+public class EmployeeInfoActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
@@ -71,13 +71,13 @@ public class UserInfoActivity extends BaseActivity {
     @BindView(R.id.iv_employeeinfo_auth)
     ImageView iv_employeeinfo_auth;
 
-    MyCenterResponse myCenterResponse;
+    MyCenterEmployeeResponse myCenterResponse;
 
     Disposable disposable;
 
     @Override
     public void initParams() {
-        myCenterResponse= (MyCenterResponse) getIntent().getSerializableExtra("response");
+        myCenterResponse= (MyCenterEmployeeResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人信息");
 
@@ -121,7 +121,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     public int initViews() {
-        return R.layout.activity_userinfo;
+        return R.layout.activity_employeeinfo;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class UserInfoActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.layout_employeeinfo_age:
-                ActionSheetUtils.showDate(UserInfoActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showDate(EmployeeInfoActivity.this.getSupportFragmentManager(),
                         "生日",
                         "取消",
                         "完成",
@@ -164,21 +164,21 @@ public class UserInfoActivity extends BaseActivity {
                 );
                 break;
             case R.id.layout_employeeinfo_avatar:
-                ActionSheetUtils.showCamera(UserInfoActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(EmployeeInfoActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
-                                Utils.takePicture(UserInfoActivity.this, CommonParams.RESULT_TAKEPHOTO);
+                                Utils.takePicture(EmployeeInfoActivity.this, CommonParams.RESULT_TAKEPHOTO);
                             }
                             else if (position==1) {
-                                Utils.choicePic(UserInfoActivity.this, 1, CommonParams.RESULT_ALUMNI);
+                                Utils.choicePic(EmployeeInfoActivity.this, 1, CommonParams.RESULT_ALUMNI);
                             }
                         }, "取消", () -> {
 
                         });
                 break;
             case R.id.layout_employeeinfo_name:
-                Intent intent_updatename=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_updatename=new Intent(EmployeeInfoActivity.this, UpdateTextInfoActivity.class);
                 intent_updatename.putExtra("title", "昵称");
                 intent_updatename.putExtra("param", "nickName");
                 intent_updatename.putExtra("needcommit", true);
@@ -186,7 +186,7 @@ public class UserInfoActivity extends BaseActivity {
                 startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employeeinfo_summary:
-                Intent intent_summary=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_summary=new Intent(EmployeeInfoActivity.this, UpdateTextInfoActivity.class);
                 intent_summary.putExtra("title", "简介");
                 intent_summary.putExtra("param", "introduction");
                 intent_summary.putExtra("needcommit", true);
@@ -194,12 +194,12 @@ public class UserInfoActivity extends BaseActivity {
                 startActivityForResult(intent_summary, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employeeinfo_auth:
-                Intent intent_info=new Intent(UserInfoActivity.this, UserAuthActivity.class);
+                Intent intent_info=new Intent(EmployeeInfoActivity.this, EmployeeAuthActivity.class);
                 intent_info.putExtra("response", myCenterResponse);
                 startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_employeeinfo_sex:
-                ActionSheetUtils.showList(UserInfoActivity.this.getSupportFragmentManager(), "性别",
+                ActionSheetUtils.showList(EmployeeInfoActivity.this.getSupportFragmentManager(), "性别",
                         new String[]{"男", "女"}, position -> updateTextInfo("sex", ""+(position+1)),
                         () -> {
 
@@ -219,7 +219,7 @@ public class UserInfoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            Utils.cropImage(path, UserInfoActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(path, EmployeeInfoActivity.this, CommonParams.RESULT_CROP);
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
             ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
@@ -229,15 +229,15 @@ public class UserInfoActivity extends BaseActivity {
             if (filePaths.size()!=1) {
                 return;
             }
-            Utils.cropImage(filePaths.get(0), UserInfoActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(filePaths.get(0), EmployeeInfoActivity.this, CommonParams.RESULT_CROP);
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
             uploadFile(path);
         }
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
-            myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
             if (TextUtils.isEmpty(data.getStringExtra("param"))) {
+                myCenterResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
                 if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
                     tv_employeeinfo_auth.setText("未认证");
                     iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfonoauth);
@@ -289,7 +289,7 @@ public class UserInfoActivity extends BaseActivity {
 
                 @Override
                 public void onNext(EmptyResponse value) {
-                    Toast.makeText(UserInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmployeeInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                     if (param.equals("picPath")) {
                         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                                 .setUri(Uri.parse(paramValue)).setAutoPlayAnimations(true).build();
@@ -313,7 +313,7 @@ public class UserInfoActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
-                    Toast.makeText(UserInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmployeeInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -347,7 +347,7 @@ public class UserInfoActivity extends BaseActivity {
 
             @Override
             public void onError() {
-                Toast.makeText(UserInfoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmployeeInfoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

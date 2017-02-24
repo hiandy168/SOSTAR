@@ -2,7 +2,8 @@ package com.renyu.sostar.impl;
 
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.Response;
-import com.renyu.sostar.bean.MyCenterResponse;
+import com.renyu.sostar.bean.MyCenterEmployeeResponse;
+import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.SigninResponse;
 
 import io.reactivex.Observable;
@@ -34,7 +35,7 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/center")
-    Observable<Response<MyCenterResponse>> getMyCenter(@Body RequestBody requestBody);
+    Observable<Response<MyCenterEmployeeResponse>> getMyEmployeeCenter(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/setUserType")
@@ -47,4 +48,12 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/setStaffAuthentica")
     Observable<Response<EmptyResponse>> setStaffAuthentica(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/center")
+    Observable<Response<MyCenterEmployerResponse>> getMyEmployerCenter(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setEmployerInfo")
+    Observable<Response<EmptyResponse>> setEmployerInfo(@Body RequestBody requestBody);
 }

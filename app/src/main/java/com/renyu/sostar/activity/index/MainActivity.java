@@ -27,10 +27,12 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
-import com.renyu.sostar.activity.user.UserAuthActivity;
-import com.renyu.sostar.activity.user.UserInfoActivity;
+import com.renyu.sostar.activity.user.EmployeeAuthActivity;
+import com.renyu.sostar.activity.user.EmployeeInfoActivity;
+import com.renyu.sostar.activity.user.EmployerInfoActivity;
+import com.renyu.sostar.bean.MyCenterEmployeeResponse;
+import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
-import com.renyu.sostar.bean.MyCenterResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
@@ -64,16 +66,23 @@ public class MainActivity extends BaseActivity {
     TextView tv_main_menu_auth;
     @BindView(R.id.iv_main_menu_auth)
     ImageView iv_main_menu_auth;
-    @BindView(R.id.iv_main_menu_evaluatelevel)
-    TextView iv_main_menu_evaluatelevel;
-    @BindView(R.id.iv_main_menu_finishorder)
-    TextView iv_main_menu_finishorder;
-    @BindView(R.id.iv_main_menu_closerate)
-    TextView iv_main_menu_closerate;
+    @BindView(R.id.tv_main_menu_evaluatelevel)
+    TextView tv_main_menu_evaluatelevel;
+    @BindView(R.id.tv_main_menu_order)
+    TextView tv_main_menu_order;
+    @BindView(R.id.tv_main_menu_order_desp)
+    TextView tv_main_menu_order_desp;
+    @BindView(R.id.tv_main_menu_closerate)
+    TextView tv_main_menu_closerate;
     @BindView(R.id.tv_main_menu_auth2)
     TextView tv_main_menu_auth2;
+    @BindView(R.id.tv_main_menu_mycenter_info)
+    TextView tv_main_menu_mycenter_info;
+    @BindView(R.id.layout_main_menu_mycenter_area)
+    TextView layout_main_menu_mycenter_area;
 
-    MyCenterResponse myCenterResponse;
+    MyCenterEmployeeResponse myCenterEmployeeResponse;
+    MyCenterEmployerResponse myCenterEmployerResponse;
 
     @Override
     public void initParams() {
@@ -88,6 +97,16 @@ public class MainActivity extends BaseActivity {
         TextView tv_menu_nav_title= (TextView) main_menu_layout.findViewById(R.id.tv_nav_title);
         tv_menu_nav_title.setText("我的");
         tv_menu_nav_title.setTextColor(Color.WHITE);
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            tv_main_menu_mycenter_info.setText("企业资料");
+            layout_main_menu_mycenter_area.setText("发单范围");
+            tv_main_menu_order_desp.setText("已发单");
+        }
+        else {
+            tv_main_menu_mycenter_info.setText("个人资料");
+            layout_main_menu_mycenter_area.setText("接单范围");
+            tv_main_menu_order_desp.setText("已接单");
+        }
 
         main_dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         main_dl.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -133,7 +152,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        getMyCenter();
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            getMyEmployerCenter();
+        }
+        else {
+            getMyEmployeeCenter();
+        }
     }
 
     @Override
@@ -158,14 +182,26 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.layout_main_menu_mycenter_info:
-                Intent intent_info=new Intent(MainActivity.this, UserInfoActivity.class);
-                intent_info.putExtra("response", myCenterResponse);
-                startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    Intent intent_info=new Intent(MainActivity.this, EmployerInfoActivity.class);
+                    intent_info.putExtra("response", myCenterEmployerResponse);
+                    startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                }
+                else {
+                    Intent intent_info=new Intent(MainActivity.this, EmployeeInfoActivity.class);
+                    intent_info.putExtra("response", myCenterEmployeeResponse);
+                    startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                }
                 break;
             case R.id.layout_main_menu_mycenter_auth:
-                Intent intent_auth=new Intent(MainActivity.this, UserAuthActivity.class);
-                intent_auth.putExtra("response", myCenterResponse);
-                startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+
+                }
+                else {
+                    Intent intent_auth=new Intent(MainActivity.this, EmployeeAuthActivity.class);
+                    intent_auth.putExtra("response", myCenterEmployeeResponse);
+                    startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
+                }
                 break;
         }
     }
@@ -182,12 +218,18 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
-            myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
-            updateMyCenter(myCenterResponse);
+            if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
+                updateMyEmployerCenter(myCenterEmployerResponse);
+            }
+            else {
+                myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
+                updateMyEmployeeCenter(myCenterEmployeeResponse);
+            }
         }
     }
 
-    private void getMyCenter() {
+    private void getMyEmployeeCenter() {
         if (TextUtils.isEmpty(ACache.get(this).getAsString(CommonParams.USER_ID))) {
             return;
         }
@@ -196,17 +238,17 @@ public class MainActivity extends BaseActivity {
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
-                .getMyCenter(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<MyCenterResponse>() {
+                .getMyEmployeeCenter(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<MyCenterEmployeeResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(MyCenterResponse value) {
-                myCenterResponse=value;
-                updateMyCenter(myCenterResponse);
+            public void onNext(MyCenterEmployeeResponse value) {
+                myCenterEmployeeResponse=value;
+                updateMyEmployeeCenter(myCenterEmployeeResponse);
             }
 
             @Override
@@ -221,7 +263,41 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void updateMyCenter(MyCenterResponse value) {
+    private void getMyEmployerCenter() {
+        if (TextUtils.isEmpty(ACache.get(this).getAsString(CommonParams.USER_ID))) {
+            return;
+        }
+        MyCenterRequest request=new MyCenterRequest();
+        MyCenterRequest.ParamBean paramBean=new MyCenterRequest.ParamBean();
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getMyEmployerCenter(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<MyCenterEmployerResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(MyCenterEmployerResponse value) {
+                myCenterEmployerResponse=value;
+                updateMyEmployerCenter(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void updateMyEmployeeCenter(MyCenterEmployeeResponse value) {
         if (!TextUtils.isEmpty(value.getNickName())) {
             tv_main_menu_name.setText(value.getNickName());
         }
@@ -245,8 +321,37 @@ public class MainActivity extends BaseActivity {
             iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfoauthing);
             tv_main_menu_auth2.setText("认证中");
         }
-        iv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
-        iv_main_menu_finishorder.setText(""+value.getFinishedOrders());
-        iv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
+        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
+        tv_main_menu_order.setText(""+value.getFinishedOrders());
+        tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
+    }
+
+    private void updateMyEmployerCenter(MyCenterEmployerResponse value) {
+        if (!TextUtils.isEmpty(value.getCompanyName())) {
+            tv_main_menu_name.setText(value.getCompanyName());
+        }
+        if (!TextUtils.isEmpty(value.getLogoPath())) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(value.getLogoPath())).setAutoPlayAnimations(true).build();
+            iv_main_menu_avatar.setController(draweeController);
+        }
+        if (TextUtils.isEmpty(value.getAuthentication()) || value.getAuthentication().equals("0")) {
+            tv_main_menu_auth.setText("未认证");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfonoauth);
+            tv_main_menu_auth2.setText("未认证");
+        }
+        else if (value.getAuthentication().equals("1")) {
+            tv_main_menu_auth.setText("已认证");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_myauth);
+            tv_main_menu_auth2.setText("已认证");
+        }
+        else if (value.getAuthentication().equals("2")) {
+            tv_main_menu_auth.setText("认证中");
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfoauthing);
+            tv_main_menu_auth2.setText("认证中");
+        }
+//        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.get())?"0":value.getEvaluateLevel());
+        tv_main_menu_order.setText(""+value.getOngoingOrder());
+        tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
     }
 }

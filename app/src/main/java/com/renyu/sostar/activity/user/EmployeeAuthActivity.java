@@ -23,7 +23,7 @@ import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
-import com.renyu.sostar.bean.MyCenterResponse;
+import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.bean.UserAuthRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -42,7 +42,7 @@ import io.reactivex.disposables.Disposable;
  * Created by renyu on 2017/2/24.
  */
 
-public class UserAuthActivity extends BaseActivity {
+public class EmployeeAuthActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
@@ -68,11 +68,11 @@ public class UserAuthActivity extends BaseActivity {
 
     Disposable disposable;
 
-    MyCenterResponse myCenterResponse;
+    MyCenterEmployeeResponse myCenterResponse;
 
     @Override
     public void initParams() {
-        myCenterResponse= (MyCenterResponse) getIntent().getSerializableExtra("response");
+        myCenterResponse= (MyCenterEmployeeResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人认证");
 
@@ -103,7 +103,7 @@ public class UserAuthActivity extends BaseActivity {
 
     @Override
     public int initViews() {
-        return R.layout.activity_userauth;
+        return R.layout.activity_employeeauth;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class UserAuthActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_userauth_name:
-                Intent intent_userauth_name=new Intent(UserAuthActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_userauth_name=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_name.putExtra("title", "真实姓名");
                 intent_userauth_name.putExtra("param", "name");
                 intent_userauth_name.putExtra("needcommit", false);
@@ -144,7 +144,7 @@ public class UserAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_name, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_phone:
-                Intent intent_userauth_phone=new Intent(UserAuthActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_userauth_phone=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_phone.putExtra("title", "联系电话");
                 intent_userauth_phone.putExtra("param", "phone");
                 intent_userauth_phone.putExtra("needcommit", false);
@@ -152,7 +152,7 @@ public class UserAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_id:
-                Intent intent_userauth_id=new Intent(UserAuthActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_userauth_id=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_id.putExtra("title", "身份证号");
                 intent_userauth_id.putExtra("param", "certificateId");
                 intent_userauth_id.putExtra("needcommit", false);
@@ -161,14 +161,14 @@ public class UserAuthActivity extends BaseActivity {
                 break;
             case R.id.layout_userauth_positive:
                 uploadPicPosition=1;
-                ActionSheetUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(EmployeeAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
-                                Utils.takePicture(UserAuthActivity.this, CommonParams.RESULT_TAKEPHOTO);
+                                Utils.takePicture(EmployeeAuthActivity.this, CommonParams.RESULT_TAKEPHOTO);
                             }
                             else if (position==1) {
-                                Utils.choicePic(UserAuthActivity.this, 1, CommonParams.RESULT_ALUMNI);
+                                Utils.choicePic(EmployeeAuthActivity.this, 1, CommonParams.RESULT_ALUMNI);
                             }
                         }, "取消", () -> {
 
@@ -176,14 +176,14 @@ public class UserAuthActivity extends BaseActivity {
                 break;
             case R.id.layout_userauth_negative:
                 uploadPicPosition=2;
-                ActionSheetUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(EmployeeAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
-                                Utils.takePicture(UserAuthActivity.this, CommonParams.RESULT_TAKEPHOTO);
+                                Utils.takePicture(EmployeeAuthActivity.this, CommonParams.RESULT_TAKEPHOTO);
                             }
                             else if (position==1) {
-                                Utils.choicePic(UserAuthActivity.this, 1, CommonParams.RESULT_ALUMNI);
+                                Utils.choicePic(EmployeeAuthActivity.this, 1, CommonParams.RESULT_ALUMNI);
                             }
                         }, "取消", () -> {
 
@@ -235,14 +235,14 @@ public class UserAuthActivity extends BaseActivity {
 
             @Override
             public void onNext(EmptyResponse value) {
-                Toast.makeText(UserAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmployeeAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 myCenterResponse.setAuthentication("2");
                 onBackPressed();
             }
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(UserAuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmployeeAuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -268,7 +268,7 @@ public class UserAuthActivity extends BaseActivity {
         }
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            Utils.cropImage(path, UserAuthActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(path, EmployeeAuthActivity.this, CommonParams.RESULT_CROP);
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
             ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
@@ -278,7 +278,7 @@ public class UserAuthActivity extends BaseActivity {
             if (filePaths.size()!=1) {
                 return;
             }
-            Utils.cropImage(filePaths.get(0), UserAuthActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(filePaths.get(0), EmployeeAuthActivity.this, CommonParams.RESULT_CROP);
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
@@ -319,7 +319,7 @@ public class UserAuthActivity extends BaseActivity {
 
             @Override
             public void onError() {
-                Toast.makeText(UserAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmployeeAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

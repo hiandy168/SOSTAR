@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by renyu on 2017/2/22.
  */
 
-public class MyCenterResponse implements Serializable {
+public class MyCenterEmployeeResponse implements Serializable {
 
     /**
      * age : string
