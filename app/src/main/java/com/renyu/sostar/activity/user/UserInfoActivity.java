@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +21,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
-import com.renyu.commonlibrary.views.wheelview.WheelViewUtils;
+import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
@@ -65,6 +66,10 @@ public class UserInfoActivity extends BaseActivity {
     SimpleDraweeView iv_employeeinfo_avatar;
     @BindView(R.id.tv_employeeinfo_auth)
     TextView tv_employeeinfo_auth;
+    @BindView(R.id.tv_employeeinfo_sex)
+    TextView tv_employeeinfo_sex;
+    @BindView(R.id.iv_employeeinfo_auth)
+    ImageView iv_employeeinfo_auth;
 
     MyCenterResponse myCenterResponse;
 
@@ -84,37 +89,34 @@ public class UserInfoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(myCenterResponse.getNickName())) {
             tv_employeeinfo_name.setText(myCenterResponse.getNickName());
         }
-        else {
-            tv_employeeinfo_name.setText("暂无");
-        }
         if (!TextUtils.isEmpty(myCenterResponse.getIntroduction())) {
             tv_employeeinfo_summary.setText(myCenterResponse.getIntroduction());
-        }
-        else {
-            tv_employeeinfo_summary.setText("暂无");
         }
         if (!TextUtils.isEmpty(myCenterResponse.getAge())) {
             tv_employeeinfo_age.setText(myCenterResponse.getAge());
         }
-        else {
-            tv_employeeinfo_age.setText("暂无");
-        }
-        if (TextUtils.isEmpty(myCenterResponse.getAuthentication())) {
+        if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
             tv_employeeinfo_auth.setText("未认证");
+            iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfonoauth);
         }
-        else {
-            if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
-                tv_employeeinfo_auth.setText("未认证");
+        else if (myCenterResponse.getAuthentication().equals("1")) {
+            tv_employeeinfo_auth.setText("已认证");
+            iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfoauthed);
+        }
+        else if (myCenterResponse.getAuthentication().equals("2")) {
+            tv_employeeinfo_auth.setText("认证中");
+            iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfoauthing);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getSex())) {
+            if (myCenterResponse.getSex().equals("1")) {
+                tv_employeeinfo_sex.setText("男");
             }
-            else if (myCenterResponse.getAuthentication().equals("1")) {
-                tv_employeeinfo_auth.setText("已认证");
-            }
-            else if (myCenterResponse.getAuthentication().equals("2")) {
-                tv_employeeinfo_auth.setText("认证中");
+            else {
+                tv_employeeinfo_sex.setText("女");
             }
         }
         tv_employeeinfo_evaluate.setText(TextUtils.isEmpty(myCenterResponse.getEvaluateLevel())?"0":myCenterResponse.getEvaluateLevel());
-        tv_employeeinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0":myCenterResponse.getCloseRate());
+        tv_employeeinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate()+"%");
     }
 
     @Override
@@ -138,14 +140,15 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     @OnClick({R.id.ib_nav_left, R.id.layout_employeeinfo_age, R.id.layout_employeeinfo_avatar,
-            R.id.layout_employeeinfo_name, R.id.layout_employeeinfo_summary, R.id.layout_employeeinfo_auth})
+            R.id.layout_employeeinfo_name, R.id.layout_employeeinfo_summary,
+            R.id.layout_employeeinfo_auth, R.id.tv_employeeinfo_sex})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
                 onBackPressed();
                 break;
             case R.id.layout_employeeinfo_age:
-                WheelViewUtils.showDate(UserInfoActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showDate(UserInfoActivity.this.getSupportFragmentManager(),
                         "生日",
                         "取消",
                         "完成",
@@ -161,7 +164,7 @@ public class UserInfoActivity extends BaseActivity {
                 );
                 break;
             case R.id.layout_employeeinfo_avatar:
-                WheelViewUtils.showCamera(UserInfoActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(UserInfoActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
@@ -178,18 +181,29 @@ public class UserInfoActivity extends BaseActivity {
                 Intent intent_updatename=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
                 intent_updatename.putExtra("title", "昵称");
                 intent_updatename.putExtra("param", "nickName");
+                intent_updatename.putExtra("needcommit", true);
+                intent_updatename.putExtra("source", tv_employeeinfo_name.getText().toString());
                 startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employeeinfo_summary:
                 Intent intent_summary=new Intent(UserInfoActivity.this, UpdateTextInfoActivity.class);
                 intent_summary.putExtra("title", "简介");
                 intent_summary.putExtra("param", "introduction");
+                intent_summary.putExtra("needcommit", true);
+                intent_summary.putExtra("source", tv_employeeinfo_summary.getText().toString());
                 startActivityForResult(intent_summary, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employeeinfo_auth:
                 Intent intent_info=new Intent(UserInfoActivity.this, UserAuthActivity.class);
                 intent_info.putExtra("response", myCenterResponse);
                 startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
+            case R.id.tv_employeeinfo_sex:
+                ActionSheetUtils.showList(UserInfoActivity.this.getSupportFragmentManager(), "性别",
+                        new String[]{"男", "女"}, position -> updateTextInfo("sex", ""+(position+1)),
+                        () -> {
+
+                        });
                 break;
         }
     }
@@ -222,16 +236,19 @@ public class UserInfoActivity extends BaseActivity {
             uploadFile(path);
         }
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
+            myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
             if (TextUtils.isEmpty(data.getStringExtra("param"))) {
-                myCenterResponse= (MyCenterResponse) data.getSerializableExtra("value");
                 if (TextUtils.isEmpty(myCenterResponse.getAuthentication()) || myCenterResponse.getAuthentication().equals("0")) {
                     tv_employeeinfo_auth.setText("未认证");
+                    iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfonoauth);
                 }
                 else if (myCenterResponse.getAuthentication().equals("1")) {
                     tv_employeeinfo_auth.setText("已认证");
+                    iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfoauthed);
                 }
                 else if (myCenterResponse.getAuthentication().equals("2")) {
                     tv_employeeinfo_auth.setText("认证中");
+                    iv_employeeinfo_auth.setImageResource(R.mipmap.ic_userinfoauthing);
                 }
             }
             else if (data.getStringExtra("param").equals("nickName")) {
@@ -277,9 +294,20 @@ public class UserInfoActivity extends BaseActivity {
                         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                                 .setUri(Uri.parse(paramValue)).setAutoPlayAnimations(true).build();
                         iv_employeeinfo_avatar.setController(draweeController);
+                        myCenterResponse.setPicPath(paramValue);
                     }
                     if (param.equals("age")) {
                         tv_employeeinfo_age.setText(paramValue);
+                        myCenterResponse.setAge(paramValue);
+                    }
+                    if (param.equals("sex")) {
+                        if (paramValue.equals("1")) {
+                            tv_employeeinfo_sex.setText("男");
+                        }
+                        else {
+                            tv_employeeinfo_sex.setText("女");
+                        }
+                        myCenterResponse.setSex(param);
                     }
                 }
 
@@ -297,7 +325,6 @@ public class UserInfoActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-
 
     private void uploadFile(String path) {
         HashMap<String, File> fileHashMap=new HashMap<>();

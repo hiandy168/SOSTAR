@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.views.wheelview;
+package com.renyu.commonlibrary.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;

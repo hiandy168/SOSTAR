@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -52,6 +53,9 @@ public class UpdateTextInfoActivity extends BaseActivity {
         tv_nav_title.setText(getIntent().getStringExtra("title"));
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("完成");
+        tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        et_updatetextinfo.setText(getIntent().getStringExtra("source"));
+        et_updatetextinfo.setSelection(getIntent().getStringExtra("source").length());
     }
 
     @Override

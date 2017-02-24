@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.views.wheelview;
+package com.renyu.commonlibrary.views;
 
 import android.support.v4.app.FragmentManager;
 
@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
  * Created by renyu on 2017/2/22.
  */
 
-public class WheelViewUtils {
+public class ActionSheetUtils {
 
     public static void showDate(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
         ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.DATE)
@@ -23,6 +23,12 @@ public class WheelViewUtils {
     public static void showCamera(FragmentManager manager, String title, String[] items, ActionSheetFragment.OnItemClickListener onItemClickListener, String cancelTitle, ActionSheetFragment.OnCancelListener onCancelListener) {
         ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.CAMERA)
                 .setTitle(title).setListItems(items, onItemClickListener).setCancelTitle(cancelTitle)
+                .setOnCancelListener(onCancelListener).show();
+    }
+
+    public static void showList(FragmentManager manager, String title, String[] items, ActionSheetFragment.OnItemClickListener onItemClickListener, ActionSheetFragment.OnCancelListener onCancelListener) {
+        ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.ITEM)
+                .setTitle(title).setListItems(items, onItemClickListener)
                 .setOnCancelListener(onCancelListener).show();
     }
 }

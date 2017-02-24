@@ -7,15 +7,20 @@ import java.io.Serializable;
  */
 
 public class MyCenterResponse implements Serializable {
+
     /**
      * age : string
      * authentication : string
+     * certificateId : string
      * closeRate : string
      * evaluateLevel : string
      * finishedOrders : 0
      * introduction : string
      * name : string
      * nickName : string
+     * phone : string
+     * picCerOppo : string
+     * picCerpos : string
      * picPath : string
      * rangeArea : 0
      * sex : string
@@ -23,12 +28,16 @@ public class MyCenterResponse implements Serializable {
 
     private String age;
     private String authentication;
+    private String certificateId;
     private String closeRate;
     private String evaluateLevel;
     private int finishedOrders;
     private String introduction;
     private String name;
     private String nickName;
+    private String phone;
+    private String picCerOppo;
+    private String picCerpos;
     private String picPath;
     private int rangeArea;
     private String sex;
@@ -47,6 +56,14 @@ public class MyCenterResponse implements Serializable {
 
     public void setAuthentication(String authentication) {
         this.authentication = authentication;
+    }
+
+    public String getCertificateId() {
+        return certificateId;
+    }
+
+    public void setCertificateId(String certificateId) {
+        this.certificateId = certificateId;
     }
 
     public String getCloseRate() {
@@ -95,6 +112,30 @@ public class MyCenterResponse implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPicCerOppo() {
+        return picCerOppo;
+    }
+
+    public void setPicCerOppo(String picCerOppo) {
+        this.picCerOppo = picCerOppo;
+    }
+
+    public String getPicCerpos() {
+        return picCerpos;
+    }
+
+    public void setPicCerpos(String picCerpos) {
+        this.picCerpos = picCerpos;
     }
 
     public String getPicPath() {

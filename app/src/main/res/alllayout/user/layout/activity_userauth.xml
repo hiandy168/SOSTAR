@@ -34,8 +34,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="9dip"
                 android:textSize="14sp"
-                android:textColor="#999999"
-                android:text="暂无"/>
+                android:textColor="#999999" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,8 +69,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="9dip"
                 android:textSize="14sp"
-                android:textColor="#999999"
-                android:text="暂无"/>
+                android:textColor="#999999" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,8 +103,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="9dip"
                 android:textSize="14sp"
-                android:textColor="#999999"
-                android:text="暂无"/>
+                android:textColor="#999999" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,6 +142,7 @@
                     android:layout_height="50dip"
                     android:layout_centerInParent="true"
                     fresco:roundAsCircle="false"
+                    fresco:roundedCornerRadius="10dp"
                     fresco:roundingBorderWidth="1dp"
                     fresco:roundingBorderColor="#999999"
                     fresco:placeholderImage="@mipmap/ic_launcher"
@@ -173,6 +171,8 @@
                     android:layout_width="50dip"
                     android:layout_height="50dip"
                     android:layout_centerInParent="true"
+                    fresco:roundAsCircle="false"
+                    fresco:roundedCornerRadius="10dp"
                     fresco:roundingBorderWidth="1dp"
                     fresco:roundingBorderColor="#999999"
                     fresco:placeholderImage="@mipmap/ic_launcher"

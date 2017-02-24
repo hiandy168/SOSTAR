@@ -61,7 +61,7 @@
                     android:id="@+id/iv_main_menu_auth"
                     android:layout_alignBottom="@id/layout_main_menu_info"
                     android:layout_toRightOf="@id/layout_main_menu_info"
-                    android:layout_marginBottom="-3dip"
+                    android:layout_marginBottom="-4dip"
                     android:layout_marginStart="5dip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -249,6 +249,7 @@
 
                 </View>
                 <LinearLayout
+                    android:id="@+id/layout_main_menu_mycenter_auth"
                     android:layout_width="match_parent"
                     android:layout_height="45dip"
                     android:gravity="center_vertical"

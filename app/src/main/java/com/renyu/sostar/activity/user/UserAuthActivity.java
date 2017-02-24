@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,10 +16,11 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
-import com.renyu.commonlibrary.views.wheelview.WheelViewUtils;
+import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyCenterResponse;
@@ -73,6 +75,30 @@ public class UserAuthActivity extends BaseActivity {
         myCenterResponse= (MyCenterResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人认证");
+
+        if (!TextUtils.isEmpty(myCenterResponse.getName())) {
+            tv_userauth_name.setText(myCenterResponse.getName());
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getCertificateId())) {
+            tv_userauth_id.setText(myCenterResponse.getCertificateId());
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getPhone())) {
+            tv_userauth_phone.setText(myCenterResponse.getPhone());
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getPicCerpos())) {
+            iv_userauth_positive.setTag(myCenterResponse.getPicCerpos());
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getPicCerpos())).setAutoPlayAnimations(true).build();
+            iv_userauth_positive.setController(draweeController);
+            tv_userauth_positive.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getPicCerOppo())) {
+            iv_userauth_negative.setTag(myCenterResponse.getPicCerOppo());
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getPicCerOppo())).setAutoPlayAnimations(true).build();
+            iv_userauth_negative.setController(draweeController);
+            tv_userauth_negative.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -114,6 +140,7 @@ public class UserAuthActivity extends BaseActivity {
                 intent_userauth_name.putExtra("title", "真实姓名");
                 intent_userauth_name.putExtra("param", "name");
                 intent_userauth_name.putExtra("needcommit", false);
+                intent_userauth_name.putExtra("source", tv_userauth_name.getText().toString());
                 startActivityForResult(intent_userauth_name, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_phone:
@@ -121,6 +148,7 @@ public class UserAuthActivity extends BaseActivity {
                 intent_userauth_phone.putExtra("title", "联系电话");
                 intent_userauth_phone.putExtra("param", "phone");
                 intent_userauth_phone.putExtra("needcommit", false);
+                intent_userauth_phone.putExtra("source", tv_userauth_phone.getText().toString());
                 startActivityForResult(intent_userauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_id:
@@ -128,11 +156,12 @@ public class UserAuthActivity extends BaseActivity {
                 intent_userauth_id.putExtra("title", "身份证号");
                 intent_userauth_id.putExtra("param", "certificateId");
                 intent_userauth_id.putExtra("needcommit", false);
+                intent_userauth_id.putExtra("source", tv_userauth_id.getText().toString());
                 startActivityForResult(intent_userauth_id, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_userauth_positive:
                 uploadPicPosition=1;
-                WheelViewUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
@@ -147,7 +176,7 @@ public class UserAuthActivity extends BaseActivity {
                 break;
             case R.id.layout_userauth_negative:
                 uploadPicPosition=2;
-                WheelViewUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showCamera(UserAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
                             if (position==0) {
@@ -167,6 +196,26 @@ public class UserAuthActivity extends BaseActivity {
     }
 
     private void commitAuth() {
+        if (TextUtils.isEmpty(tv_userauth_phone.getText().toString())) {
+            Toast.makeText(this, "请填写联系电话", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_userauth_name.getText().toString())) {
+            Toast.makeText(this, "请填写真实姓名", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_userauth_id.getText().toString())) {
+            Toast.makeText(this, "请填写身份证号", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (iv_userauth_positive.getTag()==null) {
+            Toast.makeText(this, "请添加正面照片", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (iv_userauth_negative.getTag()==null) {
+            Toast.makeText(this, "请添加反面照片", Toast.LENGTH_SHORT).show();
+            return;
+        }
         UserAuthRequest request=new UserAuthRequest();
         UserAuthRequest.ParamBean paramBean=new UserAuthRequest.ParamBean();
         paramBean.setPhone(tv_userauth_phone.getText().toString());
@@ -174,6 +223,7 @@ public class UserAuthActivity extends BaseActivity {
         paramBean.setName(tv_userauth_name.getText().toString());
         paramBean.setPicCerpos(iv_userauth_positive.getTag().toString());
         paramBean.setPicCerOppo(iv_userauth_negative.getTag().toString());
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .setStaffAuthentica(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
@@ -186,7 +236,7 @@ public class UserAuthActivity extends BaseActivity {
             @Override
             public void onNext(EmptyResponse value) {
                 Toast.makeText(UserAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                myCenterResponse.setAuthentication("3");
+                myCenterResponse.setAuthentication("2");
                 onBackPressed();
             }
 

@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.views.wheelview;
+package com.renyu.commonlibrary.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,6 +29,7 @@ import com.blankj.utilcode.utils.SizeUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.renyu.commonlibrary.R;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.views.wheelview.LoopView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -187,15 +188,7 @@ public class ActionSheetFragment extends Fragment {
         }
         if (getArguments().getInt("type")==1) {
             ListView pop_listview= (ListView) view.findViewById(R.id.pop_listview);
-            LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) pop_listview.getLayoutParams();
-            int maxHeight=getScreenHeight(getActivity())-getStatusBarHeight(getActivity())-dp2px(getActivity(), (45+10+10))-dp2px(getActivity(), (45+0.5f));
-            int dateHeight=dp2px(getActivity(), (45+0.5f)*getArguments().getStringArray("items").length);
-            if (maxHeight<dateHeight) {
-                params.height=maxHeight;
-            }
-            else {
-                params.height= dp2px(getActivity(), (45+0.5f)*getArguments().getStringArray("items").length);
-            }
+            pop_listview.setVisibility(View.VISIBLE);
             ActionSheetAdapter adapter=new ActionSheetAdapter(getActivity(), getArguments().getStringArray("items"));
             pop_listview.setAdapter(adapter);
             pop_listview.setOnItemClickListener((parent, view1, position, id) -> {
@@ -204,6 +197,8 @@ public class ActionSheetFragment extends Fragment {
                     dismiss();
                 }
             });
+            LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
+            pop_morechoice.setVisibility(View.VISIBLE);
         }
         else if (getArguments().getInt("type")==2) {
             GridLayout pop_grid= (GridLayout) view.findViewById(R.id.pop_grid);

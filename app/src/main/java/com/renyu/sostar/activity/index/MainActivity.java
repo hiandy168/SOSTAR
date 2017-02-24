@@ -27,6 +27,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
+import com.renyu.sostar.activity.user.UserAuthActivity;
 import com.renyu.sostar.activity.user.UserInfoActivity;
 import com.renyu.sostar.bean.MyCenterRequest;
 import com.renyu.sostar.bean.MyCenterResponse;
@@ -145,7 +146,7 @@ public class MainActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info})
+    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info, R.id.layout_main_menu_mycenter_auth})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -160,6 +161,11 @@ public class MainActivity extends BaseActivity {
                 Intent intent_info=new Intent(MainActivity.this, UserInfoActivity.class);
                 intent_info.putExtra("response", myCenterResponse);
                 startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
+            case R.id.layout_main_menu_mycenter_auth:
+                Intent intent_auth=new Intent(MainActivity.this, UserAuthActivity.class);
+                intent_auth.putExtra("response", myCenterResponse);
+                startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
         }
     }
@@ -219,9 +225,6 @@ public class MainActivity extends BaseActivity {
         if (!TextUtils.isEmpty(value.getNickName())) {
             tv_main_menu_name.setText(value.getNickName());
         }
-        else {
-            tv_main_menu_name.setText("暂无");
-        }
         if (!TextUtils.isEmpty(value.getPicPath())) {
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                     .setUri(Uri.parse(value.getPicPath())).setAutoPlayAnimations(true).build();
@@ -229,7 +232,7 @@ public class MainActivity extends BaseActivity {
         }
         if (TextUtils.isEmpty(value.getAuthentication()) || value.getAuthentication().equals("0")) {
             tv_main_menu_auth.setText("未认证");
-            iv_main_menu_auth.setImageResource(R.mipmap.ic_mynoauth);
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfonoauth);
             tv_main_menu_auth2.setText("未认证");
         }
         else if (value.getAuthentication().equals("1")) {
@@ -239,7 +242,7 @@ public class MainActivity extends BaseActivity {
         }
         else if (value.getAuthentication().equals("2")) {
             tv_main_menu_auth.setText("认证中");
-            iv_main_menu_auth.setImageResource(R.mipmap.ic_myauth);
+            iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfoauthing);
             tv_main_menu_auth2.setText("认证中");
         }
         iv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
