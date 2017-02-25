@@ -56,4 +56,9 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setEmployerInfo")
     Observable<Response<EmptyResponse>> setEmployerInfo(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setEmployerAuthentica")
+    Observable<Response<EmptyResponse>> setEmployerAuthentica(@Body RequestBody requestBody);
+
 }

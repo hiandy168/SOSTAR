@@ -29,6 +29,7 @@
         <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.UpdateTextInfoActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".activity.user.EmployeeAuthActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.EmployerAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.other.WebActivity" android:screenOrientation="portrait" android:process=":webview"></activity>
         <!-- 定位上报服务 -->
         <service android:name=".service.LocationService" android:process=":locationservice"></service>

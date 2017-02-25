@@ -29,6 +29,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.activity.user.EmployeeAuthActivity;
 import com.renyu.sostar.activity.user.EmployeeInfoActivity;
+import com.renyu.sostar.activity.user.EmployerAuthActivity;
 import com.renyu.sostar.activity.user.EmployerInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
@@ -141,6 +142,7 @@ public class MainActivity extends BaseActivity {
                 GridLayout.LayoutParams params= (GridLayout.LayoutParams) view.getLayoutParams();
                 params.width=width/3;
                 params.height=height;
+                view.requestLayout();
             }
         });
     }
@@ -195,7 +197,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.layout_main_menu_mycenter_auth:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-
+                    Intent intent_auth=new Intent(MainActivity.this, EmployerAuthActivity.class);
+                    intent_auth.putExtra("response", myCenterEmployerResponse);
+                    startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 }
                 else {
                     Intent intent_auth=new Intent(MainActivity.this, EmployeeAuthActivity.class);
@@ -351,7 +355,7 @@ public class MainActivity extends BaseActivity {
             tv_main_menu_auth2.setText("认证中");
         }
 //        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.get())?"0":value.getEvaluateLevel());
-        tv_main_menu_order.setText(""+value.getOngoingOrder());
+        tv_main_menu_order.setText(TextUtils.isEmpty(value.getOngoingOrder())?"0":value.getOngoingOrder());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
     }
 }

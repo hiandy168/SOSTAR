@@ -290,11 +290,8 @@ public class EmployeeAuthActivity extends BaseActivity {
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         OKHttpHelper helper=new OKHttpHelper();
-        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), new OKHttpHelper.StartListener() {
-            @Override
-            public void onStart() {
+        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
 
-            }
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
