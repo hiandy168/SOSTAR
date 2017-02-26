@@ -34,6 +34,7 @@ import com.renyu.sostar.activity.user.EmployerInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
+import com.renyu.sostar.fragment.MainFragment;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
@@ -145,6 +146,9 @@ public class MainActivity extends BaseActivity {
                 view.requestLayout();
             }
         });
+
+        // 主页添加
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content, new MainFragment(), "mainFragment").commitAllowingStateLoss();
     }
 
     @Override
