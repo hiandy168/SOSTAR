@@ -14,12 +14,17 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.EmployerAuthRequest;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import java.io.File;
@@ -28,6 +33,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -62,12 +68,16 @@ public class EmployerAuthActivity extends BaseActivity {
     // 当前选中图片位置
     private int uploadPicPosition=-1;
 
+    OKHttpHelper helper;
+
     Disposable disposable;
 
     MyCenterEmployerResponse myCenterResponse;
 
     @Override
     public void initParams() {
+        helper=new OKHttpHelper();
+
         myCenterResponse= (MyCenterEmployerResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("企业认证");
@@ -217,43 +227,67 @@ public class EmployerAuthActivity extends BaseActivity {
     }
 
     private void uploadFile(String path) {
+        if (uploadPicPosition==1) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic1.setController(draweeController);
+            tv_employerauth_pic1.setVisibility(View.GONE);
+        }
+        else if (uploadPicPosition==2) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic2.setController(draweeController);
+            tv_employerauth_pic2.setVisibility(View.GONE);
+        }
+        else if (uploadPicPosition==3) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic3.setController(draweeController);
+            tv_employerauth_pic3.setVisibility(View.GONE);
+        }
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
-        OKHttpHelper helper=new OKHttpHelper();
         helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
 
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
+                Toast.makeText(EmployerAuthActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 Gson gson=new Gson();
                 UploadResponse response=gson.fromJson(string, UploadResponse.class);
                 String imageUrl="http://114.215.18.160:8081/"+response.getFid();
                 if (uploadPicPosition==1) {
                     iv_employerauth_pic1.setTag(imageUrl);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(imageUrl)).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic1.setController(draweeController);
-                    tv_employerauth_pic1.setVisibility(View.GONE);
                 }
                 else if (uploadPicPosition==2) {
                     iv_employerauth_pic2.setTag(imageUrl);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(imageUrl)).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic2.setController(draweeController);
-                    tv_employerauth_pic2.setVisibility(View.GONE);
                 }
                 else if (uploadPicPosition==3) {
                     iv_employerauth_pic3.setTag(imageUrl);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(imageUrl)).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic3.setController(draweeController);
-                    tv_employerauth_pic3.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onError() {
                 Toast.makeText(EmployerAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                if (uploadPicPosition==1) {
+                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                    iv_employerauth_pic1.setController(draweeController);
+                    tv_employerauth_pic1.setVisibility(View.GONE);
+                }
+                else if (uploadPicPosition==2) {
+                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                    iv_employerauth_pic2.setController(draweeController);
+                    tv_employerauth_pic2.setVisibility(View.GONE);
+                }
+                else if (uploadPicPosition==3) {
+                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                    iv_employerauth_pic3.setController(draweeController);
+                    tv_employerauth_pic3.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -291,6 +325,43 @@ public class EmployerAuthActivity extends BaseActivity {
             Toast.makeText(this, "请添加照片3", Toast.LENGTH_SHORT).show();
             return;
         }
+        EmployerAuthRequest request=new EmployerAuthRequest();
+        EmployerAuthRequest.ParamBean paramBean=new EmployerAuthRequest.ParamBean();
+        paramBean.setContactPhone(tv_employerauth_phone.getText().toString());
+        paramBean.setCompanyName(tv_employerauth_name.getText().toString());
+        paramBean.setCompanyCode(tv_employerauth_compcode.getText().toString());
+        paramBean.setCerPath(iv_employerauth_pic1.getTag().toString());
+        paramBean.setLicPath(iv_employerauth_pic2.getTag().toString());
+        paramBean.setRifPath(iv_employerauth_pic3.getTag().toString());
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .setEmployerAuthentica(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(EmployerAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                myCenterResponse.setAuthentication("2");
+                myCenterResponse.setCompanyName(tv_employerauth_name.getText().toString());
+                myCenterResponse.setCompanyId(tv_employerauth_compcode.getText().toString());
+                myCenterResponse.setContactPhone(tv_employerauth_phone.getText().toString());
+                onBackPressed();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(EmployerAuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

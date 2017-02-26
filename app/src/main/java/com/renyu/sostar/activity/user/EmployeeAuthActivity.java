@@ -25,7 +25,7 @@ import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.UploadResponse;
-import com.renyu.sostar.bean.UserAuthRequest;
+import com.renyu.sostar.bean.EmployeeAuthRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -216,8 +216,8 @@ public class EmployeeAuthActivity extends BaseActivity {
             Toast.makeText(this, "请添加反面照片", Toast.LENGTH_SHORT).show();
             return;
         }
-        UserAuthRequest request=new UserAuthRequest();
-        UserAuthRequest.ParamBean paramBean=new UserAuthRequest.ParamBean();
+        EmployeeAuthRequest request=new EmployeeAuthRequest();
+        EmployeeAuthRequest.ParamBean paramBean=new EmployeeAuthRequest.ParamBean();
         paramBean.setPhone(tv_userauth_phone.getText().toString());
         paramBean.setCertificateId(tv_userauth_id.getText().toString());
         paramBean.setName(tv_userauth_name.getText().toString());
@@ -237,6 +237,11 @@ public class EmployeeAuthActivity extends BaseActivity {
             public void onNext(EmptyResponse value) {
                 Toast.makeText(EmployeeAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 myCenterResponse.setAuthentication("2");
+                myCenterResponse.setName(tv_userauth_name.getText().toString());
+                myCenterResponse.setCertificateId(tv_userauth_id.getText().toString());
+                myCenterResponse.setPhone(tv_userauth_phone.getText().toString());
+                myCenterResponse.setPicCerpos(iv_userauth_positive.getTag().toString());
+                myCenterResponse.setPicCerOppo(iv_userauth_negative.getTag().toString());
                 onBackPressed();
             }
 
@@ -287,6 +292,18 @@ public class EmployeeAuthActivity extends BaseActivity {
     }
 
     private void uploadFile(String path) {
+        if (uploadPicPosition==1) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+            iv_userauth_positive.setController(draweeController);
+            tv_userauth_positive.setVisibility(View.GONE);
+        }
+        else if (uploadPicPosition==2) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+            iv_userauth_negative.setController(draweeController);
+            tv_userauth_negative.setVisibility(View.GONE);
+        }
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         OKHttpHelper helper=new OKHttpHelper();
@@ -295,28 +312,33 @@ public class EmployeeAuthActivity extends BaseActivity {
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
+                Toast.makeText(EmployeeAuthActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 Gson gson=new Gson();
                 UploadResponse response=gson.fromJson(string, UploadResponse.class);
                 String imageUrl="http://114.215.18.160:8081/"+response.getFid();
                 if (uploadPicPosition==1) {
                     iv_userauth_positive.setTag(imageUrl);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(imageUrl)).setAutoPlayAnimations(true).build();
-                    iv_userauth_positive.setController(draweeController);
-                    tv_userauth_positive.setVisibility(View.GONE);
                 }
                 else if (uploadPicPosition==2) {
                     iv_userauth_negative.setTag(imageUrl);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(imageUrl)).setAutoPlayAnimations(true).build();
-                    iv_userauth_negative.setController(draweeController);
-                    tv_userauth_negative.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onError() {
                 Toast.makeText(EmployeeAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                if (uploadPicPosition==1) {
+                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                    iv_userauth_positive.setController(draweeController);
+                    tv_userauth_positive.setVisibility(View.VISIBLE);
+                }
+                else if (uploadPicPosition==2) {
+                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                    iv_userauth_negative.setController(draweeController);
+                    tv_userauth_negative.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

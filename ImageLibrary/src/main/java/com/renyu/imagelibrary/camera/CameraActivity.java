@@ -34,7 +34,7 @@ public class CameraActivity extends BaseActivity {
             @Override
             public void grant() {
                 if (getSupportFragmentManager().getFragments()==null || getSupportFragmentManager().getFragments().size()==0) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CameraFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CameraFragment()).commitAllowingStateLoss();
                 }
             }
 

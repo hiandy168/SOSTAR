@@ -7,7 +7,7 @@ import com.renyu.sostar.BuildConfig;
  * Created by renyu on 2017/2/24.
  */
 
-public class UserAuthRequest {
+public class EmployeeAuthRequest {
     /**
      * deviceId : string
      * param : {"address":"string","certificateId":"string","introduction":"string","name":"string","phone":"string","picCerOppo":"string","picCerpos":"string","picPath":"string","userId":0}
