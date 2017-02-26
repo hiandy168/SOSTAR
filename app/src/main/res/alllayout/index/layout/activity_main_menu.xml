@@ -292,6 +292,7 @@
 
                 </View>
                 <LinearLayout
+                    android:id="@+id/layout_main_menu_mycenter_area"
                     android:layout_width="match_parent"
                     android:layout_height="45dip"
                     android:gravity="center_vertical"
@@ -302,7 +303,7 @@
                         android:layout_marginStart="12dip"
                         android:src="@mipmap/ic_mycenter_location"/>
                     <TextView
-                        android:id="@+id/layout_main_menu_mycenter_area"
+                        android:id="@+id/tv_main_menu_mycenter_area_desp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="9dip"
@@ -310,6 +311,7 @@
                         android:textColor="#333333"
                         android:text="接单范围"/>
                     <TextView
+                        android:id="@+id/tv_main_menu_mycenter_area"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"

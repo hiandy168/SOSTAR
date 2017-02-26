@@ -31,6 +31,7 @@ import com.renyu.sostar.activity.user.EmployeeAuthActivity;
 import com.renyu.sostar.activity.user.EmployeeInfoActivity;
 import com.renyu.sostar.activity.user.EmployerAuthActivity;
 import com.renyu.sostar.activity.user.EmployerInfoActivity;
+import com.renyu.sostar.activity.user.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
@@ -80,8 +81,10 @@ public class MainActivity extends BaseActivity {
     TextView tv_main_menu_auth2;
     @BindView(R.id.tv_main_menu_mycenter_info)
     TextView tv_main_menu_mycenter_info;
-    @BindView(R.id.layout_main_menu_mycenter_area)
-    TextView layout_main_menu_mycenter_area;
+    @BindView(R.id.tv_main_menu_mycenter_area_desp)
+    TextView tv_main_menu_mycenter_area_desp;
+    @BindView(R.id.tv_main_menu_mycenter_area)
+    TextView tv_main_menu_mycenter_area;
 
     MyCenterEmployeeResponse myCenterEmployeeResponse;
     MyCenterEmployerResponse myCenterEmployerResponse;
@@ -101,12 +104,12 @@ public class MainActivity extends BaseActivity {
         tv_menu_nav_title.setTextColor(Color.WHITE);
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             tv_main_menu_mycenter_info.setText("企业资料");
-            layout_main_menu_mycenter_area.setText("发单范围");
+            tv_main_menu_mycenter_area_desp.setText("发单范围");
             tv_main_menu_order_desp.setText("已发单");
         }
         else {
             tv_main_menu_mycenter_info.setText("个人资料");
-            layout_main_menu_mycenter_area.setText("接单范围");
+            tv_main_menu_mycenter_area_desp.setText("接单范围");
             tv_main_menu_order_desp.setText("已接单");
         }
 
@@ -176,7 +179,8 @@ public class MainActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info, R.id.layout_main_menu_mycenter_auth})
+    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info,
+            R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -211,6 +215,21 @@ public class MainActivity extends BaseActivity {
                     startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 }
                 break;
+            case R.id.layout_main_menu_mycenter_area:
+                Intent intent_updatename=new Intent(MainActivity.this, UpdateTextInfoActivity.class);
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    intent_updatename.putExtra("title", "发单范围");
+                }
+                else {
+                    intent_updatename.putExtra("title", "接单范围");
+                }
+                intent_updatename.putExtra("param", "rangeArea");
+                intent_updatename.putExtra("needcommit", true);
+                intent_updatename.putExtra("source",
+                        tv_main_menu_mycenter_area.getText().toString()
+                                .substring(0, tv_main_menu_mycenter_area.getText().toString().indexOf("公里")));
+                startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
+                break;
         }
     }
 
@@ -227,12 +246,24 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
             if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
-                updateMyEmployerCenter(myCenterEmployerResponse);
+                if (data.getStringExtra("param")!=null && data.getStringExtra("param").equals("rangeArea")) {
+                    tv_main_menu_mycenter_area.setText(data.getStringExtra("value")+"公里");
+                    myCenterEmployerResponse.setRangeArea(Integer.parseInt(data.getStringExtra("value")));
+                }
+                else {
+                    myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
+                    updateMyEmployerCenter(myCenterEmployerResponse);
+                }
             }
             else {
-                myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
-                updateMyEmployeeCenter(myCenterEmployeeResponse);
+                if (data.getStringExtra("param")!=null && data.getStringExtra("param").equals("rangeArea")) {
+                    tv_main_menu_mycenter_area.setText(data.getStringExtra("value")+"公里");
+                    myCenterEmployeeResponse.setRangeArea(Integer.parseInt(data.getStringExtra("value")));
+                }
+                else {
+                    myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
+                    updateMyEmployeeCenter(myCenterEmployeeResponse);
+                }
             }
         }
     }
@@ -332,6 +363,7 @@ public class MainActivity extends BaseActivity {
         tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
         tv_main_menu_order.setText(""+value.getFinishedOrders());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
+        tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
     }
 
     private void updateMyEmployerCenter(MyCenterEmployerResponse value) {
@@ -361,5 +393,6 @@ public class MainActivity extends BaseActivity {
 //        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.get())?"0":value.getEvaluateLevel());
         tv_main_menu_order.setText(TextUtils.isEmpty(value.getOngoingOrder())?"0":value.getOngoingOrder());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
+        tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
     }
 }

@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 
 public class MyCenterEmployeeResponse implements Serializable {
-
     /**
      * age : string
      * authentication : string
