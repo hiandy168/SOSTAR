@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +24,9 @@ import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.EmployeeAuthRequest;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.UploadResponse;
-import com.renyu.sostar.bean.EmployeeAuthRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -62,9 +63,11 @@ public class EmployeeAuthActivity extends BaseActivity {
     SimpleDraweeView iv_userauth_negative;
     @BindView(R.id.tv_userauth_negative)
     TextView tv_userauth_negative;
+    @BindView(R.id.btn_userauth_commit)
+    Button btn_userauth_commit;
 
     // 当前选中图片位置
-    private int uploadPicPosition=-1;
+    private int choicePicPosition=-1;
 
     Disposable disposable;
 
@@ -98,6 +101,9 @@ public class EmployeeAuthActivity extends BaseActivity {
                     .setUri(Uri.parse(myCenterResponse.getPicCerOppo())).setAutoPlayAnimations(true).build();
             iv_userauth_negative.setController(draweeController);
             tv_userauth_negative.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+            btn_userauth_commit.setVisibility(View.GONE);
         }
     }
 
@@ -160,7 +166,7 @@ public class EmployeeAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_id, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_userauth_positive:
-                uploadPicPosition=1;
+                choicePicPosition=1;
                 ActionSheetUtils.showCamera(EmployeeAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
@@ -175,7 +181,7 @@ public class EmployeeAuthActivity extends BaseActivity {
                         });
                 break;
             case R.id.layout_userauth_negative:
-                uploadPicPosition=2;
+                choicePicPosition=2;
                 ActionSheetUtils.showCamera(EmployeeAuthActivity.this.getSupportFragmentManager(),
                         "设置头像", new String[]{"拍照", "从相册获取"},
                         position -> {
@@ -266,6 +272,7 @@ public class EmployeeAuthActivity extends BaseActivity {
             }
             if (data.getStringExtra("param").equals("phone")) {
                 tv_userauth_phone.setText(data.getStringExtra("value"));
+                myCenterResponse.setPhone(tv_userauth_phone.getText().toString());
             }
             if (data.getStringExtra("param").equals("certificateId")) {
                 tv_userauth_id.setText(data.getStringExtra("value"));
@@ -287,11 +294,11 @@ public class EmployeeAuthActivity extends BaseActivity {
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            uploadFile(path);
+            uploadFile(path, choicePicPosition);
         }
     }
 
-    private void uploadFile(String path) {
+    private void uploadFile(String path, int uploadPicPosition) {
         if (uploadPicPosition==1) {
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                     .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
@@ -332,12 +339,14 @@ public class EmployeeAuthActivity extends BaseActivity {
                             .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
                     iv_userauth_positive.setController(draweeController);
                     tv_userauth_positive.setVisibility(View.VISIBLE);
+                    iv_userauth_positive.setTag("");
                 }
                 else if (uploadPicPosition==2) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                             .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
                     iv_userauth_negative.setController(draweeController);
                     tv_userauth_negative.setVisibility(View.VISIBLE);
+                    tv_userauth_negative.setTag("");
                 }
             }
         });

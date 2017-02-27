@@ -24,14 +24,17 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
+import com.renyu.commonlibrary.views.ActionSheetUtils;
+import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.activity.user.EmployeeAuthActivity;
 import com.renyu.sostar.activity.user.EmployeeInfoActivity;
 import com.renyu.sostar.activity.user.EmployerAuthActivity;
 import com.renyu.sostar.activity.user.EmployerInfoActivity;
-import com.renyu.sostar.activity.user.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
@@ -39,6 +42,9 @@ import com.renyu.sostar.fragment.MainFragment;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -88,6 +94,8 @@ public class MainActivity extends BaseActivity {
 
     MyCenterEmployeeResponse myCenterEmployeeResponse;
     MyCenterEmployerResponse myCenterEmployerResponse;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
@@ -193,11 +201,17 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.layout_main_menu_mycenter_info:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    if (myCenterEmployerResponse==null) {
+                        return;
+                    }
                     Intent intent_info=new Intent(MainActivity.this, EmployerInfoActivity.class);
                     intent_info.putExtra("response", myCenterEmployerResponse);
                     startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
                 }
                 else {
+                    if (myCenterEmployeeResponse==null) {
+                        return;
+                    }
                     Intent intent_info=new Intent(MainActivity.this, EmployeeInfoActivity.class);
                     intent_info.putExtra("response", myCenterEmployeeResponse);
                     startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
@@ -205,30 +219,45 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.layout_main_menu_mycenter_auth:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    if (myCenterEmployerResponse==null) {
+                        return;
+                    }
                     Intent intent_auth=new Intent(MainActivity.this, EmployerAuthActivity.class);
                     intent_auth.putExtra("response", myCenterEmployerResponse);
                     startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 }
                 else {
+                    if (myCenterEmployeeResponse==null) {
+                        return;
+                    }
                     Intent intent_auth=new Intent(MainActivity.this, EmployeeAuthActivity.class);
                     intent_auth.putExtra("response", myCenterEmployeeResponse);
                     startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 }
                 break;
             case R.id.layout_main_menu_mycenter_area:
-                Intent intent_updatename=new Intent(MainActivity.this, UpdateTextInfoActivity.class);
+                int[] realArea=new int[] {3, 5, 10, 10000};
+                String[] despArea=new String[] {"3公里", "5公里", "10公里", "不限范围"};
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    intent_updatename.putExtra("title", "发单范围");
+                    ActionSheetUtils.showList(getSupportFragmentManager(), "发单范围",
+                            new String[]{"3公里", "5公里", "10公里", "不限范围"}, position -> {
+                                tv_main_menu_mycenter_area.setText(despArea[position]);
+                                myCenterEmployerResponse.setRangeArea(""+realArea[position]);
+                                updateTextInfo("rangeArea", ""+realArea[position]);
+                            }, () -> {
+
+                            });
                 }
                 else {
-                    intent_updatename.putExtra("title", "接单范围");
+                    ActionSheetUtils.showList(getSupportFragmentManager(), "接单范围",
+                            new String[]{"3公里", "5公里", "10公里", "不限范围"}, position -> {
+                                tv_main_menu_mycenter_area.setText(despArea[position]);
+                                myCenterEmployeeResponse.setRangeArea(realArea[position]);
+                                updateTextInfo("rangeArea", ""+realArea[position]);
+                            }, () -> {
+
+                            });
                 }
-                intent_updatename.putExtra("param", "rangeArea");
-                intent_updatename.putExtra("needcommit", true);
-                intent_updatename.putExtra("source",
-                        tv_main_menu_mycenter_area.getText().toString()
-                                .substring(0, tv_main_menu_mycenter_area.getText().toString().indexOf("公里")));
-                startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
         }
     }
@@ -246,24 +275,12 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
             if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                if (data.getStringExtra("param")!=null && data.getStringExtra("param").equals("rangeArea")) {
-                    tv_main_menu_mycenter_area.setText(data.getStringExtra("value")+"公里");
-                    myCenterEmployerResponse.setRangeArea(Integer.parseInt(data.getStringExtra("value")));
-                }
-                else {
-                    myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
-                    updateMyEmployerCenter(myCenterEmployerResponse);
-                }
+                myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
+                updateMyEmployerCenter(myCenterEmployerResponse);
             }
             else {
-                if (data.getStringExtra("param")!=null && data.getStringExtra("param").equals("rangeArea")) {
-                    tv_main_menu_mycenter_area.setText(data.getStringExtra("value")+"公里");
-                    myCenterEmployeeResponse.setRangeArea(Integer.parseInt(data.getStringExtra("value")));
-                }
-                else {
-                    myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
-                    updateMyEmployeeCenter(myCenterEmployeeResponse);
-                }
+                myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
+                updateMyEmployeeCenter(myCenterEmployeeResponse);
             }
         }
     }
@@ -364,6 +381,12 @@ public class MainActivity extends BaseActivity {
         tv_main_menu_order.setText(""+value.getFinishedOrders());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
         tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
+        if (value.getRangeArea()==10000) {
+            tv_main_menu_mycenter_area.setText("不限范围");
+        }
+        else {
+            tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
+        }
     }
 
     private void updateMyEmployerCenter(MyCenterEmployerResponse value) {
@@ -390,9 +413,81 @@ public class MainActivity extends BaseActivity {
             iv_main_menu_auth.setImageResource(R.mipmap.ic_userinfoauthing);
             tv_main_menu_auth2.setText("认证中");
         }
-//        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.get())?"0":value.getEvaluateLevel());
+        tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getStar())?"0":value.getStar());
         tv_main_menu_order.setText(TextUtils.isEmpty(value.getOngoingOrder())?"0":value.getOngoingOrder());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
-        tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
+        if (TextUtils.isEmpty(value.getRangeArea())) {
+            tv_main_menu_mycenter_area.setText("0公里");
+        }
+        else if (value.getRangeArea().equals("10000")) {
+            tv_main_menu_mycenter_area.setText("不限范围");
+        }
+        else {
+            tv_main_menu_mycenter_area.setText(value.getRangeArea()+"公里");
+        }
+    }
+
+    private void updateTextInfo(String param, String value) {
+        try {
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("deviceId", Utils.getUniquePsuedoID());
+            jsonObject.put("ver", BuildConfig.VERSION_NAME);
+            JSONObject childJsonObject=new JSONObject();
+            childJsonObject.put(param, value);
+            childJsonObject.put("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
+            jsonObject.put("param", childJsonObject);
+            if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                retrofit.create(RetrofitImpl.class)
+                        .setEmployerInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
+                        .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable=d;
+                    }
+
+                    @Override
+                    public void onNext(EmptyResponse value) {
+                        Toast.makeText(MainActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+            }
+            else {
+                retrofit.create(RetrofitImpl.class)
+                        .setStaffInfo(Retrofit2Utils.postJsonPrepare(jsonObject.toString()))
+                        .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable=d;
+                    }
+
+                    @Override
+                    public void onNext(EmptyResponse value) {
+                        Toast.makeText(MainActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

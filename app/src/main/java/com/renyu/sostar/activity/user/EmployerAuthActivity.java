@@ -3,8 +3,11 @@ package com.renyu.sostar.activity.user;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,9 +67,11 @@ public class EmployerAuthActivity extends BaseActivity {
     TextView tv_employerauth_pic2;
     @BindView(R.id.tv_employerauth_pic3)
     TextView tv_employerauth_pic3;
+    @BindView(R.id.btn_employerauth_commit)
+    Button btn_employerauth_commit;
 
     // 当前选中图片位置
-    private int uploadPicPosition=-1;
+    private int choicePicPosition=-1;
 
     OKHttpHelper helper;
 
@@ -88,8 +93,32 @@ public class EmployerAuthActivity extends BaseActivity {
         if (!TextUtils.isEmpty(myCenterResponse.getContactPhone())) {
             tv_employerauth_phone.setText(myCenterResponse.getContactPhone());
         }
-        if (!TextUtils.isEmpty(myCenterResponse.getCompanyId())) {
-            tv_employerauth_compcode.setText(myCenterResponse.getCompanyId());
+        if (!TextUtils.isEmpty(myCenterResponse.getCompanyCode())) {
+            tv_employerauth_compcode.setText(myCenterResponse.getCompanyCode());
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getCerPath())) {
+            iv_employerauth_pic1.setTag(myCenterResponse.getCerPath());
+            DraweeController draweeController1 = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getCerPath())).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic1.setController(draweeController1);
+            tv_employerauth_pic1.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getLicPath())) {
+            iv_employerauth_pic2.setTag(myCenterResponse.getLicPath());
+            DraweeController draweeController2 = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getLicPath())).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic2.setController(draweeController2);
+            tv_employerauth_pic2.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getRifPath())) {
+            iv_employerauth_pic3.setTag(myCenterResponse.getRifPath());
+            DraweeController draweeController3 = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(myCenterResponse.getRifPath())).setAutoPlayAnimations(true).build();
+            iv_employerauth_pic3.setController(draweeController3);
+            tv_employerauth_pic3.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+            btn_employerauth_commit.setVisibility(View.GONE);
         }
     }
 
@@ -113,17 +142,26 @@ public class EmployerAuthActivity extends BaseActivity {
         return 0;
     }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
+    }
+
     @OnClick({R.id.btn_employerauth_commit, R.id.layout_employerauth_pic1,
             R.id.layout_employerauth_pic2, R.id.layout_employerauth_pic3,
             R.id.layout_employerauth_name, R.id.layout_employerauth_phone,
-            R.id.layout_employerauth_compcode})
+            R.id.layout_employerauth_compcode, R.id.ib_nav_left})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
             case R.id.btn_employerauth_commit:
                 commitAuth();
                 break;
             case R.id.layout_employerauth_pic1:
-                uploadPicPosition=1;
+                choicePicPosition=1;
                 ActionSheetUtils.showCamera(EmployerAuthActivity.this.getSupportFragmentManager(),
                         "添加1", new String[]{"拍照", "从相册获取"},
                         position -> {
@@ -138,6 +176,7 @@ public class EmployerAuthActivity extends BaseActivity {
                         });
                 break;
             case R.id.layout_employerauth_pic2:
+                choicePicPosition=2;
                 ActionSheetUtils.showCamera(EmployerAuthActivity.this.getSupportFragmentManager(),
                         "添加2", new String[]{"拍照", "从相册获取"},
                         position -> {
@@ -152,6 +191,7 @@ public class EmployerAuthActivity extends BaseActivity {
                         });
                 break;
             case R.id.layout_employerauth_pic3:
+                choicePicPosition=3;
                 ActionSheetUtils.showCamera(EmployerAuthActivity.this.getSupportFragmentManager(),
                         "添加3", new String[]{"拍照", "从相册获取"},
                         position -> {
@@ -222,11 +262,11 @@ public class EmployerAuthActivity extends BaseActivity {
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            uploadFile(path);
+            uploadFile(path, choicePicPosition);
         }
     }
 
-    private void uploadFile(String path) {
+    private void uploadFile(String path, int uploadPicPosition) {
         if (uploadPicPosition==1) {
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                     .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
@@ -275,18 +315,21 @@ public class EmployerAuthActivity extends BaseActivity {
                             .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic1.setController(draweeController);
                     tv_employerauth_pic1.setVisibility(View.GONE);
+                    tv_employerauth_pic1.setTag("");
                 }
                 else if (uploadPicPosition==2) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                             .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic2.setController(draweeController);
                     tv_employerauth_pic2.setVisibility(View.GONE);
+                    tv_employerauth_pic2.setTag("");
                 }
                 else if (uploadPicPosition==3) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                             .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic3.setController(draweeController);
                     tv_employerauth_pic3.setVisibility(View.GONE);
+                    tv_employerauth_pic3.setTag("");
                 }
             }
         });
@@ -348,8 +391,11 @@ public class EmployerAuthActivity extends BaseActivity {
                 Toast.makeText(EmployerAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 myCenterResponse.setAuthentication("2");
                 myCenterResponse.setCompanyName(tv_employerauth_name.getText().toString());
-                myCenterResponse.setCompanyId(tv_employerauth_compcode.getText().toString());
+                myCenterResponse.setCompanyCode(tv_employerauth_compcode.getText().toString());
                 myCenterResponse.setContactPhone(tv_employerauth_phone.getText().toString());
+                myCenterResponse.setCerPath(iv_employerauth_pic1.getTag().toString());
+                myCenterResponse.setLicPath(iv_employerauth_pic2.getTag().toString());
+                myCenterResponse.setRifPath(iv_employerauth_pic3.getTag().toString());
                 onBackPressed();
             }
 

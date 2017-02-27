@@ -7,34 +7,40 @@ import java.io.Serializable;
  */
 
 public class MyCenterEmployerResponse implements Serializable {
-
     /**
      * authentication : string
+     * cerPath : string
      * closeRate : string
-     * companyId : string
+     * companyCode : string
      * companyName : string
      * contactPhone : string
      * finishedOrderNum : string
      * introduction : string
+     * licPath : string
      * logoPath : string
      * messageNum : string
      * ongoingOrder : string
      * rangeArea : string
+     * rifPath : string
      * star : string
      */
 
     private String authentication;
+    private String cerPath;
     private String closeRate;
-    private String companyId;
+    private String companyCode;
     private String companyName;
     private String contactPhone;
     private String finishedOrderNum;
     private String introduction;
+    private String licPath;
     private String logoPath;
     private String messageNum;
     private String ongoingOrder;
-    private int rangeArea;
+    private String rangeArea;
+    private String rifPath;
     private String star;
+    private String webAddress;
 
     public String getAuthentication() {
         return authentication;
@@ -42,6 +48,14 @@ public class MyCenterEmployerResponse implements Serializable {
 
     public void setAuthentication(String authentication) {
         this.authentication = authentication;
+    }
+
+    public String getCerPath() {
+        return cerPath;
+    }
+
+    public void setCerPath(String cerPath) {
+        this.cerPath = cerPath;
     }
 
     public String getCloseRate() {
@@ -52,12 +66,12 @@ public class MyCenterEmployerResponse implements Serializable {
         this.closeRate = closeRate;
     }
 
-    public String getCompanyId() {
-        return companyId;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getCompanyName() {
@@ -92,6 +106,14 @@ public class MyCenterEmployerResponse implements Serializable {
         this.introduction = introduction;
     }
 
+    public String getLicPath() {
+        return licPath;
+    }
+
+    public void setLicPath(String licPath) {
+        this.licPath = licPath;
+    }
+
     public String getLogoPath() {
         return logoPath;
     }
@@ -116,12 +138,20 @@ public class MyCenterEmployerResponse implements Serializable {
         this.ongoingOrder = ongoingOrder;
     }
 
-    public int getRangeArea() {
+    public String getRangeArea() {
         return rangeArea;
     }
 
-    public void setRangeArea(int rangeArea) {
+    public void setRangeArea(String rangeArea) {
         this.rangeArea = rangeArea;
+    }
+
+    public String getRifPath() {
+        return rifPath;
+    }
+
+    public void setRifPath(String rifPath) {
+        this.rifPath = rifPath;
     }
 
     public String getStar() {
@@ -130,5 +160,13 @@ public class MyCenterEmployerResponse implements Serializable {
 
     public void setStar(String star) {
         this.star = star;
+    }
+
+    public String getWebAddress() {
+        return webAddress;
+    }
+
+    public void setWebAddress(String webAddress) {
+        this.webAddress = webAddress;
     }
 }

@@ -107,6 +107,8 @@ public class EmployerInfoActivity extends BaseActivity {
             tv_employerinfo_auth.setText("认证中");
             iv_employerinfo_auth.setImageResource(R.mipmap.ic_userinfoauthing);
         }
+        tv_employerinfo_web.setText(myCenterResponse.getWebAddress());
+        tv_employerinfo_evaluate.setText(TextUtils.isEmpty(myCenterResponse.getStar())?"0":myCenterResponse.getStar());
         tv_employerinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate()+"%");
     }
 
@@ -137,7 +139,8 @@ public class EmployerInfoActivity extends BaseActivity {
     }
 
     @OnClick({R.id.ib_nav_left, R.id.layout_employerinfo_name, R.id.layout_employerinfo_avatar,
-            R.id.layout_employerinfo_web, R.id.layout_employerinfo_auth, R.id.layout_employerinfo_summary})
+            R.id.layout_employerinfo_web, R.id.layout_employerinfo_auth, R.id.layout_employerinfo_summary,
+            R.id.layout_employerinfo_phone})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -176,12 +179,15 @@ public class EmployerInfoActivity extends BaseActivity {
             case R.id.layout_employerinfo_web:
                 Intent intent_web=new Intent(EmployerInfoActivity.this, UpdateTextInfoActivity.class);
                 intent_web.putExtra("title", "公司网站");
-                intent_web.putExtra("param", "address");
+                intent_web.putExtra("param", "webAddress");
                 intent_web.putExtra("needcommit", true);
                 intent_web.putExtra("source", tv_employerinfo_web.getText().toString());
                 startActivityForResult(intent_web, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employerinfo_auth:
+                Intent intent_auth=new Intent(EmployerInfoActivity.this, EmployerAuthActivity.class);
+                intent_auth.putExtra("response", myCenterResponse);
+                startActivityForResult(intent_auth, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employerinfo_summary:
                 Intent intent_summary=new Intent(EmployerInfoActivity.this, UpdateTextInfoActivity.class);
@@ -230,6 +236,8 @@ public class EmployerInfoActivity extends BaseActivity {
                     tv_employerinfo_auth.setText("认证中");
                     iv_employerinfo_auth.setImageResource(R.mipmap.ic_userinfoauthing);
                 }
+                tv_employerinfo_name.setText(myCenterResponse.getCompanyName());
+                tv_employerinfo_phone.setText(myCenterResponse.getContactPhone());
             }
             else if (data.getStringExtra("param").equals("companyName")) {
                 tv_employerinfo_name.setText(data.getStringExtra("value"));
@@ -243,8 +251,9 @@ public class EmployerInfoActivity extends BaseActivity {
                 tv_employerinfo_phone.setText(data.getStringExtra("value"));
                 myCenterResponse.setContactPhone(data.getStringExtra("value"));
             }
-            else if (data.getStringExtra("param").equals("address")) {
-
+            else if (data.getStringExtra("param").equals("webAddress")) {
+                tv_employerinfo_web.setText(data.getStringExtra("value"));
+                myCenterResponse.setWebAddress(data.getStringExtra("value"));
             }
         }
     }
