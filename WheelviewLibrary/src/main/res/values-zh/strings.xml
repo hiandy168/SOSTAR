@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="wheeldatepicker_year">年</string>
-    <string name="wheeldatepicker_month">月</string>
-    <string name="wheeldatepicker_day">日</string>
-    <string name="wheeldatepicker_minute">分</string>
-    <string name="wheeldatepicker_second">秒</string>
-</resources>

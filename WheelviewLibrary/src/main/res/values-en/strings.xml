@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="wheeldatepicker_year">/</string>
-    <string name="wheeldatepicker_month">/</string>
-    <string name="wheeldatepicker_day"></string>
-    <string name="wheeldatepicker_minute">:</string>
-    <string name="wheeldatepicker_second"></string>
-</resources>
