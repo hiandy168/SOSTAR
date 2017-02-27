@@ -82,16 +82,22 @@ public class SplashActivity extends BaseActivity {
                     }
                     else {
                         Intent[] intents=new Intent[2];
-                        // 如果没有用户身份类型，进入选择身份类型页面
-                        if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE))) {
-                            intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                            intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
-                            startActivities(intents);
+                        // 注销过，需要重新登录
+                        if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_SIGNIN))) {
+                            startActivity(new Intent(SplashActivity.this, SignInSignUpActivity.class));
                         }
                         else {
-                            intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                            intents[1]=new Intent(SplashActivity.this, MainActivity.class);
-                            startActivities(intents);
+                            // 如果没有用户身份类型，进入选择身份类型页面
+                            if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE))) {
+                                intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
+                                intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
+                                startActivities(intents);
+                            }
+                            else {
+                                intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
+                                intents[1]=new Intent(SplashActivity.this, MainActivity.class);
+                                startActivities(intents);
+                            }
                         }
                     }
                     finish();

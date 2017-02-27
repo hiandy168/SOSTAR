@@ -6,6 +6,8 @@ import android.support.multidex.MultiDexApplication;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
+import com.facebook.cache.disk.DiskCacheConfig;
+import com.facebook.common.disk.NoOpDiskTrimmableRegistry;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.renyu.commonlibrary.commonutils.ChannelUtils;
@@ -13,6 +15,8 @@ import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;
+
+import java.io.File;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -43,8 +47,15 @@ public class SostarApp extends MultiDexApplication {
             strategy.setUploadProcess(processName == null || processName.equals(getPackageName()));
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
-            //初始化fresco
-            Fresco.initialize(this, ImagePipelineConfig.newBuilder(this)
+            // 初始化fresco
+            DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(this)
+                    // 缓存文件目录
+                    .setBaseDirectoryPath(new File(CommonParams.FRESCO_CACHE_PATH))
+                    // 缓存文件夹名
+                    .setBaseDirectoryName(CommonParams.FRESCO_CACHE_NAME)
+                    .setDiskTrimmableRegistry(NoOpDiskTrimmableRegistry.getInstance())
+                    .build();
+            Fresco.initialize(this, ImagePipelineConfig.newBuilder(this).setMainDiskCacheConfig(diskCacheConfig)
                     .setDownsampleEnabled(true)
                     .build());
 

@@ -395,6 +395,7 @@
 
                 </View>
                 <LinearLayout
+                    android:id="@+id/layout_main_menu_mycenter_settings"
                     android:layout_width="match_parent"
                     android:layout_height="45dip"
                     android:gravity="center_vertical"

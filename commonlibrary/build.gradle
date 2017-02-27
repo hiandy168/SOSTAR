@@ -78,4 +78,6 @@ dependencies {
     compile 'com.facebook.fresco:webpsupport:1.1.0'
     //SwipyRefreshLayout  A SwipeRefreshLayout extension that allows to swipe in both direction
     compile 'com.github.orangegangsters:swipy:1.2.3'
+    //SwitchButton  A cute widget of Switch Button for you to create beautiful and friendly UI.
+    compile 'com.kyleduo.switchbutton:library:1.4.5'
 }

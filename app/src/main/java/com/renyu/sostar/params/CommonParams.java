@@ -25,11 +25,15 @@ public class CommonParams {
     public static final String HOTFIX_PATH= ROOT_PATH + File.separator + "hotfix";
     // 项目日志目录
     public static final String LOG_PATH= ROOT_PATH + File.separator + "log";
+    // fresco缓存目录
+    public static final String FRESCO_CACHE_PATH= ROOT_PATH + File.separator + "cache";
+    public static final String FRESCO_CACHE_NAME= "fresco_cache";
 
     public static final String USER_PHONE="user_phone";
     public static final String USER_PASSWORD="user_password";
     public static final String USER_TYPE="user_type";
     public static final String USER_ID="user_id";
+    public static final String USER_SIGNIN="user_signin";
     // 启动页跳转流程
     public static final String FROM="from";
     // 跳转到首页
