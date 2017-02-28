@@ -117,9 +117,6 @@ freeline_project_description.json
 .gradle
 /build/
 
-# 美团多渠道
-channel
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
