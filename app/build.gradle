@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'walle'
 //apply plugin: 'com.antfortune.freeline'
 
 android {
@@ -75,6 +76,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     // andfix
     compile 'com.alipay.euler:andfix:0.5.0@aar'
+    // walle  Android Signature V2 Scheme签名下的新一代渠道包打包神器
+    compile 'com.meituan.android.walle:library:1.0.5'
     compile project(':CommonLibrary')
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
@@ -82,4 +85,11 @@ dependencies {
     compile project(':HyphenateLibrary')
     compile project(':QRCodeLibrary')
     //    debugCompile project(":runtime:runtime")
+}
+
+walle {
+    // 指定渠道包的输出路径
+    apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+    // 定制渠道包的APK的文件名称
+    apkFileNameFormat = '${projectName}-${channel}-v${versionName}-${buildTime}.apk';
 }

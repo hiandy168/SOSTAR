@@ -3,6 +3,7 @@ package com.renyu.sostar.application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
@@ -10,7 +11,7 @@ import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.disk.NoOpDiskTrimmableRegistry;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.renyu.commonlibrary.commonutils.ChannelUtils;
+import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
@@ -40,7 +41,9 @@ public class SostarApp extends MultiDexApplication {
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
-            strategy.setAppChannel(ChannelUtils.getChannel(this));
+            String channel = WalleChannelReader.getChannel(this);
+            Log.d("SostarApp", channel);
+            strategy.setAppChannel(channel);
             strategy.setAppVersion(BuildConfig.VERSION_NAME);
             strategy.setAppPackageName(getPackageName());
             // 设置是否为上报进程
