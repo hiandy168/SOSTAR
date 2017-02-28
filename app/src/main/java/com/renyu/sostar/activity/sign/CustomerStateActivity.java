@@ -26,6 +26,8 @@ import io.reactivex.disposables.Disposable;
 
 public class CustomerStateActivity extends BaseActivity {
 
+    Disposable disposable;
+
     @Override
     public void initParams() {
 
@@ -81,7 +83,7 @@ public class CustomerStateActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                disposable=d;
             }
 
             @Override

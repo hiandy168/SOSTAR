@@ -188,23 +188,42 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/layout_main_menu_message"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <ImageView
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/layout_inner_main_menu_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_mymessage"/>
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_centerInParent="true">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/ic_mymessage"/>
+                        <TextView
+                            android:text="消息中心"
+                            android:layout_marginTop="11dip"
+                            android:textColor="#333333"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                     <TextView
-                        android:text="消息中心"
-                        android:layout_marginTop="11dip"
-                        android:textColor="#333333"
-                        android:textSize="12sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                        android:id="@+id/tv_main_menu_message"
+                        android:layout_alignLeft="@id/layout_inner_main_menu_message"
+                        android:layout_width="15dip"
+                        android:layout_height="15dip"
+                        android:visibility="invisible"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="32dip"
+                        android:layout_marginTop="13dip"
+                        android:background="@drawable/shape_rounded_solid_red"/>
+                </RelativeLayout>
             </android.support.v7.widget.GridLayout>
             <View
                 android:layout_width="match_parent"
@@ -364,6 +383,7 @@
 
                 </View>
                 <LinearLayout
+                    android:id="@+id/layout_main_menu_mycenter_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="45dip"
                     android:gravity="center_vertical"

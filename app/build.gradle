@@ -44,11 +44,12 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
-                    'src/main/res/alllayout/signin',
-                    'src/main/res/alllayout/base',
+                    'src/main/res/alllayout/sign',
+                    'src/main/res/alllayout/other',
                     'src/main/res/alllayout/index',
                     'src/main/res/alllayout/user',
                     'src/main/res/alllayout/settings',
+                    'src/main/res/alllayout/message',
                     'src/main/res'
             ]
         }

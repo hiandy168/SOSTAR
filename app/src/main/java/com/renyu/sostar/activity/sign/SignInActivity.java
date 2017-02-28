@@ -40,8 +40,6 @@ public class SignInActivity extends BaseActivity {
     ClearEditText signin_pwd;
     @BindView(R.id.layout_signin_rootview)
     LinearLayout layout_signin_rootview;
-    @BindView(R.id.layout_signup)
-    LinearLayout layout_signup;
 
     Disposable disposable=null;
 

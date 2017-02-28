@@ -68,7 +68,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rulechange,
-            R.id.btn_settings_sign_out})
+            R.id.btn_settings_sign_out, R.id.ib_nav_left})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_settings_cache:
@@ -84,6 +84,9 @@ public class SettingsActivity extends BaseActivity {
                 intent.putExtra(CommonParams.FROM, CommonParams.FINISH);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                break;
+            case R.id.ib_nav_left:
+                finish();
                 break;
         }
     }

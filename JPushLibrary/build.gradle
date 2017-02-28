@@ -14,7 +14,7 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME : "com.renyu.sostar",
-                JPUSH_APPKEY : "dcdf6df5fd40da26976be67b", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "a8e8f82096aba5758f32776b", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
 

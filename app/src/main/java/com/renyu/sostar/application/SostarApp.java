@@ -3,7 +3,6 @@ package com.renyu.sostar.application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
@@ -42,7 +41,6 @@ public class SostarApp extends MultiDexApplication {
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
             String channel = WalleChannelReader.getChannel(this);
-            Log.d("SostarApp", channel);
             strategy.setAppChannel(channel);
             strategy.setAppVersion(BuildConfig.VERSION_NAME);
             strategy.setAppPackageName(getPackageName());

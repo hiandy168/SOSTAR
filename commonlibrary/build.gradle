@@ -80,4 +80,6 @@ dependencies {
     compile 'com.github.orangegangsters:swipy:1.2.3'
     //SwitchButton  A cute widget of Switch Button for you to create beautiful and friendly UI.
     compile 'com.kyleduo.switchbutton:library:1.4.5'
+    //SwipeRecyclerView  RecyclerView侧滑菜单，长按拖拽，滑动删除，自动加载更多，和ViewPager结合使用，和任何下拉刷新框架结合使用
+    compile 'com.yanzhenjie:recyclerview-swipe:1.0.2'
 }
