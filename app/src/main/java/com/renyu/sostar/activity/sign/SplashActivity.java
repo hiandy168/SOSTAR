@@ -102,7 +102,6 @@ public class SplashActivity extends BaseActivity {
                     }
                     finish();
                 });
-
                 openLog(CommonParams.LOG_PATH);
             }
 
@@ -111,7 +110,6 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
         });
-        openLog(CommonParams.LOG_PATH);
     }
 
     @Override
