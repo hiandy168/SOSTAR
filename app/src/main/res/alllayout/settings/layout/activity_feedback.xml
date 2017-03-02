@@ -3,13 +3,47 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/view_nav"></include>
-    <EditText
-        android:id="@+id/ed_feedback"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="100dip" />
+        android:layout_height="16dip"
+        android:background="#f2f2f2">
+
+    </View>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dip">
+        <EditText
+            android:id="@+id/ed_feedback"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:gravity="top|left"
+            android:hint="写下你的问题和宝贵意见"
+            android:textSize="13sp"
+            android:textColor="#c7c7c7"
+            android:textColorHint="#c7c7c7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_feedback_numbers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="12dip"
+            android:text="0/120"
+            android:textSize="13sp"
+            android:textColor="#999999" />
+    </RelativeLayout>
     <Button
         android:id="@+id/btn_feedback"
+        android:layout_marginTop="70dip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dip"
+        android:background="@drawable/shape_rounded_solid_green"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_marginEnd="16dip"
+        android:layout_marginStart="16dip"
         android:text="提交"/>
 </LinearLayout>

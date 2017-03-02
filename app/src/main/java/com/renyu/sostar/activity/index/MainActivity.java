@@ -97,6 +97,10 @@ public class MainActivity extends BaseActivity {
     TextView tv_main_menu_mycenter_area;
     @BindView(R.id.tv_main_menu_message)
     TextView tv_main_menu_message;
+    @BindView(R.id.layout_main_menu_mycenter_fav_line)
+    View layout_main_menu_mycenter_fav_line;
+    @BindView(R.id.layout_main_menu_mycenter_fav)
+    LinearLayout layout_main_menu_mycenter_fav;
 
     MyCenterEmployeeResponse myCenterEmployeeResponse;
     MyCenterEmployerResponse myCenterEmployerResponse;
@@ -177,6 +181,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            layout_main_menu_mycenter_fav.setVisibility(View.GONE);
+            layout_main_menu_mycenter_fav_line.setVisibility(View.GONE);
+        }
+
         // 主页添加
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content, new MainFragment(), "mainFragment").commitAllowingStateLoss();
     }
@@ -208,8 +217,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info,
             R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area,
-            R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message,
-            R.id.layout_main_menu_mycenter_feedback})
+            R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -285,9 +293,6 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.layout_main_menu_message:
                 startActivity(new Intent(MainActivity.this, MessageListActivity.class));
-                break;
-            case R.id.layout_main_menu_mycenter_feedback:
-                startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
                 break;
         }
     }

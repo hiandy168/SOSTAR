@@ -68,7 +68,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rulechange,
-            R.id.btn_settings_sign_out, R.id.ib_nav_left})
+            R.id.btn_settings_sign_out, R.id.ib_nav_left, R.id.layout_settings_feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_settings_cache:
@@ -87,6 +87,9 @@ public class SettingsActivity extends BaseActivity {
                 break;
             case R.id.ib_nav_left:
                 finish();
+                break;
+            case R.id.layout_settings_feedback:
+                startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
                 break;
         }
     }

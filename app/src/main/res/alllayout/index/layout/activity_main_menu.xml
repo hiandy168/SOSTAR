@@ -377,13 +377,15 @@
                         android:src="@mipmap/ic_arrow_gray_right"/>
                 </LinearLayout>
                 <View
+                    android:id="@+id/layout_main_menu_mycenter_fav_line"
                     android:layout_width="match_parent"
-                    android:layout_height="16dip"
-                    android:background="#f2f2f2">
+                    android:layout_height="0.5dip"
+                    android:layout_marginStart="12dip"
+                    android:background="#999999">
 
                 </View>
                 <LinearLayout
-                    android:id="@+id/layout_main_menu_mycenter_feedback"
+                    android:id="@+id/layout_main_menu_mycenter_fav"
                     android:layout_width="match_parent"
                     android:layout_height="45dip"
                     android:gravity="center_vertical"
@@ -392,7 +394,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dip"
-                        android:src="@mipmap/ic_mycenter_feedback"/>
+                        android:src="@mipmap/ic_mycenter_fav"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -400,7 +402,7 @@
                         android:layout_weight="1"
                         android:textSize="14sp"
                         android:textColor="#333333"
-                        android:text="意见反馈"/>
+                        android:text="收藏"/>
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -409,9 +411,8 @@
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dip"
-                    android:layout_marginStart="12dip"
-                    android:background="#999999">
+                    android:layout_height="16dip"
+                    android:background="#f2f2f2">
 
                 </View>
                 <LinearLayout
