@@ -50,6 +50,8 @@ public class ActionSheetFragment extends Fragment {
     //添加进入的第一个view
     View pop_child_layout;
 
+    FragmentManager fragmentManager;
+
     //提供类型
     public enum CHOICE {
         ITEM, DATE, TIME, GRID, CAMERA
@@ -493,7 +495,8 @@ public class ActionSheetFragment extends Fragment {
         });
     }
 
-    private void show(final FragmentManager manager, final String tag) {
+    private void show(FragmentManager manager, final String tag) {
+        this.fragmentManager=manager;
         if (manager.isDestroyed() || !isDismiss) {
             return;
         }
@@ -512,8 +515,8 @@ public class ActionSheetFragment extends Fragment {
         }
         isDismiss=true;
         new Handler().post(() -> {
-            getFragmentManager().popBackStack();
-            FragmentTransaction transaction=getFragmentManager().beginTransaction();
+            fragmentManager.popBackStack();
+            FragmentTransaction transaction=fragmentManager.beginTransaction();
             transaction.remove(ActionSheetFragment.this);
             transaction.commitAllowingStateLoss();
         });

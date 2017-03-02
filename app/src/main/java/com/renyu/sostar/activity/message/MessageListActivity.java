@@ -1,27 +1,41 @@
 package com.renyu.sostar.activity.message;
 
 import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.ViewGroup;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blankj.utilcode.utils.SizeUtils;
+import com.google.gson.Gson;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.renyu.commonlibrary.baseact.BaseActivity;
-import com.renyu.commonlibrary.views.ListViewDecoration;
+import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.MessageListAdapter;
-import com.yanzhenjie.recyclerview.swipe.Closeable;
-import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+import com.renyu.sostar.bean.DeleteAllMessageRequest;
+import com.renyu.sostar.bean.DeleteOneMessageRequest;
+import com.renyu.sostar.bean.MsgListRequest;
+import com.renyu.sostar.bean.MsgListResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
+import com.renyu.sostar.params.CommonParams;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/2/28.
@@ -29,28 +43,56 @@ import butterknife.BindView;
 
 public class MessageListActivity extends BaseActivity {
 
+    @BindView(R.id.nav_layout)
+    RelativeLayout nav_layout;
+    @BindView(R.id.tv_nav_title)
+    TextView tv_nav_title;
+    @BindView(R.id.tv_nav_right)
+    TextView tv_nav_right;
+    @BindView(R.id.swipy_messagelist)
+    SwipyRefreshLayout swipy_messagelist;
     @BindView(R.id.rv_messagelist)
-    SwipeMenuRecyclerView rv_messagelist;
+    RecyclerView rv_messagelist;
     MessageListAdapter adapter;
 
-    ArrayList<String> beans;
+    ArrayList<Object> beans;
+
+    int page=1;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
         beans=new ArrayList<>();
-        for (int i=0;i<20;i++) {
-            beans.add(""+i);
-        }
 
+        nav_layout.setBackgroundColor(Color.WHITE);
+        tv_nav_title.setText("消息中心");
+        tv_nav_right.setText("清空");
+        tv_nav_right.setTextColor(Color.parseColor("#999999"));
+
+        swipy_messagelist.setOnRefreshListener(direction -> {
+            if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
+
+            }
+            else if (direction==SwipyRefreshLayoutDirection.TOP) {
+                page=1;
+            }
+            getMsgList();
+        });
         rv_messagelist.setHasFixedSize(true);
         rv_messagelist.setLayoutManager(new LinearLayoutManager(this));
         rv_messagelist.setItemAnimator(new DefaultItemAnimator());
-        rv_messagelist.addItemDecoration(new ListViewDecoration(getApplicationContext()));
-        // 设置菜单创建器。
-        rv_messagelist.setSwipeMenuCreator(swipeMenuCreator);
-        // 设置菜单Item点击监听。
-        rv_messagelist.setSwipeMenuItemClickListener(menuItemClickListener);
-        adapter=new MessageListAdapter(this, beans);
+        adapter=new MessageListAdapter(this, beans, new MessageListAdapter.OnMessageCtrolListener() {
+            @Override
+            public void delete(int position) {
+                deleteOneMessage(position);
+            }
+
+            @Override
+            public void read(int position) {
+                readMessage(position);
+            }
+        });
         rv_messagelist.setAdapter(adapter);
     }
 
@@ -61,12 +103,12 @@ public class MessageListActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-
+        getMsgList();
     }
 
     @Override
     public int setStatusBarColor() {
-        return ContextCompat.getColor(this, R.color.colorPrimary);
+        return Color.WHITE;
     }
 
     @Override
@@ -74,54 +116,200 @@ public class MessageListActivity extends BaseActivity {
         return 0;
     }
 
-    /**
-     * 菜单创建器。在Item要创建菜单的时候调用。
-     */
-    private SwipeMenuCreator swipeMenuCreator = (swipeLeftMenu, swipeRightMenu, viewType) -> {
-        int width = SizeUtils.dp2px(60);
-        int height = ViewGroup.LayoutParams.MATCH_PARENT;
-        // 添加左侧的，如果不添加，则左侧不会出现菜单。
-        {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
+    }
 
+    @OnClick({R.id.ib_nav_left, R.id.tv_nav_right})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
+            case R.id.tv_nav_right:
+                deleteAllMessage();
+                break;
         }
+    }
 
-        // 添加右侧的，如果不添加，则右侧不会出现菜单。
-        {
-            SwipeMenuItem deleteItem = new SwipeMenuItem(MessageListActivity.this)
-                    .setBackgroundColor(Color.WHITE)
-                    .setText("删除")
-                    .setTextColor(Color.RED)
-                    .setWidth(width)
-                    .setHeight(height);
-            swipeRightMenu.addMenuItem(deleteItem);
-        }
-    };
-
-    /**
-     * 菜单点击监听。
-     */
-    private OnSwipeMenuItemClickListener menuItemClickListener = new OnSwipeMenuItemClickListener() {
-        /**
-         * Item的菜单被点击的时候调用。
-         * @param closeable       closeable. 用来关闭菜单。
-         * @param adapterPosition adapterPosition. 这个菜单所在的item在Adapter中position。
-         * @param menuPosition    menuPosition. 这个菜单的position。比如你为某个Item创建了2个MenuItem，那么这个position可能是是 0、1，
-         * @param direction       如果是左侧菜单，值是：SwipeMenuRecyclerView#LEFT_DIRECTION，如果是右侧菜单，值是：SwipeMenuRecyclerView#RIGHT_DIRECTION.
-         */
-        @Override
-        public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
-            // 关闭被点击的菜单。
-            closeable.smoothCloseMenu();
-            if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(MessageListActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
-            } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(MessageListActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+    private void getMsgList() {
+        MsgListRequest request=new MsgListRequest();
+        MsgListRequest.ParamBean paramBean=new MsgListRequest.ParamBean();
+        MsgListRequest.ParamBean.PaginationBean paginationBean=new MsgListRequest.ParamBean.PaginationBean();
+        paginationBean.setPageSize(15);
+        paginationBean.setStartPos(page);
+        paramBean.setPagination(paginationBean);
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class).msgList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<MsgListResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
             }
-            // 删除按钮被点击。
-            if (menuPosition == 0) {
-                beans.remove(adapterPosition);
-                adapter.notifyItemRemoved(adapterPosition);
+
+            @Override
+            public void onNext(MsgListResponse value) {
+                if (page==1) {
+                    beans.clear();
+                }
+                SimpleDateFormat dateFormatTime=new SimpleDateFormat("yyyy-MM-dd");
+                for (int i = 0; i < value.getData().size(); i++) {
+                    // 最开始的第一个
+                    if ((beans.size()+i)==0) {
+                        Date date=new Date();
+                        date.setTime(value.getData().get(i).getCrtTime());
+                        beans.add(dateFormatTime.format(date));
+                    }
+                    else {
+                        Date date=new Date();
+                        date.setTime(((MsgListResponse.DataBean) (beans.get(beans.size()-1))).getCrtTime());
+                        String preview=dateFormatTime.format(date);
+                        date.setTime(value.getData().get(i).getCrtTime());
+                        String now=dateFormatTime.format(date);
+                        if (!now.equals(preview)) {
+                            beans.add(dateFormatTime.format(date));
+                        }
+                    }
+                    beans.add(value.getData().get(i));
+                }
+                adapter.notifyDataSetChanged();
+                page++;
+                swipy_messagelist.setRefreshing(false);
             }
-        }
-    };
+
+            @Override
+            public void onError(Throwable e) {
+                swipy_messagelist.setRefreshing(false);
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void deleteOneMessage(int position) {
+        DeleteOneMessageRequest request=new DeleteOneMessageRequest();
+        DeleteOneMessageRequest.ParamBean paramBean=new DeleteOneMessageRequest.ParamBean();
+        paramBean.setMessageId(Integer.parseInt(((MsgListResponse.DataBean) beans.get(position)).getMessageId()));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .deleteMsg(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
+                adapter.notifyItemRemoved(position);
+                beans.remove(position);
+
+                outer:
+                while (beans.size()!=0) {
+                    for (int i = 0; i < beans.size(); i++) {
+                        if (beans.get(i) instanceof String) {
+                            // 首先检查当前时间节点是否为最后一个节点，是则需要删除
+                            if (i==beans.size()-1) {
+                                adapter.notifyItemRemoved(i);
+                                beans.remove(i);
+                                continue outer;
+                            }
+                            // 其次检查当前时间节点下方item是否依然是时间节点，是则需要删除
+                            else if (beans.get(i+1) instanceof String) {
+                                adapter.notifyItemRemoved(i);
+                                beans.remove(i);
+                                continue outer;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void readMessage(int position) {
+        DeleteOneMessageRequest request=new DeleteOneMessageRequest();
+        DeleteOneMessageRequest.ParamBean paramBean=new DeleteOneMessageRequest.ParamBean();
+        paramBean.setMessageId(Integer.parseInt(((MsgListResponse.DataBean) beans.get(position)).getMessageId()));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .readMsg(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
+                ((MsgListResponse.DataBean) beans.get(position)).setReadFlg("1");
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void deleteAllMessage() {
+        DeleteAllMessageRequest request=new DeleteAllMessageRequest();
+        DeleteAllMessageRequest.ParamBean paramBean=new DeleteAllMessageRequest.ParamBean();
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .deleteMsgList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
+                beans.clear();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
 }

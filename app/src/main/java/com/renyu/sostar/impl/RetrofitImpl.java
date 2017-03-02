@@ -2,6 +2,7 @@ package com.renyu.sostar.impl;
 
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.Response;
+import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.SigninResponse;
@@ -65,4 +66,19 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/SetSuggest")
     Observable<Response<EmptyResponse>> setSuggest(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/all/msgList")
+    Observable<Response<MsgListResponse>> msgList(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/all/deleteMsg")
+    Observable<Response<EmptyResponse>> deleteMsg(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/all/readMsg")
+    Observable<Response<EmptyResponse>> readMsg(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/all/deleteMsgList")
+    Observable<Response<EmptyResponse>> deleteMsgList(@Body RequestBody requestBody);
 }

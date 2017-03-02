@@ -6,13 +6,15 @@ import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 
 /**
- * Created by renyu on 2017/2/22.
+ * Created by renyu on 2017/3/2.
  */
 
-public class MyCenterRequest {
+public class DeleteAllMessageRequest {
     /**
      * deviceId : string
-     * param : {"userId":"string"}
+     * param : {"userId":0}
+     * platform : string
+     * sysversion : string
      * ver : string
      */
 
@@ -32,16 +34,16 @@ public class MyCenterRequest {
 
     public static class ParamBean {
         /**
-         * userId : string
+         * userId : 0
          */
 
-        private String userId;
+        private int userId;
 
-        public String getUserId() {
+        public int getUserId() {
             return userId;
         }
 
-        public void setUserId(String userId) {
+        public void setUserId(int userId) {
             this.userId = userId;
         }
     }

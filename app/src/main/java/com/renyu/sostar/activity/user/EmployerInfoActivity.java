@@ -260,6 +260,10 @@ public class EmployerInfoActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount()>0) {
+            getSupportFragmentManager().popBackStack();
+            return;
+        }
         Intent intent=new Intent();
         intent.putExtra("value", myCenterResponse);
         setResult(RESULT_OK, intent);

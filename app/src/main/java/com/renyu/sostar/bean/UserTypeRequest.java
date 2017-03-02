@@ -1,5 +1,7 @@
 package com.renyu.sostar.bean;
 
+import android.os.Build;
+
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 
@@ -16,6 +18,8 @@ public class UserTypeRequest {
 
     private String deviceId = Utils.getUniquePsuedoID();
     private ParamBean param;
+    private String platform = "android";
+    private String sysversion = Build.VERSION.RELEASE;
     private String ver = BuildConfig.VERSION_NAME;
 
     public ParamBean getParam() {

@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity {
         startService(new Intent(this, LocationService.class));
 
         // 注册极光alias
-        JPushInterface.setAliasAndTags(getApplicationContext(), Utils.getUniquePsuedoID().replace("-", "_"), null, (i, s, set) -> {
+        JPushInterface.setAliasAndTags(getApplicationContext(), ACache.get(this).getAsString(CommonParams.USER_ID), null, (i, s, set) -> {
             if (i==0) {
                 Log.d("MainActivity", "注册极光alias成功");
             }
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.d("EmployerMainActivity", "newState:" + newState);
+
             }
         });
         BarUtils.adjustStatusBar(this, (ViewGroup) main_dl.getChildAt(0), ContextCompat.getColor(this, R.color.colorPrimary));
