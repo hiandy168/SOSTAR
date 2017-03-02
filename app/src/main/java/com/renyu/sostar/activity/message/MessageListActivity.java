@@ -19,6 +19,9 @@ import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
+import com.renyu.commonlibrary.views.ActionSheetFragment;
+import com.renyu.commonlibrary.views.ActionSheetUtils;
+import com.renyu.jpushlibrary.bean.NotificationBean;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.MessageListAdapter;
 import com.renyu.sostar.bean.DeleteAllMessageRequest;
@@ -28,8 +31,13 @@ import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -68,7 +76,7 @@ public class MessageListActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("消息中心");
         tv_nav_right.setText("清空");
-        tv_nav_right.setTextColor(Color.parseColor("#999999"));
+        tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         swipy_messagelist.setOnRefreshListener(direction -> {
             if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
@@ -103,7 +111,10 @@ public class MessageListActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        getMsgList();
+        swipy_messagelist.post(() -> {
+            swipy_messagelist.setRefreshing(true);
+            getMsgList();
+        });
     }
 
     @Override
@@ -120,6 +131,14 @@ public class MessageListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setDark(this);
         super.onCreate(savedInstanceState);
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.ib_nav_left, R.id.tv_nav_right})
@@ -129,7 +148,10 @@ public class MessageListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_nav_right:
-                deleteAllMessage();
+                ActionSheetUtils.showDouble(getSupportFragmentManager(), "清空消息", "取消", "清空",
+                        value -> deleteAllMessage(), () -> {
+
+                });
                 break;
         }
     }
@@ -159,9 +181,7 @@ public class MessageListActivity extends BaseActivity {
                 for (int i = 0; i < value.getData().size(); i++) {
                     // 最开始的第一个
                     if ((beans.size()+i)==0) {
-                        Date date=new Date();
-                        date.setTime(value.getData().get(i).getCrtTime());
-                        beans.add(dateFormatTime.format(date));
+                        beans.add(checkTime(value.getData().get(i).getCrtTime()));
                     }
                     else {
                         Date date=new Date();
@@ -170,7 +190,7 @@ public class MessageListActivity extends BaseActivity {
                         date.setTime(value.getData().get(i).getCrtTime());
                         String now=dateFormatTime.format(date);
                         if (!now.equals(preview)) {
-                            beans.add(dateFormatTime.format(date));
+                            beans.add(checkTime(value.getData().get(i).getCrtTime()));
                         }
                     }
                     beans.add(value.getData().get(i));
@@ -262,15 +282,13 @@ public class MessageListActivity extends BaseActivity {
 
             @Override
             public void onNext(EmptyResponse value) {
-                Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-
                 ((MsgListResponse.DataBean) beans.get(position)).setReadFlg("1");
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -311,5 +329,35 @@ public class MessageListActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private String checkTime(long time) {
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar=Calendar.getInstance();
+        String todayText=dateFormat.format(calendar.getTime());
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        String yesterdayText=dateFormat.format(calendar.getTime());
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        String beforeYesterdayText=dateFormat.format(calendar.getTime());
+        Date date=new Date();
+        date.setTime(time);
+        String today=dateFormat.format(date);
+        if (todayText.equals(today)) {
+            return "今天";
+        }
+        if (yesterdayText.equals(today)) {
+            return "昨天";
+        }
+        if (beforeYesterdayText.equals(today)) {
+            return "前天";
+        }
+        return today;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(NotificationBean bean) {
+        swipy_messagelist.setRefreshing(true);
+        page=1;
+        getMsgList();
     }
 }

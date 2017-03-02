@@ -62,6 +62,10 @@
             </intent-filter>
         </receiver>
         <!-- 通知栏 -->
-        <activity android:name=".activity.other.NotificationActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <receiver android:name=".receiver.NotificationReceiver">
+            <intent-filter>
+                <action android:name="NotificationReceiver"></action>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

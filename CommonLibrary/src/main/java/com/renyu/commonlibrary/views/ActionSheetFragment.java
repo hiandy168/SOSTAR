@@ -54,7 +54,7 @@ public class ActionSheetFragment extends Fragment {
 
     //提供类型
     public enum CHOICE {
-        ITEM, DATE, TIME, GRID, CAMERA
+        ITEM, DATE, TIME, GRID, CAMERA, DOUBLE
     }
 
     OnItemClickListener onItemClickListener;
@@ -139,6 +139,17 @@ public class ActionSheetFragment extends Fragment {
         bundle.putStringArray("items", items);
         bundle.putString("cancelTitle", cancelTitle);
         bundle.putInt("type", 5);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static ActionSheetFragment newDoubleInstance(String title, String okTitle, String cancelTitle) {
+        ActionSheetFragment fragment=new ActionSheetFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("okTitle", okTitle);
+        bundle.putString("cancelTitle", cancelTitle);
+        bundle.putInt("type", 6);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -444,6 +455,28 @@ public class ActionSheetFragment extends Fragment {
                 dismiss();
             });
         }
+        else if (getArguments().getInt("type")==6) {
+            LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
+            pop_morechoice.setVisibility(View.VISIBLE);
+            LinearLayout pop_double_layout= (LinearLayout) view.findViewById(R.id.pop_double_layout);
+            pop_double_layout.setVisibility(View.VISIBLE);
+            TextView pop_double_choice= (TextView) view.findViewById(R.id.pop_double_choice);
+            pop_double_choice.setText(getArguments().getString("okTitle"));
+            pop_double_choice.setOnClickListener(v -> {
+                if (onOKListener!=null) {
+                    onOKListener.onOKClick(null);
+                }
+                dismiss();
+            });
+            TextView pop_double_cancel= (TextView) view.findViewById(R.id.pop_double_cancel);
+            pop_double_cancel.setText(getArguments().getString("cancelTitle"));
+            pop_double_cancel.setOnClickListener(v -> {
+                if (onCancelListener!=null) {
+                    onCancelListener.onCancelClick();
+                }
+                dismiss();
+            });
+        }
     }
 
     private void startPlay() {
@@ -643,6 +676,12 @@ public class ActionSheetFragment extends Fragment {
             if (choice== CHOICE.CAMERA) {
                 fragment=ActionSheetFragment.newCameraInstance(title, items, cancelTitle);
                 fragment.setOnItemClickListener(onItemClickListener);
+                fragment.setOnOKListener(onOKListener);
+                fragment.setOnCancelListener(onCancelListener);
+                fragment.show(fragmentManager, tag);
+            }
+            if (choice== CHOICE.DOUBLE) {
+                fragment=ActionSheetFragment.newDoubleInstance(title, okTitle, cancelTitle);
                 fragment.setOnOKListener(onOKListener);
                 fragment.setOnCancelListener(onCancelListener);
                 fragment.show(fragmentManager, tag);

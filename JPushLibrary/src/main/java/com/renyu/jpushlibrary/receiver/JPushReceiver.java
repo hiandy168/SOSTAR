@@ -4,7 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import com.renyu.commonlibrary.commonutils.NotificationUtils;
+import com.renyu.jpushlibrary.R;
+import com.renyu.jpushlibrary.bean.NotificationBean;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -27,6 +36,37 @@ public class JPushReceiver extends BroadcastReceiver {
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[JPushReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
             printBundle(bundle);
+
+            // 构造点击intent
+            Intent intent_no=new Intent("NotificationReceiver");
+            intent_no.putExtra("cn.jpush.android.EXTRA", bundle.getString(JPushInterface.EXTRA_EXTRA));
+            intent_no.putExtra("cn.jpush.android.MESSAGE", bundle.getString(JPushInterface.EXTRA_MESSAGE));
+            int type=-1;
+            try {
+                JSONObject jsonObject=new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                type=jsonObject.getInt("type");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (type==-1) {
+                return;
+            }
+            else {
+                String title="";
+                if (type==1) {
+                    title="订单提示";
+                }
+                else if (type==2) {
+                    title="系统消息";
+                }
+                NotificationUtils.getNotificationCenter(context)
+                        .createNormalNotification(context, title, title, bundle.getString(JPushInterface.EXTRA_MESSAGE),
+                                ContextCompat.getColor(context, R.color.colorPrimary),
+                                R.mipmap.ic_launcher, R.mipmap.ic_launcher, intent_no);
+            }
+
+            // 将消息传递出去
+            EventBus.getDefault().post(new NotificationBean());
 
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知");

@@ -2,8 +2,10 @@
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
+    android:paddingTop="7dip"
+    android:paddingBottom="5dip"
     app:ios="false"
     app:leftSwipe="false"
     app:swipeEnable="false">
@@ -15,6 +17,8 @@
             android:id="@+id/tv_adapter_messagelist_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="#999999"
             android:layout_gravity="center"/>
     </LinearLayout>
 </com.mcxtzhang.swipemenulib.SwipeMenuLayout>

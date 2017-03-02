@@ -2,39 +2,65 @@
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
+    android:paddingTop="5dip"
+    android:paddingBottom="5dip"
     app:ios="false"
     app:leftSwipe="true"
     app:swipeEnable="true">
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/tv_adapter_messagelist_layout"
-        android:background="@android:color/white">
+        android:background="@drawable/shape_rounded_solid_white">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="40dip">
             <TextView
                 android:id="@+id/tv_adapter_messagelist_type"
+                android:drawableLeft="@mipmap/ic_notification_type1"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="#333333"
+                android:drawablePadding="7dip"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dip"
+                android:text="XX消息"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tv_adapter_messagelist_time"
                 android:layout_alignParentRight="true"
+                android:layout_marginEnd="12dip"
+                android:textColor="#999999"
+                android:textSize="13sp"
+                android:text="XX消息"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#999999">
+
+        </View>
         <TextView
             android:id="@+id/tv_adapter_messagelist_content"
+            android:padding="13dip"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:text="XX消息"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <Button
         android:id="@+id/tv_adapter_messagelist_delete"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@android:color/holo_red_light"
         android:text="删除"
-        android:textColor="@android:color/holo_red_light"/>
+        android:padding="14dip"
+        android:textColor="@android:color/white"/>
 </com.mcxtzhang.swipemenulib.SwipeMenuLayout>

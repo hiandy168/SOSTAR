@@ -9,11 +9,11 @@
         android:id="@+id/swipy_messagelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="12dip"
+        android:layout_marginEnd="12dip"
         app:srl_direction="both">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_messagelist"
-            android:layout_marginStart="12dip"
-            android:layout_marginEnd="12dip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>

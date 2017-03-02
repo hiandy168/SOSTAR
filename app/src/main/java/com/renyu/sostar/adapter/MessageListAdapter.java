@@ -1,6 +1,8 @@
 package com.renyu.sostar.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +58,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(holder.getLayoutPosition())==2) {
-            ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText(beans.get(holder.getLayoutPosition()).toString());
+            if (holder.getLayoutPosition()==0) {
+                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText("");
+                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setVisibility(View.GONE);
+            }
+            else {
+                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText(beans.get(holder.getLayoutPosition()).toString());
+                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setVisibility(View.VISIBLE);
+            }
         }
         else if (getItemViewType(holder.getLayoutPosition())==1) {
             ((MessageViewHolder) holder).tv_adapter_messagelist_content.setText(((MsgListResponse.DataBean) beans.get(holder.getLayoutPosition())).getMessage());
@@ -73,6 +82,25 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     onMessageCtrolListener.delete(holder.getLayoutPosition());
                 }
             });
+            if (((MsgListResponse.DataBean) beans.get(holder.getLayoutPosition())).getReadFlg().equals("1")) {
+                ((MessageViewHolder) holder).tv_adapter_messagelist_content.setTextColor(Color.parseColor("#999999"));
+                ((MessageViewHolder) holder).tv_adapter_messagelist_type.setTextColor(Color.parseColor("#999999"));
+            }
+            else {
+                ((MessageViewHolder) holder).tv_adapter_messagelist_content.setTextColor(Color.parseColor("#333333"));
+                ((MessageViewHolder) holder).tv_adapter_messagelist_type.setTextColor(Color.parseColor("#333333"));
+            }
+            Drawable leftDrawable=null;
+            if (((MsgListResponse.DataBean) beans.get(holder.getLayoutPosition())).getMsgType().equals("1")) {
+                leftDrawable = context.getResources().getDrawable(R.mipmap.ic_notification_type1);
+                ((MessageViewHolder) holder).tv_adapter_messagelist_type.setText("订单提示");
+            }
+            else if (((MsgListResponse.DataBean) beans.get(holder.getLayoutPosition())).getMsgType().equals("2")) {
+                leftDrawable = context.getResources().getDrawable(R.mipmap.ic_notification_type2);
+                ((MessageViewHolder) holder).tv_adapter_messagelist_type.setText("系统消息");
+            }
+            leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+            ((MessageViewHolder) holder).tv_adapter_messagelist_type.setCompoundDrawables(leftDrawable, null, null, null);
         }
 
     }

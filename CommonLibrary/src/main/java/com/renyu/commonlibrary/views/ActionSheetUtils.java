@@ -31,4 +31,10 @@ public class ActionSheetUtils {
                 .setTitle(title).setListItems(items, onItemClickListener)
                 .setOnCancelListener(onCancelListener).show();
     }
+
+    public static void showDouble(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
+        ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.DOUBLE)
+                .setTitle(title).setCancelTitle(cancelTitle).setOkTitle(okTitle).setOnCancelListener(onCancelListener)
+                .setOnOKListener(onOKListener).show();
+    }
 }
