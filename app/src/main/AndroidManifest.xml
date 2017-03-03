@@ -35,7 +35,7 @@
         <activity android:name=".activity.user.EmployerAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.other.WebActivity" android:screenOrientation="portrait" android:process=":webview"></activity>
         <!-- 定位上报服务 -->
-        <service android:name=".service.LocationService" android:process=":locationservice"></service>
+        <service android:name=".service.LocationService"></service>
         <!-- 支付宝支付相关 -->
         <activity android:name=".alipay.AliPayActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".alipay.AliH5PayActivity" android:screenOrientation="portrait"></activity>

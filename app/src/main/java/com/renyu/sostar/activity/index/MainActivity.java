@@ -31,7 +31,6 @@ import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.message.MessageListActivity;
-import com.renyu.sostar.activity.settings.FeedbackActivity;
 import com.renyu.sostar.activity.settings.SettingsActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.activity.user.EmployeeAuthActivity;
@@ -46,6 +45,7 @@ import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -340,6 +340,8 @@ public class MainActivity extends BaseActivity {
             public void onNext(MyCenterEmployeeResponse value) {
                 myCenterEmployeeResponse=value;
                 updateMyEmployeeCenter(myCenterEmployeeResponse);
+
+                EventBus.getDefault().post(value);
             }
 
             @Override

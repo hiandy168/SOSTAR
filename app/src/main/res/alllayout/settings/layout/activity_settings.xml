@@ -85,7 +85,7 @@
 
         </View>
         <LinearLayout
-            android:id="@+id/layout_settings_rulechange"
+            android:id="@+id/layout_settings_rolechange"
             android:layout_width="match_parent"
             android:layout_height="45dip"
             android:gravity="center_vertical"

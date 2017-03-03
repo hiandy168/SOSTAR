@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'walle'
-//apply plugin: 'com.antfortune.freeline'
+apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -61,10 +61,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    freeline {
-//        hack true
-//        autoDependency false
-//    }
+    freeline {
+        hack true
+        autoDependency false
+    }
 }
 
 dependencies {
@@ -85,7 +85,8 @@ dependencies {
     compile project(':ImageLibrary')
     compile project(':HyphenateLibrary')
     compile project(':QRCodeLibrary')
-    //    debugCompile project(":runtime:runtime")
+    // freeline
+    debugCompile project(":runtime:runtime")
 }
 
 walle {

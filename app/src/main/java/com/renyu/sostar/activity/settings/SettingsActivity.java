@@ -11,16 +11,25 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.utils.FileUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.gson.Gson;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
+import com.renyu.sostar.bean.NotificationChangeRequest;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/2/27.
@@ -34,11 +43,25 @@ public class SettingsActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.tv_settings_cache)
     TextView tv_settings_cache;
+    @BindView(R.id.sb_settings_message)
+    SwitchButton sb_settings_message;
+
+    Disposable disposable;
+
+    boolean userChange=false;
 
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("通用设置");
+
+        sb_settings_message.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (userChange) {
+                userChange=false;
+                return;
+            }
+            changeNotificationState();
+        });
     }
 
     @Override
@@ -67,7 +90,7 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rulechange,
+    @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rolechange,
             R.id.btn_settings_sign_out, R.id.ib_nav_left, R.id.layout_settings_feedback})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -76,12 +99,17 @@ public class SettingsActivity extends BaseActivity {
                 Fresco.getImagePipeline().clearCaches();
                 tv_settings_cache.setText("0MB");
                 break;
-            case R.id.layout_settings_rulechange:
+            case R.id.layout_settings_rolechange:
+                changeRole();
                 break;
             case R.id.btn_settings_sign_out:
+                // 清除登录状态
                 ACache.get(this).remove(CommonParams.USER_SIGNIN);
+                // 关闭极光推送alias相关
+                JPushInterface.setAlias(SettingsActivity.this, "", null);
+                // 回到登录注册页
                 Intent intent=new Intent(this, SignInSignUpActivity.class);
-                intent.putExtra(CommonParams.FROM, CommonParams.FINISH);
+                intent.putExtra(CommonParams.FROM, CommonParams.NOTHING);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 break;
@@ -92,6 +120,13 @@ public class SettingsActivity extends BaseActivity {
                 startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
                 break;
         }
+    }
+
+    private void changeRole() {
+        Intent intent_main=new Intent(this, SignInSignUpActivity.class);
+        intent_main.putExtra(CommonParams.FROM, CommonParams.INDEX);
+        intent_main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent_main);
     }
 
     private String showCacheSize() {
@@ -115,5 +150,43 @@ public class SettingsActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         tv_settings_cache.setText(showCacheSize());
+    }
+
+    private void changeNotificationState() {
+        NotificationChangeRequest request=new NotificationChangeRequest();
+        NotificationChangeRequest.ParamBean paramBean=new NotificationChangeRequest.ParamBean();
+        paramBean.setMsgFlg(sb_settings_message.isChecked()?"0":"1");
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .setNotificationState(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(SettingsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                if (sb_settings_message.isChecked()) {
+                    sb_settings_message.setChecked(false);
+                }
+                else {
+                    sb_settings_message.setChecked(true);
+                }
+                userChange=true;
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

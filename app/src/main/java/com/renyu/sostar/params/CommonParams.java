@@ -46,6 +46,8 @@ public class CommonParams {
     public static final int SIGNUP=4;
     // 关闭
     public static final int FINISH=5;
+    // 什么都不执行
+    public static final int NOTHING=6;
 
     public static final int RESULT_MODIFY_PWD=1000;
     public static final int RESULT_UPDATEUSERINFO=1001;

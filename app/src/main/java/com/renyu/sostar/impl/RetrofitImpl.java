@@ -81,4 +81,9 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/all/deleteMsgList")
     Observable<Response<EmptyResponse>> deleteMsgList(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/sys/set")
+    Observable<Response<EmptyResponse>> setNotificationState(@Body RequestBody requestBody);
+
 }

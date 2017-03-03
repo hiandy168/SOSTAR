@@ -2,6 +2,8 @@ package com.renyu.sostar.activity.sign;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -130,5 +132,15 @@ public class SplashActivity extends BaseActivity {
     @Override
     public int setStatusBarTranslucent() {
         return 1;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // 如果程序已经打开则不进入启动页，直接显示之前的界面
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+        super.onCreate(savedInstanceState);
     }
 }
