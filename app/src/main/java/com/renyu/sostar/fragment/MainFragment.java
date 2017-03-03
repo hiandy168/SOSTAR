@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -49,13 +51,11 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.mv_main)
     MapView mv_main;
     BaiduMap mBaiduMap;
-    @BindView(R.id.iv_main_avatar)
-    ImageView iv_main_avatar;
 
     // 是否地图第一次定位加载成功
     boolean isFirstLoc=true;
     // 用户头像
-    BitmapDescriptor bdA;
+    Bitmap avatarBmp;
     // 用户坐标
     BDLocation bdLocation;
     // 用户marker
@@ -66,9 +66,7 @@ public class MainFragment extends BaseFragment {
         mBaiduMap=mv_main.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
-        mBaiduMap.setOnMapLoadedCallback(() -> {
-
-        });
+        mBaiduMap.setOnMapLoadedCallback(() ->  addUserOverLay(avatarBmp, bdLocation));
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
@@ -149,7 +147,7 @@ public class MainFragment extends BaseFragment {
             mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
         MainFragment.this.bdLocation=bdLocation;
-        addOverLay(bdA, bdLocation);
+        addUserOverLay(avatarBmp, bdLocation);
     }
 
     // 获取头像以刷新
@@ -166,13 +164,8 @@ public class MainFragment extends BaseFragment {
             @Override
             protected void onNewResultImpl(final Bitmap bitmap) {
                 Observable.just(bitmap).observeOn(AndroidSchedulers.mainThread()).subscribe(bitmap1 -> {
-                    iv_main_avatar.setImageBitmap(bitmap1);
-                    iv_main_avatar.setDrawingCacheEnabled(true);
-                    iv_main_avatar.destroyDrawingCache();
-                    iv_main_avatar.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-                    Bitmap cache = iv_main_avatar.getDrawingCache();
-                    bdA=BitmapDescriptorFactory.fromBitmap(cache);
-                    addOverLay(bdA, bdLocation);
+                    avatarBmp=bitmap1;
+                    addUserOverLay(bitmap1, bdLocation);
                 });
             }
 
@@ -183,8 +176,8 @@ public class MainFragment extends BaseFragment {
         }, CallerThreadExecutor.getInstance());
     }
 
-    private void addOverLay(BitmapDescriptor bd, BDLocation bdLocation) {
-        if (bd==null) {
+    private void addUserOverLay(Bitmap bitmap, BDLocation bdLocation) {
+        if (bitmap==null) {
             return;
         }
         if (bdLocation==null) {
@@ -193,7 +186,20 @@ public class MainFragment extends BaseFragment {
         if (avatarMarker!=null) {
             avatarMarker.remove();
         }
-        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd).zIndex(1000);
+
+        View view=LayoutInflater.from(getActivity()).inflate(R.layout.view_mapitem, null, false);
+        TextView tv_mapitem_text= (TextView) view.findViewById(R.id.tv_mapitem_text);
+        ImageView iv_mapitem_avatar= (ImageView) view.findViewById(R.id.iv_mapitem_avatar);
+        iv_mapitem_avatar.setImageBitmap(bitmap);
+        view.setDrawingCacheEnabled(true);
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        view.destroyDrawingCache();
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+        BitmapDescriptor bd2= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
+        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd2);
         oo.animateType(MarkerOptions.MarkerAnimateType.grow);
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
     }
