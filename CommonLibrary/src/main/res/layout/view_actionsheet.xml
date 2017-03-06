@@ -140,78 +140,13 @@
                     android:text="秒"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/pop_camera_layout"
-                android:layout_width="match_parent"
-                android:layout_height="230dip"
-                android:visibility="gone"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/pop_camera_choice1"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:text="拍照"
-                    android:layout_marginTop="30dip"
-                    android:background="@drawable/shape_rounded_corner_gray"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"/>
-                <TextView
-                    android:id="@+id/pop_camera_choice2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:text="从相册获取"
-                    android:layout_marginTop="12dip"
-                    android:background="@drawable/shape_rounded_corner_gray"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"/>
-                <TextView
-                    android:id="@+id/pop_camera_cancel"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:text="取消"
-                    android:layout_marginTop="16dip"
-                    android:background="@drawable/shape_rounded_corner_gray"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/pop_double_layout"
+                android:id="@+id/pop_customer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="230dip"
                 android:visibility="gone"
                 android:gravity="center"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/pop_double_choice"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="14sp"
-                    android:text="拍照"
-                    android:background="@drawable/shape_rounded_corner_gray"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"/>
-                <TextView
-                    android:id="@+id/pop_double_cancel"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:text="取消"
-                    android:layout_marginTop="16dip"
-                    android:background="@drawable/shape_rounded_corner_gray"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"/>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

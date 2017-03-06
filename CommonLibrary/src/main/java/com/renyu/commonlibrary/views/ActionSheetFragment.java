@@ -49,12 +49,14 @@ public class ActionSheetFragment extends Fragment {
     View realView;
     //添加进入的第一个view
     View pop_child_layout;
+    //待添加的view
+    View customerView;
 
     FragmentManager fragmentManager;
 
     //提供类型
     public enum CHOICE {
-        ITEM, DATE, TIME, GRID, CAMERA, DOUBLE
+        ITEM, DATE, TIME, GRID, CUSTOMER
     }
 
     OnItemClickListener onItemClickListener;
@@ -87,6 +89,10 @@ public class ActionSheetFragment extends Fragment {
 
     public void setOnOKListener(OnOKListener onOKListener) {
         this.onOKListener = onOKListener;
+    }
+
+    public void setCustomerView(View customerView) {
+        this.customerView=customerView;
     }
 
     public static ActionSheetFragment newItemInstance(String title, String[] items) {
@@ -132,24 +138,11 @@ public class ActionSheetFragment extends Fragment {
         return fragment;
     }
 
-    public static ActionSheetFragment newCameraInstance(String title, String[] items, String cancelTitle) {
+    public static ActionSheetFragment newCustomerInstance(String title) {
         ActionSheetFragment fragment=new ActionSheetFragment();
         Bundle bundle=new Bundle();
         bundle.putString("title", title);
-        bundle.putStringArray("items", items);
-        bundle.putString("cancelTitle", cancelTitle);
-        bundle.putInt("type", 5);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static ActionSheetFragment newDoubleInstance(String title, String okTitle, String cancelTitle) {
-        ActionSheetFragment fragment=new ActionSheetFragment();
-        Bundle bundle=new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("okTitle", okTitle);
-        bundle.putString("cancelTitle", cancelTitle);
-        bundle.putInt("type", 6);
+        bundle.putInt("type", 7);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -426,56 +419,14 @@ public class ActionSheetFragment extends Fragment {
                 dismiss();
             });
         }
-        else if (getArguments().getInt("type")==5) {
+        else if (getArguments().getInt("type")==7) {
             LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
             pop_morechoice.setVisibility(View.VISIBLE);
-            LinearLayout pop_camera_layout= (LinearLayout) view.findViewById(R.id.pop_camera_layout);
-            pop_camera_layout.setVisibility(View.VISIBLE);
-            TextView pop_camera_choice1= (TextView) view.findViewById(R.id.pop_camera_choice1);
-            pop_camera_choice1.setText(getArguments().getStringArray("items")[0]);
-            pop_camera_choice1.setOnClickListener(v -> {
-                if (onItemClickListener!=null) {
-                    onItemClickListener.onItemClick(0);
-                }
-                dismiss();
-            });
-            TextView pop_camera_choice2= (TextView) view.findViewById(R.id.pop_camera_choice2);
-            pop_camera_choice2.setText(getArguments().getStringArray("items")[1]);
-            pop_camera_choice2.setOnClickListener(v -> {
-                if (onItemClickListener!=null) {
-                    onItemClickListener.onItemClick(1);
-                }
-                dismiss();
-            });
-            TextView pop_camera_cancel= (TextView) view.findViewById(R.id.pop_camera_cancel);
-            pop_camera_cancel.setOnClickListener(v -> {
-                if (onCancelListener!=null) {
-                    onCancelListener.onCancelClick();
-                }
-                dismiss();
-            });
-        }
-        else if (getArguments().getInt("type")==6) {
-            LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
-            pop_morechoice.setVisibility(View.VISIBLE);
-            LinearLayout pop_double_layout= (LinearLayout) view.findViewById(R.id.pop_double_layout);
-            pop_double_layout.setVisibility(View.VISIBLE);
-            TextView pop_double_choice= (TextView) view.findViewById(R.id.pop_double_choice);
-            pop_double_choice.setText(getArguments().getString("okTitle"));
-            pop_double_choice.setOnClickListener(v -> {
-                if (onOKListener!=null) {
-                    onOKListener.onOKClick(null);
-                }
-                dismiss();
-            });
-            TextView pop_double_cancel= (TextView) view.findViewById(R.id.pop_double_cancel);
-            pop_double_cancel.setText(getArguments().getString("cancelTitle"));
-            pop_double_cancel.setOnClickListener(v -> {
-                if (onCancelListener!=null) {
-                    onCancelListener.onCancelClick();
-                }
-                dismiss();
-            });
+            LinearLayout pop_customer_layout= (LinearLayout) view.findViewById(R.id.pop_customer_layout);
+            pop_customer_layout.setVisibility(View.VISIBLE);
+            if (customerView!=null) {
+                pop_customer_layout.addView(customerView);
+            }
         }
     }
 
@@ -595,6 +546,7 @@ public class ActionSheetFragment extends Fragment {
         OnItemClickListener onItemClickListener;
         OnCancelListener onCancelListener;
         OnOKListener onOKListener;
+        View customerView;
 
         public Builder(FragmentManager fragmentManager) {
             this.fragmentManager=fragmentManager;
@@ -648,8 +600,13 @@ public class ActionSheetFragment extends Fragment {
             return this;
         }
 
-        public void show() {
-            ActionSheetFragment fragment;
+        public Builder setCustomerView(View customerView) {
+            this.customerView = customerView;
+            return this;
+        }
+
+        public ActionSheetFragment show() {
+            ActionSheetFragment fragment=null;
             if (choice== CHOICE.ITEM) {
                 fragment=ActionSheetFragment.newItemInstance(title, items);
                 fragment.setOnItemClickListener(onItemClickListener);
@@ -673,19 +630,12 @@ public class ActionSheetFragment extends Fragment {
                 fragment.setOnCancelListener(onCancelListener);
                 fragment.show(fragmentManager, tag);
             }
-            if (choice== CHOICE.CAMERA) {
-                fragment=ActionSheetFragment.newCameraInstance(title, items, cancelTitle);
-                fragment.setOnItemClickListener(onItemClickListener);
-                fragment.setOnOKListener(onOKListener);
-                fragment.setOnCancelListener(onCancelListener);
+            if (choice== CHOICE.CUSTOMER) {
+                fragment=ActionSheetFragment.newCustomerInstance(title);
+                fragment.setCustomerView(customerView);
                 fragment.show(fragmentManager, tag);
             }
-            if (choice== CHOICE.DOUBLE) {
-                fragment=ActionSheetFragment.newDoubleInstance(title, okTitle, cancelTitle);
-                fragment.setOnOKListener(onOKListener);
-                fragment.setOnCancelListener(onCancelListener);
-                fragment.show(fragmentManager, tag);
-            }
+            return fragment;
         }
     }
 

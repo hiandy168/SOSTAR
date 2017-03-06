@@ -18,6 +18,7 @@ import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ClearEditText;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.ResetPasswordRequest;
+import com.renyu.sostar.bean.VCodeRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -89,15 +90,7 @@ public class FindPasswordActivity extends BaseActivity {
                 resetPassword();
                 break;
             case R.id.btn_findpwd_getvcode:
-                btn_findpwd_getvcode.setEnabled(false);
-                vcode_disposable=Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                    btn_findpwd_getvcode.setText(""+(60-aLong));
-                    if (60-1-aLong==0) {
-                        btn_findpwd_getvcode.setEnabled(true);
-                        btn_findpwd_getvcode.setText("获取验证码");
-                    }
-                });
+                getVCode();
                 break;
             case R.id.ib_nav_left:
                 finish();
@@ -137,6 +130,50 @@ public class FindPasswordActivity extends BaseActivity {
                     Intent intent=new Intent();
                     setResult(RESULT_OK, intent);
                     finish();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(FindPasswordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        }
+    }
+
+    private void getVCode() {
+        if (TextUtils.isEmpty(et_findpwd_phone.getText().toString())) {
+            Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            VCodeRequest request=new VCodeRequest();
+            VCodeRequest.ParamBean paramBean=new VCodeRequest.ParamBean();
+            paramBean.setPhone(et_findpwd_phone.getText().toString());
+            request.setParam(paramBean);
+            retrofit.create(RetrofitImpl.class)
+                    .getVcode(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    network_disposable=d;
+                }
+
+                @Override
+                public void onNext(EmptyResponse value) {
+                    Toast.makeText(FindPasswordActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    btn_findpwd_getvcode.setEnabled(false);
+                    vcode_disposable= Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
+                            .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                                btn_findpwd_getvcode.setText(""+(60-aLong));
+                                if (60-1-aLong==0) {
+                                    btn_findpwd_getvcode.setEnabled(true);
+                                    btn_findpwd_getvcode.setText("获取验证码");
+                                }
+                            });
                 }
 
                 @Override

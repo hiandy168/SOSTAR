@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,7 +22,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
-import com.renyu.commonlibrary.views.ActionSheetUtils;
+import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
@@ -155,18 +156,7 @@ public class EmployerInfoActivity extends BaseActivity {
                 startActivityForResult(intent_updatename, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employerinfo_avatar:
-                ActionSheetUtils.showCamera(EmployerInfoActivity.this.getSupportFragmentManager(),
-                        "设置头像", new String[]{"拍照", "从相册获取"},
-                        position -> {
-                            if (position==0) {
-                                Utils.takePicture(EmployerInfoActivity.this, CommonParams.RESULT_TAKEPHOTO);
-                            }
-                            else if (position==1) {
-                                Utils.choicePic(EmployerInfoActivity.this, 1, CommonParams.RESULT_ALUMNI);
-                            }
-                        }, "取消", () -> {
-
-                        });
+                choicePic();
                 break;
             case R.id.layout_employerinfo_phone:
                 Intent intent_updatephone=new Intent(EmployerInfoActivity.this, UpdateTextInfoActivity.class);
@@ -337,5 +327,30 @@ public class EmployerInfoActivity extends BaseActivity {
                 Toast.makeText(EmployerInfoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void choicePic() {
+        View view_clearmessage= LayoutInflater.from(EmployerInfoActivity.this)
+                .inflate(R.layout.view_actionsheet_button_3, null, false);
+        ActionSheetFragment actionSheetFragment=ActionSheetFragment.build(getSupportFragmentManager())
+                .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
+                .setTitle("设置头像")
+                .setCustomerView(view_clearmessage)
+                .show();
+        TextView pop_three_choice1= (TextView) view_clearmessage.findViewById(R.id.pop_three_choice1);
+        pop_three_choice1.setText("拍照");
+        pop_three_choice1.setOnClickListener(v -> {
+            Utils.takePicture(EmployerInfoActivity.this, CommonParams.RESULT_TAKEPHOTO);
+            actionSheetFragment.dismiss();
+        });
+        TextView pop_three_choice2= (TextView) view_clearmessage.findViewById(R.id.pop_three_choice2);
+        pop_three_choice2.setText("从相册获取");
+        pop_three_choice2.setOnClickListener(v -> {
+            Utils.choicePic(EmployerInfoActivity.this, 1, CommonParams.RESULT_ALUMNI);
+            actionSheetFragment.dismiss();
+        });
+        TextView pop_three_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_three_cancel);
+        pop_three_cancel.setText("取消");
+        pop_three_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
     }
 }

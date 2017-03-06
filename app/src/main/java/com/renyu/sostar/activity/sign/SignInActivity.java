@@ -174,7 +174,6 @@ public class SignInActivity extends BaseActivity {
 
             }
         });
-
     }
 
     @Override

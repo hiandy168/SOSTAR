@@ -130,6 +130,7 @@ public class MainActivity extends BaseActivity {
         ImageButton ib_menu_nav_left= (ImageButton) (main_menu_layout.findViewById(R.id.ib_nav_left));
         ib_menu_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_arrow_write_left));
         ib_menu_nav_left.setOnClickListener(v -> main_dl.closeDrawer(main_menu_layout));
+        main_menu_layout.findViewById(R.id.nav_layout).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         TextView tv_menu_nav_title= (TextView) main_menu_layout.findViewById(R.id.tv_nav_title);
         tv_menu_nav_title.setText("我的");
         tv_menu_nav_title.setTextColor(Color.WHITE);
@@ -316,6 +317,8 @@ public class MainActivity extends BaseActivity {
             else {
                 myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
                 updateMyEmployeeCenter(myCenterEmployeeResponse);
+
+                EventBus.getDefault().post(myCenterEmployeeResponse);
             }
         }
     }

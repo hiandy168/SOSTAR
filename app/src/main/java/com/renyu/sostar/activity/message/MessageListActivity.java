@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -148,10 +149,22 @@ public class MessageListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_nav_right:
-                ActionSheetUtils.showDouble(getSupportFragmentManager(), "清空消息", "取消", "清空",
-                        value -> deleteAllMessage(), () -> {
-
+                View view_clearmessage= LayoutInflater.from(MessageListActivity.this)
+                        .inflate(R.layout.view_actionsheet_button_2, null, false);
+                ActionSheetFragment actionSheetFragment=ActionSheetFragment.build(getSupportFragmentManager())
+                        .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
+                        .setTitle("清空消息")
+                        .setCustomerView(view_clearmessage)
+                        .show();
+                TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice);
+                pop_double_choice.setText("清空");
+                pop_double_choice.setOnClickListener(v -> {
+                    deleteAllMessage();
+                    actionSheetFragment.dismiss();
                 });
+                TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel);
+                pop_double_cancel.setText("取消");
+                pop_double_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
                 break;
         }
     }

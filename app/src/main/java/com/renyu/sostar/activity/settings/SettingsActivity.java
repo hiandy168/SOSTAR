@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,8 +19,12 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.sign.SignInActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.bean.NotificationChangeRequest;
+import com.renyu.sostar.bean.SetUserTypeRequest;
+import com.renyu.sostar.bean.SigninRequest;
+import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -123,10 +128,77 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void changeRole() {
-        Intent intent_main=new Intent(this, SignInSignUpActivity.class);
-        intent_main.putExtra(CommonParams.FROM, CommonParams.INDEX);
-        intent_main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent_main);
+        SetUserTypeRequest request=new SetUserTypeRequest();
+        SetUserTypeRequest.ParamBean paramBean=new SetUserTypeRequest.ParamBean();
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            paramBean.setUserType("0");
+        }
+        else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            paramBean.setUserType("1");
+        }
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .setUserType(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(SettingsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                signin();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void signin() {
+        SigninRequest request=new SigninRequest();
+        SigninRequest.ParamBean paramBean=new SigninRequest.ParamBean();
+        paramBean.setPassword(ACache.get(this).getAsString(CommonParams.USER_PASSWORD));
+        paramBean.setPhone(ACache.get(this).getAsString(CommonParams.USER_PHONE));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .signin(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(SigninResponse value) {
+                ACache.get(SettingsActivity.this).put(CommonParams.USER_TYPE, value.getUserType());
+                ACache.get(SettingsActivity.this).put(CommonParams.USER_ID, value.getUserId());
+
+                Intent intent_main=new Intent(SettingsActivity.this, SignInSignUpActivity.class);
+                intent_main.putExtra(CommonParams.FROM, CommonParams.INDEX);
+                intent_main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent_main);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     private String showCacheSize() {

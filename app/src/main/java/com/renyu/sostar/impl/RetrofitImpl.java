@@ -86,4 +86,8 @@ public interface RetrofitImpl {
     @POST("sostar/api/sys/set")
     Observable<Response<EmptyResponse>> setNotificationState(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/sys/userType/set")
+    Observable<Response<EmptyResponse>> setUserType(@Body RequestBody requestBody);
+
 }
