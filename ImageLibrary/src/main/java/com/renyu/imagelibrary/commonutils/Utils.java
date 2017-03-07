@@ -3,7 +3,9 @@ package com.renyu.imagelibrary.commonutils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +14,9 @@ import com.renyu.imagelibrary.crop.CropActivity;
 import com.renyu.imagelibrary.photopicker.PhotoPickerActivity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by renyu on 2017/1/3.
@@ -62,16 +67,62 @@ public class Utils {
     }
 
     /**
+     * 剪裁图片文件
+     * @param filePath
+     * @param ratio 宽/高
+     */
+    public static void cropFile(String filePath, String newFilePath, float ratio) {
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(filePath, options);
+        float bmpWidth=options.outWidth;
+        float bmpHeight=options.outHeight;
+        int realWidth=0;
+        int realHeight=0;
+        int startX=0;
+        int startY=0;
+        // 宽度过大
+        if (bmpWidth/bmpHeight>ratio) {
+            realWidth= (int) (bmpHeight*ratio);
+            realHeight= (int) bmpHeight;
+            startX= (int) ((bmpWidth-realWidth)/2);
+            startY= 0;
+        }
+        // 高度过大
+        else if (bmpWidth/bmpHeight<ratio) {
+            realWidth= (int) bmpWidth;
+            realHeight= (int) (bmpWidth/ratio);
+            startX= 0;
+            startY= (int) ((bmpHeight-realHeight)/2);
+        }
+        BitmapFactory.Options newOpts=new BitmapFactory.Options();
+        newOpts.inJustDecodeBounds = false;
+        newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bitmap=BitmapFactory.decodeFile(filePath, newOpts);
+        bitmap=Bitmap.createBitmap(bitmap, startX, startY, realWidth, realHeight);
+        //生成新图片
+        try {
+            FileOutputStream fos = new FileOutputStream(newFilePath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos);
+            fos.flush();
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 拍照后刷新系统相册
      * @param context
      * @param newFile
      */
     public static void refreshAlbum(Context context, String newFile, String dirPath) {
         //刷新文件夹
-        if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.KITKAT) {
-            MediaScannerConnection.scanFile(context, new String[]{dirPath}, null, null);
-        }
-        else {
+        if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.KITKAT) {
             Intent scan_dir=new Intent(Intent.ACTION_MEDIA_MOUNTED);
             scan_dir.setData(Uri.fromFile(new File(dirPath)));
             context.sendBroadcast(scan_dir);
