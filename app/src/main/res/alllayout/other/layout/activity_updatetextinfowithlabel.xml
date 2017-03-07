@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/view_nav"></include>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dip">
+
+    </View>
+    <EditText
+        android:id="@+id/et_updatetextinfowithlabel"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:textSize="14sp"
+        android:textColor="#999999"
+        android:paddingStart="12dip"
+        android:paddingEnd="12dip"
+        android:gravity="center_vertical"
+        android:background="@android:color/white"/>
+    <com.renyu.commonlibrary.views.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.renyu.commonlibrary.views.FlowLayout>
+</LinearLayout>

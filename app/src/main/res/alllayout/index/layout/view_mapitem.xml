@@ -6,7 +6,8 @@
     <ImageView
         android:id="@+id/iv_mapitem_avatar"
         android:layout_width="48dip"
-        android:layout_height="48dip" />
+        android:layout_height="48dip"
+        android:scaleType="centerCrop"/>
     <TextView
         android:id="@+id/tv_mapitem_text"
         android:background="@android:color/white"
