@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
+                android:layout_marginTop="3dip"
                 app:kswAnimationDuration="300"
                 app:kswBackDrawable="@drawable/ios_back_drawable"
                 app:kswBackMeasureRatio="1.4"

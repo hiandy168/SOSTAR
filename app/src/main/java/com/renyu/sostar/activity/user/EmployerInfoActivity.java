@@ -26,6 +26,7 @@ import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.impl.RetrofitImpl;

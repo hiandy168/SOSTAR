@@ -1,4 +1,4 @@
-package com.renyu.sostar.activity.user;
+package com.renyu.sostar.activity.other;
 
 import android.content.Intent;
 import android.graphics.Color;

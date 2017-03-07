@@ -1,5 +1,6 @@
 package com.renyu.sostar.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.order.ReleaseOrderActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -128,6 +131,15 @@ public class MainFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mv_main.onSaveInstanceState(outState);
+    }
+
+    @OnClick({R.id.iv_main_releaseorder})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_main_releaseorder:
+                startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
+                break;
+        }
     }
 
     // 刷新地理位置
