@@ -1,33 +1,35 @@
 package com.renyu.imagelibrary.preview;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
-import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.imagelibrary.R;
+import com.renyu.imagelibrary.commonutils.Utils;
+import com.renyu.imagelibrary.params.CommonParams;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import me.relex.circleindicator.CircleIndicator;
-import me.relex.photodraweeview.OnPhotoTapListener;
-import me.relex.photodraweeview.PhotoDraweeView;
 
 /**
  * Created by renyu on 16/1/31.
@@ -35,14 +37,21 @@ import me.relex.photodraweeview.PhotoDraweeView;
 public class ImagePreviewActivity extends BaseActivity {
 
     MultiTouchViewPager imagepreview_viewpager;
+    MyPagerAdapter adapter;
     CircleIndicator imagepreview_indicator;
+    RelativeLayout layout_imagepreview_edit;
+    TextView imagepreview_edit;
 
     int position=0;
+    // 图片路径
     ArrayList<String> urls;
-    ArrayList<PhotoDraweeView> photoDraweeViews;
+    ArrayList<Fragment> fragments;
     //是否可以下载
     boolean canDownload;
+    //是否可以编辑
+    boolean canEdit;
 
+    // 记录图片原始尺寸，比便于复原
     HashMap<String, ImageInfo> point;
 
     @Override
@@ -62,12 +71,12 @@ public class ImagePreviewActivity extends BaseActivity {
 
     @Override
     public int setStatusBarColor() {
-        return 0;
+        return Color.BLACK;
     }
 
     @Override
     public int setStatusBarTranslucent() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -78,16 +87,22 @@ public class ImagePreviewActivity extends BaseActivity {
 
         imagepreview_viewpager= (MultiTouchViewPager) findViewById(R.id.imagepreview_viewpager);
         imagepreview_indicator= (CircleIndicator) findViewById(R.id.imagepreview_indicator);
+        layout_imagepreview_edit= (RelativeLayout) findViewById(R.id.layout_imagepreview_edit);
+        imagepreview_edit= (TextView) findViewById(R.id.imagepreview_edit);
 
         position=getIntent().getExtras().getInt("position");
         urls=getIntent().getExtras().getStringArrayList("urls");
         canDownload=getIntent().getExtras().getBoolean("canDownload");
-        photoDraweeViews=new ArrayList<>();
-        for (int i=0;i<urls.size();i++) {
-            PhotoDraweeView photoDraweeView=new PhotoDraweeView(this);
-            photoDraweeViews.add(photoDraweeView);
+        canEdit=getIntent().getExtras().getBoolean("canEdit");
+        if (canEdit) {
+            layout_imagepreview_edit.setVisibility(View.VISIBLE);
         }
-        imagepreview_viewpager.setAdapter(new MyPagerAdapter());
+        fragments=new ArrayList<>();
+        for (int i=0;i<urls.size();i++) {
+            fragments.add(ImagePreviewFragment.newInstance(urls.get(i), i));
+        }
+        adapter=new MyPagerAdapter(getSupportFragmentManager());
+        imagepreview_viewpager.setAdapter(adapter);
         imagepreview_viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -96,14 +111,16 @@ public class ImagePreviewActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Observable.timer(300, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
+                Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+                        // 图片尺寸复原
                         if (position-1>=0&&point.containsKey(""+(position-1))) {
-                            photoDraweeViews.get((position-1)).update(point.get(""+(position-1)).getWidth(), point.get(""+(position-1)).getHeight());
+                            ((ImagePreviewFragment) fragments.get(position-1)).update(point.get(""+(position-1)).getWidth(), point.get(""+(position-1)).getHeight());
                         }
                         if (position+1<=urls.size()&&point.containsKey(""+(position+1))) {
-                            photoDraweeViews.get((position+1)).update(point.get(""+(position+1)).getWidth(), point.get(""+(position+1)).getHeight());
+                            ((ImagePreviewFragment) fragments.get(position+1)).update(point.get(""+(position+1)).getWidth(), point.get(""+(position+1)).getHeight());
                         }
                     }
                 });
@@ -116,67 +133,95 @@ public class ImagePreviewActivity extends BaseActivity {
         });
         imagepreview_indicator.setViewPager(imagepreview_viewpager);
         imagepreview_viewpager.setCurrentItem(position);
+        imagepreview_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.cropImage(urls.get(imagepreview_viewpager.getCurrentItem()), ImagePreviewActivity.this, CommonParams.RESULT_CROP);
+            }
+        });
     }
 
-    private class MyPagerAdapter extends PagerAdapter {
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
 
         @Override
         public int getCount() {
-            return photoDraweeViews.size();
+            return fragments.size();
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view==object;
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(photoDraweeViews.get(position));
+        public Object instantiateItem(ViewGroup container, int position) {
+            removeFragment(container,position);
+            return super.instantiateItem(container, position);
         }
+    }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            final PhotoDraweeView photoDraweeView=photoDraweeViews.get(position);
-            PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-            controller.setUri(Uri.parse(urls.get(position).indexOf("http")!=-1?urls.get(position):"file://"+urls.get(position)));
-            controller.setOldController(photoDraweeView.getController());
-            controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                    super.onFinalImageSet(id, imageInfo, animatable);
-                    if (imageInfo == null) {
-                        return;
-                    }
-                    point.put(""+position, imageInfo);
-                    photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
-                }
-            });
-            photoDraweeView.setController(controller.build());
-            photoDraweeView.setOnPhotoTapListener(new OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float x, float y) {
-                    ImagePreviewActivity.this.finish();
-                }
-            });
-            photoDraweeView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    new AlertDialog.Builder(ImagePreviewActivity.this).setItems(new String[]{"保存"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which==0 && canDownload) {
-                                Intent intent=new Intent("ImagePreviewDownload");
-                                intent.putExtra("image", urls.get(position));
-                                sendBroadcast(intent);
-                            }
-                        }
-                    }).show();
-                    return true;
-                }
-            });
-            container.addView(photoDraweeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            return photoDraweeView;
+    private void removeFragment(ViewGroup container,int index) {
+        String tag = getFragmentTag(container.getId(), index);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null)
+            return;
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.remove(fragment);
+        ft.commitAllowingStateLoss();
+        getSupportFragmentManager().executePendingTransactions();
+    }
+
+    private String getFragmentTag(int viewId, int index) {
+        try {
+            Class<FragmentPagerAdapter> cls = FragmentPagerAdapter.class;
+            Class<?>[] parameterTypes = { int.class, long.class };
+            Method method = cls.getDeclaredMethod("makeFragmentName",
+                    parameterTypes);
+            method.setAccessible(true);
+            String tag = (String) method.invoke(this, viewId, index);
+            return tag;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
+            String path=data.getExtras().getString("path");
+            Utils.refreshAlbum(this, path, new File(path).getParentFile().getPath());
+            int position=imagepreview_viewpager.getCurrentItem();
+            urls.remove(position);
+            urls.add(position, path);
+            fragments.clear();
+            point.clear();
+            for (int i=0;i<urls.size();i++) {
+                fragments.add(ImagePreviewFragment.newInstance(urls.get(i), i));
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    // 添加图片尺寸信息
+    public void addPicSize(int position, ImageInfo imageInfo) {
+        point.put(""+position, imageInfo);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent();
+        intent.putStringArrayListExtra("urls", urls);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

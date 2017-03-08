@@ -84,6 +84,8 @@ public class PhotoPickerActivity extends BaseActivity {
     public ArrayList<String> imagePaths;
     //最大显示文件夹数量
     int COUNT_MAX=4;
+    //当前文件夹key
+    String currentKey="0";
 
     @Override
     public int setStatusBarColor() {
@@ -174,6 +176,7 @@ public class PhotoPickerActivity extends BaseActivity {
                 Bundle bundle=new Bundle();
                 bundle.putBoolean("canDownload", false);
                 bundle.putInt("position", 0);
+                bundle.putBoolean("canEdit", false);
                 ArrayList<String> urls=new ArrayList<>();
                 urls.add(path);
                 bundle.putStringArrayList("urls", urls);
@@ -208,9 +211,10 @@ public class PhotoPickerActivity extends BaseActivity {
                     Bundle bundle=new Bundle();
                     bundle.putBoolean("canDownload", false);
                     bundle.putInt("position", 0);
+                    bundle.putBoolean("canEdit", true);
                     bundle.putStringArrayList("urls", imagePaths);
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    startActivityForResult(intent, CommonParams.RESULT_PREVIEW);
                 }
             }
         });
@@ -226,7 +230,8 @@ public class PhotoPickerActivity extends BaseActivity {
                 popupWindow.dismiss();
                 PhotoDirectory directory = dictModels.get(position);
                 photopicker_dict.setText(directory.getName());
-                updateData(bucketIds.get(position));
+                currentKey=bucketIds.get(position);
+                updateData(currentKey);
             }
         });
     }
@@ -281,8 +286,10 @@ public class PhotoPickerActivity extends BaseActivity {
             public void accept(LinkedHashMap<String, PhotoDirectory> stringPhotoDirectoryLinkedHashMap) throws Exception {
                 PhotoPickerActivity.this.allHashMap=stringPhotoDirectoryLinkedHashMap;
                 if (stringPhotoDirectoryLinkedHashMap.containsKey("0")) {
-                    updateData("0");
+                    updateData(currentKey);
 
+                    dictModels.clear();
+                    bucketIds.clear();
                     Iterator iterator=stringPhotoDirectoryLinkedHashMap.entrySet().iterator();
                     while (iterator.hasNext()) {
                         Map.Entry entry= (Map.Entry) iterator.next();
@@ -380,6 +387,13 @@ public class PhotoPickerActivity extends BaseActivity {
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             finish();
+        }
+        else if (requestCode==CommonParams.RESULT_PREVIEW && resultCode==RESULT_OK) {
+            imagePaths.clear();
+            for (String url : data.getStringArrayListExtra("urls")) {
+                imagePaths.add(url);
+            }
+            loadImages();
         }
     }
 

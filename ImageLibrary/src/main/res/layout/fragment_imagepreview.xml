@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <uk.co.senab.photoview.PhotoView
+    <me.relex.photodraweeview.PhotoDraweeView
         android:id="@+id/photo_view"
     	android:layout_width="match_parent"
     	android:layout_height="match_parent">
         
-    </uk.co.senab.photoview.PhotoView>
+    </me.relex.photodraweeview.PhotoDraweeView>
 
 </LinearLayout>
