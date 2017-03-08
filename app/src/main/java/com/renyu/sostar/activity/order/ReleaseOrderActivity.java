@@ -13,9 +13,13 @@ import android.widget.TextView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.UpdateAddressInfoActivity;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
+import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.params.CommonParams;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,6 +51,8 @@ public class ReleaseOrderActivity extends BaseActivity {
     @BindView(R.id.tv_releaseorder_paytype)
     TextView tv_releaseorder_paytype;
 
+    ArrayList<String> picPath;
+
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -54,6 +60,8 @@ public class ReleaseOrderActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("保存");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+        picPath=new ArrayList<>();
     }
 
     @Override
@@ -104,20 +112,16 @@ public class ReleaseOrderActivity extends BaseActivity {
                 choiceSex();
                 break;
             case R.id.layout_releaseorder_address:
-                Intent intent_address=new Intent(ReleaseOrderActivity.this, UpdateTextInfoActivity.class);
+                Intent intent_address=new Intent(ReleaseOrderActivity.this, UpdateAddressInfoActivity.class);
                 intent_address.putExtra("title", "工作地点");
-                intent_address.putExtra("param", "address");
-                intent_address.putExtra("needcommit", false);
-                intent_address.putExtra("source", tv_releaseorder_address.getText().toString());
-                startActivityForResult(intent_address, CommonParams.RESULT_UPDATEUSERINFO);
+                startActivityForResult(intent_address, CommonParams.RESULT_UPDATEADDRESSINFO);
                 break;
             case R.id.layout_releaseorder_desp:
-                Intent intent_desp=new Intent(ReleaseOrderActivity.this, UpdateTextInfoActivity.class);
-                intent_desp.putExtra("title", "详细描述");
-                intent_desp.putExtra("param", "description");
-                intent_desp.putExtra("needcommit", false);
-                intent_desp.putExtra("source", tv_releaseorder_desp.getText().toString());
-                startActivityForResult(intent_desp, CommonParams.RESULT_UPDATEUSERINFO);
+                Intent intent_desp=new Intent(ReleaseOrderActivity.this, UpdateTextInfoWithPicActivity.class);
+                intent_desp.putExtra("title", "工作描述");
+                intent_desp.putExtra("picPath", picPath);
+                intent_desp.putExtra("ed", tv_releaseorder_desp.getText().toString());
+                startActivityForResult(intent_desp, CommonParams.RESULT_UPDATEPICINFO);
                 break;
             case R.id.layout_releaseorder_price:
                 Intent intent_price=new Intent(ReleaseOrderActivity.this, UpdateTextInfoActivity.class);
@@ -145,15 +149,16 @@ public class ReleaseOrderActivity extends BaseActivity {
             if (data.getStringExtra("param").equals("staffAccount")) {
                 tv_releaseorder_person.setText(data.getStringExtra("value"));
             }
-            else if (data.getStringExtra("param").equals("address")) {
-                tv_releaseorder_address.setText(data.getStringExtra("value"));
-            }
-            else if (data.getStringExtra("param").equals("description")) {
-                tv_releaseorder_desp.setText(data.getStringExtra("value"));
-            }
             else if (data.getStringExtra("param").equals("unitPrice")) {
                 tv_releaseorder_price.setText(data.getStringExtra("value"));
             }
+        }
+        if (requestCode==CommonParams.RESULT_UPDATEPICINFO && resultCode==RESULT_OK) {
+            picPath=data.getStringArrayListExtra("picPath");
+            tv_releaseorder_desp.setText(data.getStringExtra("ed"));
+        }
+        if (requestCode==CommonParams.RESULT_UPDATEADDRESSINFO && resultCode==RESULT_OK) {
+            tv_releaseorder_address.setText(data.getStringExtra("value"));
         }
     }
 
@@ -180,7 +185,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         TextView pop_three_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_three_cancel);
         pop_three_cancel.setText("不限");
         pop_three_cancel.setOnClickListener(v -> {
-            tv_releaseorder_sex.setText("女");
+            tv_releaseorder_sex.setText("不限");
             actionSheetFragment.dismiss();
         });
     }
@@ -194,6 +199,7 @@ public class ReleaseOrderActivity extends BaseActivity {
                 .setCustomerView(view_clearmessage)
                 .show();
         TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice);
+        pop_double_choice.setTextColor(Color.parseColor("#333333"));
         pop_double_choice.setText("日结");
         pop_double_choice.setOnClickListener(v -> {
             tv_releaseorder_paytype.setText("日结");

@@ -33,7 +33,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.sostar.R;
-import com.renyu.sostar.activity.order.ReleaseOrderActivity;
+import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -137,7 +137,7 @@ public class MainFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_releaseorder:
-                startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
+                startActivity(new Intent(getActivity(), NotStartedOrderListActivity.class));
                 break;
         }
     }

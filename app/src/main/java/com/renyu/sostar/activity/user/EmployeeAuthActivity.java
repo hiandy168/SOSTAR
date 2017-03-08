@@ -291,11 +291,12 @@ public class EmployeeAuthActivity extends BaseActivity {
             iv_userauth_negative.setController(draweeController);
             tv_userauth_negative.setVisibility(View.GONE);
         }
+        String url="http://114.215.18.160:9333/submit"+"?pos="+uploadPicPosition;
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         OKHttpHelper helper=new OKHttpHelper();
-        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
-
+        helper.asyncUpload(fileHashMap, url, new HashMap<>(), () -> {
+            helper.cancel(url);
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
@@ -316,14 +317,14 @@ public class EmployeeAuthActivity extends BaseActivity {
                 Toast.makeText(EmployeeAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                 if (uploadPicPosition==1) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
                     iv_userauth_positive.setController(draweeController);
                     tv_userauth_positive.setVisibility(View.VISIBLE);
                     iv_userauth_positive.setTag("");
                 }
                 else if (uploadPicPosition==2) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
                     iv_userauth_negative.setController(draweeController);
                     tv_userauth_negative.setVisibility(View.VISIBLE);
                     tv_userauth_negative.setTag("");

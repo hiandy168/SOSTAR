@@ -15,4 +15,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="NotStartedOrderListStyle" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+    </style>
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>

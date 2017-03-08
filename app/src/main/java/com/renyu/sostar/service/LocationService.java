@@ -26,7 +26,7 @@ public class LocationService extends Service {
     LocationClient mLocClient;
 
     // 上一次定位的坐标位置
-    BDLocation lastBdLocation;
+    public static BDLocation lastBdLocation;
 
     @Nullable
     @Override

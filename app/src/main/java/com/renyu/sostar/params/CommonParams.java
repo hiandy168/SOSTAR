@@ -55,4 +55,6 @@ public class CommonParams {
     public static final int RESULT_ALUMNI=1003;
     public static final int RESULT_CROP=1004;
     public static final int RESULT_UPDATELABELINFO=1005;
+    public static final int RESULT_UPDATEPICINFO=1006;
+    public static final int RESULT_UPDATEADDRESSINFO=1007;
 }

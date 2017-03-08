@@ -77,8 +77,6 @@ public class EmployerAuthActivity extends BaseActivity {
 
     OKHttpHelper helper;
 
-    Disposable disposable;
-
     MyCenterEmployerResponse myCenterResponse;
 
     @Override
@@ -254,10 +252,11 @@ public class EmployerAuthActivity extends BaseActivity {
             iv_employerauth_pic3.setController(draweeController);
             tv_employerauth_pic3.setVisibility(View.GONE);
         }
+        String url="http://114.215.18.160:9333/submit"+"?pos="+uploadPicPosition;
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
-        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
-
+        helper.asyncUpload(fileHashMap, url, new HashMap<>(), () -> {
+            helper.cancel(url);
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
@@ -281,23 +280,23 @@ public class EmployerAuthActivity extends BaseActivity {
                 Toast.makeText(EmployerAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                 if (uploadPicPosition==1) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic1.setController(draweeController);
-                    tv_employerauth_pic1.setVisibility(View.GONE);
+                    tv_employerauth_pic1.setVisibility(View.VISIBLE);
                     tv_employerauth_pic1.setTag("");
                 }
                 else if (uploadPicPosition==2) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic2.setController(draweeController);
-                    tv_employerauth_pic2.setVisibility(View.GONE);
+                    tv_employerauth_pic2.setVisibility(View.VISIBLE);
                     tv_employerauth_pic2.setTag("");
                 }
                 else if (uploadPicPosition==3) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.mipmap.ic_launcher)).setAutoPlayAnimations(true).build();
+                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
                     iv_employerauth_pic3.setController(draweeController);
-                    tv_employerauth_pic3.setVisibility(View.GONE);
+                    tv_employerauth_pic3.setVisibility(View.VISIBLE);
                     tv_employerauth_pic3.setTag("");
                 }
             }
