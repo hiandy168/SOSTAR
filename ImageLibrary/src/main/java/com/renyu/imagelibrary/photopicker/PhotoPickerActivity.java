@@ -243,7 +243,6 @@ public class PhotoPickerActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        initViews();
         loadImages();
     }
 

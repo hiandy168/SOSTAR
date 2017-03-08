@@ -32,6 +32,9 @@ public abstract class BaseFragment extends Fragment {
             ButterKnife.bind(this, view);
 
             httpHelper=new OKHttpHelper();
+
+            initParams();
+            loadData();
         }
         ViewGroup parent= (ViewGroup) view.getParent();
         if (parent!=null) {
@@ -44,7 +47,5 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initParams();
-        loadData();
     }
 }
