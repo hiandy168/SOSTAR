@@ -151,7 +151,7 @@ public class EmployeeInfoActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.layout_employeeinfo_age:
-                ActionSheetUtils.showDate(EmployeeInfoActivity.this.getSupportFragmentManager(),
+                ActionSheetUtils.showBeforeDate(EmployeeInfoActivity.this.getSupportFragmentManager(),
                         "生日",
                         "取消",
                         "完成",

@@ -57,4 +57,5 @@ public class CommonParams {
     public static final int RESULT_UPDATELABELINFO=1005;
     public static final int RESULT_UPDATEPICINFO=1006;
     public static final int RESULT_UPDATEADDRESSINFO=1007;
+    public static final int RESULT_UPDATETIMEINFO=1008;
 }

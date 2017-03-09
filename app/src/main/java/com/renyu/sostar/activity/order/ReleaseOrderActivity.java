@@ -5,18 +5,22 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
+import com.renyu.commonlibrary.views.wheelview.LoopView;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateAddressInfoActivity;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
+import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
 import com.renyu.sostar.params.CommonParams;
 
 import java.util.ArrayList;
@@ -52,6 +56,7 @@ public class ReleaseOrderActivity extends BaseActivity {
     TextView tv_releaseorder_paytype;
 
     ArrayList<String> picPath;
+    ArrayList<String> timeBeans;
 
     @Override
     public void initParams() {
@@ -62,6 +67,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         picPath=new ArrayList<>();
+        timeBeans=new ArrayList<>();
     }
 
     @Override
@@ -92,7 +98,7 @@ public class ReleaseOrderActivity extends BaseActivity {
 
     @OnClick({R.id.layout_releaseorder_type, R.id.layout_releaseorder_person, R.id.layout_releaseorder_sex,
             R.id.layout_releaseorder_address, R.id.layout_releaseorder_desp, R.id.layout_releaseorder_price,
-            R.id.layout_releaseorder_paytype})
+            R.id.layout_releaseorder_paytype, R.id.layout_releaseorder_time, R.id.layout_releaseorder_worktime})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_releaseorder_type:
@@ -135,6 +141,58 @@ public class ReleaseOrderActivity extends BaseActivity {
             case R.id.layout_releaseorder_paytype:
                 choicePayType();
                 break;
+            case R.id.layout_releaseorder_time:
+                Intent intent_time=new Intent(ReleaseOrderActivity.this, UpdateTimeInfoActivity.class);
+                intent_time.putExtra("title", "用工日期");
+                intent_time.putStringArrayListExtra("source", timeBeans);
+                startActivityForResult(intent_time, CommonParams.RESULT_UPDATETIMEINFO);
+                break;
+            case R.id.layout_releaseorder_worktime:
+                ArrayList<String> hours=new ArrayList<>();
+                for (int i=0;i<24;i++) {
+                    hours.add(i<10?"0"+i:""+i);
+                }
+                ArrayList<String> minutes=new ArrayList<>();
+                for (int i=0;i<60;i++) {
+                    minutes.add(i<10?"0"+i:""+i);
+                }
+                View view_timechoice= LayoutInflater.from(ReleaseOrderActivity.this)
+                        .inflate(R.layout.view_actionsheet_timechoice, null, false);
+                LoopView pop_wheel_timelayout_hour_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_start);
+                LoopView pop_wheel_timelayout_minute_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_start);
+                LoopView pop_wheel_timelayout_hour_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_end);
+                LoopView pop_wheel_timelayout_minute_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_end);
+                ActionSheetFragment.build(getSupportFragmentManager())
+                        .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
+                        .setTitle("请选择用工时间")
+                        .setOkTitle("确认")
+                        .setCancelTitle("取消")
+                        .setOnOKListener(value -> Log.d("ReleaseOrderActivity", hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
+                                minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "--" +
+                                hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
+                                minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem())))
+                        .setOnCancelListener(() -> {
+
+                        })
+                        .setCustomerView(view_timechoice)
+                        .show();
+                pop_wheel_timelayout_hour_start.setNotLoop();
+                pop_wheel_timelayout_hour_start.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
+                pop_wheel_timelayout_hour_start.setItems(hours);
+                pop_wheel_timelayout_hour_start.setTextSize(18);
+                pop_wheel_timelayout_minute_start.setNotLoop();
+                pop_wheel_timelayout_minute_start.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
+                pop_wheel_timelayout_minute_start.setItems(minutes);
+                pop_wheel_timelayout_minute_start.setTextSize(18);
+                pop_wheel_timelayout_hour_end.setNotLoop();
+                pop_wheel_timelayout_hour_end.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
+                pop_wheel_timelayout_hour_end.setItems(hours);
+                pop_wheel_timelayout_hour_end.setTextSize(18);
+                pop_wheel_timelayout_minute_end.setNotLoop();
+                pop_wheel_timelayout_minute_end.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
+                pop_wheel_timelayout_minute_end.setItems(minutes);
+                pop_wheel_timelayout_minute_end.setTextSize(18);
+                break;
         }
     }
 
@@ -159,6 +217,10 @@ public class ReleaseOrderActivity extends BaseActivity {
         }
         if (requestCode==CommonParams.RESULT_UPDATEADDRESSINFO && resultCode==RESULT_OK) {
             tv_releaseorder_address.setText(data.getStringExtra("value"));
+        }
+        if (requestCode==CommonParams.RESULT_UPDATETIMEINFO && resultCode==RESULT_OK) {
+            ArrayList<String> beans=data.getStringArrayListExtra("value");
+            timeBeans.addAll(beans);
         }
     }
 

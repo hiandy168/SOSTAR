@@ -145,10 +145,12 @@ public class ActionSheetFragment extends Fragment {
         return fragment;
     }
 
-    public static ActionSheetFragment newCustomerInstance(String title) {
+    public static ActionSheetFragment newCustomerInstance(String title, String okTitle, String cancelTitle) {
         ActionSheetFragment fragment=new ActionSheetFragment();
         Bundle bundle=new Bundle();
         bundle.putString("title", title);
+        bundle.putString("okTitle", okTitle);
+        bundle.putString("cancelTitle", cancelTitle);
         bundle.putInt("type", 7);
         fragment.setArguments(bundle);
         return fragment;
@@ -377,7 +379,7 @@ public class ActionSheetFragment extends Fragment {
             Calendar calendar_today=Calendar.getInstance();
             calendar_today.setTime(new Date());
             int currentYear=calendar_today.get(Calendar.YEAR);
-            for (int i=currentYear; i<currentYear+10; i++) {
+            for (int i=currentYear; i<currentYear+5; i++) {
                 years.add(""+i);
             }
             final ArrayList<String> months=new ArrayList<>();
@@ -552,39 +554,27 @@ public class ActionSheetFragment extends Fragment {
             });
         }
         else if (getArguments().getInt("type")==4) {
+            ArrayList<String> hours=new ArrayList<>();
+            for (int i=0;i<24;i++) {
+                hours.add(""+i);
+            }
             ArrayList<String> minutes=new ArrayList<>();
-            for (int i=2;i<6;i++) {
-                minutes.add(""+i);
-            }
-            ArrayList<String> seconds=new ArrayList<>();
             for (int i=0;i<60;i++) {
-                seconds.add(i<10?"0"+i:""+i);
+                minutes.add(i<10?"0"+i:""+i);
             }
-            ArrayList<String> seconds2=new ArrayList<>();
-            seconds2.add("00");
 
             LinearLayout pop_wheel_timelayout= (LinearLayout) view.findViewById(R.id.pop_wheel_timelayout);
-            LoopView pop_wheel_timelayout_second= (LoopView) view.findViewById(R.id.pop_wheel_timelayout_second);
+            LoopView pop_wheel_timelayout_hour= (LoopView) view.findViewById(R.id.pop_wheel_timelayout_hour);
             LoopView pop_wheel_timelayout_minute= (LoopView) view.findViewById(R.id.pop_wheel_timelayout_minute);
             pop_wheel_timelayout.setVisibility(View.VISIBLE);
-            pop_wheel_timelayout_minute.setListener(index -> {
-                pop_wheel_timelayout_second.setInitPosition(0);
-                pop_wheel_timelayout_second.setTotalScrollYPosition(0);
-                if (index==minutes.size()-1) {
-                    pop_wheel_timelayout_second.setItems(seconds2);
-                }
-                else {
-                    pop_wheel_timelayout_second.setItems(seconds);
-                }
-            });
+            pop_wheel_timelayout_hour.setNotLoop();
+            pop_wheel_timelayout_hour.setViewPadding(SizeUtils.dp2px(60), SizeUtils.dp2px(15), SizeUtils.dp2px(30), SizeUtils.dp2px(15));
+            pop_wheel_timelayout_hour.setItems(hours);
+            pop_wheel_timelayout_hour.setTextSize(18);
             pop_wheel_timelayout_minute.setNotLoop();
             pop_wheel_timelayout_minute.setViewPadding(SizeUtils.dp2px(60), SizeUtils.dp2px(15), SizeUtils.dp2px(30), SizeUtils.dp2px(15));
             pop_wheel_timelayout_minute.setItems(minutes);
             pop_wheel_timelayout_minute.setTextSize(18);
-            pop_wheel_timelayout_second.setNotLoop();
-            pop_wheel_timelayout_second.setViewPadding(SizeUtils.dp2px(60), SizeUtils.dp2px(15), SizeUtils.dp2px(30), SizeUtils.dp2px(15));
-            pop_wheel_timelayout_second.setItems(seconds);
-            pop_wheel_timelayout_second.setTextSize(18);
 
             LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
             pop_morechoice.setVisibility(View.VISIBLE);
@@ -592,7 +582,7 @@ public class ActionSheetFragment extends Fragment {
             pop_ok1.setText(getArguments().getString("okTitle"));
             pop_ok1.setOnClickListener(v -> {
                 if (onOKListener!=null) {
-                    onOKListener.onOKClick(minutes.get(pop_wheel_timelayout_minute.getSelectedItem())+":"+seconds.get(pop_wheel_timelayout_second.getSelectedItem()));
+                    onOKListener.onOKClick(hours.get(pop_wheel_timelayout_hour.getSelectedItem())+":"+minutes.get(pop_wheel_timelayout_minute.getSelectedItem()));
                 }
                 dismiss();
             });
@@ -608,6 +598,22 @@ public class ActionSheetFragment extends Fragment {
         else if (getArguments().getInt("type")==7) {
             LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
             pop_morechoice.setVisibility(View.VISIBLE);
+            TextView pop_ok1= (TextView) view.findViewById(R.id.pop_ok1);
+            pop_ok1.setText(getArguments().getString("okTitle"));
+            pop_ok1.setOnClickListener(v -> {
+                if (onOKListener!=null) {
+                    onOKListener.onOKClick("");
+                }
+                dismiss();
+            });
+            TextView pop_cancel1= (TextView) view.findViewById(R.id.pop_cancel1);
+            pop_cancel1.setText(getArguments().getString("cancelTitle"));
+            pop_cancel1.setOnClickListener(v -> {
+                if (onCancelListener!=null) {
+                    onCancelListener.onCancelClick();
+                }
+                dismiss();
+            });
             LinearLayout pop_customer_layout= (LinearLayout) view.findViewById(R.id.pop_customer_layout);
             pop_customer_layout.setVisibility(View.VISIBLE);
             if (customerView!=null) {
@@ -823,7 +829,9 @@ public class ActionSheetFragment extends Fragment {
                 fragment.show(fragmentManager, tag);
             }
             if (choice== CHOICE.CUSTOMER) {
-                fragment=ActionSheetFragment.newCustomerInstance(title);
+                fragment=ActionSheetFragment.newCustomerInstance(title, okTitle, cancelTitle);
+                fragment.setOnOKListener(onOKListener);
+                fragment.setOnCancelListener(onCancelListener);
                 fragment.setCustomerView(customerView);
                 fragment.show(fragmentManager, tag);
             }

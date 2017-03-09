@@ -32,9 +32,12 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
+import com.renyu.sostar.activity.order.ReleaseOrderActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
+import com.renyu.sostar.params.CommonParams;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -137,7 +140,12 @@ public class MainFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_releaseorder:
-                startActivity(new Intent(getActivity(), NotStartedOrderListActivity.class));
+                if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    startActivity(new Intent(getActivity(), NotStartedOrderListActivity.class));
+                }
+                else {
+                    startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
+                }
                 break;
         }
     }
