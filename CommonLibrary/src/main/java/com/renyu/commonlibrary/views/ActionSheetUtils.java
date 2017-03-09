@@ -8,8 +8,14 @@ import android.support.v4.app.FragmentManager;
 
 public class ActionSheetUtils {
 
-    public static void showDate(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
-        ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.DATE)
+    public static void showBeforeDate(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
+        ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.BEFOREDATE)
+                .setTitle(title).setOkTitle(okTitle).setCancelTitle(cancelTitle).setOnOKListener(onOKListener)
+                .setOnCancelListener(onCancelListener).show();
+    }
+
+    public static void showAfterDate(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
+        ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.AFTERDATE)
                 .setTitle(title).setOkTitle(okTitle).setCancelTitle(cancelTitle).setOnOKListener(onOKListener)
                 .setOnCancelListener(onCancelListener).show();
     }

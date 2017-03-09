@@ -56,16 +56,12 @@ public class ActionSheetFragment extends Fragment {
 
     //提供类型
     public enum CHOICE {
-        ITEM, DATE, TIME, GRID, CUSTOMER
+        ITEM, BEFOREDATE, AFTERDATE, TIME, GRID, CUSTOMER
     }
 
     OnItemClickListener onItemClickListener;
     OnCancelListener onCancelListener;
     OnOKListener onOKListener;
-
-    ArrayList<String> years=null;
-    ArrayList<String> months=null;
-    ArrayList<String> days=null;
 
     public interface OnCancelListener {
         void onCancelClick();
@@ -116,13 +112,24 @@ public class ActionSheetFragment extends Fragment {
         return fragment;
     }
 
-    public static ActionSheetFragment newDateInstance(String title, String okTitle, String cancelTitle) {
+    public static ActionSheetFragment newBeforeDateInstance(String title, String okTitle, String cancelTitle) {
         ActionSheetFragment fragment=new ActionSheetFragment();
         Bundle bundle=new Bundle();
         bundle.putString("title", title);
         bundle.putString("okTitle", okTitle);
         bundle.putString("cancelTitle", cancelTitle);
         bundle.putInt("type", 3);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static ActionSheetFragment newAfterDateInstance(String title, String okTitle, String cancelTitle) {
+        ActionSheetFragment fragment=new ActionSheetFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("okTitle", okTitle);
+        bundle.putString("cancelTitle", cancelTitle);
+        bundle.putInt("type", 5);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -156,21 +163,6 @@ public class ActionSheetFragment extends Fragment {
             if (focusView!=null) {
                 manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
             }
-        }
-
-        years=new ArrayList<>();
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTime(new Date());
-        for (int i=1950;i<=calendar.get(Calendar.YEAR);i++) {
-            years.add(""+i);
-        }
-        months=new ArrayList<>();
-        for (int i=1;i<=(calendar.get(Calendar.MONTH)+1);i++) {
-            months.add(""+i);
-        }
-        days=new ArrayList<>();
-        for (int i=1;i<=calendar.get(Calendar.DAY_OF_MONTH);i++) {
-            days.add(""+i);
         }
 
         realView=inflater.inflate(R.layout.view_actionsheet, container, false);
@@ -233,6 +225,21 @@ public class ActionSheetFragment extends Fragment {
             }
         }
         else if (getArguments().getInt("type")==3) {
+            final ArrayList<String> years=new ArrayList<>();
+            Calendar calendar_today=Calendar.getInstance();
+            calendar_today.setTime(new Date());
+            for (int i=1950;i<=calendar_today.get(Calendar.YEAR);i++) {
+                years.add(""+i);
+            }
+            final ArrayList<String> months=new ArrayList<>();
+            for (int i=1;i<=(calendar_today.get(Calendar.MONTH)+1);i++) {
+                months.add(""+i);
+            }
+            final ArrayList<String> days=new ArrayList<>();
+            for (int i=1;i<=calendar_today.get(Calendar.DAY_OF_MONTH);i++) {
+                days.add(""+i);
+            }
+
             LinearLayout pop_wheel_yearlayout= (LinearLayout) view.findViewById(R.id.pop_wheel_yearlayout);
             pop_wheel_yearlayout.setVisibility(View.VISIBLE);
 
@@ -343,6 +350,185 @@ public class ActionSheetFragment extends Fragment {
             pop_wheel_yearlayout_day.setItems(days);
             pop_wheel_yearlayout_day.setTextSize(18);
             pop_wheel_yearlayout_day.setInitPosition(days.size()-1);
+
+            LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
+            pop_morechoice.setVisibility(View.VISIBLE);
+            TextView pop_ok1= (TextView) view.findViewById(R.id.pop_ok1);
+            pop_ok1.setText(getArguments().getString("okTitle"));
+            pop_ok1.setOnClickListener(v -> {
+                if (onOKListener!=null) {
+                    onOKListener.onOKClick(years.get(pop_wheel_yearlayout_year.getSelectedItem())+"-"
+                            +months.get(pop_wheel_yearlayout_month.getSelectedItem())+"-"
+                            +days.get(pop_wheel_yearlayout_day.getSelectedItem()));
+                }
+                dismiss();
+            });
+            TextView pop_cancel1= (TextView) view.findViewById(R.id.pop_cancel1);
+            pop_cancel1.setText(getArguments().getString("cancelTitle"));
+            pop_cancel1.setOnClickListener(v -> {
+                if (onCancelListener!=null) {
+                    onCancelListener.onCancelClick();
+                }
+                dismiss();
+            });
+        }
+        else if (getArguments().getInt("type")==5) {
+            final ArrayList<String> years=new ArrayList<>();
+            Calendar calendar_today=Calendar.getInstance();
+            calendar_today.setTime(new Date());
+            int currentYear=calendar_today.get(Calendar.YEAR);
+            for (int i=currentYear; i<currentYear+10; i++) {
+                years.add(""+i);
+            }
+            final ArrayList<String> months=new ArrayList<>();
+            for (int i=(calendar_today.get(Calendar.MONTH)+1); i<=12; i++) {
+                months.add(""+i);
+            }
+            final ArrayList<String> days=new ArrayList<>();
+            for (int i=calendar_today.get(Calendar.DAY_OF_MONTH); i<=calendar_today.getActualMaximum(Calendar.DATE); i++) {
+                days.add(""+i);
+            }
+
+            LinearLayout pop_wheel_yearlayout= (LinearLayout) view.findViewById(R.id.pop_wheel_yearlayout);
+            pop_wheel_yearlayout.setVisibility(View.VISIBLE);
+
+            LoopView pop_wheel_yearlayout_year= (LoopView) view.findViewById(R.id.pop_wheel_yearlayout_year);
+            LoopView pop_wheel_yearlayout_month= (LoopView) view.findViewById(R.id.pop_wheel_yearlayout_month);
+            LoopView pop_wheel_yearlayout_day= (LoopView) view.findViewById(R.id.pop_wheel_yearlayout_day);
+
+            pop_wheel_yearlayout_year.setListener(index -> {
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(new Date());
+                // month起始位置
+                int initMonthPosition=0;
+                if (years.get(index).equals(""+calendar.get(Calendar.YEAR))) {
+                    // 当月不是从1月份开始，年份切换导致month大小变化
+                    initMonthPosition=pop_wheel_yearlayout_month.getSelectedItem()-calendar.get(Calendar.MONTH);
+                    // 年份切换不足部分补充
+                    if (initMonthPosition<0) {
+                        initMonthPosition=0;
+                    }
+                    months.clear();
+                    for (int i=(calendar.get(Calendar.MONTH)+1); i<=12; i++) {
+                        months.add(""+i);
+                    }
+                }
+                else {
+                    // 年份切换导致month大小变化
+                    if (months.size()!=12) {
+                        initMonthPosition=Integer.parseInt(months.get(pop_wheel_yearlayout_month.getSelectedItem()))-1;
+                    }
+                    else {
+                        initMonthPosition=pop_wheel_yearlayout_month.getSelectedItem();
+                    }
+                    months.clear();
+                    for (int i=1;i<=12;i++) {
+                        months.add(""+i);
+                    }
+                }
+                pop_wheel_yearlayout_month.setInitPosition(0);
+                pop_wheel_yearlayout_month.setTotalScrollYPosition(initMonthPosition);
+                pop_wheel_yearlayout_month.setItems(months);
+
+                // day起始日期
+                int initDay=Integer.parseInt(days.get(pop_wheel_yearlayout_day.getSelectedItem()));
+                // day初始化位置
+                int initDayPosition=0;
+                days.clear();
+                if (years.get(index).equals(""+calendar.get(Calendar.YEAR)) &&
+                        (""+(calendar.get(Calendar.MONTH)+1)).equals(months.get(initMonthPosition))) {
+                    for (int i=calendar.get(Calendar.DAY_OF_MONTH); i<=calendar.getActualMaximum(Calendar.DATE); i++) {
+                        days.add(""+i);
+                    }
+                    initDayPosition=initDay-calendar.get(Calendar.DAY_OF_MONTH);
+                    // 月份切换不足部分补充
+                    if (initDayPosition<0) {
+                        initDayPosition=0;
+                    }
+                }
+                else {
+                    Calendar cl=Calendar.getInstance();
+                    cl.set(Calendar.YEAR, Integer.parseInt(years.get(index)));
+                    cl.set(Calendar.MONTH, Integer.parseInt(months.get(pop_wheel_yearlayout_month.getSelectedItem()))-1);
+                    for (int i=1;i<=cl.getActualMaximum(Calendar.DATE);i++) {
+                        days.add(""+i);
+                    }
+                    boolean isFind=false;
+                    for (int i = 0; i < days.size(); i++) {
+                        if (days.get(i).equals(initDay+"")) {
+                            initDayPosition=i;
+                            isFind=true;
+                            break;
+                        }
+                    }
+                    if (!isFind) {
+                        initDayPosition=days.size()-1;
+                    }
+                }
+                pop_wheel_yearlayout_day.setInitPosition(0);
+                pop_wheel_yearlayout_day.setTotalScrollYPosition(initDayPosition);
+                pop_wheel_yearlayout_day.setItems(days);
+            });
+            pop_wheel_yearlayout_year.setNotLoop();
+            pop_wheel_yearlayout_year.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
+            pop_wheel_yearlayout_year.setItems(years);
+            pop_wheel_yearlayout_year.setTextSize(18);
+            pop_wheel_yearlayout_year.setInitPosition(0);
+
+            pop_wheel_yearlayout_month.setNotLoop();
+            pop_wheel_yearlayout_month.setListener(index -> {
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(new Date());
+                // day起始日期
+                int initDay=Integer.parseInt(days.get(pop_wheel_yearlayout_day.getSelectedItem()));
+                // day初始化位置
+                int initDayPosition=0;
+                days.clear();
+                if (years.get(pop_wheel_yearlayout_year.getSelectedItem()).equals(""+calendar.get(Calendar.YEAR)) &&
+                        (""+(calendar.get(Calendar.MONTH)+1)).equals(months.get(index))) {
+                    for (int i=calendar.get(Calendar.DAY_OF_MONTH); i<=calendar.getActualMaximum(Calendar.DATE); i++) {
+                        days.add(""+i);
+                    }
+                    initDayPosition=initDay-calendar.get(Calendar.DAY_OF_MONTH);
+                    // 月份切换不足部分补充
+                    if (initDayPosition<0) {
+                        initDayPosition=0;
+                    }
+                }
+                else {
+                    Calendar cl=Calendar.getInstance();
+                    cl.set(Calendar.YEAR, Integer.parseInt(years.get(pop_wheel_yearlayout_year.getSelectedItem())));
+                    cl.set(Calendar.MONTH, Integer.parseInt(months.get(index))-1);
+                    for (int i=1;i<=cl.getActualMaximum(Calendar.DATE);i++) {
+                        days.add(""+i);
+                    }
+                    boolean isFind=false;
+                    for (int i = 0; i < days.size(); i++) {
+                        if (days.get(i).equals(initDay+"")) {
+                            initDayPosition=i;
+                            isFind=true;
+                            break;
+                        }
+                    }
+                    if (!isFind) {
+                        initDayPosition=days.size()-1;
+                    }
+                }
+                pop_wheel_yearlayout_day.setInitPosition(0);
+                pop_wheel_yearlayout_day.setTotalScrollYPosition(initDayPosition);
+                pop_wheel_yearlayout_day.setItems(days);
+
+            });
+            pop_wheel_yearlayout_month.setViewPadding(SizeUtils.dp2px(30), SizeUtils.dp2px(15), SizeUtils.dp2px(30), SizeUtils.dp2px(15));
+            pop_wheel_yearlayout_month.setItems(months);
+            pop_wheel_yearlayout_month.setTextSize(18);
+            pop_wheel_yearlayout_month.setInitPosition(0);
+
+            pop_wheel_yearlayout_day.setNotLoop();
+            pop_wheel_yearlayout_day.setViewPadding(SizeUtils.dp2px(30), SizeUtils.dp2px(15), SizeUtils.dp2px(30), SizeUtils.dp2px(15));
+            pop_wheel_yearlayout_day.setItems(days);
+            pop_wheel_yearlayout_day.setTextSize(18);
+            pop_wheel_yearlayout_day.setInitPosition(0);
 
             LinearLayout pop_morechoice= (LinearLayout) view.findViewById(R.id.pop_morechoice);
             pop_morechoice.setVisibility(View.VISIBLE);
@@ -618,8 +804,14 @@ public class ActionSheetFragment extends Fragment {
                 fragment.setOnItemClickListener(onItemClickListener);
                 fragment.show(fragmentManager, tag);
             }
-            if (choice== CHOICE.DATE) {
-                fragment=ActionSheetFragment.newDateInstance(title, okTitle, cancelTitle);
+            if (choice== CHOICE.BEFOREDATE) {
+                fragment=ActionSheetFragment.newBeforeDateInstance(title, okTitle, cancelTitle);
+                fragment.setOnOKListener(onOKListener);
+                fragment.setOnCancelListener(onCancelListener);
+                fragment.show(fragmentManager, tag);
+            }
+            if (choice== CHOICE.AFTERDATE) {
+                fragment=ActionSheetFragment.newAfterDateInstance(title, okTitle, cancelTitle);
                 fragment.setOnOKListener(onOKListener);
                 fragment.setOnCancelListener(onCancelListener);
                 fragment.show(fragmentManager, tag);
