@@ -93,5 +93,8 @@ public class LocationService extends Service {
 
             }
         }
+        else {
+            lastBdLocation=bdLocation;
+        }
     }
 }

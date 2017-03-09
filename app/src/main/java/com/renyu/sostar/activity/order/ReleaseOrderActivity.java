@@ -5,14 +5,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.utils.SizeUtils;
+import com.google.gson.Gson;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.commonlibrary.views.wheelview.LoopView;
 import com.renyu.sostar.R;
@@ -21,12 +28,27 @@ import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
+import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.ReleaseOrderRequest;
+import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+import com.renyu.sostar.service.LocationService;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.Response;
 
 /**
  * Created by renyu on 2017/3/7.
@@ -54,9 +76,21 @@ public class ReleaseOrderActivity extends BaseActivity {
     TextView tv_releaseorder_price;
     @BindView(R.id.tv_releaseorder_paytype)
     TextView tv_releaseorder_paytype;
+    @BindView(R.id.tv_releaseorder_time)
+    TextView tv_releaseorder_time;
+    @BindView(R.id.tv_releaseorder_worktime)
+    TextView tv_releaseorder_worktime;
+    @BindView(R.id.btn_releaseorder_needmoney)
+    TextView btn_releaseorder_needmoney;
+    @BindView(R.id.btn_releaseorder_avaliablemoney)
+    TextView btn_releaseorder_avaliablemoney;
+    @BindView(R.id.sb_releaseorder)
+    SwitchButton sb_releaseorder;
 
     ArrayList<String> picPath;
-    ArrayList<String> timeBeans;
+    ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> timeBeans;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
@@ -77,7 +111,7 @@ public class ReleaseOrderActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-
+        getEmployerCashAvaliable();
     }
 
     @Override
@@ -98,7 +132,8 @@ public class ReleaseOrderActivity extends BaseActivity {
 
     @OnClick({R.id.layout_releaseorder_type, R.id.layout_releaseorder_person, R.id.layout_releaseorder_sex,
             R.id.layout_releaseorder_address, R.id.layout_releaseorder_desp, R.id.layout_releaseorder_price,
-            R.id.layout_releaseorder_paytype, R.id.layout_releaseorder_time, R.id.layout_releaseorder_worktime})
+            R.id.layout_releaseorder_paytype, R.id.layout_releaseorder_time, R.id.layout_releaseorder_worktime,
+            R.id.btn_releaseorder_commit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_releaseorder_type:
@@ -144,7 +179,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             case R.id.layout_releaseorder_time:
                 Intent intent_time=new Intent(ReleaseOrderActivity.this, UpdateTimeInfoActivity.class);
                 intent_time.putExtra("title", "用工日期");
-                intent_time.putStringArrayListExtra("source", timeBeans);
+                intent_time.putExtra("source", timeBeans);
                 startActivityForResult(intent_time, CommonParams.RESULT_UPDATETIMEINFO);
                 break;
             case R.id.layout_releaseorder_worktime:
@@ -167,10 +202,13 @@ public class ReleaseOrderActivity extends BaseActivity {
                         .setTitle("请选择用工时间")
                         .setOkTitle("确认")
                         .setCancelTitle("取消")
-                        .setOnOKListener(value -> Log.d("ReleaseOrderActivity", hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
-                                minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "--" +
-                                hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
-                                minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem())))
+                        .setOnOKListener(value -> {
+                            String temp=hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
+                                    minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "-" +
+                                    hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
+                                    minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem());
+                            tv_releaseorder_worktime.setText(temp);
+                        })
                         .setOnCancelListener(() -> {
 
                         })
@@ -192,6 +230,9 @@ public class ReleaseOrderActivity extends BaseActivity {
                 pop_wheel_timelayout_minute_end.setViewPadding(SizeUtils.dp2px(20), SizeUtils.dp2px(15), SizeUtils.dp2px(20), SizeUtils.dp2px(15));
                 pop_wheel_timelayout_minute_end.setItems(minutes);
                 pop_wheel_timelayout_minute_end.setTextSize(18);
+                break;
+            case R.id.btn_releaseorder_commit:
+                uploadPic();
                 break;
         }
     }
@@ -219,8 +260,18 @@ public class ReleaseOrderActivity extends BaseActivity {
             tv_releaseorder_address.setText(data.getStringExtra("value"));
         }
         if (requestCode==CommonParams.RESULT_UPDATETIMEINFO && resultCode==RESULT_OK) {
-            ArrayList<String> beans=data.getStringArrayListExtra("value");
+            ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> beans= (ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean>) data.getSerializableExtra("value");
+            timeBeans.clear();
             timeBeans.addAll(beans);
+            if (timeBeans.size()==0) {
+                tv_releaseorder_time.setText("");
+            }
+            else if (timeBeans.size()==1) {
+                tv_releaseorder_time.setText(timeBeans.get(0).getStartTime()+"-"+timeBeans.get(0).getEndTime());
+            }
+            else {
+                tv_releaseorder_time.setText(timeBeans.get(0).getStartTime()+"-"+timeBeans.get(0).getEndTime()+"...");
+            }
         }
     }
 
@@ -272,6 +323,169 @@ public class ReleaseOrderActivity extends BaseActivity {
         pop_double_cancel.setOnClickListener(v -> {
             tv_releaseorder_paytype.setText("定单结");
             actionSheetFragment.dismiss();
+        });
+    }
+
+    private void getEmployerCashAvaliable() {
+        EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
+        EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getEmployerCashAvaiable(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmployerCashAvaliableResponse value) {
+                btn_releaseorder_avaliablemoney.setText("可用余额：¥"+value.getCashAvaiable());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void uploadPic() {
+        OKHttpHelper helper=new OKHttpHelper();
+        String url="http://114.215.18.160:9333/submit";
+        Observable.create((ObservableOnSubscribe<ArrayList<String>>) e -> {
+            ArrayList<String> images=new ArrayList<>();
+            for (String s : picPath) {
+                HashMap<String, File> fileHashMap=new HashMap<>();
+                fileHashMap.put("image", new File(s));
+                Response resp=helper.syncUpload(fileHashMap, url, new HashMap<>());
+                if (resp.isSuccessful()) {
+                    Gson gson=new Gson();
+                    UploadResponse response=gson.fromJson(resp.body().string(), UploadResponse.class);
+                    String imageUrl="http://114.215.18.160:8081/"+response.getFid();
+                    images.add(imageUrl);
+                }
+            }
+            e.onNext(images);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ArrayList<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ArrayList<String> value) {
+                releaseOrder(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void releaseOrder(ArrayList<String> images) {
+        if (TextUtils.isEmpty(tv_releaseorder_type.getText().toString())) {
+            Toast.makeText(this, "请选择用工类型", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (timeBeans.size()==0) {
+            Toast.makeText(this, "请添加用工日期", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString())) {
+            Toast.makeText(this, "请选择工作时间", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString())) {
+            Toast.makeText(this, "请填写需求人数", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_sex.getText().toString())) {
+            Toast.makeText(this, "请选择性别要求", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_address.getText().toString())) {
+            Toast.makeText(this, "请填写工作地点", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_desp.getText().toString())) {
+            Toast.makeText(this, "请填写详细描述", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString())) {
+            Toast.makeText(this, "请填写工作报酬", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tv_releaseorder_type.getText().toString())) {
+            Toast.makeText(this, "请选择结算方式", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (LocationService.lastBdLocation==null) {
+            Toast.makeText(this, "暂无定位数据", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReleaseOrderRequest request=new ReleaseOrderRequest();
+        ReleaseOrderRequest.ParamBean paramBean=new ReleaseOrderRequest.ParamBean();
+        paramBean.setEndTime(tv_releaseorder_worktime.getText().toString().split("-")[1]);
+        paramBean.setStartTime(tv_releaseorder_worktime.getText().toString().split("-")[0]);
+        paramBean.setAddress(tv_releaseorder_address.getText().toString());
+        paramBean.setConfirmFlg(sb_releaseorder.isChecked()?"1":"0");
+        paramBean.setDescription(tv_releaseorder_desp.getText().toString());
+        paramBean.setJobType(tv_releaseorder_type.getText().toString());
+        paramBean.setLatitude(""+LocationService.lastBdLocation.getLatitude());
+        paramBean.setLongitude(""+LocationService.lastBdLocation.getLongitude());
+        paramBean.setPaymentType(tv_releaseorder_type.getText().toString().equals("日结")?"1":"2");
+        paramBean.setPicListArray(images);
+        if (tv_releaseorder_sex.getText().toString().equals("男")) {
+            paramBean.setSex("1");
+        }
+        else if (tv_releaseorder_sex.getText().toString().equals("女")) {
+            paramBean.setSex("2");
+        }
+        else {
+            paramBean.setSex("0");
+        }
+        paramBean.setStaffAccount(Integer.parseInt(tv_releaseorder_person.getText().toString()));
+        paramBean.setUnitPrice(Integer.parseInt(tv_releaseorder_price.getText().toString().substring(0, tv_releaseorder_price.getText().toString().indexOf("/"))));
+        paramBean.setPeriodTimeList(timeBeans);
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .releaseOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(ReleaseOrderActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
         });
     }
 }

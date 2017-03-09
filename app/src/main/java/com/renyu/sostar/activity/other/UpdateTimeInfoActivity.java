@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.ReleaseOrderRequest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +47,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
     @BindView(R.id.layout_updatetimeinfo_root)
     LinearLayout layout_updatetimeinfo_root;
 
-    ArrayList<String> beans;
+    ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> beans;
 
     int maxHeight=0;
 
@@ -53,7 +55,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
 
     @Override
     public void initParams() {
-        beans=new ArrayList<>();
+        beans= (ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean>) getIntent().getSerializableExtra("source");
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText(getIntent().getStringExtra("title"));
@@ -63,7 +65,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
 
         layout_updatetimeinfo_root.post(() -> maxHeight=layout_updatetimeinfo_root.getMeasuredHeight()- SizeUtils.dp2px(122));
         for (int i = 0; i < beans.size(); i++) {
-            add(""+i);
+            add(""+i, beans.get(i));
         }
     }
 
@@ -93,12 +95,32 @@ public class UpdateTimeInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    private void add(String tag) {
+    private void add(String tag, ReleaseOrderRequest.ParamBean.PeriodTimeListBean bean) {
         View view= LayoutInflater.from(this).inflate(R.layout.view_updatetimeinfo, null, false);
         view.setTag(tag);
         TextView tv_updatetimeinfo_start= (TextView) view.findViewById(R.id.tv_updatetimeinfo_start);
+        if (bean!=null) {
+            tv_updatetimeinfo_start.setText(bean.getStartTime());
+            String[] values=bean.getStartTime().split("/");
+            tv_updatetimeinfo_start.setTag(values[0]+values[1]+values[2]);
+        }
         TextView tv_updatetimeinfo_end= (TextView) view.findViewById(R.id.tv_updatetimeinfo_end);
+        if (bean!=null) {
+            tv_updatetimeinfo_end.setText(bean.getEndTime());
+            String[] values=bean.getEndTime().split("/");
+            tv_updatetimeinfo_end.setTag(values[0]+values[1]+values[2]);
+        }
         TextView tv_updatetimeinfo_all= (TextView) view.findViewById(R.id.tv_updatetimeinfo_all);
+        if (bean!=null) {
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                long startDate=dateFormat.parse(bean.getStartTime()).getTime();
+                long endDate=dateFormat.parse(bean.getEndTime()).getTime();
+                tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
         tv_updatetimeinfo_start.setOnClickListener(v -> ActionSheetUtils.showAfterDate(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
                 "开始日期",
                 "取消",
@@ -205,32 +227,35 @@ public class UpdateTimeInfoActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_nav_right:
+                beans.clear();
                 for (int i=0;i<layout_updatetimeinfo_content.getChildCount();i++) {
                     View view1=layout_updatetimeinfo_content.getChildAt(i);
                     TextView tv_updatetimeinfo_start= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_start);
                     TextView tv_updatetimeinfo_end= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_end);
                     TextView tv_updatetimeinfo_all= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_all);
-                    beans.clear();
-                    if (tv_updatetimeinfo_all.getTag()!=null && !tv_updatetimeinfo_all.getTag().toString().equals("")) {
-                        beans.add(tv_updatetimeinfo_start.getTag().toString()+"-"+tv_updatetimeinfo_end.getTag().toString());
+                    if (!TextUtils.isEmpty(tv_updatetimeinfo_all.getText().toString())) {
+                        ReleaseOrderRequest.ParamBean.PeriodTimeListBean bean=new ReleaseOrderRequest.ParamBean.PeriodTimeListBean();
+                        bean.setStartTime(tv_updatetimeinfo_start.getText().toString());
+                        bean.setEndTime(tv_updatetimeinfo_end.getText().toString());
+                        beans.add(bean);
                     }
-                    Intent intent=new Intent();
-                    intent.putStringArrayListExtra("value", beans);
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }
+                Intent intent=new Intent();
+                intent.putExtra("value", beans);
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
             case R.id.ib_nav_left:
                 finish();
                 break;
             case R.id.btn_updatetimeinfo_add:
                 if (layout_updatetimeinfo_content.getChildCount()==0) {
-                    add("0");
+                    add("0", null);
                 }
                 else {
                     String tag=layout_updatetimeinfo_content
                             .getChildAt(layout_updatetimeinfo_content.getChildCount()-1).getTag().toString();
-                    add((Integer.parseInt(tag)+1)+"");
+                    add((Integer.parseInt(tag)+1)+"", null);
                 }
                 break;
         }

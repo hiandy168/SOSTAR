@@ -216,6 +216,12 @@ public class MainActivity extends BaseActivity {
         return 1;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, LocationService.class));
+    }
+
     @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info,
             R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area,
             R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message})

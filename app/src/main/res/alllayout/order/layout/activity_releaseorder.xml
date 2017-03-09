@@ -352,7 +352,7 @@
                     android:text="接单确认"/>
                 <com.kyleduo.switchbutton.SwitchButton
                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/sb_settings_message"
+                    android:id="@+id/sb_releaseorder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
@@ -378,14 +378,28 @@
         android:layout_width="match_parent"
         android:layout_height="150dip"
         android:background="@color/colorPrimary">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_weight="1">
-
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/btn_releaseorder_needmoney"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="支付总额：¥0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/btn_releaseorder_avaliablemoney"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:text="可用余额：¥0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
         <Button
-            android:id="@+id/btn_signinsignup_nosignin"
+            android:id="@+id/btn_releaseorder_commit"
             android:textColor="@color/colorPrimary"
             android:background="@drawable/shape_rounded_solid_white"
             android:layout_gravity="center"
