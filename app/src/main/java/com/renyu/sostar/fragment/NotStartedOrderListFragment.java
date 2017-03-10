@@ -1,7 +1,27 @@
 package com.renyu.sostar.fragment;
 
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
+import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.adapter.NotStartedOrderListAdapter;
+import com.renyu.sostar.bean.MyOrderListRequest;
+import com.renyu.sostar.bean.MyOrderListResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
+import com.renyu.sostar.params.CommonParams;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/3/8.
@@ -9,14 +29,42 @@ import com.renyu.sostar.R;
 
 public class NotStartedOrderListFragment extends BaseFragment {
 
-    public static NotStartedOrderListFragment newInstance() {
+    @BindView(R.id.swipy_notstartedorderlist)
+    SwipyRefreshLayout swipy_notstartedorderlist;
+    @BindView(R.id.rv_notstartedorderlist)
+    RecyclerView rv_notstartedorderlist;
+    NotStartedOrderListAdapter adapter;
+
+    ArrayList<String> beans;
+
+    int page=1;
+
+    public static NotStartedOrderListFragment newInstance(int type) {
         NotStartedOrderListFragment fragment=new NotStartedOrderListFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("type", type);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void initParams() {
+        beans=new ArrayList<>();
 
+        rv_notstartedorderlist.setHasFixedSize(true);
+        rv_notstartedorderlist.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new NotStartedOrderListAdapter(getActivity(), beans);
+        rv_notstartedorderlist.setAdapter(adapter);
+        swipy_notstartedorderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        swipy_notstartedorderlist.setOnRefreshListener(direction -> {
+            if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
+
+            }
+            else if (direction==SwipyRefreshLayoutDirection.TOP) {
+
+            }
+        });
     }
 
     @Override
@@ -26,6 +74,45 @@ public class NotStartedOrderListFragment extends BaseFragment {
 
     @Override
     public void loadData() {
+        swipy_notstartedorderlist.post(() -> {
+            swipy_notstartedorderlist.setRefreshing(true);
+            getMyOrderList();
+        });
+    }
 
+    private void getMyOrderList() {
+        MyOrderListRequest request=new MyOrderListRequest();
+        MyOrderListRequest.ParamBean paramBean=new MyOrderListRequest.ParamBean();
+        paramBean.setUserId(ACache.get(getActivity()).getAsString(CommonParams.USER_ID));
+        MyOrderListRequest.ParamBean.PaginationBean paginationBean=new MyOrderListRequest.ParamBean.PaginationBean();
+        paginationBean.setPageSize(20);
+        paginationBean.setStartPos(page);
+        paramBean.setType(""+getArguments().getInt("type"));
+        paramBean.setPagination(paginationBean);
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .myOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<MyOrderListResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(MyOrderListResponse value) {
+                value.getData().size();
+                swipy_notstartedorderlist.setRefreshing(false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                swipy_notstartedorderlist.setRefreshing(false);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

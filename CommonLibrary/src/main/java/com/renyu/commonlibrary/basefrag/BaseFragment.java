@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.renyu.commonlibrary.networkutils.OKHttpHelper;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
 
 /**
  * Created by renyu on 15/12/3.
@@ -23,6 +25,8 @@ public abstract class BaseFragment extends Fragment {
     View view=null;
 
     public OKHttpHelper httpHelper;
+    public Retrofit retrofit=null;
+    public Retrofit retrofit_uploadimage=null;
 
     @Nullable
     @Override
@@ -32,6 +36,9 @@ public abstract class BaseFragment extends Fragment {
             ButterKnife.bind(this, view);
 
             httpHelper=new OKHttpHelper();
+            Retrofit2Utils.getInstance("http://114.215.18.160:8080/", "http://114.215.18.160:9333/");
+            retrofit = Retrofit2Utils.getBaseRetrofit();
+            retrofit_uploadimage = Retrofit2Utils.getImageUploadRetrofit();
 
             initParams();
             loadData();

@@ -41,8 +41,8 @@ public class NotStartedOrderListActivity extends BaseActivity {
     @Override
     public void initParams() {
         fragments=new ArrayList<>();
-        fragments.add(NotStartedOrderListFragment.newInstance());
-        fragments.add(NotStartedOrderListFragment.newInstance());
+        fragments.add(NotStartedOrderListFragment.newInstance(2));
+        fragments.add(NotStartedOrderListFragment.newInstance(1));
         titles=new ArrayList<>();
         titles.add("推荐");
         titles.add("最新");

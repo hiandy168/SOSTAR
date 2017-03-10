@@ -21,7 +21,6 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
-import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.jpushlibrary.bean.NotificationBean;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.MessageListAdapter;
@@ -79,6 +78,8 @@ public class MessageListActivity extends BaseActivity {
         tv_nav_right.setText("清空");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
+        swipy_messagelist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
         swipy_messagelist.setOnRefreshListener(direction -> {
             if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
 

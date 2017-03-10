@@ -99,4 +99,8 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/setEmployerOrder")
     Observable<Response<EmptyResponse>> releaseOrder(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/myOrderList")
+    Observable<Response<EmptyResponse>> myOrderList(@Body RequestBody requestBody);
+
 }
