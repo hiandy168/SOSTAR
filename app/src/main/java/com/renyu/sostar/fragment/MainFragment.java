@@ -72,7 +72,11 @@ public class MainFragment extends BaseFragment {
         mBaiduMap=mv_main.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
-        mBaiduMap.setOnMapLoadedCallback(() ->  addUserOverLay(avatarBmp, bdLocation));
+        mBaiduMap.setOnMapLoadedCallback(() ->  {
+            if (bdLocation!=null) {
+                addUserOverLay(avatarBmp, bdLocation);
+            }
+        });
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
@@ -144,7 +148,9 @@ public class MainFragment extends BaseFragment {
                     startActivity(new Intent(getActivity(), NotStartedOrderListActivity.class));
                 }
                 else {
-                    startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
+                    if (bdLocation!=null) {
+                        startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
+                    }
                 }
                 break;
         }

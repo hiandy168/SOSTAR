@@ -59,6 +59,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public Retrofit retrofit=null;
     public Retrofit retrofit_uploadimage=null;
 
+    public AlertDialog networkDialg;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

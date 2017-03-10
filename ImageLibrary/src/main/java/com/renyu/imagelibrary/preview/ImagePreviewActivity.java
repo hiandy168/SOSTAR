@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.renyu.commonlibrary.baseact.BaseActivity;
@@ -136,6 +137,10 @@ public class ImagePreviewActivity extends BaseActivity {
         imagepreview_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (urls.get(imagepreview_viewpager.getCurrentItem()).indexOf("http")!=-1) {
+                    Toast.makeText(ImagePreviewActivity.this, "网络图片不能修改", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Utils.cropImage(urls.get(imagepreview_viewpager.getCurrentItem()), ImagePreviewActivity.this, CommonParams.RESULT_CROP);
             }
         });

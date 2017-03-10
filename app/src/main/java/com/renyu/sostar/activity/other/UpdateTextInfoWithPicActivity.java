@@ -87,7 +87,7 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
             TextView textview= (TextView) view.findViewById(R.id.tv_updatetextinfowithpic);
             if (!TextUtils.isEmpty(path)) {
                 DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                        .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+                        .setUri(Uri.parse(path.indexOf("http")!=-1?path:"file://"+path)).setAutoPlayAnimations(true).build();
                 draweeView.setController(draweeController);
                 textview.setVisibility(View.GONE);
                 iv_updatetextinfowithpic_delete.setVisibility(View.VISIBLE);
@@ -138,6 +138,10 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
                     Toast.makeText(this, "请填写详细描述", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (et_updatetextinfowithpic.getText().toString().length()>120) {
+                    Toast.makeText(this, "详细描述不能超过120字", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent=new Intent();
                 intent.putExtra("picPath", picPath);
                 intent.putExtra("ed", et_updatetextinfowithpic.getText().toString());
@@ -154,7 +158,8 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            picPath.add(path);
+            Utils.cropImage(path, UpdateTextInfoWithPicActivity.this, CommonParams.RESULT_CROP);
+            return;
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
             ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
@@ -163,7 +168,10 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
             }
             picPath.addAll(filePaths);
         }
-
+        if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
+            String path=data.getExtras().getString("path");
+            picPath.add(path);
+        }
         grid_updatetextinfowithpic.removeAllViews();
         for (int i=0;i<picPath.size();i++) {
             addImage(picPath.get(i));

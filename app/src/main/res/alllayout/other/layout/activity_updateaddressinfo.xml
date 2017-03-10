@@ -6,54 +6,111 @@
     <include layout="@layout/view_nav"></include>
     <View
         android:layout_width="match_parent"
-        android:layout_height="16dip">
+        android:layout_height="0.5dip"
+        android:background="#999999">
 
     </View>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/iv_updateaddressinfo_currentaddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:text="当前定位"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tv_updateaddressinfo_currentaddress"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
-    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="16dip">
 
     </View>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
+        android:gravity="center_vertical"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iv_updateaddressinfo_currentaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dip"
+            android:paddingRight="15dip"
+            android:src="@mipmap/ic_updateaddressinfo_nor"/>
+        <TextView
+            android:text="当前定位"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginRight="20dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_updateaddressinfo_currentaddress"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/tv_updateaddressinfo_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dip"
+            android:paddingRight="12dip"
+            android:src="@mipmap/ic_updateaddressinfo_location"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dip">
+
+    </View>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:gravity="center_vertical"
+        android:background="@android:color/white"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/iv_updateaddressinfo_addaddress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_height="match_parent"
+            android:paddingLeft="12dip"
+            android:paddingRight="15dip"
+            android:src="@mipmap/ic_updateaddressinfo_nor"/>
         <TextView
             android:text="添加地址"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginRight="20dip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/ed_updateaddressinfo_addaddress"
             android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginRight="12dip"
+            android:singleLine="true"
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
 </LinearLayout>

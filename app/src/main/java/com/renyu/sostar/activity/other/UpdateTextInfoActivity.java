@@ -52,7 +52,7 @@ public class UpdateTextInfoActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText(getIntent().getStringExtra("title"));
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
-        tv_nav_right.setText("完成");
+        tv_nav_right.setText("确认");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         et_updatetextinfo.setText(getIntent().getStringExtra("source"));
         et_updatetextinfo.setSelection(getIntent().getStringExtra("source").length());

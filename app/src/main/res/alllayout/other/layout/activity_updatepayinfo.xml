@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2">
+    <include layout="@layout/view_nav"></include>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dip">
+
+    </View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dip"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:text="报酬单价"/>
+            <EditText
+                android:id="@+id/ed_updatepayinfo_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:inputType="number"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="12dip" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginStart="12dip"
+            android:background="#999999">
+
+        </View>
+        <LinearLayout
+            android:id="@+id/layout_updatepayinfo_type"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dip"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:text="计算单位"/>
+            <TextView
+                android:id="@+id/tv_updatepayinfo_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dip"
+                android:layout_marginEnd="9dip"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dip"
+                android:src="@mipmap/ic_arrow_gray_right"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

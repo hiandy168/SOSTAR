@@ -5,7 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -47,6 +48,8 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("完成");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+        et_updatetextinfowithlabel.setText(getIntent().getStringExtra("source"));
     }
 
     @Override
@@ -58,19 +61,24 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
     public void loadData() {
         for (String s : choiceArray) {
             TextView textView = new TextView(this);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+            textView.setTextColor(Color.parseColor("#999999"));
+            textView.setGravity(Gravity.CENTER);
             textView.setBackgroundResource(R.drawable.shape_rounded_corner_gray);
-            textView.setPadding(SizeUtils.dp2px(5), SizeUtils.dp2px(3), SizeUtils.dp2px(5), SizeUtils.dp2px(3));
+            textView.setPadding(SizeUtils.dp2px(8), 0, SizeUtils.dp2px(8), 0);
             textView.setText(s);
             textView.setOnClickListener(v -> {
                 et_updatetextinfowithlabel.setText(s);
                 et_updatetextinfowithlabel.setSelection(s.length());
             });
             ViewGroup.MarginLayoutParams params=new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.leftMargin= SizeUtils.dp2px(3);
-            params.rightMargin= SizeUtils.dp2px(3);
-            params.bottomMargin= SizeUtils.dp2px(3);
+            params.leftMargin= SizeUtils.dp2px(4);
+            params.rightMargin= SizeUtils.dp2px(4);
+            params.bottomMargin= SizeUtils.dp2px(4);
+            params.height= SizeUtils.dp2px(30);
             textView.setLayoutParams(params);
             fl_updatetextinfowithlabel.addView(textView);
+
         }
     }
 

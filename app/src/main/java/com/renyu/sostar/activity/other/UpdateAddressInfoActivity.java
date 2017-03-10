@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,10 @@ public class UpdateAddressInfoActivity extends BaseActivity {
     TextView tv_updateaddressinfo_currentaddress;
     @BindView(R.id.ed_updateaddressinfo_addaddress)
     EditText ed_updateaddressinfo_addaddress;
+    @BindView(R.id.iv_updateaddressinfo_currentaddress)
+    ImageView iv_updateaddressinfo_currentaddress;
+    @BindView(R.id.iv_updateaddressinfo_addaddress)
+    ImageView iv_updateaddressinfo_addaddress;
 
     int currentChoice=-1;
 
@@ -46,6 +51,8 @@ public class UpdateAddressInfoActivity extends BaseActivity {
         tv_nav_right.setText("确认");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tv_updateaddressinfo_currentaddress.setText(LocationService.lastBdLocation.getAddrStr());
+
+        ed_updateaddressinfo_addaddress.setText(getIntent().getStringExtra("source"));
     }
 
     @Override
@@ -75,7 +82,7 @@ public class UpdateAddressInfoActivity extends BaseActivity {
     }
 
     @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.iv_updateaddressinfo_addaddress,
-            R.id.iv_updateaddressinfo_currentaddress})
+            R.id.iv_updateaddressinfo_currentaddress, R.id.tv_updateaddressinfo_refresh})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_nav_right:
@@ -104,10 +111,17 @@ public class UpdateAddressInfoActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_updateaddressinfo_addaddress:
+                iv_updateaddressinfo_addaddress.setImageResource(R.mipmap.ic_updateaddressinfo_sel);
+                iv_updateaddressinfo_currentaddress.setImageResource(R.mipmap.ic_updateaddressinfo_nor);
                 currentChoice=2;
                 break;
             case R.id.iv_updateaddressinfo_currentaddress:
+                iv_updateaddressinfo_currentaddress.setImageResource(R.mipmap.ic_updateaddressinfo_sel);
+                iv_updateaddressinfo_addaddress.setImageResource(R.mipmap.ic_updateaddressinfo_nor);
                 currentChoice=1;
+                break;
+            case R.id.tv_updateaddressinfo_refresh:
+                tv_updateaddressinfo_currentaddress.setText(LocationService.lastBdLocation.getAddrStr());
                 break;
         }
     }

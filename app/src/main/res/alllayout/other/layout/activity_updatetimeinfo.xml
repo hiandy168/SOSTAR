@@ -7,6 +7,12 @@
     <include layout="@layout/view_nav"></include>
     <View
         android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <View
+        android:layout_width="match_parent"
         android:layout_height="16dip">
 
     </View>
@@ -35,7 +41,7 @@
         android:background="@android:color/white"
         android:gravity="center"
         android:textSize="16sp"
-        android:text="+增加一个"/>
+        android:text="增加"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dip"

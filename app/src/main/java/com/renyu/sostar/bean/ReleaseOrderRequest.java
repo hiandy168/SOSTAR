@@ -15,7 +15,7 @@ import java.util.List;
 public class ReleaseOrderRequest implements Serializable {
     /**
      * deviceId : string
-     * param : {"address":"string","confirmFlg":"string","description":"string","endTime":"string","jobType":"string","latitude":"string","longitude":"string","orderId":"string","orderRange":"string","paymentType":"string","periodTimeList":[{"endTime":"string","startTime":"string"}],"picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0,"userId":"string"}
+     * param : {"address":"string","confirmFlg":"string","description":"string","endTime":"string","jobType":"string","latitude":"string","longitude":"string","orderRange":"string","orderStatus":"string","paymentType":"string","periodTimeList":[{"endTime":"string","startTime":"string"}],"picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0,"unitPriceType":"string","userId":"string"}
      * platform : string
      * sysversion : string
      * ver : string
@@ -76,8 +76,8 @@ public class ReleaseOrderRequest implements Serializable {
          * jobType : string
          * latitude : string
          * longitude : string
-         * orderId : string
          * orderRange : string
+         * orderStatus : string
          * paymentType : string
          * periodTimeList : [{"endTime":"string","startTime":"string"}]
          * picListArray : ["string"]
@@ -85,6 +85,7 @@ public class ReleaseOrderRequest implements Serializable {
          * staffAccount : 0
          * startTime : string
          * unitPrice : 0
+         * unitPriceType : string
          * userId : string
          */
 
@@ -95,13 +96,14 @@ public class ReleaseOrderRequest implements Serializable {
         private String jobType;
         private String latitude;
         private String longitude;
-        private String orderId;
         private String orderRange;
+        private String orderStatus;
         private String paymentType;
         private String sex;
         private int staffAccount;
         private String startTime;
         private int unitPrice;
+        private String unitPriceType;
         private String userId;
         private List<PeriodTimeListBean> periodTimeList;
         private List<String> picListArray;
@@ -162,20 +164,20 @@ public class ReleaseOrderRequest implements Serializable {
             this.longitude = longitude;
         }
 
-        public String getOrderId() {
-            return orderId;
-        }
-
-        public void setOrderId(String orderId) {
-            this.orderId = orderId;
-        }
-
         public String getOrderRange() {
             return orderRange;
         }
 
         public void setOrderRange(String orderRange) {
             this.orderRange = orderRange;
+        }
+
+        public String getOrderStatus() {
+            return orderStatus;
+        }
+
+        public void setOrderStatus(String orderStatus) {
+            this.orderStatus = orderStatus;
         }
 
         public String getPaymentType() {
@@ -216,6 +218,14 @@ public class ReleaseOrderRequest implements Serializable {
 
         public void setUnitPrice(int unitPrice) {
             this.unitPrice = unitPrice;
+        }
+
+        public String getUnitPriceType() {
+            return unitPriceType;
+        }
+
+        public void setUnitPriceType(String unitPriceType) {
+            this.unitPriceType = unitPriceType;
         }
 
         public String getUserId() {

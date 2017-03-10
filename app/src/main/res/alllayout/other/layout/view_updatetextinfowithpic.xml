@@ -7,7 +7,7 @@
         android:id="@+id/iv_updatetextinfowithpic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="7dip"
+        android:layout_margin="6dip"
         fresco:roundAsCircle="false"
         fresco:roundedCornerRadius="5dp"
         fresco:roundingBorderWidth="0.5dp"

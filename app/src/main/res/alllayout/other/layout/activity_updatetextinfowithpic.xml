@@ -6,23 +6,31 @@
     <include layout="@layout/view_nav"></include>
     <View
         android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <View
+        android:layout_width="match_parent"
         android:layout_height="16dip">
 
     </View>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="详细描述"/>
+        android:layout_marginLeft="12dip"
+        android:paddingBottom="8dip"
+        android:textSize="12sp"
+        android:textColor="#999999"
+        android:text="详细描述(120字内)"/>
     <EditText
         android:id="@+id/et_updatetextinfowithpic"
         android:layout_width="match_parent"
         android:layout_height="80dip"
         android:textSize="14sp"
-        android:textColor="#999999"
-        android:paddingStart="12dip"
-        android:paddingEnd="12dip"
-        android:gravity="center_vertical"
-        android:layout_gravity="top|left"
+        android:textColor="#333333"
+        android:padding="12dip"
+        android:gravity="top|left"
         android:background="@android:color/white"/>
     <View
         android:layout_width="match_parent"
@@ -32,11 +40,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dip"
+        android:paddingBottom="8dip"
+        android:textSize="12sp"
+        android:textColor="#999999"
         android:text="图片描述"/>
     <android.support.v7.widget.GridLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/grid_updatetextinfowithpic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
         app:columnCount="3">
 
     </android.support.v7.widget.GridLayout>
