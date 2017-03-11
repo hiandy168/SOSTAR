@@ -1,50 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shape_rounded_solid_white">
-    <RelativeLayout
+    android:layout_height="wrap_content"
+    android:background="#f2f2f2">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="12dip"
+        android:layout_marginEnd="12dip"
+        android:background="@drawable/shape_rounded_solid_white">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dip"
+                android:layout_marginTop="15dip"
+                android:layout_marginBottom="10dip"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_notstartedorderlist_type"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_notstartedorderlist_person"
+                    android:layout_marginTop="10dip"
+                    android:textSize="11sp"
+                    android:textColor="#999999"
+                    android:text="0人"
+                    android:drawableLeft="@mipmap/ic_order_member"
+                    android:drawablePadding="7dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dip"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dip"
+                        android:src="@mipmap/ic_order_time"/>
+                    <TextView
+                        android:id="@+id/tv_notstartedorderlist_time"
+                        android:layout_marginStart="7dip"
+                        android:textSize="11sp"
+                        android:textColor="#999999"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dip"
+                android:layout_marginEnd="12dip"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_notstartedorderlist_price"
+                    android:textSize="20sp"
+                    android:textColor="#f97b4f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_notstartedorderlist_price_type"
+                    android:textSize="11sp"
+                    android:textColor="#f97b4f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#999999">
+
+        </View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dip">
+            <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/notstartedorderlist_logo"
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_marginStart="12dip"
+                android:layout_centerVertical="true"
+                fresco:roundAsCircle="false"
+                fresco:roundedCornerRadius="5dp"
+                fresco:roundingBorderWidth="0.5dp"
+                fresco:roundingBorderColor="#999999"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:retryImage="@mipmap/ic_launcher"
+                fresco:retryImageScaleType="focusCrop"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:failureImageScaleType="focusCrop"/>
             <TextView
-                android:id="@+id/notstartedorderlist_type"
+                android:id="@+id/tv_notstartedorderlist_comp"
+                android:layout_toRightOf="@id/notstartedorderlist_logo"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                android:layout_marginStart="7dip"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/notstartedorderlist_person"
+                android:id="@+id/tv_notstartedorderlist_distance"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="12dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/notstartedorderlist_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/notstartedorderlist_price"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dip"
-        android:background="#999999">
-
-    </View>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/notstartedorderlist_comp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/notstartedorderlist_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+        android:layout_height="10dip"></View>
 </LinearLayout>

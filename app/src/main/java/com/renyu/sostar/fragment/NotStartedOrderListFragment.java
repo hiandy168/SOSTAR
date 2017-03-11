@@ -35,7 +35,7 @@ public class NotStartedOrderListFragment extends BaseFragment {
     RecyclerView rv_notstartedorderlist;
     NotStartedOrderListAdapter adapter;
 
-    ArrayList<String> beans;
+    ArrayList<MyOrderListResponse.DataBean> beans;
 
     int page=1;
 
@@ -58,12 +58,10 @@ public class NotStartedOrderListFragment extends BaseFragment {
         swipy_notstartedorderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
                 android.R.color.holo_orange_light, android.R.color.holo_green_light);
         swipy_notstartedorderlist.setOnRefreshListener(direction -> {
-            if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
-
+            if (direction==SwipyRefreshLayoutDirection.TOP) {
+                page=1;
             }
-            else if (direction==SwipyRefreshLayoutDirection.TOP) {
-
-            }
+            getMyOrderList();
         });
     }
 
@@ -100,7 +98,12 @@ public class NotStartedOrderListFragment extends BaseFragment {
 
             @Override
             public void onNext(MyOrderListResponse value) {
-                value.getData().size();
+                if (page==1) {
+                    beans.clear();
+                }
+                beans.addAll(value.getData());
+                adapter.notifyDataSetChanged();
+                page++;
                 swipy_notstartedorderlist.setRefreshing(false);
             }
 

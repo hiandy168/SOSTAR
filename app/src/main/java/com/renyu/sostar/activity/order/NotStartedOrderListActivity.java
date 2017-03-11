@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.renyu.sostar.fragment.NotStartedOrderListFragment;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by renyu on 2017/3/8.
@@ -102,6 +104,15 @@ public class NotStartedOrderListActivity extends BaseActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return titles.get(position);
+        }
+    }
+
+    @OnClick({R.id.ib_nav_left})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
         }
     }
 }

@@ -6,6 +6,7 @@ import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
+import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.SigninResponse;
 
 import io.reactivex.Observable;
@@ -101,6 +102,6 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/myOrderList")
-    Observable<Response<EmptyResponse>> myOrderList(@Body RequestBody requestBody);
+    Observable<Response<MyOrderListResponse>> myOrderList(@Body RequestBody requestBody);
 
 }

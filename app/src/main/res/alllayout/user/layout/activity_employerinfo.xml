@@ -36,11 +36,11 @@
                 fresco:roundedCornerRadius="10dp"
                 fresco:roundingBorderWidth="1dp"
                 fresco:roundingBorderColor="#999999"
-                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:placeholderImage="@mipmap/ic_avatar_null"
                 fresco:placeholderImageScaleType="centerCrop"
-                fresco:retryImage="@mipmap/ic_launcher"
+                fresco:retryImage="@mipmap/ic_avatar_null"
                 fresco:retryImageScaleType="focusCrop"
-                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:failureImage="@mipmap/ic_avatar_null"
                 fresco:failureImageScaleType="focusCrop"/>
             <ImageView
                 android:layout_width="wrap_content"
