@@ -2,9 +2,11 @@ package com.renyu.sostar.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +39,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
 import com.renyu.sostar.activity.order.ReleaseOrderActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
+import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.params.CommonParams;
 
 import org.greenrobot.eventbus.EventBus;
@@ -140,7 +143,7 @@ public class MainFragment extends BaseFragment {
         mv_main.onSaveInstanceState(outState);
     }
 
-    @OnClick({R.id.iv_main_releaseorder})
+    @OnClick({R.id.iv_main_releaseorder, R.id.iv_main_mylocation})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_releaseorder:
@@ -151,6 +154,14 @@ public class MainFragment extends BaseFragment {
                     if (bdLocation!=null) {
                         startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
                     }
+                }
+                break;
+            case R.id.iv_main_mylocation:
+                if (bdLocation!=null) {
+                    LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
+                    MapStatus.Builder builder = new MapStatus.Builder();
+                    builder.target(ll);
+                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                 }
                 break;
         }
@@ -182,7 +193,18 @@ public class MainFragment extends BaseFragment {
         loadAvatarBitmap(response.getPicPath());
     }
 
+    // 获取头像以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MyCenterEmployerResponse response) {
+        loadAvatarBitmap(response.getLogoPath());
+    }
+
     private void loadAvatarBitmap(String avatarUrl) {
+        if (TextUtils.isEmpty(avatarUrl)) {
+            avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_null);
+            addUserOverLay(avatarBmp, bdLocation);
+            return;
+        }
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(avatarUrl)).setProgressiveRenderingEnabled(true).build();
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         DataSource<CloseableReference<CloseableImage>> dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
@@ -197,7 +219,8 @@ public class MainFragment extends BaseFragment {
 
             @Override
             protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
-
+                avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_null);
+                addUserOverLay(avatarBmp, bdLocation);
             }
         }, CallerThreadExecutor.getInstance());
     }

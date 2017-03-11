@@ -385,6 +385,8 @@ public class MainActivity extends BaseActivity {
             public void onNext(MyCenterEmployerResponse value) {
                 myCenterEmployerResponse=value;
                 updateMyEmployerCenter(value);
+
+                EventBus.getDefault().post(value);
             }
 
             @Override

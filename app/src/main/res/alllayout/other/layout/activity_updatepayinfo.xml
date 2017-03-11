@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:textSize="14sp"
                 android:inputType="number"
                 android:background="@android:color/transparent"
                 android:layout_marginEnd="12dip" />
