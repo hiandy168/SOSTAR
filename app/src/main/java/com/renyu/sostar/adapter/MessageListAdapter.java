@@ -59,8 +59,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(holder.getLayoutPosition())==2) {
             if (holder.getLayoutPosition()==0) {
-                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText("");
-                ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setVisibility(View.GONE);
+                SimpleDateFormat dateFormatTime=new SimpleDateFormat("yyyy-MM-dd");
+                Date date=new Date();
+                if (beans.get(holder.getLayoutPosition()).toString().equals(dateFormatTime.format(date))) {
+                    ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText("");
+                    ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setVisibility(View.GONE);
+                }
+                else {
+                    ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText(beans.get(holder.getLayoutPosition()).toString());
+                    ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setVisibility(View.VISIBLE);
+                }
             }
             else {
                 ((MessageTitleViewHolder) holder).tv_adapter_messagelist_day.setText(beans.get(holder.getLayoutPosition()).toString());

@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.value;
-import static com.renyu.sostar.R.id.iv_main_menu_avatar;
-import static com.renyu.sostar.R.id.notstartedorderlist_logo;
-
 /**
  * Created by renyu on 2017/3/10.
  */
