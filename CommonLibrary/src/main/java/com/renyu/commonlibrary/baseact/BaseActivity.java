@@ -79,7 +79,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         httpHelper = new OKHttpHelper();
-        Retrofit2Utils.getInstance("http://114.215.18.160:8080/", "http://114.215.18.160:9333/");
         retrofit = Retrofit2Utils.getBaseRetrofit();
         retrofit_uploadimage = Retrofit2Utils.getImageUploadRetrofit();
 

@@ -12,6 +12,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -34,6 +35,8 @@ public class SostarApp extends MultiDexApplication {
 
         String processName= Utils.getProcessName(android.os.Process.myPid());
         if (processName.equals(getPackageName())) {
+
+            Retrofit2Utils.getInstance("http://114.215.18.160:8080/", "http://114.215.18.160:9333/");
 
             com.blankj.utilcode.utils.Utils.init(this);
 

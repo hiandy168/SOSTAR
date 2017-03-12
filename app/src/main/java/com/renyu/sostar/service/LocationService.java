@@ -12,10 +12,17 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.google.gson.Gson;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
+import com.renyu.sostar.bean.EmployeeIndexRequest;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import org.greenrobot.eventbus.EventBus;
+
+import retrofit2.Retrofit;
 
 /**
  * Created by renyu on 2017/1/18.
@@ -45,7 +52,6 @@ public class LocationService extends Service {
                 }
 
                 EventBus.getDefault().post(bdLocation);
-                Log.d("LocationService", bdLocation.getLongitude() + " " + bdLocation.getLatitude());
                 uploadLocation(bdLocation);
             }
 
@@ -72,29 +78,32 @@ public class LocationService extends Service {
     }
 
     private void uploadLocation(BDLocation bdLocation) {
-        // 只有雇员才上报位置
-        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
-            boolean needUpload=false;
-            // 首次上报
-            if (lastBdLocation==null) {
+        boolean needUpload=false;
+        // 首次上报
+        if (lastBdLocation==null) {
+            lastBdLocation=bdLocation;
+            needUpload=true;
+        }
+        // 移动距离超过500米才上报
+        else {
+            LatLng now=new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
+            LatLng last=new LatLng(lastBdLocation.getLatitude(), lastBdLocation.getLongitude());
+            if (DistanceUtil.getDistance(now, last)>500) {
                 lastBdLocation=bdLocation;
                 needUpload=true;
             }
-            // 移动距离超过500米才上报
-            else {
-                LatLng now=new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
-                LatLng last=new LatLng(lastBdLocation.getLatitude(), lastBdLocation.getLongitude());
-                if (DistanceUtil.getDistance(now, last)>500) {
-                    lastBdLocation=bdLocation;
-                    needUpload=true;
-                }
-            }
-            if (needUpload) {
-
-            }
         }
-        else {
-            lastBdLocation=bdLocation;
+        if (needUpload) {
+            EmployeeIndexRequest request=new EmployeeIndexRequest();
+            EmployeeIndexRequest.ParamBean paramBean=new EmployeeIndexRequest.ParamBean();
+            paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+            paramBean.setLatitude(""+bdLocation.getLatitude());
+            paramBean.setLongitude(""+bdLocation.getLongitude());
+            request.setParam(paramBean);
+            Retrofit retrofit = Retrofit2Utils.getBaseRetrofit();
+            retrofit.create(RetrofitImpl.class)
+                    .updatePosition(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .compose(Retrofit2Utils.background()).subscribe(o -> Log.d("LocationService", ((EmptyResponse) o).getMessage()));
         }
     }
 }

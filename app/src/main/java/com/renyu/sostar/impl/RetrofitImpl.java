@@ -2,7 +2,9 @@ package com.renyu.sostar.impl;
 
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.networkutils.params.Response;
+import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
@@ -104,4 +106,15 @@ public interface RetrofitImpl {
     @POST("sostar/api/staff/myOrderList")
     Observable<Response<MyOrderListResponse>> myOrderList(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/homepage/staff")
+    Observable<Response<EmployeeIndexResponse>> getEmployeeIndex(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/homepage/employer")
+    Observable<Response<EmployerIndexResponse>> getEmployerIndex(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/user/updatePosition")
+    Observable<Response<EmptyResponse>> updatePosition(@Body RequestBody requestBody);
 }

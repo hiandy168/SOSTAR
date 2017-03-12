@@ -65,8 +65,12 @@ public class MainActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.main_dl)
     DrawerLayout main_dl;
+    @BindView(R.id.iv_nav_title)
+    ImageView iv_nav_title;
     @BindView(R.id.ib_nav_left)
     ImageButton ib_nav_left;
+    @BindView(R.id.ib_nav_right)
+    ImageButton ib_nav_right;
     @BindView(R.id.main_menu_layout)
     LinearLayout main_menu_layout;
     @BindView(R.id.main_menu_grid)
@@ -126,7 +130,9 @@ public class MainActivity extends BaseActivity {
         });
 
         nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        ib_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        iv_nav_title.setImageResource(R.mipmap.ic_main_logo);
+        ib_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_main_menu));
+        ib_nav_right.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_main_started_order));
         ImageButton ib_menu_nav_left= (ImageButton) (main_menu_layout.findViewById(R.id.ib_nav_left));
         ib_menu_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_arrow_write_left));
         ib_menu_nav_left.setOnClickListener(v -> main_dl.closeDrawer(main_menu_layout));
@@ -222,7 +228,7 @@ public class MainActivity extends BaseActivity {
         stopService(new Intent(this, LocationService.class));
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.layout_main_menu_mycenter_info,
+    @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_main_menu_mycenter_info,
             R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area,
             R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message})
     public void onClick(View view) {
@@ -234,6 +240,8 @@ public class MainActivity extends BaseActivity {
                 else {
                     main_dl.openDrawer(main_menu_layout);
                 }
+                break;
+            case R.id.ib_nav_right:
                 break;
             case R.id.layout_main_menu_mycenter_info:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {

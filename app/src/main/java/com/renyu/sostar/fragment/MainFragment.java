@@ -33,23 +33,33 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.google.gson.Gson;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
 import com.renyu.sostar.activity.order.ReleaseOrderActivity;
+import com.renyu.sostar.bean.EmployeeIndexRequest;
+import com.renyu.sostar.bean.EmployeeIndexResponse;
+import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/2/26.
@@ -60,6 +70,12 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.mv_main)
     MapView mv_main;
     BaiduMap mBaiduMap;
+    @BindView(R.id.tv_main_notstartorder_num)
+    TextView tv_main_notstartorder_num;
+    @BindView(R.id.tv_main_open_space)
+    View tv_main_open_space;
+    @BindView(R.id.tv_main_oper)
+    TextView tv_main_oper;
 
     // 是否地图第一次定位加载成功
     boolean isFirstLoc=true;
@@ -69,9 +85,15 @@ public class MainFragment extends BaseFragment {
     BDLocation bdLocation;
     // 用户marker
     Marker avatarMarker;
+    // 所有其他marker
+    ArrayList<Marker> otherMarkers;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
+        otherMarkers=new ArrayList<>();
+
         mBaiduMap=mv_main.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
@@ -96,6 +118,12 @@ public class MainFragment extends BaseFragment {
 
             }
         });
+        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            tv_main_oper.setText("立即接单");
+        }
+        else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            tv_main_oper.setText("立即发单");
+        }
     }
 
     @Override
@@ -143,10 +171,10 @@ public class MainFragment extends BaseFragment {
         mv_main.onSaveInstanceState(outState);
     }
 
-    @OnClick({R.id.iv_main_releaseorder, R.id.iv_main_mylocation})
+    @OnClick({R.id.layout_main_oper, R.id.iv_main_mylocation})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_main_releaseorder:
+            case R.id.layout_main_oper:
                 if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
                     startActivity(new Intent(getActivity(), NotStartedOrderListActivity.class));
                 }
@@ -185,6 +213,13 @@ public class MainFragment extends BaseFragment {
         }
         MainFragment.this.bdLocation=bdLocation;
         addUserOverLay(avatarBmp, bdLocation);
+        // 分别加载地图相关信息
+        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            loadEmployeeIndex(bdLocation);
+        }
+        else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            loadEmployerIndex(bdLocation);
+        }
     }
 
     // 获取头像以刷新
@@ -225,6 +260,88 @@ public class MainFragment extends BaseFragment {
         }, CallerThreadExecutor.getInstance());
     }
 
+    private void loadEmployeeIndex(BDLocation bdLocation) {
+        EmployeeIndexRequest request=new EmployeeIndexRequest();
+        EmployeeIndexRequest.ParamBean paramBean=new EmployeeIndexRequest.ParamBean();
+        paramBean.setUserId(ACache.get(getActivity()).getAsString(CommonParams.USER_ID));
+        paramBean.setLatitude(""+bdLocation.getLatitude());
+        paramBean.setLongitude(""+bdLocation.getLongitude());
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getEmployeeIndex(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployeeIndexResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmployeeIndexResponse value) {
+                if (value.getCount()>0) {
+                    tv_main_notstartorder_num.setText(""+value.getCount());
+                    tv_main_notstartorder_num.setVisibility(View.VISIBLE);
+                    tv_main_open_space.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tv_main_notstartorder_num.setVisibility(View.GONE);
+                    tv_main_open_space.setVisibility(View.GONE);
+                }
+                addEmployeeOverLay(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void loadEmployerIndex(BDLocation bdLocation) {
+        EmployeeIndexRequest request=new EmployeeIndexRequest();
+        EmployeeIndexRequest.ParamBean paramBean=new EmployeeIndexRequest.ParamBean();
+        paramBean.setUserId(ACache.get(getActivity()).getAsString(CommonParams.USER_ID));
+        paramBean.setLatitude(""+bdLocation.getLatitude());
+        paramBean.setLongitude(""+bdLocation.getLongitude());
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getEmployerIndex(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerIndexResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(EmployerIndexResponse value) {
+                if (value.getCount()>0) {
+                    tv_main_notstartorder_num.setText(""+value.getCount());
+                    tv_main_notstartorder_num.setVisibility(View.VISIBLE);
+                    tv_main_open_space.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tv_main_notstartorder_num.setVisibility(View.GONE);
+                    tv_main_open_space.setVisibility(View.GONE);
+                }
+                addEmployerOverLay(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     private void addUserOverLay(Bitmap bitmap, BDLocation bdLocation) {
         if (bitmap==null) {
             return;
@@ -247,9 +364,33 @@ public class MainFragment extends BaseFragment {
         view.buildDrawingCache();
         view.destroyDrawingCache();
         view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        BitmapDescriptor bd2= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
-        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd2);
+        BitmapDescriptor bd= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
+        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd);
         oo.animateType(MarkerOptions.MarkerAnimateType.grow);
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
+    }
+
+    private void addEmployeeOverLay(EmployeeIndexResponse value) {
+        BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
+        for (EmployeeIndexResponse.OrdersBean ordersBean : value.getOrders()) {
+            if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
+                continue;
+            }
+            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude()))).icon(bd);
+            oo.animateType(MarkerOptions.MarkerAnimateType.grow);
+            otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+        }
+    }
+
+    private void addEmployerOverLay(EmployerIndexResponse value) {
+        BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
+        for (EmployerIndexResponse.StaffsBean staffsBean : value.getStaffs()) {
+            if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
+                continue;
+            }
+            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude()))).icon(bd);
+            oo.animateType(MarkerOptions.MarkerAnimateType.grow);
+            otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+        }
     }
 }

@@ -14,12 +14,47 @@
             android:id="@+id/iv_main_mylocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
-        <ImageView
-            android:id="@+id/iv_main_releaseorder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_marginStart="23dip"
+            android:layout_marginTop="10dip"
+            android:src="@mipmap/ic_main_location"/>
+        <RelativeLayout
+            android:id="@+id/layout_main_oper"
+            android:background="@drawable/shape_rounded_solid_green2"
+            android:layout_width="160dip"
+            android:layout_height="55dip"
+            android:layout_marginBottom="28dip"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true" >
+            <TextView
+                android:id="@+id/tv_main_notstartorder_num"
+                android:visibility="gone"
+                android:layout_width="38dip"
+                android:layout_height="38dip"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:text="0"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"
+                android:background="@drawable/shape_circle_solid_darkgreen"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+                <View
+                    android:id="@+id/tv_main_open_space"
+                    android:visibility="gone"
+                    android:layout_width="20dip"
+                    android:layout_height="match_parent"></View>
+                <TextView
+                    android:id="@+id/tv_main_oper"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:text="立即接单"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
