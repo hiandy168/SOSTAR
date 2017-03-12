@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -56,6 +55,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -354,8 +354,7 @@ public class MainFragment extends BaseFragment {
         }
 
         View view=LayoutInflater.from(getActivity()).inflate(R.layout.view_mapitem, null, false);
-        TextView tv_mapitem_text= (TextView) view.findViewById(R.id.tv_mapitem_text);
-        ImageView iv_mapitem_avatar= (ImageView) view.findViewById(R.id.iv_mapitem_avatar);
+        CircleImageView iv_mapitem_avatar= (CircleImageView) view.findViewById(R.id.iv_mapitem_avatar);
         iv_mapitem_avatar.setImageBitmap(bitmap);
         view.setDrawingCacheEnabled(true);
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),

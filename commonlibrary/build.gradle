@@ -84,4 +84,6 @@ dependencies {
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5'
     // RecyclerItemDecoration
     compile 'com.github.magiepooh:recycler-itemdecoration:1.1.1@aar'
+    // CircleImageView  A circular ImageView for Android
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
