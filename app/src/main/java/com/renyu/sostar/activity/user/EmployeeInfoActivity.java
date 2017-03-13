@@ -19,6 +19,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
@@ -325,11 +326,8 @@ public class EmployeeInfoActivity extends BaseActivity {
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         OKHttpHelper helper=new OKHttpHelper();
-        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), new OKHttpHelper.StartListener() {
-            @Override
-            public void onStart() {
+        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
 
-            }
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
