@@ -1,12 +1,21 @@
-package com.renyu.commonlibrary.networkutils.params;
+package com.renyu.commonlibrary.network.params;
 
 /**
- * Created by renyu on 2017/2/20.
+ * Created by renyu on 15/12/16.
  */
+public class Response<T> {
 
-public class NetworkException extends Exception {
+    T data;
     int result;
     String message;
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 
     public int getResult() {
         return result;
@@ -16,7 +25,6 @@ public class NetworkException extends Exception {
         this.result = result;
     }
 
-    @Override
     public String getMessage() {
         return message;
     }

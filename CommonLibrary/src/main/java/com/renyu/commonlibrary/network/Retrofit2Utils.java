@@ -1,10 +1,10 @@
-package com.renyu.commonlibrary.networkutils;
+package com.renyu.commonlibrary.network;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
-import com.renyu.commonlibrary.networkutils.params.NetworkException;
-import com.renyu.commonlibrary.networkutils.params.Response;
-import com.renyu.commonlibrary.networkutils.params.ResponseList;
+import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.commonlibrary.network.params.NetworkException;
+import com.renyu.commonlibrary.network.params.Response;
+import com.renyu.commonlibrary.network.params.ResponseList;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

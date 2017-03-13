@@ -1,22 +1,12 @@
-package com.renyu.commonlibrary.networkutils.params;
-
-import java.util.List;
+package com.renyu.commonlibrary.network.params;
 
 /**
- * Created by renyu on 15/12/25.
+ * Created by renyu on 2017/2/20.
  */
-public class ResponseList<T> {
-    List<T> data;
+
+public class NetworkException extends Exception {
     int result;
     String message;
-
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
-    }
 
     public int getResult() {
         return result;
@@ -26,6 +16,7 @@ public class ResponseList<T> {
         this.result = result;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }

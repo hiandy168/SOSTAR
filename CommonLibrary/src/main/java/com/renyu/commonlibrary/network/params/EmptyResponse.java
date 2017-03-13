@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.networkutils.params;
+package com.renyu.commonlibrary.network.params;
 
 /**
  * Created by renyu on 2017/2/22.

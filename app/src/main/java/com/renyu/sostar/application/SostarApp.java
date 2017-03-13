@@ -12,7 +12,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
-import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;

@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.renyu.commonlibrary.networkutils.OKHttpHelper;
-import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.network.OKHttpHelper;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;

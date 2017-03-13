@@ -1,19 +1,20 @@
-package com.renyu.commonlibrary.networkutils.params;
+package com.renyu.commonlibrary.network.params;
+
+import java.util.List;
 
 /**
- * Created by renyu on 15/12/16.
+ * Created by renyu on 15/12/25.
  */
-public class Response<T> {
-
-    T data;
+public class ResponseList<T> {
+    List<T> data;
     int result;
     String message;
 
-    public T getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 

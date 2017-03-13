@@ -1,7 +1,7 @@
 package com.renyu.sostar.impl;
 
-import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
-import com.renyu.commonlibrary.networkutils.params.Response;
+import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.commonlibrary.network.params.Response;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;

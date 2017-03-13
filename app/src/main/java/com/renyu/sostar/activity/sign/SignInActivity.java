@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.views.ClearEditText;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.SigninRequest;

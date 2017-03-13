@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.networkutils;
+package com.renyu.commonlibrary.network;
 
 import java.io.IOException;
 

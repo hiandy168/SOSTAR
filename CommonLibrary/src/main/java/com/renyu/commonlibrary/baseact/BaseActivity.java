@@ -18,8 +18,8 @@ import android.view.WindowManager;
 
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
-import com.renyu.commonlibrary.networkutils.OKHttpHelper;
-import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
+import com.renyu.commonlibrary.network.OKHttpHelper;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.tencent.mars.xlog.Log;
 import com.tencent.mars.xlog.Xlog;
 
