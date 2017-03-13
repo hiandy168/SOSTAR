@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -86,22 +84,19 @@ public class Retrofit2Utils {
                 .flatMap(new Function<Response<T>, ObservableSource<T>>() {
                     @Override
                     public ObservableSource<T> apply(Response<T> response) throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<T>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<T> e) throws Exception {
-                                if (response.getResult()==1) {
-                                    if (response.getData() instanceof EmptyResponse) {
-                                        ((EmptyResponse) response.getData()).setMessage(response.getMessage());
-                                    }
-                                    e.onNext(response.getData());
-                                    e.onComplete();
+                        return Observable.create(e -> {
+                            if (response.getResult()==1) {
+                                if (response.getData() instanceof EmptyResponse) {
+                                    ((EmptyResponse) response.getData()).setMessage(response.getMessage());
                                 }
-                                else {
-                                    NetworkException exception=new NetworkException();
-                                    exception.setMessage(response.getMessage());
-                                    exception.setResult(response.getResult());
-                                    e.onError(exception);
-                                }
+                                e.onNext(response.getData());
+                                e.onComplete();
+                            }
+                            else {
+                                NetworkException exception=new NetworkException();
+                                exception.setMessage(response.getMessage());
+                                exception.setResult(response.getResult());
+                                e.onError(exception);
                             }
                         });
                     }
@@ -116,21 +111,18 @@ public class Retrofit2Utils {
                 .flatMap(new Function<ResponseList<T>, ObservableSource<List<T>>>() {
                     @Override
                     public ObservableSource<List<T>> apply(ResponseList<T> response) throws Exception {
-                        return Observable.create(new ObservableOnSubscribe<List<T>>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<List<T>> e) throws Exception {
-                                if (response.getResult()==1) {
-                                    e.onNext(response.getData());
-                                    e.onComplete();
-                                }
-                                else {
-                                    NetworkException exception=new NetworkException();
-                                    exception.setMessage(response.getMessage());
-                                    exception.setResult(response.getResult());
-                                    e.onError(exception);
-                                }
-
+                        return Observable.create(e -> {
+                            if (response.getResult()==1) {
+                                e.onNext(response.getData());
+                                e.onComplete();
                             }
+                            else {
+                                NetworkException exception=new NetworkException();
+                                exception.setMessage(response.getMessage());
+                                exception.setResult(response.getResult());
+                                e.onError(exception);
+                            }
+
                         });
                     }
                 })
