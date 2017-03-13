@@ -52,7 +52,7 @@ public class OKHttpUtils {
 //                });
 //        setCertificates(okbuilder);
         //https默认信任全部证书
-        HttpsUtils.SSLParams sslParams=HttpsUtils.getSslSocketFactory(null, null, null);
+        HttpsUtils.SSLParams sslParams= HttpsUtils.getSslSocketFactory(null, null, null);
         okbuilder.hostnameVerifier((hostname, session) -> true).sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
         okHttpClient=okbuilder.build();
     }
@@ -86,7 +86,7 @@ public class OKHttpUtils {
         return instance;
     }
 
-    public void get(String url, HashMap<String, String> headers, final OnSuccessListener successListener, final OnErrorListener errorListener) {
+    public Call getPrepare(String url, HashMap<String, String> headers) {
         Request.Builder req_builder=new Request.Builder();
         if (headers!=null&&headers.size()>0) {
             Iterator<Map.Entry<String, String>> header_it=headers.entrySet().iterator();
@@ -96,7 +96,11 @@ public class OKHttpUtils {
             }
         }
         Request request=req_builder.url(url).tag(url).build();
-        Call call=okHttpClient.newCall(request);
+        return okHttpClient.newCall(request);
+    }
+
+    public void asyncGet(String url, HashMap<String, String> headers, final OnSuccessListener successListener, final OnErrorListener errorListener) {
+        Call call=getPrepare(url, headers);
         call.enqueue(new Callback() {
 
             @Override
@@ -121,24 +125,38 @@ public class OKHttpUtils {
         });
     }
 
-    public void get(String url, OnSuccessListener successListener, OnErrorListener errorListener) {
-        get(url, null, successListener, errorListener);
+    public void asyncGet(String url, OnSuccessListener successListener, OnErrorListener errorListener) {
+        asyncGet(url, null, successListener, errorListener);
     }
 
-    public void get(String url, HashMap<String, String> headers, OnSuccessListener successListener) {
-        get(url, headers, successListener, null);
+    public void asyncGet(String url, HashMap<String, String> headers, OnSuccessListener successListener) {
+        asyncGet(url, headers, successListener, null);
     }
 
-    public void get(String url, OnSuccessListener successListener) {
-        get(url, null, successListener);
+    public void asyncGet(String url, OnSuccessListener successListener) {
+        asyncGet(url, null, successListener);
     }
 
-    public void get(String url, HashMap<String, String> headers) {
-        get(url, headers, null);
+    public void asyncGet(String url, HashMap<String, String> headers) {
+        asyncGet(url, headers, null);
     }
 
-    public void get(String url) {
-        get(url, new HashMap<String, String>());
+    public void asyncGet(String url) {
+        asyncGet(url, new HashMap<String, String>());
+    }
+
+    public Response syncGet(String url, HashMap<String, String> headers) {
+        Call call=getPrepare(url, headers);
+        try {
+            Response response=call.execute();
+            if (!response.isSuccessful()) {
+                return null;
+            }
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

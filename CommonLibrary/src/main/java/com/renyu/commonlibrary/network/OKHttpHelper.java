@@ -117,7 +117,7 @@ public class OKHttpHelper {
         if (startListener!=null) {
             startListener.onStart();
         }
-        OKHttpUtils.getInstance().get(url, response -> {
+        OKHttpUtils.getInstance().asyncGet(url, response -> {
             try {
                 String string = response.body().string();
                 Observable.just(string).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> {
@@ -140,6 +140,10 @@ public class OKHttpHelper {
                 }
             });
         });
+    }
+
+    public Response syncGetRequest(String url, HashMap<String, String> headers) {
+        return OKHttpUtils.getInstance().syncGet(url, headers);
     }
 
     public void asyncUpload(HashMap<String, File> files, String url, HashMap<String, String> params, final StartListener startListener, final RequestListener requestListener) {
