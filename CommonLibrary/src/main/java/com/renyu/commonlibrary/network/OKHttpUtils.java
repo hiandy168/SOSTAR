@@ -1,4 +1,4 @@
-package com.renyu.commonlibrary.networkutils;
+package com.renyu.commonlibrary.network;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,9 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 
 import okhttp3.Call;
 import okhttp3.Callback;
