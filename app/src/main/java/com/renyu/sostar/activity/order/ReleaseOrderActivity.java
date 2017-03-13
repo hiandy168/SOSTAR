@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
-import com.renyu.commonlibrary.networkutils.OKHttpHelper;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.commonlibrary.networkutils.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;

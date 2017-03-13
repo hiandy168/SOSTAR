@@ -11,7 +11,7 @@ import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.networkutils.Retrofit2Utils;
 import com.renyu.sostar.R;
-import com.renyu.sostar.adapter.NotStartedOrderListAdapter;
+import com.renyu.sostar.adapter.OrderListAdapter;
 import com.renyu.sostar.bean.MyOrderListRequest;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -27,20 +27,20 @@ import io.reactivex.disposables.Disposable;
  * Created by renyu on 2017/3/8.
  */
 
-public class NotStartedOrderListFragment extends BaseFragment {
+public class OrderListFragment extends BaseFragment {
 
-    @BindView(R.id.swipy_notstartedorderlist)
-    SwipyRefreshLayout swipy_notstartedorderlist;
-    @BindView(R.id.rv_notstartedorderlist)
-    RecyclerView rv_notstartedorderlist;
-    NotStartedOrderListAdapter adapter;
+    @BindView(R.id.swipy_orderlist)
+    SwipyRefreshLayout swipy_orderlist;
+    @BindView(R.id.rv_orderlist)
+    RecyclerView rv_orderlist;
+    OrderListAdapter adapter;
 
     ArrayList<MyOrderListResponse.DataBean> beans;
 
     int page=1;
 
-    public static NotStartedOrderListFragment newInstance(int type) {
-        NotStartedOrderListFragment fragment=new NotStartedOrderListFragment();
+    public static OrderListFragment newInstance(int type) {
+        OrderListFragment fragment=new OrderListFragment();
         Bundle bundle=new Bundle();
         bundle.putInt("type", type);
         fragment.setArguments(bundle);
@@ -51,13 +51,13 @@ public class NotStartedOrderListFragment extends BaseFragment {
     public void initParams() {
         beans=new ArrayList<>();
 
-        rv_notstartedorderlist.setHasFixedSize(true);
-        rv_notstartedorderlist.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter=new NotStartedOrderListAdapter(getActivity(), beans);
-        rv_notstartedorderlist.setAdapter(adapter);
-        swipy_notstartedorderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+        rv_orderlist.setHasFixedSize(true);
+        rv_orderlist.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new OrderListAdapter(getActivity(), beans);
+        rv_orderlist.setAdapter(adapter);
+        swipy_orderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
                 android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        swipy_notstartedorderlist.setOnRefreshListener(direction -> {
+        swipy_orderlist.setOnRefreshListener(direction -> {
             if (direction==SwipyRefreshLayoutDirection.TOP) {
                 page=1;
             }
@@ -67,13 +67,13 @@ public class NotStartedOrderListFragment extends BaseFragment {
 
     @Override
     public int initViews() {
-        return R.layout.fragment_notstartedorderlist;
+        return R.layout.fragment_orderlist;
     }
 
     @Override
     public void loadData() {
-        swipy_notstartedorderlist.post(() -> {
-            swipy_notstartedorderlist.setRefreshing(true);
+        swipy_orderlist.post(() -> {
+            swipy_orderlist.setRefreshing(true);
             getMyOrderList();
         });
     }
@@ -104,12 +104,12 @@ public class NotStartedOrderListFragment extends BaseFragment {
                 beans.addAll(value.getData());
                 adapter.notifyDataSetChanged();
                 page++;
-                swipy_notstartedorderlist.setRefreshing(false);
+                swipy_orderlist.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-                swipy_notstartedorderlist.setRefreshing(false);
+                swipy_orderlist.setRefreshing(false);
             }
 
             @Override

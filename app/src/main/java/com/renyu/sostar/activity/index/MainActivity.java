@@ -31,6 +31,7 @@ import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.message.MessageListActivity;
+import com.renyu.sostar.activity.order.MyOrderListActivity;
 import com.renyu.sostar.activity.settings.SettingsActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.activity.user.EmployeeAuthActivity;
@@ -230,7 +231,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_main_menu_mycenter_info,
             R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area,
-            R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message})
+            R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message,
+            R.id.layout_main_menu_myorder})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -307,7 +309,16 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
             case R.id.layout_main_menu_message:
+                if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
+                    return;
+                }
                 startActivity(new Intent(MainActivity.this, MessageListActivity.class));
+                break;
+            case R.id.layout_main_menu_myorder:
+                if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
+                    return;
+                }
+                startActivity(new Intent(MainActivity.this, MyOrderListActivity.class));
                 break;
         }
     }

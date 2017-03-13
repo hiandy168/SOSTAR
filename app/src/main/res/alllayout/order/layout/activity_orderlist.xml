@@ -17,7 +17,7 @@
         android:background="@android:color/white">
         <android.support.design.widget.TabLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tab_notstartedorderlist"
+            android:id="@+id/tab_orderlist"
             app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextColor="#999999"
             android:layout_marginLeft="50dip"
@@ -29,7 +29,7 @@
         </android.support.design.widget.TabLayout>
     </LinearLayout>
     <android.support.v4.view.ViewPager
-        android:id="@+id/vp_notstartedorderlist"
+        android:id="@+id/vp_orderlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

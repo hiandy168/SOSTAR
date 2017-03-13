@@ -13,9 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.fragment.OrderListFragment;
+import com.renyu.sostar.params.CommonParams;
 
 import java.util.ArrayList;
 
@@ -23,10 +25,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by renyu on 2017/3/8.
+ * Created by renyu on 2017/3/13.
  */
 
-public class NotStartedOrderListActivity extends BaseActivity {
+public class MyOrderListActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
@@ -46,8 +48,18 @@ public class NotStartedOrderListActivity extends BaseActivity {
         fragments.add(OrderListFragment.newInstance(2));
         fragments.add(OrderListFragment.newInstance(1));
         titles=new ArrayList<>();
-        titles.add("推荐");
-        titles.add("最新");
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            titles.add("已发单");
+            titles.add("已开工");
+            titles.add("已完成");
+            titles.add("草稿");
+        }
+        else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            titles.add("已接单");
+            titles.add("已成单");
+            titles.add("已完成");
+            titles.add("已拒绝");
+        }
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("订单");
@@ -115,4 +127,5 @@ public class NotStartedOrderListActivity extends BaseActivity {
                 break;
         }
     }
+
 }

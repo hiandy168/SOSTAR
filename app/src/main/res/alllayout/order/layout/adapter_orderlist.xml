@@ -21,13 +21,13 @@
                 android:layout_marginBottom="10dip"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/tv_notstartedorderlist_type"
+                    android:id="@+id/tv_orderlist_type"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/tv_notstartedorderlist_person"
+                    android:id="@+id/tv_orderlist_person"
                     android:layout_marginTop="10dip"
                     android:textSize="11sp"
                     android:textColor="#999999"
@@ -47,7 +47,7 @@
                         android:layout_marginTop="2dip"
                         android:src="@mipmap/ic_order_time"/>
                     <TextView
-                        android:id="@+id/tv_notstartedorderlist_time"
+                        android:id="@+id/tv_orderlist_time"
                         android:layout_marginStart="7dip"
                         android:textSize="11sp"
                         android:textColor="#999999"
@@ -63,13 +63,13 @@
                 android:layout_marginEnd="12dip"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/tv_notstartedorderlist_price"
+                    android:id="@+id/tv_orderlist_price"
                     android:textSize="20sp"
                     android:textColor="#f97b4f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/tv_notstartedorderlist_price_type"
+                    android:id="@+id/tv_orderlist_price_type"
                     android:textSize="11sp"
                     android:textColor="#f97b4f"
                     android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dip">
             <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/notstartedorderlist_logo"
+                android:id="@+id/iv_orderlist_logo"
                 android:layout_width="20dip"
                 android:layout_height="20dip"
                 android:layout_marginStart="12dip"
@@ -102,8 +102,8 @@
                 fresco:failureImage="@mipmap/ic_launcher"
                 fresco:failureImageScaleType="focusCrop"/>
             <TextView
-                android:id="@+id/tv_notstartedorderlist_comp"
-                android:layout_toRightOf="@id/notstartedorderlist_logo"
+                android:id="@+id/tv_orderlist_comp"
+                android:layout_toRightOf="@id/iv_orderlist_logo"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:layout_marginStart="7dip"
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/tv_notstartedorderlist_distance"
+                android:id="@+id/tv_orderlist_distance"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:layout_centerVertical="true"
