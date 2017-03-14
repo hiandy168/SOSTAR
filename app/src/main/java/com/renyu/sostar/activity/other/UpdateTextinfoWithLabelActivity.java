@@ -78,7 +78,6 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
             params.height= SizeUtils.dp2px(30);
             textView.setLayoutParams(params);
             fl_updatetextinfowithlabel.addView(textView);
-
         }
     }
 
