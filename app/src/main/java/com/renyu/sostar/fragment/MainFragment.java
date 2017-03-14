@@ -118,6 +118,7 @@ public class MainFragment extends BaseFragment {
 
             }
         });
+        mBaiduMap.setOnMarkerClickListener(marker -> false);
         if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
             tv_main_oper.setText("立即接单");
         }

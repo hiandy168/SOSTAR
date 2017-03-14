@@ -9,6 +9,7 @@ import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyOrderListResponse;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.SigninResponse;
 
 import io.reactivex.Observable;
@@ -117,4 +118,13 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/updatePosition")
     Observable<Response<EmptyResponse>> updatePosition(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/orderDetail")
+    Observable<Response<OrderResponse>> staffOrderDetail(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/getEmployerOrderDetail")
+    Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
+
 }

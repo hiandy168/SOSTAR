@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -15,6 +16,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyOrderListResponse;
+import com.renyu.sostar.fragment.OrderListFragment;
 import com.renyu.sostar.service.LocationService;
 
 import java.util.ArrayList;
@@ -30,6 +32,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
 
     Context context;
     ArrayList<MyOrderListResponse.DataBean> beans;
+    OnClickListener onClickListener;
+
+    public interface OnClickListener {
+        void click(int position);
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public OrderListAdapter(Context context, ArrayList<MyOrderListResponse.DataBean> beans) {
         this.context = context;
@@ -51,6 +62,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         for (String timeTemp : timeTemps) {
             times+=timeTemp+"  "+beans.get(position).getStartTime()+"-"+beans.get(position).getEndTime()+"\n";
         }
+        times=times.substring(0, times.length()-1);
         holder.tv_orderlist_time.setText(times);
         holder.tv_orderlist_price.setText(""+beans.get(position).getUnitPrice());
         if (beans.get(position).getPaymentType().equals("1")) {
@@ -66,6 +78,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
         holder.iv_orderlist_logo.setController(draweeController);
+        holder.layout_orderlist_root.setOnClickListener(v -> {
+            if (onClickListener!=null) {
+                onClickListener.click(position);
+            }
+        });
     }
 
     @Override
@@ -75,6 +92,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
 
     public class NotStartedOrderListHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.layout_orderlist_root)
+        LinearLayout layout_orderlist_root;
         @BindView(R.id.tv_orderlist_type)
         TextView tv_orderlist_type;
         @BindView(R.id.tv_orderlist_person)

@@ -98,7 +98,9 @@ public class BarUtils {
     public static void adjustStatusBar(Activity activity, ViewGroup contentLayout, int color) {
         View view=new View(activity);
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.utils.BarUtils.getStatusBarHeight(activity)));
-        view.setBackgroundColor(calculateStatusColor(color, 0));
+        if (color!=-1) {
+            view.setBackgroundColor(calculateStatusColor(color, 0));
+        }
         contentLayout.addView(view, 0);
     }
 

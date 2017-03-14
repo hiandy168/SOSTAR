@@ -1,5 +1,6 @@
 package com.renyu.sostar.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.adapter.OrderListAdapter;
 import com.renyu.sostar.bean.MyOrderListRequest;
 import com.renyu.sostar.bean.MyOrderListResponse;
@@ -54,6 +56,11 @@ public class OrderListFragment extends BaseFragment {
         rv_orderlist.setHasFixedSize(true);
         rv_orderlist.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter=new OrderListAdapter(getActivity(), beans);
+        adapter.setOnClickListener(position -> {
+            Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
+            intent.putExtra("orderId", beans.get(position).getOrderId());
+            startActivity(intent);
+        });
         rv_orderlist.setAdapter(adapter);
         swipy_orderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
                 android.R.color.holo_orange_light, android.R.color.holo_green_light);

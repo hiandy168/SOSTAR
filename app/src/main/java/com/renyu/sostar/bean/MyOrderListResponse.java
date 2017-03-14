@@ -79,7 +79,7 @@ public class MyOrderListResponse {
         private String sex;
         private int staffAccount;
         private String startTime;
-        private int unitPrice;
+        private double unitPrice;
         private List<String> picListArray;
 
         public String getAddress() {
@@ -250,11 +250,11 @@ public class MyOrderListResponse {
             this.startTime = startTime;
         }
 
-        public int getUnitPrice() {
+        public double getUnitPrice() {
             return unitPrice;
         }
 
-        public void setUnitPrice(int unitPrice) {
+        public void setUnitPrice(double unitPrice) {
             this.unitPrice = unitPrice;
         }
 
