@@ -3,6 +3,7 @@ package com.renyu.commonlibrary.baseact;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -59,7 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public Retrofit retrofit=null;
     public Retrofit retrofit_uploadimage=null;
 
-    public AlertDialog networkDialg;
+    public ProgressDialog networkDialg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

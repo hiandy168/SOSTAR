@@ -1,6 +1,6 @@
 package com.renyu.sostar.activity.order;
 
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -506,8 +506,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ArrayList<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                networkDialg=new AlertDialog.Builder(ReleaseOrderActivity.this)
-                        .setMessage("正在发布").show();
+                networkDialg= ProgressDialog.show(ReleaseOrderActivity.this, null, "正在发布");
                 disposable=d;
             }
 
