@@ -38,6 +38,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
+import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.activity.order.ReleaseOrderActivity;
 import com.renyu.sostar.bean.EmployeeIndexRequest;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
@@ -118,7 +119,19 @@ public class MainFragment extends BaseFragment {
 
             }
         });
-        mBaiduMap.setOnMarkerClickListener(marker -> false);
+        mBaiduMap.setOnMarkerClickListener(marker -> {
+            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                if (marker.getZIndex()!=0) {
+                    Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
+                    intent.putExtra("orderId", ""+marker.getZIndex());
+                    startActivity(intent);
+                }
+            }
+            else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+
+            }
+            return false;
+        });
         if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
             tv_main_oper.setText("立即接单");
         }
@@ -365,7 +378,7 @@ public class MainFragment extends BaseFragment {
         view.destroyDrawingCache();
         view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         BitmapDescriptor bd= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
-        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd);
+        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd).zIndex(0);
         oo.animateType(MarkerOptions.MarkerAnimateType.grow);
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
     }
@@ -376,7 +389,7 @@ public class MainFragment extends BaseFragment {
             if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
                 continue;
             }
-            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude()))).icon(bd);
+            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude()))).icon(bd).zIndex(Integer.parseInt(ordersBean.getOrderId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
         }
@@ -388,7 +401,7 @@ public class MainFragment extends BaseFragment {
             if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
                 continue;
             }
-            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude()))).icon(bd);
+            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude()))).icon(bd).zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
         }

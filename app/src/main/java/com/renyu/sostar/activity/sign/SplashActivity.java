@@ -125,6 +125,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // 冷启动优化方案：在加载布局视图前，将主题修改回来
+        setTheme(R.style.AppTheme);
         // 如果程序已经打开则不进入启动页，直接显示之前的界面
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();

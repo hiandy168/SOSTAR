@@ -205,7 +205,9 @@ public class OrderDetailActivity extends BaseActivity {
                 }
                 // 按小时
                 else if (value.getUnitPriceType().equals("2")) {
-                    double timeNum=Integer.parseInt(value.getEndTime())-Integer.parseInt(value.getStartTime())*1.0f/100;
+                    String startTime=value.getStartTime().split(":")[0]+value.getStartTime().split(":")[1];
+                    String endTime=value.getEndTime().split(":")[0]+value.getEndTime().split(":")[1];
+                    double timeNum=(Integer.parseInt(endTime)-Integer.parseInt(startTime))*1.0f/100;
                     tv_orderdetail_priceall.setText("总价"+dayNum*value.getUnitPrice()*dayNum*timeNum);
                 }
                 String times="";
