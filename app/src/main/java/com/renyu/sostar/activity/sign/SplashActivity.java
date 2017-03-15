@@ -1,16 +1,21 @@
 package com.renyu.sostar.activity.sign;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.FileUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.views.ProgressCircleView;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.index.MainActivity;
@@ -20,10 +25,9 @@ import com.renyu.sostar.params.CommonParams;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
+import butterknife.OnClick;
 
 /**
  * Created by renyu on 2016/12/27.
@@ -35,6 +39,11 @@ public class SplashActivity extends BaseActivity {
     SimpleDraweeView iv_splash;
     @BindView(R.id.tv_splash_version)
     TextView tv_splash_version;
+    @BindView(R.id.pcv_splash_jump)
+    ProgressCircleView pcv_splash_jump;
+
+    // 跳转动画
+    ValueAnimator valueAnimator;
 
     @Override
     public void initParams() {
@@ -72,39 +81,19 @@ public class SplashActivity extends BaseActivity {
                     }
                 }
 
-                // 延时跳转
-                Observable.timer(3, TimeUnit.SECONDS).subscribe(aLong -> {
-                    // 判断当前用户是否已经登录，没有登录去登录注册页
-                    if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_ID))) {
-                        ACache.get(SplashActivity.this).remove(CommonParams.USER_PHONE);
-                        ACache.get(SplashActivity.this).remove(CommonParams.USER_PASSWORD);
-                        ACache.get(SplashActivity.this).remove(CommonParams.USER_TYPE);
-                        ACache.get(SplashActivity.this).remove(CommonParams.USER_ID);
-                        startActivity(new Intent(SplashActivity.this, SignInSignUpActivity.class));
-                    }
-                    else {
-                        Intent[] intents=new Intent[2];
-                        // 注销过，需要重新登录
-                        if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_SIGNIN))) {
-                            startActivity(new Intent(SplashActivity.this, SignInSignUpActivity.class));
-                        }
-                        else {
-                            // 如果没有用户身份类型，进入选择身份类型页面
-                            if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE))) {
-                                intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                                intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
-                                startActivities(intents);
-                            }
-                            else {
-                                intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
-                                intents[1]=new Intent(SplashActivity.this, MainActivity.class);
-                                startActivities(intents);
-                            }
-                        }
-                    }
-                    finish();
-                });
                 openLog(CommonParams.LOG_PATH);
+
+                valueAnimator=ValueAnimator.ofInt(100, 0);
+                valueAnimator.setDuration(4000);
+                valueAnimator.addUpdateListener(animation -> pcv_splash_jump.setText("跳过", (int) (100-animation.getAnimatedFraction()*100)));
+                valueAnimator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        jump();
+                    }
+                });
+                valueAnimator.start();
             }
 
             @Override
@@ -142,5 +131,48 @@ public class SplashActivity extends BaseActivity {
             return;
         }
         super.onCreate(savedInstanceState);
+    }
+
+    @OnClick({R.id.pcv_splash_jump})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.pcv_splash_jump:
+                if (valueAnimator!=null) {
+                    valueAnimator.cancel();
+                }
+                break;
+        }
+    }
+
+    private void jump() {
+        // 判断当前用户是否已经登录，没有登录去登录注册页
+        if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_ID))) {
+            ACache.get(SplashActivity.this).remove(CommonParams.USER_PHONE);
+            ACache.get(SplashActivity.this).remove(CommonParams.USER_PASSWORD);
+            ACache.get(SplashActivity.this).remove(CommonParams.USER_TYPE);
+            ACache.get(SplashActivity.this).remove(CommonParams.USER_ID);
+            startActivity(new Intent(SplashActivity.this, SignInSignUpActivity.class));
+        }
+        else {
+            Intent[] intents=new Intent[2];
+            // 注销过，需要重新登录
+            if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_SIGNIN))) {
+                startActivity(new Intent(SplashActivity.this, SignInSignUpActivity.class));
+            }
+            else {
+                // 如果没有用户身份类型，进入选择身份类型页面
+                if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE))) {
+                    intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
+                    intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
+                    startActivities(intents);
+                }
+                else {
+                    intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
+                    intents[1]=new Intent(SplashActivity.this, MainActivity.class);
+                    startActivities(intents);
+                }
+            }
+        }
+        finish();
     }
 }
