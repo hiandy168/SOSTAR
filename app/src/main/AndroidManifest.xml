@@ -32,6 +32,7 @@
         <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployeeAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployerAuthActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.EmployeeInfo2Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.ReleaseOrderActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.NotStartedOrderListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderDetailActivity" android:screenOrientation="portrait"></activity>

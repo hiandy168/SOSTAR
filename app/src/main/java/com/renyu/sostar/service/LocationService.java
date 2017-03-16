@@ -75,6 +75,8 @@ public class LocationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         mLocClient.stop();
+
+        lastBdLocation=null;
     }
 
     private void uploadLocation(BDLocation bdLocation) {

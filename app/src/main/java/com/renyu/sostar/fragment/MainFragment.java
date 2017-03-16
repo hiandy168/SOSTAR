@@ -40,6 +40,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
 import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.activity.order.ReleaseOrderActivity;
+import com.renyu.sostar.activity.user.EmployeeInfo2Activity;
 import com.renyu.sostar.bean.EmployeeIndexRequest;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
@@ -124,6 +125,11 @@ public class MainFragment extends BaseFragment {
                 if (marker.getZIndex()!=0) {
                     Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
                     intent.putExtra("orderId", ""+marker.getZIndex());
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent=new Intent(getActivity(), EmployeeInfo2Activity.class);
+                    intent.putExtra("userId", ""+marker.getZIndex());
                     startActivity(intent);
                 }
             }
@@ -250,7 +256,7 @@ public class MainFragment extends BaseFragment {
 
     private void loadAvatarBitmap(String avatarUrl) {
         if (TextUtils.isEmpty(avatarUrl)) {
-            avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_null);
+            avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
             addUserOverLay(avatarBmp, bdLocation);
             return;
         }
@@ -268,7 +274,7 @@ public class MainFragment extends BaseFragment {
 
             @Override
             protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
-                avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_null);
+                avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
                 addUserOverLay(avatarBmp, bdLocation);
             }
         }, CallerThreadExecutor.getInstance());
@@ -389,7 +395,10 @@ public class MainFragment extends BaseFragment {
             if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
                 continue;
             }
-            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude()))).icon(bd).zIndex(Integer.parseInt(ordersBean.getOrderId()));
+            MarkerOptions oo = new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude())))
+                    .icon(bd)
+                    .zIndex(Integer.parseInt(ordersBean.getOrderId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
         }
@@ -401,7 +410,10 @@ public class MainFragment extends BaseFragment {
             if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
                 continue;
             }
-            MarkerOptions oo = new MarkerOptions().position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude()))).icon(bd).zIndex(Integer.parseInt(staffsBean.getUserId()));
+            MarkerOptions oo = new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude())))
+                    .icon(bd)
+                    .zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
         }
