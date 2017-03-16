@@ -59,6 +59,9 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
 
         et_updatetextinfowithpic.setText(getIntent().getStringExtra("ed"));
         picPath=getIntent().getStringArrayListExtra("picPath");
+        if (picPath==null) {
+            picPath=new ArrayList<>();
+        }
         for (int i=0;i<picPath.size();i++) {
             addImage(picPath.get(i));
         }
@@ -74,11 +77,7 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
             ImageView iv_updatetextinfowithpic_delete= (ImageView) view.findViewById(R.id.iv_updatetextinfowithpic_delete);
             iv_updatetextinfowithpic_delete.setOnClickListener(v -> {
                 picPath.remove(path);
-
-                grid_updatetextinfowithpic.removeAllViews();
-                for (int i=0;i<picPath.size();i++) {
-                    addImage(picPath.get(i));
-                }
+                grid_updatetextinfowithpic.removeView(view);
                 if (picPath.size()<3) {
                     addImage("");
                 }
@@ -166,19 +165,27 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
             if (filePaths==null) {
                 return;
             }
+            grid_updatetextinfowithpic.removeView(
+                    grid_updatetextinfowithpic.getChildAt(grid_updatetextinfowithpic.getChildCount()-1));
             picPath.addAll(filePaths);
+            for (int i=0;i<filePaths.size();i++) {
+                addImage(filePaths.get(i));
+            }
+            if (picPath.size()<3) {
+                addImage("");
+            }
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
+            grid_updatetextinfowithpic.removeView(
+                    grid_updatetextinfowithpic.getChildAt(grid_updatetextinfowithpic.getChildCount()-1));
             picPath.add(path);
+            addImage(path);
+            if (picPath.size()<3) {
+                addImage("");
+            }
         }
-        grid_updatetextinfowithpic.removeAllViews();
-        for (int i=0;i<picPath.size();i++) {
-            addImage(picPath.get(i));
-        }
-        if (picPath.size()<3) {
-            addImage("");
-        }
+
     }
 
     private void choicePic() {
