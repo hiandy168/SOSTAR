@@ -100,7 +100,15 @@ public class ImagePreviewActivity extends BaseActivity {
         }
         fragments=new ArrayList<>();
         for (int i=0;i<urls.size();i++) {
-            fragments.add(ImagePreviewFragment.newInstance(urls.get(i), i));
+            ImagePreviewFragment fragment= ImagePreviewFragment.newInstance(urls.get(i), i);
+            fragment.setOnPicChangedListener(new ImagePreviewFragment.OnPicChangedListener() {
+                @Override
+                public void picChanged(int position, ImageInfo imageInfo) {
+                    // 添加图片尺寸信息
+                    point.put(""+position, imageInfo);
+                }
+            });
+            fragments.add(fragment);
         }
         adapter=new MyPagerAdapter(getSupportFragmentManager());
         imagepreview_viewpager.setAdapter(adapter);
@@ -202,7 +210,7 @@ public class ImagePreviewActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
+        if (requestCode== CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
             Utils.refreshAlbum(this, path, new File(path).getParentFile().getPath());
             int position=imagepreview_viewpager.getCurrentItem();
@@ -215,11 +223,6 @@ public class ImagePreviewActivity extends BaseActivity {
             }
             adapter.notifyDataSetChanged();
         }
-    }
-
-    // 添加图片尺寸信息
-    public void addPicSize(int position, ImageInfo imageInfo) {
-        point.put(""+position, imageInfo);
     }
 
     @Override

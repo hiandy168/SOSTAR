@@ -28,6 +28,16 @@ public class ImagePreviewFragment extends BaseFragment {
     @BindView(R2.id.photo_view)
     PhotoDraweeView photoDraweeView;
 
+    OnPicChangedListener onPicChangedListener;
+
+    public interface OnPicChangedListener {
+        void picChanged(int position, ImageInfo imageInfo);
+    }
+
+    public void setOnPicChangedListener(OnPicChangedListener onPicChangedListener) {
+        this.onPicChangedListener = onPicChangedListener;
+    }
+
     public static ImagePreviewFragment newInstance(String url, int position) {
         ImagePreviewFragment fragment=new ImagePreviewFragment();
         Bundle bundle=new Bundle();
@@ -50,7 +60,7 @@ public class ImagePreviewFragment extends BaseFragment {
                 if (imageInfo == null) {
                     return;
                 }
-                ((ImagePreviewActivity) getActivity()).addPicSize(getArguments().getInt("position"), imageInfo);
+                onPicChangedListener.picChanged(getArguments().getInt("position"), imageInfo);
                 photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
             }
         });
