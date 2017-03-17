@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.blankj.utilcode.utils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 import com.renyu.commonlibrary.network.OKHttpHelper;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
@@ -71,12 +71,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             ButterKnife.bind(this);
         }
 
-        //设置沉浸式，二选一
+        // 设置沉浸式，二选一
         if (setStatusBarColor()!=0) {
-            BarUtils.setColor(this, setStatusBarColor());
+            BarUtils.setColor(this, setStatusBarColor(), 0);
+            // 此为全屏模式下设置沉浸式颜色
+            BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
         }
         if (setStatusBarTranslucent()!=0) {
-            BarUtils.setTranslucent(this);
+            com.renyu.commonlibrary.commonutils.BarUtils.setTranslucent(this);
         }
 
         httpHelper = new OKHttpHelper();
