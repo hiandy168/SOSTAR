@@ -2,6 +2,7 @@ package com.renyu.commonlibrary.network;
 
 import android.content.Context;
 
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.Utils;
 
 import org.json.JSONException;
@@ -46,30 +47,30 @@ public class TokenInterceptor implements Interceptor {
                     // https://aznapi.house365.com/api/58bf98c1dcb63?city=nj&timestamp=2489390618&app_id=96625801&rand_str=abcdefghijklmn&signature=dc607b0e91667409d99a42ea241fb6c0&device_id=00000000-7deb-db10-ffff-ffff8dcff671
                     int timestamp= (int) (System.currentTimeMillis()/1000);
                     String random="abcdefghijklmn";
-                    String signature="app_id=96625801&app_secret=JcJEdRYOapqLXtQPgPZNMRScqtaUbUrJ&device_id="+
+                    String signature="app_id=46877648&app_secret=kCkrePwPpHOsYYSYWTDKzvczWRyvhknG&device_id="+
                             Utils.getUniquePsuedoID()+"&rand_str="+random+"&timestamp="+timestamp;
                     String url="https://aznapi.house365.com/api/58bf98c1dcb63?city=nj&timestamp="+timestamp+
-                            "&app_id=96625801&rand_str="+random+
-                            "&signature="+ Utils.getMD5(signature)+
-                            "&device_id="+ Utils.getUniquePsuedoID();
-                    Response tokenResponse=okHttpHelper.syncGetRequest(url, new HashMap<>());
+                            "&app_id=46877648&rand_str="+random+
+                            "&signature="+Utils.getMD5(signature)+
+                            "&device_id="+Utils.getUniquePsuedoID();
+                    HashMap<String, String> headMaps=new HashMap<>();
+                    headMaps.put("version", "v1.0");
+                    Response tokenResponse=okHttpHelper.syncGetRequest(url, headMaps);
                     String value=getBodyString(tokenResponse);
-                    String access_token=new JSONObject(value).getJSONObject("data").getString("access_token");
-                    tokenResponse.body().close();
-                    Request newRequest = request.newBuilder().header("access_token", access_token).build();
-                    return chain.proceed(newRequest);
-                }
-                else {
+                    if (new JSONObject(value).getInt("code")==1) {
+                        String access_token=new JSONObject(value).getJSONObject("data").getString("access_token");
+                        ACache.get(context).put("access_token", access_token);
+                        tokenResponse.body().close();
+                        Request newRequest = request.newBuilder().header("access_token", access_token).build();
+                        return chain.proceed(newRequest);
+                    }
                     return originalResponse;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                return originalResponse;
             }
         }
-        else {
-            return originalResponse;
-        }
+        return originalResponse;
     }
 
     public String getBodyString(Response response) throws IOException {
