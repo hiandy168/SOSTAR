@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mcxtzhang.swipemenulib.SwipeMenuLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:paddingTop="5dip"
+    android:paddingBottom="5dip"
+    android:id="@+id/swipelayout_adapter_employeelist"
+    app:ios="false"
+    app:leftSwipe="true"
+    app:swipeEnable="true">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_adapter_employeelist"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="75dip">
+            <RelativeLayout
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="10dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.facebook.drawee.view.SimpleDraweeView
+                    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/iv_adapter_employeelist_avatar"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    fresco:placeholderImage="@mipmap/ic_avatar_small"
+                    fresco:placeholderImageScaleType="centerCrop"
+                    fresco:retryImage="@mipmap/ic_avatar_small"
+                    fresco:retryImageScaleType="focusCrop"
+                    fresco:failureImage="@mipmap/ic_avatar_small"
+                    fresco:failureImageScaleType="focusCrop"
+                    fresco:roundAsCircle="true" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/iv_adapter_employeelist_avatar"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_adapter_employeelist_name"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#333333"/>
+                    <TextView
+                        android:id="@+id/tv_adapter_employeelist_desp"
+                        android:layout_marginTop="4dip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginRight="10dip" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#cccccc">
+
+        </View>
+    </LinearLayout>
+    <Button
+        android:id="@+id/tv_adapter_employeelist_delete"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_red_light"
+        android:text="删除"
+        android:padding="14dip"
+        android:textColor="@android:color/white"/>
+</com.mcxtzhang.swipemenulib.SwipeMenuLayout>

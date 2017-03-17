@@ -45,6 +45,8 @@ public class MyOrderListActivity extends BaseActivity {
     @Override
     public void initParams() {
         fragments=new ArrayList<>();
+        fragments.add(OrderListFragment.newInstance(4));
+        fragments.add(OrderListFragment.newInstance(3));
         fragments.add(OrderListFragment.newInstance(2));
         fragments.add(OrderListFragment.newInstance(1));
         titles=new ArrayList<>();
@@ -66,10 +68,16 @@ public class MyOrderListActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         tab_orderlist.setTabGravity(TabLayout.GRAVITY_FILL);
-        tab_orderlist.setTabMode(TabLayout.MODE_FIXED);
+        if (titles.size()>2) {
+            tab_orderlist.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }
+        else {
+            tab_orderlist.setTabMode(TabLayout.MODE_FIXED);
+            Utils.setIndicator(this, tab_orderlist, 30, 30);
+        }
+
         vp_orderlist.setAdapter(new OrderAdapter(getSupportFragmentManager()));
         tab_orderlist.setupWithViewPager(vp_orderlist);
-        Utils.setIndicator(this, tab_orderlist, 30, 30);
     }
 
     @Override

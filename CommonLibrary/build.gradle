@@ -84,4 +84,6 @@ dependencies {
     compile 'com.github.magiepooh:recycler-itemdecoration:1.1.1@aar'
     // CircleImageView  A circular ImageView for Android
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //sticky-headers-recyclerview  Sticky Headers decorator for Android's RecyclerView
+    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 }

@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.order;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
@@ -160,13 +161,17 @@ public class OrderDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.tv_nav_right})
+    @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.layout_orderdetail_info3})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
                 finish();
                 break;
             case R.id.tv_nav_right:
+                break;
+            case R.id.layout_orderdetail_info3:
+                Intent intent_employees=new Intent(OrderDetailActivity.this, EmployeeListActivity.class);
+                startActivityForResult(intent_employees, CommonParams.RESULT_EMPLOYEELIST);
                 break;
         }
     }
@@ -342,5 +347,15 @@ public class OrderDetailActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK) {
+            if (requestCode==CommonParams.RESULT_EMPLOYEELIST) {
+
+            }
+        }
     }
 }
