@@ -11,6 +11,7 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutD
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
+import com.renyu.commonlibrary.network.params.Response;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.adapter.OrderListAdapter;
@@ -22,6 +23,7 @@ import com.renyu.sostar.params.CommonParams;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -95,9 +97,16 @@ public class OrderListFragment extends BaseFragment {
         paramBean.setType(""+getArguments().getInt("type"));
         paramBean.setPagination(paginationBean);
         request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .myOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<MyOrderListResponse>() {
+        Observable<Response<MyOrderListResponse>> observable=null;
+        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            observable= retrofit.create(RetrofitImpl.class)
+                    .myStaffOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
+        }
+        else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            observable= retrofit.create(RetrofitImpl.class)
+                    .myEmployerOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
+        }
+        observable.compose(Retrofit2Utils.background()).subscribe(new Observer<MyOrderListResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 

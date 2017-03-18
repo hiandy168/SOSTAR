@@ -349,6 +349,98 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    private void cancleMyOrder() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .cancleMyOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void cancelEmployeeOrder() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .cancelEmployeeOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void receiveOrder() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .receiveOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

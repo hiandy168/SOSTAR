@@ -105,7 +105,11 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/myOrderList")
-    Observable<Response<MyOrderListResponse>> myOrderList(@Body RequestBody requestBody);
+    Observable<Response<MyOrderListResponse>> myStaffOrderList(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/myOrderList")
+    Observable<Response<MyOrderListResponse>> myEmployerOrderList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/homepage/staff")
@@ -127,4 +131,23 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/getEmployerOrderDetail")
     Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setDraftToOrder")
+    Observable<Response<EmptyResponse>> setDraftToOrder(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/cancleMyOrder")
+    Observable<Response<EmptyResponse>> cancleMyOrder(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/confirmStaff")
+    Observable<Response<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/cancelOrder")
+    Observable<Response<EmptyResponse>> cancelEmployeeOrder(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/receiveOrder")
+    Observable<Response<EmptyResponse>> receiveOrder(@Body RequestBody requestBody);
 }

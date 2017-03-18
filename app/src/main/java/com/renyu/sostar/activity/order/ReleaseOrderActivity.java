@@ -32,6 +32,7 @@ import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -581,6 +582,36 @@ public class ReleaseOrderActivity extends BaseActivity {
             public void onError(Throwable e) {
                 networkDialg.dismiss();
                 Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void setDraftToOrder() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .setDraftToOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
 
             @Override
