@@ -2,9 +2,11 @@ package com.renyu.sostar.impl;
 
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.network.params.Response;
+import com.renyu.commonlibrary.network.params.ResponseList;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
+import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
@@ -124,7 +126,7 @@ public interface RetrofitImpl {
     Observable<Response<EmptyResponse>> updatePosition(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    @POST("sostar/api/staff/orderDetail")
+    @POST("sostar/api/staff/orderRelationDetail")
     Observable<Response<OrderResponse>> staffOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
@@ -140,8 +142,8 @@ public interface RetrofitImpl {
     Observable<Response<EmptyResponse>> cancleMyOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    @POST("sostar/api/employer/confirmStaff")
-    Observable<Response<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
+    @POST("sostar/api/employer/getEmployerStaffList")
+    Observable<ResponseList<EmployerStaffListResponse>> getEmployerStaffList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/cancelOrder")
@@ -150,4 +152,17 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/receiveOrder")
     Observable<Response<EmptyResponse>> receiveOrder(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/orderCenter")
+    Observable<Response<MyOrderListResponse>> employeeOrderCenter(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/startMyOrder")
+    Observable<Response<EmptyResponse>> startOrder(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/confirmStaff")
+    Observable<Response<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
+
 }

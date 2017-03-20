@@ -6,10 +6,10 @@ import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 
 /**
- * Created by renyu on 2017/3/18.
+ * Created by renyu on 2017/3/20.
  */
 
-public class ConfirmStaffRequest {
+public class ComfirmEmployeeRequest {
     /**
      * deviceId : string
      * param : {"orderId":0,"status":0,"userId":"string"}
@@ -24,12 +24,44 @@ public class ConfirmStaffRequest {
     private String sysversion = Build.VERSION.RELEASE;
     private String ver = BuildConfig.VERSION_NAME;
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public ParamBean getParam() {
         return param;
     }
 
     public void setParam(ParamBean param) {
         this.param = param;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getSysversion() {
+        return sysversion;
+    }
+
+    public void setSysversion(String sysversion) {
+        this.sysversion = sysversion;
+    }
+
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
     }
 
     public static class ParamBean {

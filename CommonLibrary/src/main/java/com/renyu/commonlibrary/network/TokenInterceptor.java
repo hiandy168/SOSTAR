@@ -61,7 +61,7 @@ public class TokenInterceptor implements Interceptor {
                         String access_token=new JSONObject(value).getJSONObject("data").getString("access_token");
                         ACache.get(context).put("access_token", access_token);
                         tokenResponse.body().close();
-                        Request newRequest = request.newBuilder().header("access_token", access_token).build();
+                        Request newRequest = request.newBuilder().header("access-token", access_token).build();
                         return chain.proceed(newRequest);
                     }
                     return originalResponse;

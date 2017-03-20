@@ -13,9 +13,10 @@ import java.util.List;
  */
 
 public class ReleaseOrderRequest implements Serializable {
+
     /**
      * deviceId : string
-     * param : {"address":"string","confirmFlg":"string","description":"string","endTime":"string","jobType":"string","latitude":"string","longitude":"string","orderRange":"string","orderStatus":"string","paymentType":"string","periodTimeList":[{"endTime":"string","startTime":"string"}],"picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0,"unitPriceType":"string","userId":"string"}
+     * param : {"address":"string","aggregateAddress":"string","aggregateTime":"string","confirmFlg":"string","description":"string","endTime":"string","jobType":"string","latitude":"string","longitude":"string","orderRange":"string","orderStatus":"string","paymentType":"string","periodTimeList":[{"endTime":"string","startTime":"string"}],"picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0,"unitPriceType":"string","userId":"string"}
      * platform : string
      * sysversion : string
      * ver : string
@@ -27,6 +28,14 @@ public class ReleaseOrderRequest implements Serializable {
     private String sysversion = Build.VERSION.RELEASE;
     private String ver = BuildConfig.VERSION_NAME;
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public ParamBean getParam() {
         return param;
     }
@@ -35,9 +44,35 @@ public class ReleaseOrderRequest implements Serializable {
         this.param = param;
     }
 
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getSysversion() {
+        return sysversion;
+    }
+
+    public void setSysversion(String sysversion) {
+        this.sysversion = sysversion;
+    }
+
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
+    }
+
     public static class ParamBean implements Serializable {
         /**
          * address : string
+         * aggregateAddress : string
+         * aggregateTime : string
          * confirmFlg : string
          * description : string
          * endTime : string
@@ -58,6 +93,8 @@ public class ReleaseOrderRequest implements Serializable {
          */
 
         private String address;
+        private String aggregateAddress;
+        private String aggregateTime;
         private String confirmFlg;
         private String description;
         private String endTime;
@@ -82,6 +119,22 @@ public class ReleaseOrderRequest implements Serializable {
 
         public void setAddress(String address) {
             this.address = address;
+        }
+
+        public String getAggregateAddress() {
+            return aggregateAddress;
+        }
+
+        public void setAggregateAddress(String aggregateAddress) {
+            this.aggregateAddress = aggregateAddress;
+        }
+
+        public String getAggregateTime() {
+            return aggregateTime;
+        }
+
+        public void setAggregateTime(String aggregateTime) {
+            this.aggregateTime = aggregateTime;
         }
 
         public String getConfirmFlg() {

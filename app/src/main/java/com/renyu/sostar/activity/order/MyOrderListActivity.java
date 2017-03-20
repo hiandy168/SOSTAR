@@ -9,9 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.Utils;
@@ -45,22 +47,30 @@ public class MyOrderListActivity extends BaseActivity {
     @Override
     public void initParams() {
         fragments=new ArrayList<>();
-        fragments.add(OrderListFragment.newInstance(4));
-        fragments.add(OrderListFragment.newInstance(3));
-        fragments.add(OrderListFragment.newInstance(2));
-        fragments.add(OrderListFragment.newInstance(1));
         titles=new ArrayList<>();
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             titles.add("已发单");
             titles.add("已开工");
             titles.add("已完成");
+            titles.add("已取消");
             titles.add("草稿");
+            fragments.add(OrderListFragment.newInstance(1, OrderListFragment.OrderListType.myEmployerList));
+            fragments.add(OrderListFragment.newInstance(3, OrderListFragment.OrderListType.myEmployerList));
+            fragments.add(OrderListFragment.newInstance(5, OrderListFragment.OrderListType.myEmployerList));
+            fragments.add(OrderListFragment.newInstance(9, OrderListFragment.OrderListType.myEmployerList));
+            fragments.add(OrderListFragment.newInstance(0, OrderListFragment.OrderListType.myEmployerList));
         }
         else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
             titles.add("已接单");
             titles.add("已成单");
             titles.add("已完成");
+            titles.add("已取消");
             titles.add("已拒绝");
+            fragments.add(OrderListFragment.newInstance(1, OrderListFragment.OrderListType.myEmployeeList));
+            fragments.add(OrderListFragment.newInstance(2, OrderListFragment.OrderListType.myEmployeeList));
+            fragments.add(OrderListFragment.newInstance(3, OrderListFragment.OrderListType.myEmployeeList));
+            fragments.add(OrderListFragment.newInstance(4, OrderListFragment.OrderListType.myEmployeeList));
+            fragments.add(OrderListFragment.newInstance(4, OrderListFragment.OrderListType.myEmployeeList));
         }
 
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -68,12 +78,15 @@ public class MyOrderListActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         tab_orderlist.setTabGravity(TabLayout.GRAVITY_FILL);
-        if (titles.size()>2) {
+        if (titles.size()>3) {
             tab_orderlist.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
         else {
             tab_orderlist.setTabMode(TabLayout.MODE_FIXED);
             Utils.setIndicator(this, tab_orderlist, 30, 30);
+            LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) tab_orderlist.getLayoutParams();
+            params.setMargins(SizeUtils.dp2px(40), 0, SizeUtils.dp2px(40), 0);
+            tab_orderlist.setLayoutParams(params);
         }
 
         vp_orderlist.setAdapter(new OrderAdapter(getSupportFragmentManager()));

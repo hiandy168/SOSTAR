@@ -38,15 +38,39 @@ public class OrderListFragment extends BaseFragment {
     @BindView(R.id.rv_orderlist)
     RecyclerView rv_orderlist;
     OrderListAdapter adapter;
+    OrderListType orderListType;
+    // 订单列表类型
+    public enum OrderListType {
+        myOrderList("雇员待接单", 1),
+        myEmployeeList("雇员我的订单列表", 2),
+        myEmployerList("雇主订单列表", 3);
+
+        OrderListType(String name, int index) {
+            this.name = name;
+            this.index = index;
+        }
+
+        private String name ;
+        private int index;
+
+        public String getName() {
+            return name;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
 
     ArrayList<MyOrderListResponse.DataBean> beans;
 
     int page=1;
 
-    public static OrderListFragment newInstance(int type) {
+    public static OrderListFragment newInstance(int type, OrderListType orderListType) {
         OrderListFragment fragment=new OrderListFragment();
         Bundle bundle=new Bundle();
         bundle.putInt("type", type);
+        bundle.putInt("orderListType", orderListType.getIndex());
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -61,6 +85,12 @@ public class OrderListFragment extends BaseFragment {
         adapter.setOnClickListener(position -> {
             Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
             intent.putExtra("orderId", beans.get(position).getOrderId());
+            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                // 雇员待接单采用雇主订单详情
+                if (getArguments().getInt("orderListType")==1) {
+                    intent.putExtra("typeIsCommit", true);
+                }
+            }
             startActivity(intent);
         });
         rv_orderlist.setAdapter(adapter);
@@ -99,10 +129,19 @@ public class OrderListFragment extends BaseFragment {
         request.setParam(paramBean);
         Observable<Response<MyOrderListResponse>> observable=null;
         if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-            observable= retrofit.create(RetrofitImpl.class)
-                    .myStaffOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
+            // 雇员待接单
+            if (getArguments().getInt("orderListType")==1) {
+                observable= retrofit.create(RetrofitImpl.class)
+                        .myStaffOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
+            }
+            // 雇员我的订单列表
+            else if (getArguments().getInt("orderListType")==2) {
+                observable= retrofit.create(RetrofitImpl.class)
+                        .employeeOrderCenter(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
+            }
         }
         else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            // 雇主我的订单列表
             observable= retrofit.create(RetrofitImpl.class)
                     .myEmployerOrderList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)));
         }

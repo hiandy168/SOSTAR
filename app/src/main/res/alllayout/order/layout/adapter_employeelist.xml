@@ -40,11 +40,18 @@
                     fresco:failureImage="@mipmap/ic_avatar_small"
                     fresco:failureImageScaleType="focusCrop"
                     fresco:roundAsCircle="true" />
+                <TextView
+                    android:id="@+id/iv_adapter_employeelist_oper"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/iv_adapter_employeelist_avatar"
+                    android:layout_toLeftOf="@id/iv_adapter_employeelist_oper"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
                     android:orientation="vertical">

@@ -20,8 +20,6 @@
             android:id="@+id/tab_orderlist"
             app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextColor="#999999"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
             style="@style/NotStartedOrderListStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

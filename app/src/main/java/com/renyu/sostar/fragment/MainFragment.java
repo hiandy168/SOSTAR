@@ -46,6 +46,7 @@ import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
+import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -252,6 +253,19 @@ public class MainFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MyCenterEmployerResponse response) {
         loadAvatarBitmap(response.getLogoPath());
+    }
+
+    // 发单成功以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ReleaseOrderRequest request) {
+        if (TextUtils.isEmpty(tv_main_notstartorder_num.getText().toString())) {
+            tv_main_notstartorder_num.setText("1");
+        }
+        else {
+            tv_main_notstartorder_num.setText(""+(Integer.parseInt(tv_main_notstartorder_num.getText().toString())+1));
+        }
+        tv_main_notstartorder_num.setVisibility(View.VISIBLE);
+        tv_main_open_space.setVisibility(View.VISIBLE);
     }
 
     private void loadAvatarBitmap(String avatarUrl) {

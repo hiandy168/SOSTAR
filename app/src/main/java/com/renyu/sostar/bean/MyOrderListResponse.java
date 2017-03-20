@@ -7,8 +7,9 @@ import java.util.List;
  */
 
 public class MyOrderListResponse {
+
     /**
-     * data : [{"address":"string","companyName":"string","confirmFlg":"string","createUserId":"string","crtTime":"2017-03-10T01:55:28.759Z","description":"string","distance":"string","endTime":"string","jobType":"string","latitude":"string","logoPath":"string","longitude":"string","okStaffAccount":0,"orderId":"string","orderRange":0,"orderStatus":"string","paymentType":"string","periodTime":"string","picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0}]
+     * data : [{"address":"string","aggregateAddress":"string","aggregateTime":"string","companyName":"string","confirmFlg":"string","createUserId":"string","crtTime":"2017-03-20T00:51:07.048Z","description":"string","endTime":"string","jobType":"string","latitude":"string","logoPath":"string","longitude":"string","okStaffAccount":0,"orderId":"string","orderRange":0,"orderStatus":"string","paymentType":"string","periodTime":"string","picListArray":["string"],"sex":"string","staffAccount":0,"startTime":"string","unitPrice":0,"unitPriceType":"string"}]
      * total : 0
      */
 
@@ -34,12 +35,13 @@ public class MyOrderListResponse {
     public static class DataBean {
         /**
          * address : string
+         * aggregateAddress : string
+         * aggregateTime : string
          * companyName : string
          * confirmFlg : string
          * createUserId : string
-         * crtTime : 2017-03-10T01:55:28.759Z
+         * crtTime : 2017-03-20T00:51:07.048Z
          * description : string
-         * distance : string
          * endTime : string
          * jobType : string
          * latitude : string
@@ -56,15 +58,17 @@ public class MyOrderListResponse {
          * staffAccount : 0
          * startTime : string
          * unitPrice : 0
+         * unitPriceType : string
          */
 
         private String address;
+        private String aggregateAddress;
+        private String aggregateTime;
         private String companyName;
         private String confirmFlg;
         private String createUserId;
         private String crtTime;
         private String description;
-        private String distance;
         private String endTime;
         private String jobType;
         private String latitude;
@@ -79,7 +83,8 @@ public class MyOrderListResponse {
         private String sex;
         private int staffAccount;
         private String startTime;
-        private double unitPrice;
+        private int unitPrice;
+        private String unitPriceType;
         private List<String> picListArray;
 
         public String getAddress() {
@@ -88,6 +93,22 @@ public class MyOrderListResponse {
 
         public void setAddress(String address) {
             this.address = address;
+        }
+
+        public String getAggregateAddress() {
+            return aggregateAddress;
+        }
+
+        public void setAggregateAddress(String aggregateAddress) {
+            this.aggregateAddress = aggregateAddress;
+        }
+
+        public String getAggregateTime() {
+            return aggregateTime;
+        }
+
+        public void setAggregateTime(String aggregateTime) {
+            this.aggregateTime = aggregateTime;
         }
 
         public String getCompanyName() {
@@ -128,14 +149,6 @@ public class MyOrderListResponse {
 
         public void setDescription(String description) {
             this.description = description;
-        }
-
-        public String getDistance() {
-            return distance;
-        }
-
-        public void setDistance(String distance) {
-            this.distance = distance;
         }
 
         public String getEndTime() {
@@ -250,12 +263,20 @@ public class MyOrderListResponse {
             this.startTime = startTime;
         }
 
-        public double getUnitPrice() {
+        public int getUnitPrice() {
             return unitPrice;
         }
 
-        public void setUnitPrice(double unitPrice) {
+        public void setUnitPrice(int unitPrice) {
             this.unitPrice = unitPrice;
+        }
+
+        public String getUnitPriceType() {
+            return unitPriceType;
+        }
+
+        public void setUnitPriceType(String unitPriceType) {
+            this.unitPriceType = unitPriceType;
         }
 
         public List<String> getPicListArray() {

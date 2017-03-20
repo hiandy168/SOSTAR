@@ -93,6 +93,7 @@ public class UpdateAddressInfoActivity extends BaseActivity {
                 else if (currentChoice==1) {
                     Intent intent=new Intent();
                     intent.putExtra("value", tv_updateaddressinfo_currentaddress.getText().toString());
+                    intent.putExtra("param", getIntent().getStringExtra("param"));
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -103,6 +104,7 @@ public class UpdateAddressInfoActivity extends BaseActivity {
                     }
                     Intent intent=new Intent();
                     intent.putExtra("value", ed_updateaddressinfo_addaddress.getText().toString());
+                    intent.putExtra("param", getIntent().getStringExtra("param"));
                     setResult(RESULT_OK, intent);
                     finish();
                 }
