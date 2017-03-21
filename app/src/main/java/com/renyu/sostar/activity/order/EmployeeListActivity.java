@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ImageButton;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -34,10 +36,10 @@ import io.reactivex.disposables.Disposable;
 
 public class EmployeeListActivity extends BaseActivity {
 
+    @BindView(R.id.nav_layout)
+    RelativeLayout nav_layout;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
-    @BindView(R.id.ib_nav_left)
-    ImageButton ib_nav_left;
     @BindView(R.id.rv_employee)
     RecyclerView rv_employee;
     EmployeeListAdapter adapter;
@@ -46,7 +48,8 @@ public class EmployeeListActivity extends BaseActivity {
 
     @Override
     public void initParams() {
-        tv_nav_title.setTextColor(Color.WHITE);
+        nav_layout.setBackgroundColor(Color.WHITE);
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("雇员列表");
 
         beans=new ArrayList<>();
@@ -87,6 +90,15 @@ public class EmployeeListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setDark(this);
         super.onCreate(savedInstanceState);
+    }
+
+    @OnClick({R.id.ib_nav_left})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
+        }
     }
 
     private void getEmployerStaffList() {
@@ -149,11 +161,6 @@ public class EmployeeListActivity extends BaseActivity {
                     // 确认
                     if (status==1) {
                         beanTemp.setStaffStatus("1");
-                        beans.add(0, beanTemp);
-                    }
-                    // 拒绝
-                    else if (status==2) {
-                        beanTemp.setStaffStatus("0");
                         beans.add(0, beanTemp);
                     }
                     adapter.notifyDataSetChanged();

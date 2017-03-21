@@ -2,15 +2,20 @@ package com.renyu.sostar.activity.order;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +30,17 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.qrcodelibrary.ZBarQRScanActivity;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.ReleaseOrderRequest;
+import com.renyu.sostar.bean.StaffSignRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,6 +122,8 @@ public class OrderDetailActivity extends BaseActivity {
     // 是否是未接单状态
     boolean isNotReceive=false;
 
+    PopupWindow popupWindow;
+
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.TRANSPARENT);
@@ -173,13 +186,22 @@ public class OrderDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.layout_orderdetail_info3, R.id.btn_orderdetail_commit})
+    private void initPop(View popView) {
+        popupWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+    }
+
+    @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_orderdetail_info3, R.id.btn_orderdetail_commit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
                 finish();
                 break;
-            case R.id.tv_nav_right:
+            case R.id.ib_nav_right:
+                popupWindow.showAsDropDown(ib_nav_right, 0, -SizeUtils.dp2px(15));
                 break;
             case R.id.layout_orderdetail_info3:
                 Intent intent_employees=new Intent(OrderDetailActivity.this, EmployeeListActivity.class);
@@ -191,9 +213,21 @@ public class OrderDetailActivity extends BaseActivity {
                     if (orderResponse.getOrderStatus().equals("-1")) {
                         receiveOrder();
                     }
+                    else if (orderResponse.getOrderStatus().equals("1")) {
+                        Intent intent=new Intent(OrderDetailActivity.this, ZBarQRScanActivity.class);
+                        startActivityForResult(intent, CommonParams.RESULT_QRCODE);
+                    }
                 }
                 else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    if (orderResponse.getOrderStatus().equals("2")) {
+                    if (orderResponse.getOrderStatus().equals("0")) {
+                        Intent intent=new Intent(OrderDetailActivity.this, ReleaseOrderActivity.class);
+                        intent.putExtra("value", orderResponse);
+                        startActivity(intent);
+                    }
+                    else if (orderResponse.getOrderStatus().equals("1")) {
+                        cancelEmployeeOrder();
+                    }
+                    else if (orderResponse.getOrderStatus().equals("2")) {
                         startOrder();
                     }
                 }
@@ -237,6 +271,10 @@ public class OrderDetailActivity extends BaseActivity {
                 }
                 orderResponse=value;
 
+                // popupWindow的处理
+                View popView = LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.view_pop, null, false);
+                LinearLayout layout_pop= (LinearLayout) popView.findViewById(R.id.layout_pop);
+
                 tv_orderdetail_type.setText(value.getJobType());
                 tv_orderdetail_person.setText(""+value.getStaffAccount());
                 int dayNum=value.getPeriodTime().split(",").length;
@@ -269,7 +307,7 @@ public class OrderDetailActivity extends BaseActivity {
                         .setUri(Uri.parse(value.getLogoPath())).setAutoPlayAnimations(true).build();
                 iv_orderdetail_logo.setController(logoDraweeController);
                 tv_orderdetail_comp.setText(value.getCompanyName());
-                tv_orderdetail_orderid.setText(value.getOrderId());
+                tv_orderdetail_orderid.setText("订单号:"+value.getOrderId());
                 tv_orderdetail_address.setText(value.getAddress());
                 if (value.getSex().equals("0")) {
                     tv_orderdetail_sex.setText("男女不限");
@@ -299,30 +337,29 @@ public class OrderDetailActivity extends BaseActivity {
                     }
                     // 0.未确认
                     else if (value.getOrderStatus().equals("0")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("待确认");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("待确认");
                     }
                     // 1.已确认
                     else if (value.getOrderStatus().equals("1")) {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("立即签到");
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("取消订单");
+                        layout_pop.addView(getPopupTextView("取消订单", v -> cancelEmployeeOrder()));
                     }
                     // 2.已被拒绝
                     else if (value.getOrderStatus().equals("2")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("已拒绝");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("已拒绝");
                     }
                     // 3.主动取消
                     else if (value.getOrderStatus().equals("3")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("已取消");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("已取消");
                     }
                     // 4.已完成(待支付)
                     else if (value.getOrderStatus().equals("4")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("待支付");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("待支付");
                     }
                     // 5.已完成(已支付)
                     else if (value.getOrderStatus().equals("5")) {
@@ -343,46 +380,45 @@ public class OrderDetailActivity extends BaseActivity {
                     else if (value.getOrderStatus().equals("8")) {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("查看进度");
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("申请离职");
+                        layout_pop.addView(getPopupTextView("申请离职", v -> applyForLeave()));
                     }
                     // 9.雇主取消定单
                     else if (value.getOrderStatus().equals("9")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已取消");
-                        tv_orderdetail_tip.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已取消");
                     }
                     // 10.雇主解雇员工
                     else if (value.getOrderStatus().equals("10")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已结束");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已结束");
                     }
                     // 11.申请离职中
                     else if (value.getOrderStatus().equals("11")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("申请离职中");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("申请离职中");
                     }
                     // 12.离职
                     else if (value.getOrderStatus().equals("12")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已结束");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已结束");
                     }
                     // 13.超过时间签到自动终止
                     else if (value.getOrderStatus().equals("13")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         String startTime=value.getStartTime().split(":")[0]+value.getStartTime().split(":")[1];
                         SimpleDateFormat dateFormat=new SimpleDateFormat("HHmm");
-                        if (Integer.parseInt(dateFormat.format(new Date()))-Integer.parseInt(startTime)>30) {
+                        if (Integer.parseInt(dateFormat.format(new Date()))-Integer.parseInt(startTime)<30) {
+                            btn_orderdetail_commit.setVisibility(View.VISIBLE);
                             btn_orderdetail_commit.setText("订单已过期/补签到");
                         }
                         else {
-                            btn_orderdetail_commit.setText("订单已过期");
+                            btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                            btn_orderdetail_cancel.setText("订单已过期");
                         }
                     }
                     // 14.雇主超时未开工订单自动取消
                     else if (value.getOrderStatus().equals("14")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已结束");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已结束");
                     }
                 }
                 else if (ACache.get(OrderDetailActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
@@ -406,27 +442,25 @@ public class OrderDetailActivity extends BaseActivity {
                     // 订单状态
                     // 已发单
                     if (value.getOrderStatus().equals("1")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("取消订单");
+                        layout_pop.addView(getPopupTextView("取消订单", v -> cancleMyOrder()));
                     }
                     // 已成单
                     else if (value.getOrderStatus().equals("2")) {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("签到开工");
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("取消订单");
+                        layout_pop.addView(getPopupTextView("取消订单", v -> cancleMyOrder()));
                     }
                     // 已开始
                     else if (value.getOrderStatus().equals("3")) {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("查看进度");
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("取消订单");
+                        layout_pop.addView(getPopupTextView("订单二维码", v -> showQRCode()));
+                        layout_pop.addView(getPopupTextView("取消订单", v -> cancleMyOrder()));
                     }
                     // 已过期
                     else if (value.getOrderStatus().equals("4")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已过期");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已过期");
                     }
                     // 已完成
                     else if (value.getOrderStatus().equals("5")) {
@@ -435,8 +469,8 @@ public class OrderDetailActivity extends BaseActivity {
                     }
                     // 已取消
                     else if (value.getOrderStatus().equals("9")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("订单已取消");
+                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
+                        btn_orderdetail_cancel.setText("订单已取消");
                     }
                     // 草稿
                     else if (value.getOrderStatus().equals("0")) {
@@ -455,6 +489,8 @@ public class OrderDetailActivity extends BaseActivity {
                 adapter=new OrderDetailAdapter();
                 vp_orderdetail.setAdapter(adapter);
                 indicator_orderdetail.setViewPager(vp_orderdetail);
+
+                initPop(popView);
             }
 
             @Override
@@ -469,6 +505,20 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    @NonNull
+    private TextView getPopupTextView(String title, View.OnClickListener listener) {
+        TextView textView=new TextView(OrderDetailActivity.this);
+        textView.setBackgroundColor(Color.WHITE);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        textView.setTextColor(Color.parseColor("#999999"));
+        textView.setGravity(Gravity.CENTER);
+        textView.setPadding(SizeUtils.dp2px(8), SizeUtils.dp2px(8), SizeUtils.dp2px(8), SizeUtils.dp2px(8));
+        textView.setText(title);
+        textView.setOnClickListener(listener);
+        return textView;
+    }
+
+    // 雇主取消订单
     private void cancleMyOrder() {
         OrderRequest request=new OrderRequest();
         OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -476,20 +526,22 @@ public class OrderDetailActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .cancleMyOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(Object value) {
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
+                getOrderDetail();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -499,6 +551,7 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    // 雇员取消订单
     private void cancelEmployeeOrder() {
         OrderRequest request=new OrderRequest();
         OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -507,20 +560,22 @@ public class OrderDetailActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .cancelEmployeeOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(Object value) {
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
+                getOrderDetail();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -530,6 +585,7 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
+    // 接单
     private void receiveOrder() {
         OrderRequest request=new OrderRequest();
         OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -564,7 +620,7 @@ public class OrderDetailActivity extends BaseActivity {
         });
     }
 
-    // 订单开始
+    // 雇主签到开始
     private void startOrder() {
         OrderRequest request=new OrderRequest();
         OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -572,7 +628,41 @@ public class OrderDetailActivity extends BaseActivity {
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
-                .startOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .startMyOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+                getOrderDetail();
+                showQRCode();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    // 雇员签到开始
+    private void staffSign(String value) {
+        StaffSignRequest request=new StaffSignRequest();
+        StaffSignRequest.ParamBean paramBean=new StaffSignRequest.ParamBean();
+        paramBean.setTag(value);
+        paramBean.setSignTime(""+new Date().getTime());
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .startMyOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
                 .compose(Retrofit2Utils.background()).subscribe(new Observer() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -586,7 +676,7 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -603,6 +693,27 @@ public class OrderDetailActivity extends BaseActivity {
             if (requestCode==CommonParams.RESULT_EMPLOYEELIST) {
                 getOrderDetail();
             }
+            if (requestCode==CommonParams.RESULT_QRCODE) {
+                staffSign(data.getStringExtra("result"));
+            }
         }
+    }
+
+    // 发单成功以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ReleaseOrderRequest request) {
+        getOrderDetail();
+    }
+
+    // 显示二维码
+    private void showQRCode() {
+        Intent intent=new Intent(OrderDetailActivity.this, OrderQRCodeActivity.class);
+        intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+        startActivity(intent);
+    }
+
+    // 申请离职
+    private void applyForLeave() {
+
     }
 }

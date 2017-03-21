@@ -1,6 +1,7 @@
 package com.renyu.qrcodelibrary;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -30,6 +31,11 @@ public class ZBarQRScanActivity extends BaseActivity {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 vibrator.vibrate(200);
                 zbar_scan_view.startSpot();
+
+                Intent intent=new Intent();
+                intent.putExtra("result", result);
+                setResult(RESULT_OK, intent);
+                finish();
             }
 
             @Override

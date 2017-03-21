@@ -32,7 +32,7 @@ import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
-import com.renyu.sostar.bean.OrderRequest;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -98,6 +98,8 @@ public class ReleaseOrderActivity extends BaseActivity {
     @BindView(R.id.tv_releaseorder_aggregatetime)
     TextView tv_releaseorder_aggregatetime;
 
+    // 旧数据
+    OrderResponse orderResponse;
     ArrayList<String> picPath;
     ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> timeBeans;
 
@@ -113,6 +115,108 @@ public class ReleaseOrderActivity extends BaseActivity {
 
         picPath=new ArrayList<>();
         timeBeans=new ArrayList<>();
+        if (getIntent().getSerializableExtra("value")!=null) {
+            orderResponse= (OrderResponse) getIntent().getSerializableExtra("value");
+
+            // 设置用工类型
+            tv_releaseorder_type.setText(orderResponse.getJobType());
+            tv_releaseorder_type.setVisibility(View.VISIBLE);
+
+            // 设置用工时间
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
+            String[] periodTimes=orderResponse.getPeriodTime().split(",");
+            long lastStart=0;
+            ReleaseOrderRequest.ParamBean.PeriodTimeListBean lastBean=null;
+            for (int i = 0; i < periodTimes.length; i++) {
+                // 开始设置
+                if (lastStart==0) {
+                    lastBean=new ReleaseOrderRequest.ParamBean.PeriodTimeListBean();
+                    lastBean.setStartTime(periodTimes[i]);
+                }
+                else {
+                    try {
+                        // 判断是不是连贯的，不是连贯的就将之前的添加进去
+                        if ((int) (format.parse(periodTimes[i]).getTime()/1000)-(int) (lastStart/1000)!=3600*24) {
+                            lastBean.setEndTime(periodTimes[i-1]);
+                            timeBeans.add(lastBean);
+                            lastBean=new ReleaseOrderRequest.ParamBean.PeriodTimeListBean();
+                            lastBean.setStartTime(periodTimes[i]);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    lastStart=format.parse(periodTimes[i]).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // 设置最后一个
+                if (i==periodTimes.length-1) {
+                    lastBean.setEndTime(periodTimes[i]);
+                    timeBeans.add(lastBean);
+                }
+            }
+            if (timeBeans.size()==0) {
+                tv_releaseorder_time.setText("");
+            }
+            else if (timeBeans.size()==1) {
+                tv_releaseorder_time.setText(timeBeans.get(0).getStartTime()+"-"+timeBeans.get(0).getEndTime());
+            }
+            else {
+                tv_releaseorder_time.setText(timeBeans.get(0).getStartTime()+"-"+timeBeans.get(0).getEndTime()+"...");
+            }
+
+            // 设置工作时间
+            tv_releaseorder_worktime.setText(orderResponse.getStartTime()+"-"+orderResponse.getEndTime());
+
+            // 设置需求人数
+            tv_releaseorder_person.setText(""+orderResponse.getStaffAccount());
+
+            // 设置性别要求
+            if (orderResponse.getSex().equals("0")) {
+                tv_releaseorder_sex.setText("男女不限");
+            }
+            else if (orderResponse.getSex().equals("1")) {
+                tv_releaseorder_sex.setText("男");
+            }
+            else if (orderResponse.getSex().equals("2")) {
+                tv_releaseorder_sex.setText("女");
+            }
+
+            // 设置工作地点
+            tv_releaseorder_address.setText(orderResponse.getAddress());
+
+            // 设置集合地点
+            tv_releaseorder_aggregateaddress.setText(orderResponse.getAggregateAddress());
+
+            // 设置集合时间
+            tv_releaseorder_aggregatetime.setText(orderResponse.getAggregateTime());
+
+            // 设置详细描述
+            tv_releaseorder_desp.setText(orderResponse.getDescription());
+            // 设置详细描述图片
+            if (orderResponse.getPicListArray()!=null) {
+                picPath.addAll(orderResponse.getPicListArray());
+            }
+
+            // 设置工作报酬
+            if (orderResponse.getUnitPriceType().equals("2")) {
+                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"/小时");
+            }
+            else if (orderResponse.getUnitPriceType().equals("1")) {
+                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"/天");
+            }
+
+            // 设置结算方式
+            tv_releaseorder_paytype.setText(orderResponse.getPaymentType().equals("1")?"日结":"订单结");
+
+            // 设置订单确认
+            sb_releaseorder.setChecked(orderResponse.getConfirmFlg().equals("1")?true:false);
+
+            // 设置支付金额
+            changeUsedMoney();
+        }
     }
 
     @Override
@@ -372,9 +476,9 @@ public class ReleaseOrderActivity extends BaseActivity {
             actionSheetFragment.dismiss();
         });
         TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel);
-        pop_double_cancel.setText("定单结");
+        pop_double_cancel.setText("订单结");
         pop_double_cancel.setOnClickListener(v -> {
-            tv_releaseorder_paytype.setText("定单结");
+            tv_releaseorder_paytype.setText("订单结");
             actionSheetFragment.dismiss();
         });
     }
@@ -592,7 +696,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             paramBean.setSex("0");
         }
         paramBean.setStaffAccount(Integer.parseInt(tv_releaseorder_person.getText().toString()));
-        paramBean.setUnitPrice(Integer.parseInt(tv_releaseorder_price.getText().toString().split("/")[0]));
+        paramBean.setUnitPrice(tv_releaseorder_price.getText().toString().split("/")[0]);
         if (tv_releaseorder_price.getText().toString().split("/")[1].equals("小时")) {
             paramBean.setUnitPriceType("2");
         }
@@ -604,6 +708,9 @@ public class ReleaseOrderActivity extends BaseActivity {
         paramBean.setOrderStatus(""+orderStatus);
         paramBean.setAggregateAddress(tv_releaseorder_aggregateaddress.getText().toString());
         paramBean.setAggregateTime(tv_releaseorder_aggregatetime.getText().toString());
+        if (getIntent().getSerializableExtra("value")!=null) {
+            paramBean.setOrderId(orderResponse.getOrderId());
+        }
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .releaseOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
@@ -618,6 +725,7 @@ public class ReleaseOrderActivity extends BaseActivity {
                 networkDialg.dismiss();
 
                 // 发单成功刷新首页数据
+                // 发单成功刷新详情数据
                 EventBus.getDefault().post(new ReleaseOrderRequest());
 
                 Toast.makeText(ReleaseOrderActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
@@ -628,36 +736,6 @@ public class ReleaseOrderActivity extends BaseActivity {
             public void onError(Throwable e) {
                 networkDialg.dismiss();
                 Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-
-    private void setDraftToOrder() {
-        OrderRequest request=new OrderRequest();
-        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
-        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
-        request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .setDraftToOrder(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Object value) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
             }
 
             @Override

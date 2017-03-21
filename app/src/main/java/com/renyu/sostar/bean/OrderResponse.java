@@ -1,12 +1,13 @@
 package com.renyu.sostar.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by renyu on 2017/3/14.
  */
 
-public class OrderResponse {
+public class OrderResponse implements Serializable {
     /**
      * address : string
      * companyName : string
@@ -35,6 +36,8 @@ public class OrderResponse {
      */
 
     private String address;
+    private String aggregateAddress;
+    private String aggregateTime;
     private String companyName;
     private String confirmFlg;
     private String createUserId;
@@ -258,5 +261,21 @@ public class OrderResponse {
 
     public void setPicStaffArray(List<String> picStaffArray) {
         this.picStaffArray = picStaffArray;
+    }
+
+    public String getAggregateAddress() {
+        return aggregateAddress;
+    }
+
+    public void setAggregateAddress(String aggregateAddress) {
+        this.aggregateAddress = aggregateAddress;
+    }
+
+    public String getAggregateTime() {
+        return aggregateTime;
+    }
+
+    public void setAggregateTime(String aggregateTime) {
+        this.aggregateTime = aggregateTime;
     }
 }

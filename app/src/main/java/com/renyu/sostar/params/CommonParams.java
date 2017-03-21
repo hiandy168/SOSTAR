@@ -60,4 +60,5 @@ public class CommonParams {
     public static final int RESULT_UPDATETIMEINFO=1008;
     public static final int RESULT_UPDATEPAYTYPEINFO=1009;
     public static final int RESULT_EMPLOYEELIST=1010;
+    public static final int RESULT_QRCODE=1011;
 }

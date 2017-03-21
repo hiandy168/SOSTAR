@@ -63,13 +63,13 @@ public class MyOrderListActivity extends BaseActivity {
         else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
             titles.add("已接单");
             titles.add("已成单");
-            titles.add("已完成");
+            titles.add("未成单");
             titles.add("已取消");
-            titles.add("已拒绝");
+            titles.add("已完成");
             fragments.add(OrderListFragment.newInstance(1, OrderListFragment.OrderListType.myEmployeeList));
             fragments.add(OrderListFragment.newInstance(2, OrderListFragment.OrderListType.myEmployeeList));
             fragments.add(OrderListFragment.newInstance(3, OrderListFragment.OrderListType.myEmployeeList));
-            fragments.add(OrderListFragment.newInstance(4, OrderListFragment.OrderListType.myEmployeeList));
+            fragments.add(OrderListFragment.newInstance(5, OrderListFragment.OrderListType.myEmployeeList));
             fragments.add(OrderListFragment.newInstance(4, OrderListFragment.OrderListType.myEmployeeList));
         }
 

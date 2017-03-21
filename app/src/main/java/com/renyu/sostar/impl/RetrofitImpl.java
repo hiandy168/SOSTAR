@@ -13,6 +13,7 @@ import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.SigninResponse;
+import com.renyu.sostar.bean.StartMyOrderSignResponse;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -134,10 +135,6 @@ public interface RetrofitImpl {
     Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    @POST("sostar/api/employer/setDraftToOrder")
-    Observable<Response<EmptyResponse>> setDraftToOrder(@Body RequestBody requestBody);
-
-    @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/cancleMyOrder")
     Observable<Response<EmptyResponse>> cancleMyOrder(@Body RequestBody requestBody);
 
@@ -159,10 +156,18 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/startMyOrder")
-    Observable<Response<EmptyResponse>> startOrder(@Body RequestBody requestBody);
+    Observable<Response<EmptyResponse>> startMyOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/confirmStaff")
     Observable<Response<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/startMyOrderSign")
+    Observable<Response<StartMyOrderSignResponse>> startMyOrderSign(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/sign")
+    Observable<Response<EmptyResponse>> staffSign(@Body RequestBody requestBody);
 
 }

@@ -92,6 +92,7 @@ public class ReleaseOrderRequest implements Serializable {
          * userId : string
          */
 
+        private String orderId;
         private String address;
         private String aggregateAddress;
         private String aggregateTime;
@@ -107,11 +108,19 @@ public class ReleaseOrderRequest implements Serializable {
         private String sex;
         private int staffAccount;
         private String startTime;
-        private int unitPrice;
+        private String unitPrice;
         private String unitPriceType;
         private String userId;
         private List<PeriodTimeListBean> periodTimeList;
         private List<String> picListArray;
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(String orderId) {
+            this.orderId = orderId;
+        }
 
         public String getAddress() {
             return address;
@@ -233,11 +242,11 @@ public class ReleaseOrderRequest implements Serializable {
             this.startTime = startTime;
         }
 
-        public int getUnitPrice() {
+        public String getUnitPrice() {
             return unitPrice;
         }
 
-        public void setUnitPrice(int unitPrice) {
+        public void setUnitPrice(String unitPrice) {
             this.unitPrice = unitPrice;
         }
 
