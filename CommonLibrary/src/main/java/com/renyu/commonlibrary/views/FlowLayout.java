@@ -35,6 +35,31 @@ public class FlowLayout extends ViewGroup {
             View view=getChildAt(i);
             measureChild(view, widthMeasureSpec, heightMeasureSpec);
         }
+
+        // 完整宽度
+        int allWidth= MeasureSpec.getSize(widthMeasureSpec);
+        // 完整高度
+        int allHeight=0;
+
+        // 上一次测量完的宽度
+        int lastWidth=0;
+        // 上一次测量完的高度
+        int lastHeight=0;
+
+        for (int i=0;i<getChildCount();i++) {
+            View view=getChildAt(i);
+            int childWidth=view.getMeasuredWidth();
+            int childHeight=view.getMeasuredHeight();
+            MarginLayoutParams params= (MarginLayoutParams) view.getLayoutParams();
+            if (lastWidth+params.leftMargin+params.rightMargin+childWidth>allWidth) {
+                lastHeight+=params.topMargin+childHeight+params.bottomMargin;
+                allHeight=lastHeight+params.topMargin+childHeight+params.bottomMargin;
+                lastWidth=0;
+            }
+            lastWidth+=params.leftMargin+childWidth+params.rightMargin;
+        }
+
+        setMeasuredDimension(allWidth, allHeight);
     }
 
     @Override
