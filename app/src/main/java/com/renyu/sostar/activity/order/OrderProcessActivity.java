@@ -2,9 +2,11 @@ package com.renyu.sostar.activity.order;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,8 +36,10 @@ public class OrderProcessActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.ib_nav_left)
     ImageButton ib_nav_left;
-    @BindView(R.id.ib_nav_right)
-    ImageButton ib_nav_right;
+    @BindView(R.id.tv_nav_right)
+    TextView tv_nav_right;
+    @BindView(R.id.iv_orderprocess)
+    ImageView iv_orderprocess;
     @BindView(R.id.tv_orderprocess)
     TextView tv_orderprocess;
     @BindView(R.id.btn_orderprocess_commit)
@@ -49,20 +53,24 @@ public class OrderProcessActivity extends BaseActivity {
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         if (process==1) {
+            iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
             tv_orderprocess.setText("签到成功！\n请准时到岗开始工作");
             tv_nav_title.setText("扫码签到");
             btn_orderprocess_commit.setText("确认");
         }
         if (process==3) {
+            iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
             btn_orderprocess_commit.setText("确认");
-            ib_nav_right.setTag("加班");
+            tv_nav_right.setText("加班");
 
             tv_orderprocess.setText("订单正在进行中。\n已进行"+getWorkTime());
         }
         else if (process==8) {
+            iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
             btn_orderprocess_commit.setText("确认");
 
@@ -182,7 +190,7 @@ public class OrderProcessActivity extends BaseActivity {
         return 0;
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.btn_orderprocess_commit, R.id.ib_nav_right})
+    @OnClick({R.id.ib_nav_left, R.id.btn_orderprocess_commit, R.id.tv_nav_right})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -200,7 +208,7 @@ public class OrderProcessActivity extends BaseActivity {
                     }
                 }
                 break;
-            case R.id.ib_nav_right:
+            case R.id.tv_nav_right:
                 if (ACache.get(OrderProcessActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
                     Intent intent=new Intent(OrderProcessActivity.this, OverTimeActivity.class);
                     intent.putExtra("params", getIntent().getSerializableExtra("params"));
