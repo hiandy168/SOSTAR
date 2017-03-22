@@ -170,4 +170,8 @@ public interface RetrofitImpl {
     @POST("sostar/api/staff/sign")
     Observable<Response<EmptyResponse>> staffSign(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/applyOff")
+    Observable<Response<EmptyResponse>> applyOff(@Body RequestBody requestBody);
+
 }
