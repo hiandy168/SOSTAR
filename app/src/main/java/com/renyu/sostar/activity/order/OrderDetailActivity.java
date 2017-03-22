@@ -390,18 +390,6 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("查看进度");
                     }
-                    // 6.未评价
-                    else if (value.getOrderStatus().equals("6")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                    }
-                    // 7.已评价
-                    else if (value.getOrderStatus().equals("7")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                    }
                     // 8.已开始
                     else if (value.getOrderStatus().equals("8")) {
                         btn_orderdetail_cancel.setVisibility(View.GONE);

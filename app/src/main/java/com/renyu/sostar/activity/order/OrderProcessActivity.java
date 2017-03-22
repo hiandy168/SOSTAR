@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.order;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +49,6 @@ public class OrderProcessActivity extends BaseActivity {
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
-        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
 
         if (process==1) {
             tv_orderprocess.setText("签到成功！\n请准时到岗开始工作");
@@ -202,7 +202,9 @@ public class OrderProcessActivity extends BaseActivity {
                 break;
             case R.id.ib_nav_right:
                 if (ACache.get(OrderProcessActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-
+                    Intent intent=new Intent(OrderProcessActivity.this, OverTimeActivity.class);
+                    intent.putExtra("params", getIntent().getSerializableExtra("params"));
+                    startActivity(intent);
                 }
                 break;
         }
