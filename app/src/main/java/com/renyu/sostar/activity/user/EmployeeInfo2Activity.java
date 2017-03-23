@@ -1,11 +1,14 @@
 package com.renyu.sostar.activity.user;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,13 @@ import io.reactivex.disposables.Disposable;
 
 public class EmployeeInfo2Activity extends BaseActivity {
 
+    @BindView(R.id.nav_layout)
+    RelativeLayout nav_layout;
+    @BindView(R.id.tv_nav_title)
+    TextView tv_nav_title;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
+
     @BindView(R.id.iv_employeeinfo2_avatar)
     SimpleDraweeView iv_employeeinfo2_avatar;
     @BindView(R.id.tv_employeeinfo2_auth)
@@ -58,7 +68,10 @@ public class EmployeeInfo2Activity extends BaseActivity {
 
     @Override
     public void initParams() {
-
+        nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        tv_nav_title.setTextColor(Color.WHITE);
+        tv_nav_title.setText("个人详情");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
     }
 
     @Override
@@ -103,7 +116,7 @@ public class EmployeeInfo2Activity extends BaseActivity {
                 if (!TextUtils.isEmpty(value.getNickName())) {
                     tv_employeeinfo2_nickname.setText(value.getNickName());
                 }
-                tv_employeeinfo2_userId.setText(getIntent().getStringExtra("userId"));
+                tv_employeeinfo2_userId.setText("普工:"+getIntent().getStringExtra("userId"));
                 if (!TextUtils.isEmpty(value.getPicPath())) {
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                             .setUri(Uri.parse(value.getPicPath())).setAutoPlayAnimations(true).build();
@@ -138,9 +151,12 @@ public class EmployeeInfo2Activity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.tv_employeeinfo2_call})
+    @OnClick({R.id.tv_employeeinfo2_call, R.id.ib_nav_left})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
             case R.id.tv_employeeinfo2_call:
                 if (response!=null && !TextUtils.isEmpty(response.getPhone())) {
                     Intent intent = new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+response.getPhone()));

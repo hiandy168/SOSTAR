@@ -1,6 +1,7 @@
 package com.renyu.sostar.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.EmployeeListActivity;
+import com.renyu.sostar.activity.user.EmployeeInfo2Activity;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -94,6 +96,11 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
             holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
         }
+        holder.layout_adapter_employeelist.setOnClickListener(v -> {
+            Intent intent=new Intent(context, EmployeeInfo2Activity.class);
+            intent.putExtra("userId", beans.get(position).getUserId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -133,12 +140,9 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_head.setText("已离职");
             holder.tv_adapter_employeelist_choice.setVisibility(View.GONE);
         }
-        holder.tv_adapter_employeelist_choice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.tv_adapter_employeelist_choice.setOnClickListener(v -> {
 
 
-            }
         });
     }
 

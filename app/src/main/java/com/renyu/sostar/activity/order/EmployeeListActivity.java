@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,8 @@ public class EmployeeListActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
+    @BindView(R.id.ib_nav_right)
+    ImageButton ib_nav_right;
     @BindView(R.id.rv_employee)
     RecyclerView rv_employee;
     EmployeeListAdapter adapter;
@@ -51,6 +54,7 @@ public class EmployeeListActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("雇员列表");
+        ib_nav_right.setImageResource(R.mipmap.ic_order_notification);
 
         beans=new ArrayList<>();
         rv_employee.setHasFixedSize(true);
@@ -92,11 +96,13 @@ public class EmployeeListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @OnClick({R.id.ib_nav_left})
+    @OnClick({R.id.ib_nav_left, R.id.ib_nav_right})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
                 finish();
+                break;
+            case R.id.ib_nav_right:
                 break;
         }
     }
