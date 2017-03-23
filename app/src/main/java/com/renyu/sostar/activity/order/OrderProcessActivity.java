@@ -2,6 +2,8 @@ package com.renyu.sostar.activity.order;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +54,6 @@ public class OrderProcessActivity extends BaseActivity {
 
     int process;
     OrderResponse orderResponse;
-
 
     @Override
     public void initParams() {
@@ -235,6 +236,12 @@ public class OrderProcessActivity extends BaseActivity {
     @Override
     public int setStatusBarTranslucent() {
         return 0;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
     }
 
     @OnClick({R.id.ib_nav_left, R.id.btn_orderprocess_commit, R.id.tv_nav_right})
