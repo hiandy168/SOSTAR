@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <cn.bingoogolapple.qrcode.zbar.ZBarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/zbar_scan_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:qrcv_animTime="1000"
-        app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
         app:qrcv_barcodeRectHeight="140dp"
         app:qrcv_borderColor="@android:color/white"
         app:qrcv_borderSize="1dp"
@@ -17,16 +16,49 @@
         app:qrcv_customScanLineDrawable="@drawable/scan_icon_scanline"
         app:qrcv_isBarcode="false"
         app:qrcv_isCenterVertical="false"
+        app:qrcv_topOffset="157dip"
         app:qrcv_isOnlyDecodeScanBoxArea="false"
         app:qrcv_isShowDefaultGridScanLineDrawable="true"
         app:qrcv_isShowDefaultScanLineDrawable="true"
         app:qrcv_isShowTipBackground="true"
         app:qrcv_isShowTipTextAsSingleLine="false"
         app:qrcv_isTipTextBelowRect="false"
-        app:qrcv_maskColor="#33FFFFFF"
-        app:qrcv_qrCodeTipText="将二维码/条码放入框内，即可自动扫描"
-        app:qrcv_rectWidth="200dp"
+        app:qrcv_maskColor="#11FFFFFF"
+        app:qrcv_rectWidth="210dp"
         app:qrcv_scanLineColor="@android:color/white"
-        app:qrcv_toolbarHeight="56dp"
-        app:qrcv_topOffset="90dp"/>
-</LinearLayout>
+        app:qrcv_toolbarHeight="0dip" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65dip"
+        android:layout_marginRight="65dip"
+        android:layout_marginTop="145dip"
+        android:background="@mipmap/bg_qrcode">
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/view_nav"></include>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_zbar_scan_view_time"
+        android:layout_marginTop="390dip"
+        android:layout_centerHorizontal="true"
+        android:textSize="12sp"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_zbar_scan_view_tip"
+        android:text="提示：距离开工还有 0 分钟\n请尽快扫码签到开工"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dip"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

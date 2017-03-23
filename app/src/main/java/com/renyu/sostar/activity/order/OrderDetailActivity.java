@@ -215,6 +215,10 @@ public class OrderDetailActivity extends BaseActivity {
                     }
                     else if (orderResponse.getOrderStatus().equals("1") || orderResponse.getOrderStatus().equals("13")) {
                         Intent intent=new Intent(OrderDetailActivity.this, ZBarQRScanActivity.class);
+                        intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+                        intent.putExtra("startTime", orderResponse.getStartTime());
+                        intent.putExtra("endTime", orderResponse.getEndTime());
+                        intent.putExtra("periodTime", orderResponse.getPeriodTime());
                         startActivityForResult(intent, CommonParams.RESULT_QRCODE);
                     }
                     else if (orderResponse.getOrderStatus().equals("4") ||

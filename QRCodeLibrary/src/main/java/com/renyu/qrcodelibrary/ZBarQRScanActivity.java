@@ -1,13 +1,22 @@
 package com.renyu.qrcodelibrary;
 
-import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.BarUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
 
@@ -17,13 +26,25 @@ import cn.bingoogolapple.qrcode.zbar.ZBarView;
 
 public class ZBarQRScanActivity extends BaseActivity {
 
+    @BindView(R2.id.tv_nav_title)
+    TextView tv_nav_title;
+    @BindView(R2.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R2.id.zbar_scan_view)
     ZBarView zbar_scan_view;
-
-    String[] permissions={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+    @BindView(R2.id.tv_zbar_scan_view_time)
+    TextView tv_zbar_scan_view_time;
+    @BindView(R2.id.tv_zbar_scan_view_tip)
+    TextView tv_zbar_scan_view_tip;
 
     @Override
     public void initParams() {
+        tv_nav_title.setTextColor(Color.WHITE);
+        tv_nav_title.setText("扫码签到");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
+
+        BarUtils.adjustStatusBar(this, (ViewGroup) ((ViewGroup) zbar_scan_view.getParent()).getChildAt(2), -1);
+
         zbar_scan_view.setDelegate(new QRCodeView.Delegate() {
             @Override
             public void onScanQRCodeSuccess(String result) {
@@ -43,6 +64,10 @@ public class ZBarQRScanActivity extends BaseActivity {
 
             }
         });
+
+        tv_zbar_scan_view_time.setText("订单编号  "+getIntent().getStringExtra("orderId")
+                +"   "+"工作时间  "+getIntent().getStringExtra("startTime")+"-"+getIntent().getStringExtra("endTime"));
+        refreshTime();
     }
 
     @Override
@@ -71,25 +96,10 @@ public class ZBarQRScanActivity extends BaseActivity {
         zbar_scan_view.startCamera();
 //        zbar_scan_view.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
         zbar_scan_view.showScanRect();
-        checkPermission(permissions, getResources().getString(R.string.permission_camera), new OnPermissionCheckedListener() {
+        zbar_scan_view.post(new Runnable() {
             @Override
-            public void checked(boolean flag) {
-
-            }
-
-            @Override
-            public void grant() {
-                zbar_scan_view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        zbar_scan_view.startSpot();
-                    }
-                });
-            }
-
-            @Override
-            public void denied() {
-
+            public void run() {
+                zbar_scan_view.startSpot();
             }
         });
     }
@@ -104,5 +114,35 @@ public class ZBarQRScanActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         zbar_scan_view.onDestroy();
+    }
+
+    private void refreshTime() {
+        String[] periodTime=getIntent().getStringExtra("periodTime").split(",");
+        long currentTime1 =System.currentTimeMillis();
+        for (String s : periodTime) {
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            try {
+                long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
+                if (currentTime1 <startTime) {
+                    int minute= (int) ((startTime- currentTime1)/(1000*60));
+                    tv_zbar_scan_view_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
+                    break;
+                }
+                else {
+                    tv_zbar_scan_view_tip.setText("提示：已经开工");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @OnClick({R2.id.ib_nav_left})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R2.id.ib_nav_left:
+                finish();
+                break;
+        }
     }
 }

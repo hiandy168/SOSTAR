@@ -1,6 +1,5 @@
 package com.renyu.qrcodelibrary;
 
-import android.Manifest;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -18,8 +17,6 @@ public class ZxingQRScanActivity extends BaseActivity {
 
     @BindView(R2.id.zxing_scan_view)
     ZXingView zxing_scan_view;
-
-    String[] permissions={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
     @Override
     public void initParams() {
@@ -65,25 +62,10 @@ public class ZxingQRScanActivity extends BaseActivity {
         zxing_scan_view.startCamera();
 //        zxing_scan_view.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
         zxing_scan_view.showScanRect();
-        checkPermission(permissions, getResources().getString(R.string.permission_camera), new OnPermissionCheckedListener() {
+        zxing_scan_view.post(new Runnable() {
             @Override
-            public void checked(boolean flag) {
-
-            }
-
-            @Override
-            public void grant() {
-                zxing_scan_view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        zxing_scan_view.startSpot();
-                    }
-                });
-            }
-
-            @Override
-            public void denied() {
-
+            public void run() {
+                zxing_scan_view.startSpot();
             }
         });
     }
