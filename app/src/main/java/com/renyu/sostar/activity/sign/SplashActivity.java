@@ -84,7 +84,7 @@ public class SplashActivity extends BaseActivity {
                 openLog(CommonParams.LOG_PATH);
 
                 valueAnimator=ValueAnimator.ofInt(100, 0);
-                valueAnimator.setDuration(4000);
+                valueAnimator.setDuration(3000);
                 valueAnimator.addUpdateListener(animation -> pcv_splash_jump.setText("跳过", (int) (100-animation.getAnimatedFraction()*100)));
                 valueAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override

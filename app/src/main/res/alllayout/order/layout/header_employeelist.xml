@@ -2,15 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/tv_adapter_employeelist_head"
-        android:textColor="#999999"
-        android:background="#f5f6f6"
-        android:paddingLeft="14dip"
-        android:textSize="12sp"
-        android:gravity="center_vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="25dip" />
+        android:layout_height="25dip">
+        <TextView
+            android:id="@+id/tv_adapter_employeelist_head"
+            android:textColor="#999999"
+            android:background="#f5f6f6"
+            android:paddingLeft="14dip"
+            android:textSize="12sp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_adapter_employeelist_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="14dip"
+            android:paddingLeft="14dip"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="选择"
+            android:textSize="12sp"
+            android:textColor="#33aadc"/>
+    </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dip"

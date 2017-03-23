@@ -132,6 +132,7 @@ public class EmployeeListActivity extends BaseActivity {
         });
     }
 
+    // 确认雇员
     public void confirmStaff(String userId, int status) {
         ComfirmEmployeeRequest request=new ComfirmEmployeeRequest();
         ComfirmEmployeeRequest.ParamBean paramBean=new ComfirmEmployeeRequest.ParamBean();
@@ -165,7 +166,116 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 }
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    // 解雇
+    public void fireStaff(String userId) {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        paramBean.setUserId(userId);
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .fireStaff(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                EmployerStaffListResponse beanTemp=null;
+                for (EmployerStaffListResponse bean : beans) {
+                    if (bean.getUserId().equals(userId)) {
+                        beanTemp=bean;
+                        beans.remove(bean);
+                    }
+                }
+                if (beanTemp!=null) {
+                    boolean oper=false;
+                    beanTemp.setStaffStatus("10");
+                    for (int i = 0; i < beans.size(); i++) {
+                        if (beans.get(i).getStaffStatus().equals("10")) {
+                            // 加到所属第一个
+                            beans.add(i, beanTemp);
+                            oper=true;
+                            break;
+                        }
+                    }
+                    if (!oper) {
+                        beans.add(beanTemp);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    // 确认离职
+    public void comfirmResignation(String userId) {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        paramBean.setUserId(userId);
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .comfirmResignation(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                EmployerStaffListResponse beanTemp=null;
+                for (EmployerStaffListResponse bean : beans) {
+                    if (bean.getUserId().equals(userId)) {
+                        beanTemp=bean;
+                        beans.remove(bean);
+                    }
+                }
+                if (beanTemp!=null) {
+                    boolean oper=false;
+                    beanTemp.setStaffStatus("12");
+                    for (int i = 0; i < beans.size(); i++) {
+                        if (beans.get(i).getStaffStatus().equals("12")) {
+                            // 加到所属第一个
+                            beans.add(i, beanTemp);
+                            oper=true;
+                            break;
+                        }
+                    }
+                    if (!oper) {
+                        beans.add(beanTemp);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
