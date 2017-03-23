@@ -1,8 +1,12 @@
 package com.renyu.sostar.activity.order;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -15,14 +19,17 @@ import com.renyu.sostar.bean.StartMyOrderSignResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.bingoogolapple.qrcode.core.BGAQRCodeUtil;
 import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -31,12 +38,71 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OrderQRCodeActivity extends BaseActivity {
 
+    @BindView(R.id.nav_layout)
+    RelativeLayout nav_layout;
+    @BindView(R.id.tv_nav_title)
+    TextView tv_nav_title;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.iv_orderqrcode)
     ImageView iv_orderqrcode;
+    @BindView(R.id.iv_orderqrcode_orderid)
+    TextView iv_orderqrcode_orderid;
+    @BindView(R.id.iv_orderqrcode_time)
+    TextView iv_orderqrcode_time;
+    @BindView(R.id.iv_orderqrcode_tip)
+    TextView iv_orderqrcode_tip;
 
     @Override
     public void initParams() {
+        nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        tv_nav_title.setTextColor(Color.WHITE);
+        tv_nav_title.setText("扫码签到");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
 
+        iv_orderqrcode_orderid.setText("订单编号  "+getIntent().getStringExtra("orderId"));
+        iv_orderqrcode_time.setText("工作时间  "+getIntent().getStringExtra("startTime")+"-"+getIntent().getStringExtra("endTime"));
+        String[] periodTime=getIntent().getStringExtra("periodTime").split(",");
+
+        // 判断当前是不是开工时间
+        boolean isWorking=false;
+
+        long currentTime=System.currentTimeMillis();
+
+        for (String s : periodTime) {
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            try {
+                long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
+                long endTime=format.parse(s+" "+getIntent().getStringExtra("endTime")).getTime();
+                if (startTime<currentTime && currentTime<endTime) {
+                    isWorking=true;
+                    break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (isWorking) {
+            iv_orderqrcode_tip.setText("提示：已经开工");
+        }
+        else {
+            for (String s : periodTime) {
+                SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                try {
+                    long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
+                    if (currentTime<startTime) {
+                        int minute= (int) ((startTime-currentTime)/(1000*60));
+                        iv_orderqrcode_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
+                        break;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
 
     @Override
@@ -75,12 +141,11 @@ public class OrderQRCodeActivity extends BaseActivity {
 
             @Override
             public void onNext(StartMyOrderSignResponse value) {
-                Observable.just(value.getTag()).map(s -> QRCodeEncoder.syncEncodeQRCode(s, BGAQRCodeUtil.dp2px(OrderQRCodeActivity.this, 200))).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Bitmap>() {
-                    @Override
-                    public void accept(Bitmap bitmap) throws Exception {
-                        iv_orderqrcode.setImageBitmap(bitmap);
-                    }
-                });
+                Observable.just(value.getTag()).map(s -> QRCodeEncoder.syncEncodeQRCode(s,
+                        BGAQRCodeUtil.dp2px(OrderQRCodeActivity.this, 210)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(bitmap -> iv_orderqrcode.setImageBitmap(bitmap));
             }
 
             @Override
@@ -95,4 +160,12 @@ public class OrderQRCodeActivity extends BaseActivity {
         });
     }
 
+    @OnClick({R.id.ib_nav_left})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ib_nav_left:
+                finish();
+                break;
+        }
+    }
 }

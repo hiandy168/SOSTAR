@@ -774,6 +774,9 @@ public class OrderDetailActivity extends BaseActivity {
     private void showQRCode() {
         Intent intent=new Intent(OrderDetailActivity.this, OrderQRCodeActivity.class);
         intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+        intent.putExtra("startTime", orderResponse.getStartTime());
+        intent.putExtra("endTime", orderResponse.getEndTime());
+        intent.putExtra("periodTime", orderResponse.getPeriodTime());
         startActivity(intent);
     }
 }
