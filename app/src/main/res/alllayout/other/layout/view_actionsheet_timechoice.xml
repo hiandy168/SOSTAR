@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="230dip">
+    android:layout_height="match_parent">
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="开始时间"
-            android:layout_margin="10dip"
-            android:gravity="center"/>
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="230dip">
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <com.renyu.commonlibrary.views.wheelview.LoopView
-                android:id="@+id/pop_wheel_timelayout_hour_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text=":"/>
-            <com.renyu.commonlibrary.views.wheelview.LoopView
-                android:id="@+id/pop_wheel_timelayout_minute_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="开始时间"
+                android:layout_margin="10dip"
+                android:gravity="center"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <com.renyu.commonlibrary.views.wheelview.LoopView
+                    android:id="@+id/pop_wheel_timelayout_hour_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=":"/>
+                <com.renyu.commonlibrary.views.wheelview.LoopView
+                    android:id="@+id/pop_wheel_timelayout_minute_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="结束时间"
-            android:layout_margin="10dip"
-            android:gravity="center" />
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <com.renyu.commonlibrary.views.wheelview.LoopView
-                android:id="@+id/pop_wheel_timelayout_hour_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text=":"/>
-            <com.renyu.commonlibrary.views.wheelview.LoopView
-                android:id="@+id/pop_wheel_timelayout_minute_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="结束时间"
+                android:layout_margin="10dip"
+                android:gravity="center" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <com.renyu.commonlibrary.views.wheelview.LoopView
+                    android:id="@+id/pop_wheel_timelayout_hour_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=":"/>
+                <com.renyu.commonlibrary.views.wheelview.LoopView
+                    android:id="@+id/pop_wheel_timelayout_minute_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

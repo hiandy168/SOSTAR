@@ -62,6 +62,7 @@ public class OrderResponse implements Serializable {
     private String unitPriceType;
     private List<String> picListArray;
     private List<String> picStaffArray;
+    private int payFlg;
 
     public String getAddress() {
         return address;
@@ -277,5 +278,13 @@ public class OrderResponse implements Serializable {
 
     public void setAggregateTime(String aggregateTime) {
         this.aggregateTime = aggregateTime;
+    }
+
+    public int getPayFlg() {
+        return payFlg;
+    }
+
+    public void setPayFlg(int payFlg) {
+        this.payFlg = payFlg;
     }
 }

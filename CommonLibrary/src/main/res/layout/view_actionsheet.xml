@@ -137,9 +137,9 @@
             <LinearLayout
                 android:id="@+id/pop_customer_layout"
                 android:layout_width="match_parent"
-                android:layout_height="230dip"
+                android:layout_height="match_parent"
                 android:visibility="gone"
-                android:gravity="center"
+                android:gravity="bottom|center_horizontal"
                 android:orientation="vertical">
 
             </LinearLayout>

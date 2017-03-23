@@ -36,9 +36,7 @@ public class FlowLayout extends ViewGroup {
             measureChild(view, widthMeasureSpec, heightMeasureSpec);
         }
 
-        // 完整宽度
         int allWidth= MeasureSpec.getSize(widthMeasureSpec);
-        // 完整高度
         int allHeight=0;
 
         // 上一次测量完的宽度
@@ -51,6 +49,10 @@ public class FlowLayout extends ViewGroup {
             int childWidth=view.getMeasuredWidth();
             int childHeight=view.getMeasuredHeight();
             MarginLayoutParams params= (MarginLayoutParams) view.getLayoutParams();
+            // 只有一行
+            if (allHeight==0) {
+                allHeight=lastHeight+params.topMargin+childHeight+params.bottomMargin;
+            }
             if (lastWidth+params.leftMargin+params.rightMargin+childWidth>allWidth) {
                 lastHeight+=params.topMargin+childHeight+params.bottomMargin;
                 allHeight=lastHeight+params.topMargin+childHeight+params.bottomMargin;
