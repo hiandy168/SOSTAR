@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,8 +45,14 @@ public class OrderProcessActivity extends BaseActivity {
     TextView tv_orderprocess;
     @BindView(R.id.btn_orderprocess_commit)
     Button btn_orderprocess_commit;
+    @BindView(R.id.layout_orderprocess_money)
+    LinearLayout layout_orderprocess_money;
+    @BindView(R.id.tv_orderprocess_hint)
+    TextView tv_orderprocess_hint;
 
     int process;
+    OrderResponse orderResponse;
+
 
     @Override
     public void initParams() {
@@ -62,24 +69,64 @@ public class OrderProcessActivity extends BaseActivity {
             btn_orderprocess_commit.setText("确认");
         }
         if (process==3) {
+            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
             btn_orderprocess_commit.setText("确认");
             tv_nav_right.setText("加班");
 
-            tv_orderprocess.setText("订单正在进行中。\n已进行"+getWorkTime());
+            // 未支付
+            if (orderResponse.getPayFlg()==0) {
+                iv_orderprocess.setImageResource(R.mipmap.ic_order_comp);
+                tv_orderprocess.setText("");
+                layout_orderprocess_money.setVisibility(View.VISIBLE);
+                tv_orderprocess_hint.setVisibility(View.VISIBLE);
+                btn_orderprocess_commit.setText("确认支付");
+                btn_orderprocess_commit.setVisibility(View.VISIBLE);
+            }
+            // 已支付
+            else if (orderResponse.getPayFlg()==1) {
+                iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
+                btn_orderprocess_commit.setText("评价雇主");
+                btn_orderprocess_commit.setVisibility(View.VISIBLE);
+                btn_orderprocess_commit.setOnClickListener(v -> {
+                    Intent intent_employees=new Intent(OrderProcessActivity.this, EmployeeListActivity.class);
+                    intent_employees.putExtra("orderId", orderResponse.getOrderId());
+                    startActivity(intent_employees);
+                });
+            }
+            // 不可支付
+            else {
+                iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
+                tv_orderprocess.setText("订单正在进行中。\n已进行"+getWorkTime());
+            }
         }
         else if (process==8) {
-            iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
+            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             tv_nav_title.setText("订单进度");
-            btn_orderprocess_commit.setText("确认");
 
-            tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
+            // 未支付
+            if (orderResponse.getPayFlg()==0) {
+                iv_orderprocess.setImageResource(R.mipmap.ic_order_comp);
+                tv_orderprocess.setText("等待支付完成\n订单号"+orderResponse.getOrderId()+"  任务已完成");
+            }
+            // 已支付
+            else if (orderResponse.getPayFlg()==1) {
+                iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
+                btn_orderprocess_commit.setText("评价雇主");
+                btn_orderprocess_commit.setVisibility(View.VISIBLE);
+            }
+            // 不可支付
+            else {
+                iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
+                tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
+            }
         }
     }
 
     private String getWorkTime() {
-        OrderResponse orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
         long currentTime=System.currentTimeMillis();
         // 寻找最接近的任务开始时间
         // 累计工作天时数

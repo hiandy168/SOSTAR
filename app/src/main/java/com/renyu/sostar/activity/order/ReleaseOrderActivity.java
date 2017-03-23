@@ -684,7 +684,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         paramBean.setJobType(tv_releaseorder_type.getText().toString());
         paramBean.setLatitude(""+LocationService.lastBdLocation.getLatitude());
         paramBean.setLongitude(""+LocationService.lastBdLocation.getLongitude());
-        paramBean.setPaymentType(tv_releaseorder_type.getText().toString().equals("日结")?"1":"2");
+        paramBean.setPaymentType(tv_releaseorder_paytype.getText().toString().equals("日结")?"1":"2");
         paramBean.setPicListArray(images);
         if (tv_releaseorder_sex.getText().toString().equals("男")) {
             paramBean.setSex("1");

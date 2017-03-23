@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.order;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -124,6 +125,8 @@ public class OrderDetailActivity extends BaseActivity {
 
     PopupWindow popupWindow;
 
+    String[] permissions={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.TRANSPARENT);
@@ -214,12 +217,7 @@ public class OrderDetailActivity extends BaseActivity {
                         receiveOrder();
                     }
                     else if (orderResponse.getOrderStatus().equals("1") || orderResponse.getOrderStatus().equals("13")) {
-                        Intent intent=new Intent(OrderDetailActivity.this, ZBarQRScanActivity.class);
-                        intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
-                        intent.putExtra("startTime", orderResponse.getStartTime());
-                        intent.putExtra("endTime", orderResponse.getEndTime());
-                        intent.putExtra("periodTime", orderResponse.getPeriodTime());
-                        startActivityForResult(intent, CommonParams.RESULT_QRCODE);
+                        sign();
                     }
                     else if (orderResponse.getOrderStatus().equals("4") ||
                             orderResponse.getOrderStatus().equals("5") ||
@@ -782,5 +780,30 @@ public class OrderDetailActivity extends BaseActivity {
         intent.putExtra("endTime", orderResponse.getEndTime());
         intent.putExtra("periodTime", orderResponse.getPeriodTime());
         startActivity(intent);
+    }
+
+    // 去签到
+    private void sign() {
+        checkPermission(permissions, getResources().getString(R.string.permission_camera), new OnPermissionCheckedListener() {
+            @Override
+            public void checked(boolean flag) {
+
+            }
+
+            @Override
+            public void grant() {
+                Intent intent=new Intent(OrderDetailActivity.this, ZBarQRScanActivity.class);
+                intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+                intent.putExtra("startTime", orderResponse.getStartTime());
+                intent.putExtra("endTime", orderResponse.getEndTime());
+                intent.putExtra("periodTime", orderResponse.getPeriodTime());
+                startActivityForResult(intent, CommonParams.RESULT_QRCODE);
+            }
+
+            @Override
+            public void denied() {
+
+            }
+        });
     }
 }
