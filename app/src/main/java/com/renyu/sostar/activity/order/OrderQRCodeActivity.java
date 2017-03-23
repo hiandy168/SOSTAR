@@ -21,6 +21,7 @@ import com.renyu.sostar.params.CommonParams;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,6 +53,8 @@ public class OrderQRCodeActivity extends BaseActivity {
     TextView iv_orderqrcode_time;
     @BindView(R.id.iv_orderqrcode_tip)
     TextView iv_orderqrcode_tip;
+
+    Disposable d;
 
     @Override
     public void initParams() {
@@ -87,21 +90,52 @@ public class OrderQRCodeActivity extends BaseActivity {
             iv_orderqrcode_tip.setText("提示：已经开工");
         }
         else {
-            for (String s : periodTime) {
-                SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                try {
-                    long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
-                    if (currentTime<startTime) {
-                        int minute= (int) ((startTime-currentTime)/(1000*60));
-                        iv_orderqrcode_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
-                        break;
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            refreshTime();
+            Observable.timer(1, TimeUnit.MINUTES)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Long>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            OrderQRCodeActivity.this.d=d;
+                        }
+
+                        @Override
+                        public void onNext(Long value) {
+                            refreshTime();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+    }
+
+    private void refreshTime() {
+        String[] periodTime=getIntent().getStringExtra("periodTime").split(",");
+        long currentTime1 =System.currentTimeMillis();
+        for (String s : periodTime) {
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            try {
+                long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
+                if (currentTime1 <startTime) {
+                    int minute= (int) ((startTime- currentTime1)/(1000*60));
+                    iv_orderqrcode_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
+                    break;
                 }
-
+                else {
+                    iv_orderqrcode_tip.setText("提示：已经开工");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
         }
     }
 
@@ -166,6 +200,14 @@ public class OrderQRCodeActivity extends BaseActivity {
             case R.id.ib_nav_left:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (d!=null) {
+            d.dispose();
         }
     }
 }
