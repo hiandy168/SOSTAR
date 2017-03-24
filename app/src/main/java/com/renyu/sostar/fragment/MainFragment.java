@@ -63,6 +63,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by renyu on 2017/2/26.
@@ -325,7 +326,7 @@ public class MainFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
             }
 
             @Override
@@ -366,7 +367,7 @@ public class MainFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
             }
 
             @Override
@@ -404,10 +405,14 @@ public class MainFragment extends BaseFragment {
     }
 
     private void addEmployeeOverLay(EmployeeIndexResponse value) {
+        EmployeeIndexResponse.OrdersBean[] beans=new EmployeeIndexResponse.OrdersBean[value.getOrders().size()];
+        for (int i = 0; i < value.getOrders().size(); i++) {
+            beans[i]=value.getOrders().get(i);
+        }
         BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
-        for (EmployeeIndexResponse.OrdersBean ordersBean : value.getOrders()) {
+        Observable.fromArray(beans).map(ordersBean -> {
             if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
-                continue;
+                return false;
             }
             MarkerOptions oo = new MarkerOptions()
                     .position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude())))
@@ -415,14 +420,21 @@ public class MainFragment extends BaseFragment {
                     .zIndex(Integer.parseInt(ordersBean.getOrderId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
-        }
+            return true;
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+
+        });
     }
 
     private void addEmployerOverLay(EmployerIndexResponse value) {
+        EmployerIndexResponse.StaffsBean[] beans=new EmployerIndexResponse.StaffsBean[value.getStaffs().size()];
+        for (int i = 0; i < value.getStaffs().size(); i++) {
+            beans[i]=value.getStaffs().get(i);
+        }
         BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
-        for (EmployerIndexResponse.StaffsBean staffsBean : value.getStaffs()) {
+        Observable.fromArray(beans).map(staffsBean -> {
             if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
-                continue;
+                return false;
             }
             MarkerOptions oo = new MarkerOptions()
                     .position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude())))
@@ -430,6 +442,9 @@ public class MainFragment extends BaseFragment {
                     .zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
             otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
-        }
+            return true;
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+
+        });
     }
 }
