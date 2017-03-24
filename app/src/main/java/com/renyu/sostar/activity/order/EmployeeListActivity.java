@@ -20,8 +20,11 @@ import com.renyu.sostar.adapter.EmployeeListAdapter;
 import com.renyu.sostar.bean.ComfirmEmployeeRequest;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.renyu.sostar.bean.OrderRequest;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +175,9 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 }
+
+                // 员工身份变化需要刷新
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
@@ -227,6 +233,9 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 }
+
+                // 员工身份变化需要刷新
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
@@ -282,6 +291,9 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                     adapter.notifyDataSetChanged();
                 }
+
+                // 员工身份变化需要刷新
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override

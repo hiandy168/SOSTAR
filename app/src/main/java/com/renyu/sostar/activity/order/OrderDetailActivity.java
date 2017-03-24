@@ -209,7 +209,7 @@ public class OrderDetailActivity extends BaseActivity {
             case R.id.layout_orderdetail_info3:
                 Intent intent_employees=new Intent(OrderDetailActivity.this, EmployeeListActivity.class);
                 intent_employees.putExtra("orderId", getIntent().getStringExtra("orderId"));
-                startActivityForResult(intent_employees, CommonParams.RESULT_EMPLOYEELIST);
+                startActivity(intent_employees);
                 break;
             case R.id.btn_orderdetail_commit:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
@@ -757,9 +757,6 @@ public class OrderDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==RESULT_OK) {
-            if (requestCode==CommonParams.RESULT_EMPLOYEELIST) {
-                getOrderDetail();
-            }
             if (requestCode==CommonParams.RESULT_QRCODE) {
                 staffSign(data.getStringExtra("result"));
             }
@@ -769,6 +766,12 @@ public class OrderDetailActivity extends BaseActivity {
     // 发单成功以刷新
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ReleaseOrderRequest request) {
+        getOrderDetail();
+    }
+
+    // 员工状态变化以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(OrderResponse response) {
         getOrderDetail();
     }
 
