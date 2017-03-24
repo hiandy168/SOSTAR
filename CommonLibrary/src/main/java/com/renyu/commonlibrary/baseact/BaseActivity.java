@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -62,6 +64,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ProgressDialog networkDialg;
 
+    // 是否M以上机型设置了主体黑色
+    boolean isDark=false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +78,24 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // 设置沉浸式，二选一
         if (setStatusBarColor()!=0) {
-            BarUtils.setColor(this, setStatusBarColor(), 0);
-            // 此为全屏模式下设置沉浸式颜色
-            BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
+            if (isDark) {
+                ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
+                contentView.setPadding(0, BarUtils.getStatusBarHeight(this), 0, 0);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
+            else {
+                BarUtils.setColor(this, setStatusBarColor(), 0);
+                // 此为全屏模式下设置沉浸式颜色
+                BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
+            }
         }
         if (setStatusBarTranslucent()!=0) {
-            com.renyu.commonlibrary.commonutils.BarUtils.setTranslucent(this);
+            if (isDark) {
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
+            else {
+                com.renyu.commonlibrary.commonutils.BarUtils.setTranslucent(this);
+            }
         }
 
         httpHelper = new OKHttpHelper();
@@ -201,11 +218,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             setStatusBarDarkIcon(activity.getWindow(), true);
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            View decor = getWindow().getDecorView();
-            int ui = getWindow().getDecorView().getSystemUiVisibility();
-            ui |=View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;  //黑色
-//            ui &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;  //白色
-            decor.setSystemUiVisibility(ui);
+            isDark=true;
+
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+//            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
 
