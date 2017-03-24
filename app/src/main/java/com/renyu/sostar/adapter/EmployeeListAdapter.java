@@ -15,7 +15,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.EmployeeListActivity;
-import com.renyu.sostar.activity.user.EmployeeInfo2Activity;
+import com.renyu.sostar.activity.user.InfoActivity;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -97,7 +97,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
         }
         holder.layout_adapter_employeelist.setOnClickListener(v -> {
-            Intent intent=new Intent(context, EmployeeInfo2Activity.class);
+            Intent intent=new Intent(context, InfoActivity.class);
             intent.putExtra("userId", beans.get(position).getUserId());
             context.startActivity(intent);
         });

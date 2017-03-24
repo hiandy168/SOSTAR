@@ -40,7 +40,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
 import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.activity.order.ReleaseOrderActivity;
-import com.renyu.sostar.activity.user.EmployeeInfo2Activity;
+import com.renyu.sostar.activity.user.InfoActivity;
 import com.renyu.sostar.bean.EmployeeIndexRequest;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
@@ -130,7 +130,7 @@ public class MainFragment extends BaseFragment {
                     startActivity(intent);
                 }
                 else {
-                    Intent intent=new Intent(getActivity(), EmployeeInfo2Activity.class);
+                    Intent intent=new Intent(getActivity(), InfoActivity.class);
                     intent.putExtra("userId", ""+marker.getZIndex());
                     startActivity(intent);
                 }

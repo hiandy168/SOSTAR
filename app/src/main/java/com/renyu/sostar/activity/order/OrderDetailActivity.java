@@ -40,6 +40,7 @@ import com.renyu.sostar.bean.StaffSignRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -62,6 +63,8 @@ public class OrderDetailActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.layout_orderdetail_nav)
+    LinearLayout layout_orderdetail_nav;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.ib_nav_left)
@@ -129,7 +132,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     @Override
     public void initParams() {
-        nav_layout.setBackgroundColor(Color.TRANSPARENT);
+        layout_orderdetail_nav.setBackgroundColor(Color.parseColor("#60000000"));
         tv_nav_title.setTextColor(Color.WHITE);
         tv_nav_title.setText("订单详情");
         ib_nav_right.setImageResource(R.mipmap.ic_order_more);
@@ -139,11 +142,13 @@ public class OrderDetailActivity extends BaseActivity {
         btn_orderdetail_cancel.setVisibility(View.GONE);
         tv_orderdetail_tip.setVisibility(View.GONE);
 
-        BarUtils.adjustStatusBar(this, (ViewGroup) findViewById(R.id.layout_orderdetail_nav), -1);
+        BarUtils.adjustStatusBar(this, layout_orderdetail_nav, -1);
 
         images=new ArrayList<>();
 
         isNotReceive=getIntent().getBooleanExtra("typeIsCommit", false);
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -187,6 +192,12 @@ public class OrderDetailActivity extends BaseActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView(views.get(position));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initPop(View popView) {

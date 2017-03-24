@@ -78,11 +78,8 @@ public class MyOrderListActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         tab_orderlist.setTabGravity(TabLayout.GRAVITY_FILL);
-        if (titles.size()>3) {
-            tab_orderlist.setTabMode(TabLayout.MODE_SCROLLABLE);
-        }
-        else {
-            tab_orderlist.setTabMode(TabLayout.MODE_FIXED);
+        tab_orderlist.setTabMode(TabLayout.MODE_FIXED);
+        if (titles.size()<=3) {
             Utils.setIndicator(this, tab_orderlist, 30, 30);
             LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) tab_orderlist.getLayoutParams();
             params.setMargins(SizeUtils.dp2px(40), 0, SizeUtils.dp2px(40), 0);

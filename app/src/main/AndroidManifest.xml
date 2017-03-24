@@ -32,7 +32,7 @@
         <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployeeAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployerAuthActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.user.EmployeeInfo2Activity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.InfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.ReleaseOrderActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.NotStartedOrderListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderDetailActivity" android:screenOrientation="portrait"></activity>
@@ -41,6 +41,7 @@
         <activity android:name=".activity.order.EmployeeListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderQRCodeActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderProcessActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.order.OrderBroadcastActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.other.UpdateTextInfoActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".activity.other.UpdateTextinfoWithLabelActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".activity.other.UpdateTextInfoWithPicActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan"></activity>

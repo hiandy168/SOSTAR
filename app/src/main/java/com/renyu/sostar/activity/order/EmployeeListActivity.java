@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.order;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -106,6 +107,9 @@ public class EmployeeListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ib_nav_right:
+                Intent intent=new Intent(EmployeeListActivity.this, OrderBroadcastActivity.class);
+                intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+                startActivity(intent);
                 break;
         }
     }

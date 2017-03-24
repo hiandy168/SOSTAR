@@ -182,4 +182,8 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/comfirmResignation")
     Observable<Response<EmptyResponse>> comfirmResignation(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setMsg")
+    Observable<Response<EmptyResponse>> setMsg(@Body RequestBody requestBody);
+
 }

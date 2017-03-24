@@ -89,7 +89,7 @@ public class OrderProcessActivity extends BaseActivity {
             else if (orderResponse.getPayFlg()==1) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
                 tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
-                btn_orderprocess_commit.setText("评价雇主");
+                btn_orderprocess_commit.setText("评价雇员");
                 btn_orderprocess_commit.setVisibility(View.VISIBLE);
                 btn_orderprocess_commit.setOnClickListener(v -> {
                     Intent intent_employees=new Intent(OrderProcessActivity.this, EmployeeListActivity.class);
