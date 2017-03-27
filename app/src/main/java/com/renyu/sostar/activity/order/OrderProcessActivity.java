@@ -69,11 +69,13 @@ public class OrderProcessActivity extends BaseActivity {
             tv_nav_title.setText("扫码签到");
             btn_orderprocess_commit.setText("确认");
         }
-        if (process==3) {
+        if ((process==3 || process==4 || process==5 || process==9) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
-            tv_nav_right.setText("加班");
+            if (process!=4 || process!=9) {
+                tv_nav_right.setText("加班");
+            }
 
             // 未支付
             if (orderResponse.getPayFlg()==0) {
@@ -88,13 +90,15 @@ public class OrderProcessActivity extends BaseActivity {
             else if (orderResponse.getPayFlg()==1) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
                 tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
-                btn_orderprocess_commit.setText("评价雇员");
-                btn_orderprocess_commit.setVisibility(View.VISIBLE);
-                btn_orderprocess_commit.setOnClickListener(v -> {
-                    Intent intent_employees=new Intent(OrderProcessActivity.this, EmployeeListActivity.class);
-                    intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                    startActivity(intent_employees);
-                });
+                if (process==5) {
+                    btn_orderprocess_commit.setText("评价雇员");
+                    btn_orderprocess_commit.setVisibility(View.VISIBLE);
+                    btn_orderprocess_commit.setOnClickListener(v -> {
+                        Intent intent_employees=new Intent(OrderProcessActivity.this, EmployeeListActivity.class);
+                        intent_employees.putExtra("orderId", orderResponse.getOrderId());
+                        startActivity(intent_employees);
+                    });
+                }
             }
             // 不可支付
             else {
@@ -102,7 +106,7 @@ public class OrderProcessActivity extends BaseActivity {
                 tv_orderprocess.setText("订单正在进行中。\n已进行"+getWorkTime());
             }
         }
-        else if (process==8) {
+        if ((process==4 || process==5 || process==8) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
             orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             tv_nav_title.setText("订单进度");
 
@@ -115,13 +119,15 @@ public class OrderProcessActivity extends BaseActivity {
             else if (orderResponse.getPayFlg()==1) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
                 tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
-                btn_orderprocess_commit.setText("评价雇主");
-                btn_orderprocess_commit.setVisibility(View.VISIBLE);
-                btn_orderprocess_commit.setOnClickListener(v -> {
-                    Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
-                    intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                    startActivity(intent_employees);
-                });
+                if (process==4 || process==5) {
+                    btn_orderprocess_commit.setText("评价雇员");
+                    btn_orderprocess_commit.setVisibility(View.VISIBLE);
+                    btn_orderprocess_commit.setOnClickListener(v -> {
+                        Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
+                        intent_employees.putExtra("orderId", orderResponse.getOrderId());
+                        startActivity(intent_employees);
+                    });
+                }
             }
             // 不可支付
             else {
@@ -129,42 +135,26 @@ public class OrderProcessActivity extends BaseActivity {
                 tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
             }
         }
-        if (process==9) {
-            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
-            iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
-            tv_nav_title.setText("订单进度");
-
-            iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
-            tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
-            btn_orderprocess_commit.setVisibility(View.GONE);
-        }
-        else if (process==10) {
+        if (process==9 || process==10 || process==12 || process==13 || process==14) {
             orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             tv_nav_title.setText("订单进度");
 
             iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
-            tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务您已被解雇");
-            btn_orderprocess_commit.setText("评价雇主");
-            btn_orderprocess_commit.setVisibility(View.VISIBLE);
-            btn_orderprocess_commit.setOnClickListener(v -> {
-                Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
-                intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                startActivity(intent_employees);
-            });
-        }
-        else if (process==12) {
-            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
-            tv_nav_title.setText("订单进度");
-
-            iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
-            tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务您已离职");
-            btn_orderprocess_commit.setText("评价雇主");
-            btn_orderprocess_commit.setVisibility(View.VISIBLE);
-            btn_orderprocess_commit.setOnClickListener(v -> {
-                Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
-                intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                startActivity(intent_employees);
-            });
+            if (process==9) {
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
+            }
+            else if (process==10) {
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务您已被解雇");
+            }
+            else if (process==12) {
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务您已离职");
+            }
+            else if (process==13) {
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
+            }
+            else if (process==14) {
+                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
+            }
         }
     }
 

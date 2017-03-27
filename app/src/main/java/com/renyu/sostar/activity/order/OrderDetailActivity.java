@@ -44,7 +44,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -227,17 +226,17 @@ public class OrderDetailActivity extends BaseActivity {
                     if (orderResponse.getOrderStatus().equals("-1")) {
                         receiveOrder();
                     }
-                    else if (orderResponse.getOrderStatus().equals("1") || orderResponse.getOrderStatus().equals("13")) {
+                    else if (orderResponse.getOrderStatus().equals("1")) {
                         sign();
                     }
                     else if (orderResponse.getOrderStatus().equals("4") ||
                             orderResponse.getOrderStatus().equals("5") ||
-                            orderResponse.getOrderStatus().equals("6") ||
-                            orderResponse.getOrderStatus().equals("7") ||
                             orderResponse.getOrderStatus().equals("8") ||
                             orderResponse.getOrderStatus().equals("9") ||
                             orderResponse.getOrderStatus().equals("10") ||
-                            orderResponse.getOrderStatus().equals("12")) {
+                            orderResponse.getOrderStatus().equals("12") ||
+                            orderResponse.getOrderStatus().equals("13") ||
+                            orderResponse.getOrderStatus().equals("14")) {
                         Intent intent=new Intent(OrderDetailActivity.this, OrderProcessActivity.class);
                         intent.putExtra("params", orderResponse);
                         intent.putExtra("process", orderResponse.getOrderStatus());
@@ -398,76 +397,35 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("已取消");
                     }
-                    // 4.已完成(待支付)
-                    else if (value.getOrderStatus().equals("4")) {
+                    // 4.已完成(待支付)  5.已完成(已支付)  8.已开始  9.雇主取消定单
+                    // 10.雇主解雇员工  12.离职  13.超过时间签到自动终止  14.雇主超时未开工订单自动取消
+                    else if (value.getOrderStatus().equals("4") ||
+                            value.getOrderStatus().equals("5") ||
+                            value.getOrderStatus().equals("8") ||
+                            value.getOrderStatus().equals("9") ||
+                            value.getOrderStatus().equals("10") ||
+                            value.getOrderStatus().equals("12") ||
+                            value.getOrderStatus().equals("13") ||
+                            value.getOrderStatus().equals("14")) {
                         btn_orderdetail_cancel.setVisibility(View.GONE);
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("查看进度");
-                    }
-                    // 5.已完成(已支付)
-                    else if (value.getOrderStatus().equals("5")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                    }
-                    // 8.已开始
-                    else if (value.getOrderStatus().equals("8")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                        layout_pop.addView(getPopupTextView("申请离职", v -> {
-                            staffApplyOff();
-                            popupWindow.dismiss();
-                        }));
-                        layout_pop.addView(getPopupTextView("立即签到", v -> {
-                            sign();
-                            popupWindow.dismiss();
-                        }));
-                    }
-                    // 9.雇主取消定单
-                    else if (value.getOrderStatus().equals("9")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                    }
-                    // 10.雇主解雇员工
-                    else if (value.getOrderStatus().equals("10")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
+                        if (value.getOrderStatus().equals("8")) {
+                            layout_pop.addView(getPopupTextView("申请离职", v -> {
+                                staffApplyOff();
+                                popupWindow.dismiss();
+                            }));
+                            layout_pop.addView(getPopupTextView("立即签到", v -> {
+                                sign();
+                                popupWindow.dismiss();
+                            }));
+                        }
                     }
                     // 11.申请离职中
                     else if (value.getOrderStatus().equals("11")) {
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("申请离职中");
-                    }
-                    // 12.离职
-                    else if (value.getOrderStatus().equals("12")) {
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                    }
-                    // 13.超过时间签到自动终止
-                    else if (value.getOrderStatus().equals("13")) {
-                        String startTime=value.getStartTime().split(":")[0]+value.getStartTime().split(":")[1];
-                        SimpleDateFormat dateFormat=new SimpleDateFormat("HHmm");
-                        if (Integer.parseInt(dateFormat.format(new Date()))-Integer.parseInt(startTime)<30) {
-                            btn_orderdetail_cancel.setVisibility(View.GONE);
-                            btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                            btn_orderdetail_commit.setText("订单已过期/补签到");
-                        }
-                        else {
-                            btn_orderdetail_commit.setVisibility(View.GONE);
-                            btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                            btn_orderdetail_cancel.setText("订单已过期");
-                        }
-                    }
-                    // 14.雇主超时未开工订单自动取消
-                    else if (value.getOrderStatus().equals("14")) {
-                        btn_orderdetail_commit.setVisibility(View.GONE);
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("订单已结束");
                     }
                 }
                 else if (ACache.get(OrderDetailActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
@@ -604,7 +562,7 @@ public class OrderDetailActivity extends BaseActivity {
             public void onNext(EmptyResponse value) {
                 Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
-                getOrderDetail();
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
@@ -638,7 +596,7 @@ public class OrderDetailActivity extends BaseActivity {
             public void onNext(EmptyResponse value) {
                 Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
-                getOrderDetail();
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
@@ -705,7 +663,7 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onNext(Object value) {
-                getOrderDetail();
+                EventBus.getDefault().post(new OrderResponse());
                 showQRCode();
             }
 

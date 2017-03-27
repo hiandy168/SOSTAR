@@ -17,8 +17,13 @@ import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.adapter.OrderListAdapter;
 import com.renyu.sostar.bean.MyOrderListRequest;
 import com.renyu.sostar.bean.MyOrderListResponse;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -102,6 +107,8 @@ public class OrderListFragment extends BaseFragment {
             }
             getMyOrderList();
         });
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -172,5 +179,19 @@ public class OrderListFragment extends BaseFragment {
 
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    // 员工状态变化以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(OrderResponse response) {
+        page=1;
+        getMyOrderList();
     }
 }

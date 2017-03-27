@@ -16,9 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.imagelibrary.commonutils.Utils;
@@ -85,8 +89,10 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
             SimpleDraweeView draweeView= (SimpleDraweeView) view.findViewById(R.id.iv_updatetextinfowithpic);
             TextView textview= (TextView) view.findViewById(R.id.tv_updatetextinfowithpic);
             if (!TextUtils.isEmpty(path)) {
+                ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(path.indexOf("http")!=-1?path:"file://"+path))
+                        .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(200), SizeUtils.dp2px(200))).build();
                 DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                        .setUri(Uri.parse(path.indexOf("http")!=-1?path:"file://"+path)).setAutoPlayAnimations(true).build();
+                        .setImageRequest(request).setAutoPlayAnimations(true).build();
                 draweeView.setController(draweeController);
                 textview.setVisibility(View.GONE);
                 iv_updatetextinfowithpic_delete.setVisibility(View.VISIBLE);

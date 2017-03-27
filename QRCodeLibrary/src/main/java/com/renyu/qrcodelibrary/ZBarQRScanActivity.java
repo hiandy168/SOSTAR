@@ -123,13 +123,25 @@ public class ZBarQRScanActivity extends BaseActivity {
             SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
             try {
                 long startTime=format.parse(s+" "+getIntent().getStringExtra("startTime")).getTime();
-                if (currentTime1 <startTime) {
+                long endTime=format.parse(s+" "+getIntent().getStringExtra("endTime")).getTime();
+                // 任务开始范围外
+                if (currentTime1>endTime) {
+                    continue;
+                }
+                // 任务正在执行，半小时内可以补签到
+                else if (currentTime1>=startTime && currentTime1<=endTime) {
+                    if (startTime+1000*60*30>currentTime1) {
+                        tv_zbar_scan_view_tip.setText("提示：已经开工,半小时内补签到");
+                    }
+                    else {
+                        tv_zbar_scan_view_tip.setText("提示：已经开工");
+                    }
+                }
+                // 任务还未开始
+                else if (currentTime1<startTime) {
                     int minute= (int) ((startTime- currentTime1)/(1000*60));
                     tv_zbar_scan_view_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
                     break;
-                }
-                else {
-                    tv_zbar_scan_view_tip.setText("提示：已经开工");
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
