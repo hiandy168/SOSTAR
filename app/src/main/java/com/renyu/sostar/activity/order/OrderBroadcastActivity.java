@@ -1,6 +1,8 @@
 package com.renyu.sostar.activity.order;
 
 import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -64,6 +66,12 @@ public class OrderBroadcastActivity extends BaseActivity {
         return 0;
     }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setDark(this);
+        super.onCreate(savedInstanceState);
+    }
+
     @OnClick({R.id.ib_nav_left, R.id.btn_orderbroadcast})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -93,6 +101,7 @@ public class OrderBroadcastActivity extends BaseActivity {
         OrderMessageRequest.ParamBean paramBean=new OrderMessageRequest.ParamBean();
         paramBean.setMsg(et_orderbroadcast.getText().toString());
         paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+        paramBean.setReceiverId("");
         paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)

@@ -463,7 +463,12 @@ public class OrderDetailActivity extends BaseActivity {
                             value.getOrderStatus().equals("2")) {
                         btn_orderdetail_cancel.setVisibility(View.GONE);
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
+                        if (value.getOrderStatus().equals("2")) {
+                            btn_orderdetail_commit.setText("签到开工");
+                        }
+                        else {
+                            btn_orderdetail_commit.setText("查看进度");
+                        }
                         if (value.getOrderStatus().equals("3")) {
                             layout_pop.addView(getPopupTextView("订单二维码", v -> {
                                 showQRCode();
@@ -518,10 +523,10 @@ public class OrderDetailActivity extends BaseActivity {
     private TextView getPopupTextView(String title, View.OnClickListener listener) {
         TextView textView=new TextView(OrderDetailActivity.this);
         textView.setBackgroundColor(Color.WHITE);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         textView.setTextColor(Color.parseColor("#999999"));
         textView.setGravity(Gravity.CENTER);
-        textView.setPadding(SizeUtils.dp2px(8), SizeUtils.dp2px(8), SizeUtils.dp2px(8), SizeUtils.dp2px(8));
+        textView.setPadding(SizeUtils.dp2px(12), SizeUtils.dp2px(12), SizeUtils.dp2px(12), SizeUtils.dp2px(12));
         textView.setText(title);
         textView.setOnClickListener(listener);
         return textView;
@@ -615,6 +620,9 @@ public class OrderDetailActivity extends BaseActivity {
 
                 isNotReceive=false;
                 getOrderDetail();
+
+                // 雇员接单状态变化以刷新
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
@@ -716,7 +724,7 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onNext(Object value) {
-                getOrderDetail();
+                EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override

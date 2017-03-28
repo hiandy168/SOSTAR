@@ -189,6 +189,7 @@ public class OrderListFragment extends BaseFragment {
     }
 
     // 员工状态变化以刷新
+    // 雇员接单状态变化以刷新
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(OrderResponse response) {
         page=1;
