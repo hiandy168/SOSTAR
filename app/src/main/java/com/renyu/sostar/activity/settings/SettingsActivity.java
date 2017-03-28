@@ -56,6 +56,7 @@ public class SettingsActivity extends BaseActivity {
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("通用设置");
 
         sb_settings_message.setOnCheckedChangeListener((buttonView, isChecked) -> {

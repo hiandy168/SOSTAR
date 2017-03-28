@@ -80,6 +80,7 @@ public class EmployeeAuthActivity extends BaseActivity {
         myCenterResponse= (MyCenterEmployeeResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人认证");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getName())) {
             tv_userauth_name.setText(myCenterResponse.getName());

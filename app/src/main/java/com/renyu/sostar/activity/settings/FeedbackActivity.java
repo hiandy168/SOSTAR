@@ -47,6 +47,7 @@ public class FeedbackActivity extends BaseActivity {
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("意见反馈");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
     }
 
     @Override

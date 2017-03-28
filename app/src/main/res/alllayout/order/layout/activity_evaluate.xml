@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2">
+    <include layout="@layout/view_nav"></include>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
+    <ImageView
+        android:src="@mipmap/ic_evaluate"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="65dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_evaluate_orderinfo"
+        android:layout_marginTop="27dip"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:lineSpacingExtra="3dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RatingBar
+        android:id="@+id/rb_evaluate"
+        style="@style/orderRatingBar"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="55dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:rating="0" >
+    </RatingBar>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dip"
+        android:orientation="vertical">
+        <com.renyu.commonlibrary.views.FlowLayout
+            android:id="@+id/fl_evaluate"
+            android:layout_marginStart="30dip"
+            android:layout_marginEnd="30dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.renyu.commonlibrary.views.FlowLayout>
+        <Button
+            android:id="@+id/btn_evaluate_commit"
+            android:background="@drawable/shape_rounded_solid_green"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="12dip"
+            android:layout_marginEnd="16dip"
+            android:layout_marginStart="16dip"
+            android:layout_marginBottom="20dip"
+            android:layout_alignParentBottom="true"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="确认评价"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

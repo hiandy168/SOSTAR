@@ -33,6 +33,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.message.MessageListActivity;
 import com.renyu.sostar.activity.order.MyOrderListActivity;
 import com.renyu.sostar.activity.order.SearchOrderActivtiy;
+import com.renyu.sostar.activity.order.StartedOrderListActivity;
 import com.renyu.sostar.activity.settings.SettingsActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.activity.user.EmployeeAuthActivity;
@@ -245,6 +246,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.ib_nav_right:
+                startActivity(new Intent(MainActivity.this, StartedOrderListActivity.class));
                 break;
             case R.id.layout_main_menu_mycenter_info:
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {

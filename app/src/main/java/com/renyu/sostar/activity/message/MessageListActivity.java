@@ -75,6 +75,7 @@ public class MessageListActivity extends BaseActivity {
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("消息中心");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("清空");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 

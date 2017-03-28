@@ -68,6 +68,17 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
             holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
         }
+        // 已完成
+        else if (beans.get(position).getStaffStatus().equals("4") ||
+                beans.get(position).getStaffStatus().equals("5")) {
+            holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+            holder.tv_adapter_employeelist_oper1.setText("评价");
+            holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).evaluate(beans.get(position).getUserId(), beans.get(position).getName()));
+            holder.tv_adapter_employeelist_oper2.setVisibility(View.VISIBLE);
+            holder.tv_adapter_employeelist_oper2.setText("收藏");
+            holder.tv_adapter_employeelist_oper2.setOnClickListener(v -> ((EmployeeListActivity) context).collection(beans.get(position).getUserId()));
+            holder.v_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+        }
         // 已确认 进行中
         else if (beans.get(position).getStaffStatus().equals("8")) {
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
@@ -76,23 +87,11 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
             holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
         }
-        // 被解雇
-        else if (beans.get(position).getStaffStatus().equals("10")) {
-            holder.tv_adapter_employeelist_oper1.setVisibility(View.GONE);
-            holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
-            holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
-        }
         // 申请离职
         else if (beans.get(position).getStaffStatus().equals("11")) {
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
             holder.tv_adapter_employeelist_oper1.setText("确认");
             holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).comfirmResignation(beans.get(position).getUserId()));
-            holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
-            holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
-        }
-        // 已离职
-        else if (beans.get(position).getStaffStatus().equals("12")) {
-            holder.tv_adapter_employeelist_oper1.setVisibility(View.GONE);
             holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
             holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
         }
@@ -124,21 +123,18 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_head.setText("已确认");
             holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
         }
+        else if (beans.get(position).getStaffStatus().equals("4") ||
+                beans.get(position).getStaffStatus().equals("5")) {
+            holder.tv_adapter_employeelist_head.setText("评价");
+            holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
+        }
         else if (beans.get(position).getStaffStatus().equals("8")) {
             holder.tv_adapter_employeelist_head.setText("已确认");
             holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
         }
-        else if (beans.get(position).getStaffStatus().equals("10")) {
-            holder.tv_adapter_employeelist_head.setText("被解雇");
-            holder.tv_adapter_employeelist_choice.setVisibility(View.GONE);
-        }
         else if (beans.get(position).getStaffStatus().equals("11")) {
             holder.tv_adapter_employeelist_head.setText("申请离职");
             holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
-        }
-        else if (beans.get(position).getStaffStatus().equals("12")) {
-            holder.tv_adapter_employeelist_head.setText("已离职");
-            holder.tv_adapter_employeelist_choice.setVisibility(View.GONE);
         }
         holder.tv_adapter_employeelist_choice.setOnClickListener(v -> {
 

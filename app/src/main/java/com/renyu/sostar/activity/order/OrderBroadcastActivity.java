@@ -44,6 +44,7 @@ public class OrderBroadcastActivity extends BaseActivity {
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("发送广播");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
     }
 
     @Override

@@ -82,6 +82,7 @@ public class EmployerInfoActivity extends BaseActivity {
         myCenterResponse= (MyCenterEmployerResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("企业信息");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getLogoPath())) {
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()

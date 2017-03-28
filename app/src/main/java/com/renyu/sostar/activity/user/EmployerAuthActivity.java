@@ -86,6 +86,7 @@ public class EmployerAuthActivity extends BaseActivity {
         myCenterResponse= (MyCenterEmployerResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("企业认证");
+        tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getCompanyName())) {
             tv_employerauth_name.setText(myCenterResponse.getCompanyName());

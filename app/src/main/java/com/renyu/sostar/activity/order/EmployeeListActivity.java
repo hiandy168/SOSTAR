@@ -222,19 +222,6 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                 }
                 if (beanTemp!=null) {
-                    boolean oper=false;
-                    beanTemp.setStaffStatus("10");
-                    for (int i = 0; i < beans.size(); i++) {
-                        if (beans.get(i).getStaffStatus().equals("10")) {
-                            // 加到所属第一个
-                            beans.add(i, beanTemp);
-                            oper=true;
-                            break;
-                        }
-                    }
-                    if (!oper) {
-                        beans.add(beanTemp);
-                    }
                     adapter.notifyDataSetChanged();
                 }
 
@@ -280,19 +267,6 @@ public class EmployeeListActivity extends BaseActivity {
                     }
                 }
                 if (beanTemp!=null) {
-                    boolean oper=false;
-                    beanTemp.setStaffStatus("12");
-                    for (int i = 0; i < beans.size(); i++) {
-                        if (beans.get(i).getStaffStatus().equals("12")) {
-                            // 加到所属第一个
-                            beans.add(i, beanTemp);
-                            oper=true;
-                            break;
-                        }
-                    }
-                    if (!oper) {
-                        beans.add(beanTemp);
-                    }
                     adapter.notifyDataSetChanged();
                 }
 
@@ -310,5 +284,19 @@ public class EmployeeListActivity extends BaseActivity {
 
             }
         });
+    }
+
+    // 评价雇员
+    public void evaluate(String userId, String userName) {
+        Intent intent=new Intent(EmployeeListActivity.this, EvaluateActivity.class);
+        intent.putExtra("userName", userName);
+        intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+        intent.putExtra("userId", userId);
+        startActivity(intent);
+    }
+
+    // 确认离职
+    public void collection(String userId) {
+
     }
 }
