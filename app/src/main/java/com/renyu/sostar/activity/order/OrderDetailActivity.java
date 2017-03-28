@@ -249,14 +249,12 @@ public class OrderDetailActivity extends BaseActivity {
                         intent.putExtra("value", orderResponse);
                         startActivity(intent);
                     }
-                    else if (orderResponse.getOrderStatus().equals("1")) {
-                        cancelEmployeeOrder();
-                    }
                     else if (orderResponse.getOrderStatus().equals("2")) {
                         startOrder();
                     }
-                    else if (orderResponse.getOrderStatus().equals("5") ||
-                            orderResponse.getOrderStatus().equals("3") ||
+                    else if (orderResponse.getOrderStatus().equals("3") ||
+                            orderResponse.getOrderStatus().equals("4") ||
+                            orderResponse.getOrderStatus().equals("5") ||
                             orderResponse.getOrderStatus().equals("9")) {
                         Intent intent=new Intent(OrderDetailActivity.this, OrderProcessActivity.class);
                         intent.putExtra("params", orderResponse);
@@ -374,6 +372,7 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("待确认");
+                        tv_orderdetail_tip.setVisibility(View.GONE);
                     }
                     // 1.已确认
                     else if (value.getOrderStatus().equals("1")) {
@@ -456,47 +455,31 @@ public class OrderDetailActivity extends BaseActivity {
                             popupWindow.dismiss();
                         }));
                     }
-                    // 已成单
-                    else if (value.getOrderStatus().equals("2")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("签到开工");
-                        layout_pop.addView(getPopupTextView("取消订单", v -> {
-                            cancleMyOrder();
-                            popupWindow.dismiss();
-                        }));
-                    }
-                    // 已开始
-                    else if (value.getOrderStatus().equals("3")) {
+                    // 2.已成单  3.已开始  4.已过期  5.已完成  9.已取消
+                    else if (value.getOrderStatus().equals("4") ||
+                            value.getOrderStatus().equals("5") ||
+                            value.getOrderStatus().equals("9") ||
+                            value.getOrderStatus().equals("3") ||
+                            value.getOrderStatus().equals("2")) {
                         btn_orderdetail_cancel.setVisibility(View.GONE);
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("查看进度");
-                        layout_pop.addView(getPopupTextView("订单二维码", v -> {
-                            showQRCode();
-                            popupWindow.dismiss();
-                        }));
-                        layout_pop.addView(getPopupTextView("取消订单", v -> {
-                            cancleMyOrder();
-                            popupWindow.dismiss();
-                        }));
-                    }
-                    // 已过期
-                    else if (value.getOrderStatus().equals("4")) {
-                        btn_orderdetail_commit.setVisibility(View.GONE);
-                        btn_orderdetail_cancel.setVisibility(View.VISIBLE);
-                        btn_orderdetail_cancel.setText("订单已过期");
-                    }
-                    // 已完成
-                    else if (value.getOrderStatus().equals("5")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
-                    }
-                    // 已取消
-                    else if (value.getOrderStatus().equals("9")) {
-                        btn_orderdetail_cancel.setVisibility(View.GONE);
-                        btn_orderdetail_commit.setVisibility(View.VISIBLE);
-                        btn_orderdetail_commit.setText("查看进度");
+                        if (value.getOrderStatus().equals("3")) {
+                            layout_pop.addView(getPopupTextView("订单二维码", v -> {
+                                showQRCode();
+                                popupWindow.dismiss();
+                            }));
+                            layout_pop.addView(getPopupTextView("取消订单", v -> {
+                                cancleMyOrder();
+                                popupWindow.dismiss();
+                            }));
+                        }
+                        if (value.getOrderStatus().equals("2")) {
+                            layout_pop.addView(getPopupTextView("取消订单", v -> {
+                                cancleMyOrder();
+                                popupWindow.dismiss();
+                            }));
+                        }
                     }
                     // 草稿
                     else if (value.getOrderStatus().equals("0")) {
