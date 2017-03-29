@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
-        android:rating="0" >
+        android:rating="3" >
     </RatingBar>
     <RelativeLayout
         android:layout_width="match_parent"

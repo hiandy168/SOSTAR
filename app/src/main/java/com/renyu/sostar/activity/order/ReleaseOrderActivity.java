@@ -217,6 +217,12 @@ public class ReleaseOrderActivity extends BaseActivity {
             // 设置支付金额
             changeUsedMoney();
         }
+        else {
+            if (!TextUtils.isEmpty(getIntent().getStringExtra("address"))) {
+                // 设置工作地点
+                tv_releaseorder_address.setText(getIntent().getStringExtra("address"));
+            }
+        }
     }
 
     @Override

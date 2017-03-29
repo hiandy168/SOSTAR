@@ -80,6 +80,9 @@ public class LocationService extends Service {
     }
 
     private void uploadLocation(BDLocation bdLocation) {
+        // 设置当前城市
+        CommonParams.CITY=bdLocation.getCity();
+
         boolean needUpload=false;
         // 首次上报
         if (lastBdLocation==null) {

@@ -25,6 +25,8 @@
         <activity android:name=".activity.sign.CustomerStateActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.sign.ProtocalActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.index.MainActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.index.SearchPoiActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.index.SearchOrderActivtiy" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.settings.SettingsActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.settings.FeedbackActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.settings.FavListActivity" android:screenOrientation="portrait"></activity>
@@ -38,7 +40,6 @@
         <activity android:name=".activity.order.NotStartedOrderListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderDetailActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.MyOrderListActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.order.SearchOrderActivtiy" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.EmployeeListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderQRCodeActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderProcessActivity" android:screenOrientation="portrait"></activity>

@@ -1,4 +1,4 @@
-package com.renyu.sostar.activity.order;
+package com.renyu.sostar.activity.index;
 
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_search_poi">
+    <TextView
+        android:id="@+id/tv_search_poi_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip"
+        android:textSize="15sp"
+        android:textColor="#333333" />
+    <TextView
+        android:id="@+id/tv_search_poi_desp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingBottom="5dip"
+        android:textSize="12sp"
+        android:textColor="#999999"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#cccccc">
+
+    </View>
+</LinearLayout>

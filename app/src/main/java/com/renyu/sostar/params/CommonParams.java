@@ -62,4 +62,7 @@ public class CommonParams {
     public static final int RESULT_QRCODE=1011;
     public static final int RESULT_OVERTIME=1012;
     public static final int RESULT_EVALUATE=1013;
+
+    // 当前城市
+    public static String CITY=null;
 }

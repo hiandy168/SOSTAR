@@ -32,7 +32,6 @@ import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.message.MessageListActivity;
 import com.renyu.sostar.activity.order.MyOrderListActivity;
-import com.renyu.sostar.activity.order.SearchOrderActivtiy;
 import com.renyu.sostar.activity.order.StartedOrderListActivity;
 import com.renyu.sostar.activity.settings.FavListActivity;
 import com.renyu.sostar.activity.settings.SettingsActivity;
@@ -328,7 +327,12 @@ public class MainActivity extends BaseActivity {
                 if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
                     return;
                 }
-                startActivity(new Intent(MainActivity.this, SearchOrderActivtiy.class));
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    startActivity(new Intent(MainActivity.this, SearchPoiActivity.class));
+                }
+                else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    startActivity(new Intent(MainActivity.this, SearchOrderActivtiy.class));
+                }
                 break;
             case R.id.layout_main_menu_mycenter_fav:
                 if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
