@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:background="#f2f2f2">
     <include layout="@layout/view_nav"></include>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#999999">
+
+    </View>
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/swipy_messagelist"

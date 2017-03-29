@@ -14,15 +14,18 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.EmployeeListAdapter;
 import com.renyu.sostar.bean.ComfirmEmployeeRequest;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
+import com.renyu.sostar.bean.FavRequest;
 import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
+import com.renyu.sostar.params.CommonParams;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -292,11 +295,66 @@ public class EmployeeListActivity extends BaseActivity {
         intent.putExtra("userName", userName);
         intent.putExtra("orderId", getIntent().getStringExtra("orderId"));
         intent.putExtra("userId", userId);
-        startActivity(intent);
+        startActivityForResult(intent, CommonParams.RESULT_EVALUATE);
     }
 
-    // 确认离职
+    // 收藏
     public void collection(String userId) {
+        FavRequest request=new FavRequest();
+        FavRequest.ParamBean paramBean=new FavRequest.ParamBean();
+        paramBean.setEmployer(ACache.get(this).getAsString(CommonParams.USER_ID));
+        paramBean.setStaff(userId);
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .doFav(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                for (EmployerStaffListResponse bean : beans) {
+                    if (bean.getUserId().equals(userId)) {
+                        bean.setFavFlg("1");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK) {
+            if (requestCode==CommonParams.RESULT_EVALUATE) {
+                EmployerStaffListResponse tempBean=null;
+                for (EmployerStaffListResponse bean : beans) {
+                    if (bean.getUserId().equals(data.getStringExtra("userId"))) {
+                        tempBean=bean;
+                        break;
+                    }
+                }
+                if (tempBean!=null) {
+                    beans.remove(tempBean);
+                    tempBean.setEvaluateFlg("1");
+                    beans.add(tempBean);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 }

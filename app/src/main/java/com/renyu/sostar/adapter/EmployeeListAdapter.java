@@ -46,7 +46,8 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
     @Override
     public void onBindViewHolder(MyEmployeeListViewHolder holder, int position) {
-        holder.tv_adapter_employeelist_name.setText(beans.get(position).getName());
+        holder.tv_adapter_employeelist_name.setText(beans.get(position).getNickName());
+        holder.tv_adapter_employeelist_desp.setText("评价等级 "+beans.get(position).getEvaluateLevel());
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
         holder.iv_adapter_employeelist_avatar.setController(draweeController);
@@ -71,15 +72,36 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         // 已完成
         else if (beans.get(position).getStaffStatus().equals("4") ||
                 beans.get(position).getStaffStatus().equals("5")) {
-            holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
-            holder.tv_adapter_employeelist_oper1.setText("评价");
-            holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).evaluate(beans.get(position).getUserId(), beans.get(position).getName()));
-            holder.tv_adapter_employeelist_oper2.setVisibility(View.VISIBLE);
-            holder.tv_adapter_employeelist_oper2.setText("收藏");
-            holder.tv_adapter_employeelist_oper2.setOnClickListener(v -> ((EmployeeListActivity) context).collection(beans.get(position).getUserId()));
-            holder.v_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+            if (beans.get(position).getEvaluateFlg().equals("1") && beans.get(position).getFavFlg().equals("1")) {
+                holder.tv_adapter_employeelist_oper1.setVisibility(View.GONE);
+                holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
+                holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
+            }
+            else if (beans.get(position).getEvaluateFlg().equals("0") && beans.get(position).getFavFlg().equals("1")) {
+                holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+                holder.tv_adapter_employeelist_oper1.setText("评价");
+                holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).evaluate(beans.get(position).getUserId(), beans.get(position).getName()));
+                holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
+                holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
+            }
+            else if (beans.get(position).getEvaluateFlg().equals("1") && beans.get(position).getFavFlg().equals("0")) {
+                holder.tv_adapter_employeelist_oper1.setVisibility(View.GONE);
+                holder.tv_adapter_employeelist_oper2.setVisibility(View.VISIBLE);
+                holder.tv_adapter_employeelist_oper2.setText("收藏");
+                holder.tv_adapter_employeelist_oper2.setOnClickListener(v -> ((EmployeeListActivity) context).collection(beans.get(position).getUserId()));
+                holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
+            }
+            else {
+                holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+                holder.tv_adapter_employeelist_oper1.setText("评价");
+                holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).evaluate(beans.get(position).getUserId(), beans.get(position).getNickName()));
+                holder.tv_adapter_employeelist_oper2.setVisibility(View.VISIBLE);
+                holder.tv_adapter_employeelist_oper2.setText("收藏");
+                holder.tv_adapter_employeelist_oper2.setOnClickListener(v -> ((EmployeeListActivity) context).collection(beans.get(position).getUserId()));
+                holder.v_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
+            }
         }
-        // 已确认 进行中
+        // 进行中
         else if (beans.get(position).getStaffStatus().equals("8")) {
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
             holder.tv_adapter_employeelist_oper1.setText("解雇");
@@ -125,8 +147,14 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         }
         else if (beans.get(position).getStaffStatus().equals("4") ||
                 beans.get(position).getStaffStatus().equals("5")) {
-            holder.tv_adapter_employeelist_head.setText("评价");
-            holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
+            if (beans.get(position).getEvaluateFlg().equals("1")) {
+                holder.tv_adapter_employeelist_head.setText("已评价");
+                holder.tv_adapter_employeelist_choice.setVisibility(View.GONE);
+            }
+            else if (beans.get(position).getEvaluateFlg().equals("0")) {
+                holder.tv_adapter_employeelist_head.setText("未评价");
+                holder.tv_adapter_employeelist_choice.setVisibility(View.VISIBLE);
+            }
         }
         else if (beans.get(position).getStaffStatus().equals("8")) {
             holder.tv_adapter_employeelist_head.setText("已确认");

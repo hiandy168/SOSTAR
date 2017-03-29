@@ -73,7 +73,7 @@ public class OrderProcessActivity extends BaseActivity {
             orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
-            if (process!=4 || process!=9) {
+            if ((process!=4 || process!=9) && orderResponse.getPayFlg()!=1) {
                 tv_nav_right.setText("加班");
             }
 
@@ -120,12 +120,14 @@ public class OrderProcessActivity extends BaseActivity {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
                 tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
                 if (process==4 || process==5) {
-                    btn_orderprocess_commit.setText("评价雇员");
+                    btn_orderprocess_commit.setText("评价雇主");
                     btn_orderprocess_commit.setVisibility(View.VISIBLE);
                     btn_orderprocess_commit.setOnClickListener(v -> {
                         Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
                         intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                        startActivity(intent_employees);
+                        intent_employees.putExtra("userName", "");
+                        intent_employees.putExtra("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
+                        startActivityForResult(intent_employees, CommonParams.RESULT_EVALUATE);
                     });
                 }
             }
@@ -300,6 +302,16 @@ public class OrderProcessActivity extends BaseActivity {
                     startActivity(intent);
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK) {
+            if (requestCode==CommonParams.RESULT_EVALUATE) {
+                btn_orderprocess_commit.setVisibility(View.GONE);
+            }
         }
     }
 }

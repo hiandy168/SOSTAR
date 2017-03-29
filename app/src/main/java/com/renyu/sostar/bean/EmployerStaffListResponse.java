@@ -34,6 +34,8 @@ public class EmployerStaffListResponse {
     private String sex;
     private String staffStatus;
     private String userId;
+    private String evaluateFlg;
+    private String favFlg;
 
     public String getAge() {
         return age;
@@ -137,5 +139,21 @@ public class EmployerStaffListResponse {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getEvaluateFlg() {
+        return evaluateFlg;
+    }
+
+    public void setEvaluateFlg(String evaluateFlg) {
+        this.evaluateFlg = evaluateFlg;
+    }
+
+    public String getFavFlg() {
+        return favFlg;
+    }
+
+    public void setFavFlg(String favFlg) {
+        this.favFlg = favFlg;
     }
 }

@@ -7,6 +7,7 @@ import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
+import com.renyu.sostar.bean.FavListResponse;
 import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
@@ -185,5 +186,21 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setMsg")
     Observable<Response<EmptyResponse>> setMsg(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/evaluateStaff")
+    Observable<Response<EmptyResponse>> evaluateStaff(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/doFav")
+    Observable<Response<EmptyResponse>> doFav(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/searchFav")
+    Observable<ResponseList<FavListResponse>> searchFav(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/outFav")
+    Observable<Response<EmptyResponse>> outFav(@Body RequestBody requestBody);
 
 }

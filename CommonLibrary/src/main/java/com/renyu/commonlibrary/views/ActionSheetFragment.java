@@ -179,6 +179,7 @@ public class ActionSheetFragment extends Fragment {
     private void initViews(View view) {
         pop_child_layout=view.findViewById(R.id.pop_child_layout);
         pop_child_layout.setVisibility(View.INVISIBLE);
+        pop_child_layout.setOnTouchListener((v, event) -> true);
         realView.setOnClickListener(v -> dismiss());
         String title=getArguments().getString("title");
         TextView pop_title= (TextView) view.findViewById(R.id.pop_title);
