@@ -2,6 +2,7 @@ package com.renyu.sostar.activity.index;
 
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +40,8 @@ public class SearchOrderActivtiy extends BaseActivity {
     LinearLayout layout_search_hot;
     @BindView(R.id.flow_search_hot)
     FlowLayout flow_search_hot;
+    @BindView(R.id.rv_search)
+    RecyclerView rv_search;
 
     String[] choiceArray={"品质检测", "机械操作", "普工", "技工"};
 

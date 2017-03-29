@@ -16,7 +16,6 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyOrderListResponse;
-import com.renyu.sostar.fragment.OrderListFragment;
 import com.renyu.sostar.service.LocationService;
 
 import java.util.ArrayList;
@@ -74,7 +73,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         holder.tv_orderlist_comp.setText(beans.get(position).getCompanyName());
         LatLng userLatlng=new LatLng(LocationService.lastBdLocation.getLatitude(), LocationService.lastBdLocation.getLongitude());
         LatLng orderLatlng=new LatLng(Double.parseDouble(beans.get(position).getLatitude()), Double.parseDouble(beans.get(position).getLongitude()));
-        holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+        if (beans.get(position).getLatitude().equals("0") || beans.get(position).getLongitude().equals("0")) {
+            holder.tv_orderlist_distance.setVisibility(View.GONE);
+        }
+        else {
+            holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
+            holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+        }
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
         holder.iv_orderlist_logo.setController(draweeController);

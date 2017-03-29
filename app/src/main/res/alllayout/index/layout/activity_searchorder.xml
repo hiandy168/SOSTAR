@@ -31,7 +31,9 @@
                 android:textColor="#90e6c5"
                 android:textColorHint="#90e6c5"
                 android:hint="搜索关键词"
+                android:singleLine="true"
                 android:textSize="14sp"
+                android:imeOptions="actionSearch"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
         <TextView

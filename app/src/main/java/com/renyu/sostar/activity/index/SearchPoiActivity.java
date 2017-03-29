@@ -3,6 +3,7 @@ package com.renyu.sostar.activity.index;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.baidu.mapapi.search.core.PoiInfo;
@@ -67,6 +68,13 @@ public class SearchPoiActivity extends BaseActivity implements OnGetPoiSearchRes
                 .subscribe(searchResultModels -> {
 
                 });
+        ed_search_word.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId== EditorInfo.IME_ACTION_SEARCH) {
+                mPoiSearch.searchInCity((new PoiCitySearchOption())
+                        .city(CommonParams.CITY).keyword(ed_search_word.getText().toString()).pageCapacity(30).pageNum(0));
+            }
+            return false;
+        });
         rv_search.setHasFixedSize(true);
         rv_search.setLayoutManager(new LinearLayoutManager(this));
         adapter=new SearchPoiAdapter(this, beans);
