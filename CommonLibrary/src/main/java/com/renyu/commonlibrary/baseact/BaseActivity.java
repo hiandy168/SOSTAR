@@ -86,7 +86,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             else {
                 BarUtils.setColor(this, setStatusBarColor(), 0);
                 // 此为全屏模式下设置沉浸式颜色
-                BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
+                // 此方法会导致键盘无法将EditText弹起
+//                BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
             }
         }
         if (setStatusBarTranslucent()!=0) {
