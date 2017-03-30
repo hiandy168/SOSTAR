@@ -71,14 +71,19 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
             holder.tv_orderlist_price_type.setText("/小时");
         }
         holder.tv_orderlist_comp.setText(beans.get(position).getCompanyName());
-        LatLng userLatlng=new LatLng(LocationService.lastBdLocation.getLatitude(), LocationService.lastBdLocation.getLongitude());
-        LatLng orderLatlng=new LatLng(Double.parseDouble(beans.get(position).getLatitude()), Double.parseDouble(beans.get(position).getLongitude()));
-        if (Double.parseDouble(beans.get(position).getLatitude())<1 || Double.parseDouble(beans.get(position).getLongitude())<1) {
+        if (LocationService.lastBdLocation==null || LocationService.lastBdLocation==null) {
             holder.tv_orderlist_distance.setVisibility(View.GONE);
         }
         else {
-            holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
-            holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+            LatLng userLatlng=new LatLng(LocationService.lastBdLocation.getLatitude(), LocationService.lastBdLocation.getLongitude());
+            LatLng orderLatlng=new LatLng(Double.parseDouble(beans.get(position).getLatitude()), Double.parseDouble(beans.get(position).getLongitude()));
+            if (Double.parseDouble(beans.get(position).getLatitude())<1 || Double.parseDouble(beans.get(position).getLongitude())<1) {
+                holder.tv_orderlist_distance.setVisibility(View.GONE);
+            }
+            else {
+                holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
+                holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+            }
         }
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();

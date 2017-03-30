@@ -96,11 +96,11 @@
                 fresco:roundedCornerRadius="5dp"
                 fresco:roundingBorderWidth="0.5dp"
                 fresco:roundingBorderColor="#999999"
-                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:placeholderImage="@mipmap/ic_avatar_small"
                 fresco:placeholderImageScaleType="centerCrop"
-                fresco:retryImage="@mipmap/ic_launcher"
+                fresco:retryImage="@mipmap/ic_avatar_small"
                 fresco:retryImageScaleType="focusCrop"
-                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:failureImage="@mipmap/ic_avatar_small"
                 fresco:failureImageScaleType="focusCrop"/>
             <TextView
                 android:id="@+id/tv_orderlist_comp"
