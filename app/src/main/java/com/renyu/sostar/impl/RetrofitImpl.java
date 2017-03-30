@@ -203,4 +203,11 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/outFav")
     Observable<Response<EmptyResponse>> outFav(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setExtrawork")
+    Observable<Response<EmptyResponse>> setExtrawork(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/homepage/staffDetail")
+    Observable<ResponseList<MyOrderListResponse.DataBean>> searchOrder(@Body RequestBody requestBody);
 }

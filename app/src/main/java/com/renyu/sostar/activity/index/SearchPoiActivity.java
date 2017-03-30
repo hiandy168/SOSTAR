@@ -3,6 +3,7 @@ package com.renyu.sostar.activity.index;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -33,10 +35,10 @@ import io.reactivex.functions.Function;
 
 public class SearchPoiActivity extends BaseActivity implements OnGetPoiSearchResultListener {
 
-    @BindView(R.id.ed_search_word)
-    EditText ed_search_word;
-    @BindView(R.id.rv_search)
-    RecyclerView rv_search;
+    @BindView(R.id.ed_searchpoi_word)
+    EditText ed_searchpoi_word;
+    @BindView(R.id.rv_searchpoi)
+    RecyclerView rv_searchpoi;
     SearchPoiAdapter adapter;
 
     PoiSearch mPoiSearch = null;
@@ -49,7 +51,7 @@ public class SearchPoiActivity extends BaseActivity implements OnGetPoiSearchRes
 
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
-        RxTextView.textChanges(ed_search_word)
+        RxTextView.textChanges(ed_searchpoi_word)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .filter(charSequence -> charSequence.toString().trim().length() > 0)
                 .switchMap(new Function<CharSequence, ObservableSource<String>>() {
@@ -68,22 +70,22 @@ public class SearchPoiActivity extends BaseActivity implements OnGetPoiSearchRes
                 .subscribe(searchResultModels -> {
 
                 });
-        ed_search_word.setOnEditorActionListener((v, actionId, event) -> {
+        ed_searchpoi_word.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId== EditorInfo.IME_ACTION_SEARCH) {
                 mPoiSearch.searchInCity((new PoiCitySearchOption())
-                        .city(CommonParams.CITY).keyword(ed_search_word.getText().toString()).pageCapacity(30).pageNum(0));
+                        .city(CommonParams.CITY).keyword(ed_searchpoi_word.getText().toString()).pageCapacity(30).pageNum(0));
             }
             return false;
         });
-        rv_search.setHasFixedSize(true);
-        rv_search.setLayoutManager(new LinearLayoutManager(this));
+        rv_searchpoi.setHasFixedSize(true);
+        rv_searchpoi.setLayoutManager(new LinearLayoutManager(this));
         adapter=new SearchPoiAdapter(this, beans);
-        rv_search.setAdapter(adapter);
+        rv_searchpoi.setAdapter(adapter);
     }
 
     @Override
     public int initViews() {
-        return R.layout.activity_searchorder;
+        return R.layout.activity_searchpoi;
     }
 
     @Override
@@ -124,5 +126,14 @@ public class SearchPoiActivity extends BaseActivity implements OnGetPoiSearchRes
     protected void onDestroy() {
         super.onDestroy();
         mPoiSearch.destroy();
+    }
+
+    @OnClick({R.id.tv_searchpoi_cancel})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_searchpoi_cancel:
+                finish();
+                break;
+        }
     }
 }
