@@ -24,14 +24,14 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class NotificationUtils {
-	
+
 	private volatile static NotificationUtils center=null;
 	private static NotificationManager manager=null;
 
 	private static HashMap<String, NotificationCompat.Builder> builders;
 
 	private static HashMap<String, Integer> lastPercentMaps;
-	
+
 	/**
 	 * 通知栏中心调度
 	 * @param context
@@ -104,8 +104,8 @@ public class NotificationUtils {
 	 * @param largeIcon
 	 * @param actionIcon1
 	 * @param actionTitle1
-     * @param actionClass1
-     */
+	 * @param actionClass1
+	 */
 	public void createButtonNotification(Context context,
 										 String ticker, String title, String content,
 										 int color, int smallIcon, int largeIcon,
@@ -137,9 +137,9 @@ public class NotificationUtils {
 	 * @param color
 	 * @param smallIcon
 	 * @param largeIcon
-     * @param max
-     * @param progress
-     */
+	 * @param max
+	 * @param progress
+	 */
 	public void createProgressNotification(Context context,
 										   String ticker, String title, String content,
 										   int color, int smallIcon, int largeIcon,
@@ -157,8 +157,8 @@ public class NotificationUtils {
 	 * @param content
 	 * @param color
 	 * @param smallIcon
-     * @param largeIcon
-     */
+	 * @param largeIcon
+	 */
 	public void createIndeterminateProgressNotification(Context context,
 														String ticker, String title, String content,
 														int color, int smallIcon, int largeIcon,
@@ -179,8 +179,8 @@ public class NotificationUtils {
 	 * @param largeIcon
 	 * @param bigText
 	 * @param bigContentTitle
-     * @param summaryText
-     */
+	 * @param summaryText
+	 */
 	public void createBigTextNotification(Context context,
 										  String ticker, String title, String content,
 										  int color, int smallIcon, int largeIcon,
@@ -206,13 +206,13 @@ public class NotificationUtils {
 	 * @param largeIcon
 	 * @param bigLargeIcon
 	 * @param bigPicture
-     * @param bigContentTitle
-     * @param summaryText
-     */
+	 * @param bigContentTitle
+	 * @param summaryText
+	 */
 	public void createBigImageNotification(Context context,
-										  String ticker, String title, String content,
-										  int color, int smallIcon, int largeIcon,
-										  int bigLargeIcon, int bigPicture, String bigContentTitle, String summaryText,
+										   String ticker, String title, String content,
+										   int color, int smallIcon, int largeIcon,
+										   int bigLargeIcon, int bigPicture, String bigContentTitle, String summaryText,
 										   Intent intent) {
 		NotificationCompat.BigPictureStyle style=new NotificationCompat.BigPictureStyle();
 		style.bigLargeIcon(BitmapFactory.decodeResource(context.getResources(), bigLargeIcon));
@@ -235,8 +235,8 @@ public class NotificationUtils {
 	 * @param largeIcon
 	 * @param linesString
 	 * @param bigContentTitle
-     * @param summaryText
-     */
+	 * @param summaryText
+	 */
 	public void createTextListNotification(Context context,
 										   String ticker, String title, String content,
 										   int color, int smallIcon, int largeIcon,
@@ -284,7 +284,7 @@ public class NotificationUtils {
 		builders.put(""+id, builder);
 		lastPercentMaps.put(""+id, 0);
 	}
-	
+
 	/**
 	 * 更新相应id的通知栏
 	 * @param context
@@ -315,7 +315,7 @@ public class NotificationUtils {
 		builder.setContent(views);
 		manager.notify(id, builder.build());
 	}
-	
+
 	/**
 	 * 关闭通知
 	 * @param id
@@ -334,18 +334,18 @@ public class NotificationUtils {
 		builders.clear();
 		lastPercentMaps.clear();
 	}
-	
+
 	/**
 	 * 最后提示
 	 * @param context
 	 * @param id
 	 */
-	public void showEndNotification(Context context, int id, Class activity) {
+	public void showEndNotification(Context context, int id) {
 		if (!checkContainId(id)) {
 			return;
 		}
 		NotificationCompat.Builder builder=builders.get(""+id);
-		builder.setContentIntent(PendingIntent.getActivity(context, (int) SystemClock.uptimeMillis(), new Intent(context, activity), PendingIntent.FLAG_UPDATE_CURRENT));
+		builder.setContentIntent(PendingIntent.getBroadcast(context, (int) SystemClock.uptimeMillis(), new Intent(), PendingIntent.FLAG_UPDATE_CURRENT));
 		manager.notify(id, builder.build());
 		manager.cancel(id);
 		builders.remove(""+id);
@@ -364,6 +364,10 @@ public class NotificationUtils {
 	private static int getNotificationColor(Context context) {
 		NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
 		Notification notification=builder.build();
+		// 7.0没有解决
+		if (notification.contentView==null) {
+			return Color.WHITE;
+		}
 		int layoutId=notification.contentView.getLayoutId();
 		ViewGroup viewGroup= (ViewGroup) LayoutInflater.from(context).inflate(layoutId, null, false);
 		if (viewGroup.findViewById(android.R.id.title)!=null) {
