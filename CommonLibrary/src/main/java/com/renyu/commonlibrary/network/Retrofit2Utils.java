@@ -130,4 +130,30 @@ public class Retrofit2Utils {
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public static <T> ObservableTransformer asyncEmptyBackground() {
+        return upstream -> upstream
+                .flatMap(new Function<ResponseList<T>, ObservableSource<T>>() {
+                    @Override
+                    public ObservableSource<T> apply(ResponseList<T> response) throws Exception {
+                        return Observable.create(e -> {
+                            if (response.getResult()==1) {
+                                EmptyResponse response1=new EmptyResponse();
+                                response1.setMessage(response.getMessage());
+                                e.onNext((T) response1);
+                                e.onComplete();
+                            }
+                            else {
+                                NetworkException exception=new NetworkException();
+                                exception.setMessage(response.getMessage());
+                                exception.setResult(response.getResult());
+                                e.onError(exception);
+                            }
+                        });
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
