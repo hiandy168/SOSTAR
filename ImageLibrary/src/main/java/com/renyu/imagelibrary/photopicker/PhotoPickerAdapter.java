@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.blankj.utilcode.utils.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -84,6 +85,7 @@ public class PhotoPickerAdapter extends RecyclerView.Adapter<PhotoPickerAdapter.
             public void onClick(View v) {
                 boolean flag=models.get(position).isSelect();
                 if (((PhotoPickerActivity) context).imagePaths.size()==((PhotoPickerActivity) context).maxNum && !flag) {
+                    Toast.makeText(context, "您最多只能选择" + ((PhotoPickerActivity) context).maxNum + "张图片", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 models.get(position).setSelect(!flag);
