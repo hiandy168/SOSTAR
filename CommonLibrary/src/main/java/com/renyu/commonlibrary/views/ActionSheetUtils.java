@@ -20,6 +20,12 @@ public class ActionSheetUtils {
                 .setOnCancelListener(onCancelListener).show();
     }
 
+    public static ActionSheetFragment showAfterDateWithoutDismiss(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
+        return ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.AFTERDATE).setCanDismiss(false)
+                .setTitle(title).setOkTitle(okTitle).setCancelTitle(cancelTitle).setOnOKListener(onOKListener)
+                .setOnCancelListener(onCancelListener).show();
+    }
+
     public static void showTime(FragmentManager manager, String title, String cancelTitle, String okTitle, ActionSheetFragment.OnOKListener onOKListener, ActionSheetFragment.OnCancelListener onCancelListener) {
         ActionSheetFragment.build(manager).setChoice(ActionSheetFragment.CHOICE.TIME)
                 .setTitle(title).setOkTitle(okTitle).setCancelTitle(cancelTitle).setOnOKListener(onOKListener)

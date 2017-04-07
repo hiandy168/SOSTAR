@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.renyu.commonlibrary.views.ActionSheetUtils.showAfterDateWithoutDismiss;
 
 /**
  * Created by renyu on 2017/3/8.
@@ -52,6 +55,9 @@ public class UpdateTimeInfoActivity extends BaseActivity {
     int maxHeight=0;
 
     int viewHeight=0;
+
+    // 临时使用
+    ActionSheetFragment actionSheetFragment;
 
     @Override
     public void initParams() {
@@ -121,7 +127,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        tv_updatetimeinfo_start.setOnClickListener(v -> ActionSheetUtils.showAfterDate(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
+        tv_updatetimeinfo_start.setOnClickListener(v -> actionSheetFragment=showAfterDateWithoutDismiss(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
                 "开始日期",
                 "取消",
                 "完成",
@@ -130,35 +136,53 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                     String year = string.split("-")[0];
                     String month = Integer.parseInt(string.split("-")[1]) < 10 ? "0" + string.split("-")[1] : string.split("-")[1];
                     String day = Integer.parseInt(string.split("-")[2]) < 10 ? "0" + string.split("-")[2] : string.split("-")[2];
-                    tv_updatetimeinfo_start.setText(year + "/" + month + "/" + day);
                     tv_updatetimeinfo_start.setTag(year+month+day);
                     if (tv_updatetimeinfo_end.getTag()!=null && !tv_updatetimeinfo_end.getTag().toString().equals("")) {
                         if (Integer.parseInt(tv_updatetimeinfo_start.getTag().toString())>
                                 Integer.parseInt(tv_updatetimeinfo_end.getTag().toString())) {
-                            Toast.makeText(this, "开始时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
-                            tv_updatetimeinfo_start.setText("");
-                            tv_updatetimeinfo_start.setTag("");
-                            tv_updatetimeinfo_all.setText("");
+                            Toast.makeText(UpdateTimeInfoActivity.this, "开始时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
-                            try {
-                                long startDate=dateFormat.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
-                                long endDate=dateFormat.parse(tv_updatetimeinfo_end.getText().toString()).getTime();
-                                tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            // 是否有时间重叠部分
+                            if (checkStartTime(tv_updatetimeinfo_start, tv_updatetimeinfo_end, year + "/" + month + "/" + day)) {
+                                Toast.makeText(UpdateTimeInfoActivity.this, "时间重合", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                tv_updatetimeinfo_start.setText(year + "/" + month + "/" + day);
+                                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
+                                try {
+                                    long startDate=dateFormat.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
+                                    long endDate=dateFormat.parse(tv_updatetimeinfo_end.getText().toString()).getTime();
+                                    tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                actionSheetFragment.dismiss();
                             }
                         }
                     }
                     else {
-                        tv_updatetimeinfo_all.setText("");
+                        // 是否有时间重叠部分
+                        if (checkStartTime(tv_updatetimeinfo_start, tv_updatetimeinfo_end, year + "/" + month + "/" + day)) {
+                            Toast.makeText(UpdateTimeInfoActivity.this, "时间重合", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            actionSheetFragment.dismiss();
+                            tv_updatetimeinfo_start.setText(year + "/" + month + "/" + day);
+                            tv_updatetimeinfo_all.setText("");
+                        }
+
                     }
                 }, () -> {
-
-                }
-        ));
-        tv_updatetimeinfo_end.setOnClickListener(v -> ActionSheetUtils.showAfterDate(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
+                    if (TextUtils.isEmpty(tv_updatetimeinfo_start.getText().toString())) {
+                        tv_updatetimeinfo_start.setTag("");
+                    }
+                    else {
+                        String[] temp=tv_updatetimeinfo_start.getText().toString().split("/");
+                        tv_updatetimeinfo_start.setTag(temp[0]+temp[1]+temp[2]);
+                    }
+                }));
+        tv_updatetimeinfo_end.setOnClickListener(v -> actionSheetFragment=ActionSheetUtils.showAfterDateWithoutDismiss(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
                 "结束日期",
                 "取消",
                 "完成",
@@ -167,34 +191,51 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                     String year = string.split("-")[0];
                     String month = Integer.parseInt(string.split("-")[1]) < 10 ? "0" + string.split("-")[1] : string.split("-")[1];
                     String day = Integer.parseInt(string.split("-")[2]) < 10 ? "0" + string.split("-")[2] : string.split("-")[2];
-                    tv_updatetimeinfo_end.setText(year + "/" + month + "/" + day);
                     tv_updatetimeinfo_end.setTag(year+month+day);
                     if (tv_updatetimeinfo_start.getTag()!=null && !tv_updatetimeinfo_start.getTag().toString().equals("")) {
                         if (Integer.parseInt(tv_updatetimeinfo_start.getTag().toString())>
                                 Integer.parseInt(tv_updatetimeinfo_end.getTag().toString())) {
-                            Toast.makeText(this, "开始时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
-                            tv_updatetimeinfo_end.setText("");
-                            tv_updatetimeinfo_end.setTag("");
-                            tv_updatetimeinfo_all.setText("");
+                            Toast.makeText(UpdateTimeInfoActivity.this, "开始时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
-                            try {
-                                long startDate=dateFormat.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
-                                long endDate=dateFormat.parse(tv_updatetimeinfo_end.getText().toString()).getTime();
-                                tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            // 是否有时间重叠部分
+                            if (checkEndTime(tv_updatetimeinfo_start, tv_updatetimeinfo_end, year + "/" + month + "/" + day)) {
+                                Toast.makeText(UpdateTimeInfoActivity.this, "时间重合", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                tv_updatetimeinfo_end.setText(year + "/" + month + "/" + day);
+                                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
+                                try {
+                                    long startDate=dateFormat.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
+                                    long endDate=dateFormat.parse(tv_updatetimeinfo_end.getText().toString()).getTime();
+                                    tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                actionSheetFragment.dismiss();
                             }
                         }
                     }
                     else {
-                        tv_updatetimeinfo_all.setText("");
+                        // 是否有时间重叠部分
+                        if (checkEndTime(tv_updatetimeinfo_start, tv_updatetimeinfo_end, year + "/" + month + "/" + day)) {
+                            Toast.makeText(UpdateTimeInfoActivity.this, "时间重合", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            actionSheetFragment.dismiss();
+                            tv_updatetimeinfo_end.setText(year + "/" + month + "/" + day);
+                            tv_updatetimeinfo_all.setText("");
+                        }
                     }
                 }, () -> {
-
-                }
-        ));
+                    if (TextUtils.isEmpty(tv_updatetimeinfo_end.getText().toString())) {
+                        tv_updatetimeinfo_end.setTag("");
+                    }
+                    else {
+                        String[] temp=tv_updatetimeinfo_end.getText().toString().split("/");
+                        tv_updatetimeinfo_end.setTag(temp[0]+temp[1]+temp[2]);
+                    }
+                }));
         Button btn_updatetimeinfo_delete= (Button) view.findViewById(R.id.btn_updatetimeinfo_delete);
         btn_updatetimeinfo_delete.setOnClickListener(v -> {
             layout_updatetimeinfo_content.removeView(view);
@@ -259,5 +300,87 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    /**
+     * 检查起始时间不能包括在之前已选的里面
+     * @param tv_updatetimeinfo_start
+     * @param time
+     * @return
+     */
+    private boolean checkStartTime(TextView tv_updatetimeinfo_start, TextView tv_updatetimeinfo_end, String time) {
+        boolean timeRepeat=false;
+        for (int i=0;i<layout_updatetimeinfo_content.getChildCount();i++) {
+            View view1=layout_updatetimeinfo_content.getChildAt(i);
+            // 过滤自己
+            TextView tv_updatetimeinfo_start1= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_start);
+            if (tv_updatetimeinfo_start1==tv_updatetimeinfo_start) {
+                continue;
+            }
+            TextView tv_updatetimeinfo_end1= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_end);
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                long start=format.parse(tv_updatetimeinfo_start1.getText().toString()).getTime();
+                long end=format.parse(tv_updatetimeinfo_end1.getText().toString()).getTime();
+                long current=format.parse(time).getTime();
+                // 起始时间不能包括在之前已选的里面
+                if (current>=start && current<=end) {
+                    timeRepeat=true;
+                    break;
+                }
+                // 当存在终止时间的时候，起始时间不能包括在之前已选的
+                if (!TextUtils.isEmpty(tv_updatetimeinfo_end.getText().toString())) {
+                    long current2=format.parse(tv_updatetimeinfo_end.getText().toString()).getTime();
+                    if (current2>=end && current<=end) {
+                        timeRepeat=true;
+                        break;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return timeRepeat;
+    }
+
+    /**
+     * 检查起始时间不能包括在之前已选的里面
+     * @param tv_updatetimeinfo_start
+     * @param time
+     * @return
+     */
+    private boolean checkEndTime(TextView tv_updatetimeinfo_start, TextView tv_updatetimeinfo_end, String time) {
+        boolean timeRepeat=false;
+        for (int i=0;i<layout_updatetimeinfo_content.getChildCount();i++) {
+            View view1=layout_updatetimeinfo_content.getChildAt(i);
+            // 过滤自己
+            TextView tv_updatetimeinfo_end1= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_end);
+            if (tv_updatetimeinfo_end1==tv_updatetimeinfo_end) {
+                continue;
+            }
+            TextView tv_updatetimeinfo_start1= (TextView) view1.findViewById(R.id.tv_updatetimeinfo_start);
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                long start=format.parse(tv_updatetimeinfo_start1.getText().toString()).getTime();
+                long end=format.parse(tv_updatetimeinfo_end1.getText().toString()).getTime();
+                long current=format.parse(time).getTime();
+                // 结束时间不能包括在之前已选的里面
+                if (current>=start && current<=end) {
+                    timeRepeat=true;
+                    break;
+                }
+                // 当存在起始时间的时候，结束时间不能包括在之前已选的
+                if (!TextUtils.isEmpty(tv_updatetimeinfo_start.getText().toString())) {
+                    long current2=format.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
+                    if (current2>=end && current2<=start) {
+                        timeRepeat=true;
+                        break;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return timeRepeat;
     }
 }

@@ -59,6 +59,9 @@ public class ActionSheetFragment extends Fragment {
         ITEM, BEFOREDATE, AFTERDATE, TIME, GRID, CUSTOMER
     }
 
+    //是否自动关闭
+    boolean canDismiss=true;
+
     OnItemClickListener onItemClickListener;
     OnCancelListener onCancelListener;
     OnOKListener onOKListener;
@@ -89,6 +92,10 @@ public class ActionSheetFragment extends Fragment {
 
     public void setCustomerView(View customerView) {
         this.customerView=customerView;
+    }
+
+    public void setCanDismiss(boolean canDismiss) {
+        this.canDismiss = canDismiss;
     }
 
     public static ActionSheetFragment newItemInstance(String title, String[] items) {
@@ -543,7 +550,9 @@ public class ActionSheetFragment extends Fragment {
                             +months.get(pop_wheel_yearlayout_month.getSelectedItem())+"-"
                             +days.get(pop_wheel_yearlayout_day.getSelectedItem()));
                 }
-                dismiss();
+                if (canDismiss) {
+                    dismiss();
+                }
             });
             TextView pop_cancel1= (TextView) view.findViewById(R.id.pop_cancel1);
             pop_cancel1.setText(getArguments().getString("cancelTitle"));
@@ -605,7 +614,9 @@ public class ActionSheetFragment extends Fragment {
                 if (onOKListener!=null) {
                     onOKListener.onOKClick("");
                 }
-                dismiss();
+                if (canDismiss) {
+                    dismiss();
+                }
             });
             TextView pop_cancel1= (TextView) view.findViewById(R.id.pop_cancel1);
             pop_cancel1.setText(getArguments().getString("cancelTitle"));
@@ -736,6 +747,7 @@ public class ActionSheetFragment extends Fragment {
         CHOICE choice;
         String[] items;
         int[] images;
+        boolean canDismiss=true;
         OnItemClickListener onItemClickListener;
         OnCancelListener onCancelListener;
         OnOKListener onOKListener;
@@ -780,6 +792,11 @@ public class ActionSheetFragment extends Fragment {
 
         public Builder setChoice(CHOICE choice) {
             this.choice = choice;
+            return this;
+        }
+
+        public Builder setCanDismiss(boolean canDismiss) {
+            this.canDismiss = canDismiss;
             return this;
         }
 
@@ -836,6 +853,7 @@ public class ActionSheetFragment extends Fragment {
                 fragment.setCustomerView(customerView);
                 fragment.show(fragmentManager, tag);
             }
+            fragment.setCanDismiss(canDismiss);
             return fragment;
         }
     }
