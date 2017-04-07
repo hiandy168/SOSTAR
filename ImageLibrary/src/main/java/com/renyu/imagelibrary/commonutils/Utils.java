@@ -77,8 +77,8 @@ public class Utils {
         BitmapFactory.decodeFile(filePath, options);
         float bmpWidth=options.outWidth;
         float bmpHeight=options.outHeight;
-        int realWidth=0;
-        int realHeight=0;
+        int realWidth= (int) bmpWidth;
+        int realHeight= (int) bmpHeight;
         int startX=0;
         int startY=0;
         // 宽度过大
