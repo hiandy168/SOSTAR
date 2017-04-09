@@ -215,4 +215,9 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/recharge")
     Observable<Response<RechargeResponse>> recharge(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/cash/charge")
+    Observable<Response<EmptyResponse>> charge(@Body RequestBody requestBody);
+
 }

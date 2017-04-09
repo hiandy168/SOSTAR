@@ -17,7 +17,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
-import com.renyu.sostar.activity.sign.SignUpActivity;
+import com.renyu.sostar.bean.ChargeRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.VCodeRequest;
@@ -108,6 +108,7 @@ public class WithdrawalsActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_withdrawals_commit:
+                charge();
                 break;
             case R.id.btn_alipay_getvcode:
                 getVCode();
@@ -135,7 +136,7 @@ public class WithdrawalsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -184,6 +185,38 @@ public class WithdrawalsActivity extends BaseActivity {
         });
     }
 
+    private void charge() {
+        ChargeRequest request=new ChargeRequest();
+        ChargeRequest.ParamBean paramBean=new ChargeRequest.ParamBean();
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        paramBean.setAmount(Integer.parseInt(ed_withdrawals_money.getText().toString()));
+        paramBean.setPayeeAccount(ed_alipay_account.getText().toString());
+        paramBean.setPayeeRealName(ed_alipay_name.getText().toString());
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .charge(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(WithdrawalsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {

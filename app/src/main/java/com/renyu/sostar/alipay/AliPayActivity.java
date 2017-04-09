@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.renyu.commonlibrary.baseact.BaseActivity;
@@ -29,7 +30,8 @@ public class AliPayActivity extends BaseActivity {
 					setResult(RESULT_OK, new Intent());
 					finish();
 				} else {
-
+					Toast.makeText(AliPayActivity.this, payResult.getMemo(), Toast.LENGTH_SHORT).show();
+					finish();
 				}
 				break;
 			}

@@ -61,7 +61,6 @@
         <service android:name=".service.LocationService"></service>
         <!-- 支付宝支付相关 -->
         <activity android:name=".alipay.AliPayActivity" android:screenOrientation="portrait" android:theme="@style/transparentTheme"></activity>
-        <activity android:name=".alipay.AliH5PayActivity" android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
