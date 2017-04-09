@@ -40,6 +40,7 @@ import com.renyu.sostar.activity.user.EmployeeAuthActivity;
 import com.renyu.sostar.activity.user.EmployeeInfoActivity;
 import com.renyu.sostar.activity.user.EmployerAuthActivity;
 import com.renyu.sostar.activity.user.EmployerInfoActivity;
+import com.renyu.sostar.activity.user.WealthActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
@@ -234,7 +235,8 @@ public class MainActivity extends BaseActivity {
     @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_main_menu_mycenter_info,
             R.id.layout_main_menu_mycenter_auth, R.id.layout_main_menu_mycenter_area,
             R.id.layout_main_menu_mycenter_settings, R.id.layout_main_menu_message,
-            R.id.layout_main_menu_myorder, R.id.activity_main_search, R.id.layout_main_menu_mycenter_fav})
+            R.id.layout_main_menu_myorder, R.id.activity_main_search, R.id.layout_main_menu_mycenter_fav,
+            R.id.layout_main_menu_wealth})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -339,6 +341,9 @@ public class MainActivity extends BaseActivity {
                     return;
                 }
                 startActivity(new Intent(MainActivity.this, FavListActivity.class));
+                break;
+            case R.id.layout_main_menu_wealth:
+                startActivity(new Intent(MainActivity.this, WealthActivity.class));
                 break;
         }
     }

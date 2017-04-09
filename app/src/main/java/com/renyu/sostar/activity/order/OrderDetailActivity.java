@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -334,9 +335,11 @@ public class OrderDetailActivity extends BaseActivity {
                 else if (value.getUnitPriceType().equals("2")) {
                     tv_orderdetail_price_type.setText("/小时");
                 }
-                DraweeController logoDraweeController = Fresco.newDraweeControllerBuilder()
-                        .setUri(Uri.parse(value.getLogoPath())).setAutoPlayAnimations(true).build();
-                iv_orderdetail_logo.setController(logoDraweeController);
+                if (!TextUtils.isEmpty(value.getLogoPath())) {
+                    DraweeController logoDraweeController = Fresco.newDraweeControllerBuilder()
+                            .setUri(Uri.parse(value.getLogoPath())).setAutoPlayAnimations(true).build();
+                    iv_orderdetail_logo.setController(logoDraweeController);
+                }
                 tv_orderdetail_comp.setText(value.getCompanyName());
                 tv_orderdetail_orderid.setText("订单号:"+value.getOrderId());
                 tv_orderdetail_address.setText(value.getAddress());

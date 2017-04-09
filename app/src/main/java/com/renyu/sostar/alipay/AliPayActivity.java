@@ -1,11 +1,13 @@
 package com.renyu.sostar.alipay;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
 import com.alipay.sdk.app.PayTask;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.sostar.R;
 import com.renyu.sostar.bean.PayResult;
 
 import java.util.Map;
@@ -24,7 +26,8 @@ public class AliPayActivity extends BaseActivity {
 				// 判断resultStatus 为9000则代表支付成功
 				// 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
 				if (TextUtils.equals(resultStatus, "9000")) {
-
+					setResult(RESULT_OK, new Intent());
+					finish();
 				} else {
 
 				}
@@ -58,12 +61,12 @@ public class AliPayActivity extends BaseActivity {
 
 	@Override
 	public int initViews() {
-		return 0;
+		return R.layout.activity_transparent;
 	}
 
 	@Override
 	public void loadData() {
-		payV2("");
+		payV2(getIntent().getStringExtra("payinfo"));
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.renyu.sostar.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,9 +86,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
                 holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
             }
         }
-        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
-        holder.iv_orderlist_logo.setController(draweeController);
+        if (!TextUtils.isEmpty(beans.get(position).getLogoPath())) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
+            holder.iv_orderlist_logo.setController(draweeController);
+        }
         holder.layout_orderlist_root.setOnClickListener(v -> {
             if (onClickListener!=null) {
                 onClickListener.click(position);

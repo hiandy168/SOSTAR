@@ -36,6 +36,9 @@
         <activity android:name=".activity.user.EmployeeAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployerAuthActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.InfoActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.WealthActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.RechargeActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.user.WithdrawalsActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.ReleaseOrderActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.NotStartedOrderListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.order.OrderDetailActivity" android:screenOrientation="portrait"></activity>
@@ -57,7 +60,7 @@
         <!-- 定位上报服务 -->
         <service android:name=".service.LocationService"></service>
         <!-- 支付宝支付相关 -->
-        <activity android:name=".alipay.AliPayActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".alipay.AliPayActivity" android:screenOrientation="portrait" android:theme="@style/transparentTheme"></activity>
         <activity android:name=".alipay.AliH5PayActivity" android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

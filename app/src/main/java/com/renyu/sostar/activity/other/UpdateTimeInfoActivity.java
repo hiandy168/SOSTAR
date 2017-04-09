@@ -344,7 +344,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
     }
 
     /**
-     * 检查起始时间不能包括在之前已选的里面
+     * 检查结束时间不能包括在之前已选的里面
      * @param tv_updatetimeinfo_start
      * @param time
      * @return

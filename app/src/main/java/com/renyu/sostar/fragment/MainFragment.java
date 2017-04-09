@@ -202,9 +202,8 @@ public class MainFragment extends BaseFragment {
                 }
                 else {
                     if (bdLocation!=null) {
-
+                        startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
                     }
-                    startActivity(new Intent(getActivity(), ReleaseOrderActivity.class));
                 }
                 break;
             case R.id.iv_main_mylocation:
