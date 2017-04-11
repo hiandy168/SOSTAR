@@ -73,7 +73,7 @@ public class OrderProcessActivity extends BaseActivity {
             orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
-            if ((process!=4 || process!=9) && orderResponse.getPayFlg()!=1) {
+            if ((process!=4 && process!=9) && orderResponse.getPayFlg()!=1) {
                 tv_nav_right.setText("加班");
             }
 
