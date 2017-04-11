@@ -169,6 +169,16 @@ public class MainFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mv_main.onResume();
+
+        if (bdLocation!=null) {
+            // 分别加载地图相关信息
+            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                loadEmployeeIndex(bdLocation);
+            }
+            else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                loadEmployerIndex(bdLocation);
+            }
+        }
     }
 
     @Override

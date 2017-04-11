@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +49,11 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
     public void onBindViewHolder(MyEmployeeListViewHolder holder, int position) {
         holder.tv_adapter_employeelist_name.setText(beans.get(position).getNickName());
         holder.tv_adapter_employeelist_desp.setText("评价等级 "+beans.get(position).getEvaluateLevel());
-        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
-        holder.iv_adapter_employeelist_avatar.setController(draweeController);
+        if (!TextUtils.isEmpty(beans.get(position).getPicPath())) {
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
+            holder.iv_adapter_employeelist_avatar.setController(draweeController);
+        }
         // 未确认
         if (beans.get(position).getStaffStatus().equals("0")) {
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
