@@ -77,7 +77,7 @@ public class OrderProcessActivity extends BaseActivity {
                 tv_nav_right.setText("加班");
             }
 
-            // 未支付
+            // 未支付(只有订单完成的情况下才会出现未支付)
             if (orderResponse.getPayFlg()==0) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_order_comp);
                 tv_orderprocess.setText("");
@@ -89,8 +89,11 @@ public class OrderProcessActivity extends BaseActivity {
             // 已支付
             else if (orderResponse.getPayFlg()==1) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
-                tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
-                if (process==5) {
+                if (process==4) {
+                    tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已过期");
+                }
+                else if (process==5) {
+                    tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
                     btn_orderprocess_commit.setText("评价雇员");
                     btn_orderprocess_commit.setVisibility(View.VISIBLE);
                     btn_orderprocess_commit.setOnClickListener(v -> {
@@ -98,6 +101,9 @@ public class OrderProcessActivity extends BaseActivity {
                         intent_employees.putExtra("orderId", orderResponse.getOrderId());
                         startActivity(intent_employees);
                     });
+                }
+                else if (process==9) {
+                    tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
                 }
             }
             // 不可支付
