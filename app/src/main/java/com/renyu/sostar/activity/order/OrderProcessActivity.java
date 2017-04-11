@@ -106,6 +106,10 @@ public class OrderProcessActivity extends BaseActivity {
                     tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已取消");
                 }
             }
+            else if (orderResponse.getPayFlg()==3) {
+                iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
+                tv_orderprocess.setText("无需支付\n订单号"+orderResponse.getOrderId());
+            }
             // 不可支付
             else {
                 iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
