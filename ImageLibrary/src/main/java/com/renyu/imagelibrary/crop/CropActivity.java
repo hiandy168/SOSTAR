@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +69,7 @@ public class CropActivity extends BaseActivity {
 		tv_nav_right.setTextColor(Color.WHITE);
 		tv_nav_right.setVisibility(View.VISIBLE);
 		mCropImage.setFixedAspectRatio(true);
+		mCropImage.setAspectRatio(1000, 1000);
 	}
 
 	@Override

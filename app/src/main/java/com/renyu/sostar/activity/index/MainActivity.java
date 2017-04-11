@@ -363,6 +363,8 @@ public class MainActivity extends BaseActivity {
             if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
                 myCenterEmployerResponse= (MyCenterEmployerResponse) data.getSerializableExtra("value");
                 updateMyEmployerCenter(myCenterEmployerResponse);
+
+                EventBus.getDefault().post(myCenterEmployerResponse);
             }
             else {
                 myCenterEmployeeResponse= (MyCenterEmployeeResponse) data.getSerializableExtra("value");
