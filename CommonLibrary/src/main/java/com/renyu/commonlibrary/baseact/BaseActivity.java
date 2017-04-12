@@ -64,9 +64,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ProgressDialog networkDialg;
 
-    // 是否M以上机型设置了主体黑色
-    boolean is6Dark=false;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,25 +75,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // 设置沉浸式，二选一
         if (setStatusBarColor()!=0) {
-            if (is6Dark) {
-                ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
-                contentView.setPadding(0, BarUtils.getStatusBarHeight(this), 0, 0);
-                getWindow().setStatusBarColor(setStatusBarColor());
-            }
-            else {
-                BarUtils.setColor(this, setStatusBarColor(), 0);
-                // 此为全屏模式下设置沉浸式颜色
-                // 此方法会导致键盘无法将EditText弹起
+            com.renyu.commonlibrary.commonutils.BarUtils.setColor(this, setStatusBarColor());
+            // 此为全屏模式下设置沉浸式颜色
+            // 此方法会导致键盘无法将EditText弹起
 //                BarUtils.setColorForSwipeBack(this, setStatusBarColor(), 0);
-            }
         }
         if (setStatusBarTranslucent()!=0) {
-            if (is6Dark) {
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
-            else {
-                com.renyu.commonlibrary.commonutils.BarUtils.setTranslucent(this);
-            }
+            com.renyu.commonlibrary.commonutils.BarUtils.setTranslucent(this);
         }
 
         httpHelper = new OKHttpHelper();
@@ -219,11 +204,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             setStatusBarDarkIcon(activity.getWindow(), true);
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            is6Dark=true;
-
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-//            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            View decor = getWindow().getDecorView();
+            int ui = decor.getSystemUiVisibility();
+            // 设置浅色状态栏时的界面显示
+            ui |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            // 设置深色状态栏时的界面显示
+//            ui &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decor.setSystemUiVisibility(ui);
         }
     }
 

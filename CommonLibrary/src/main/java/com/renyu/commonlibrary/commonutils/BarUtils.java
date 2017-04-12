@@ -44,14 +44,28 @@ public class BarUtils {
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.utils.BarUtils.getStatusBarHeight(activity)));
             view.setBackgroundColor(calculateStatusColor(color, 0));
             viewGroup.addView(view);
+
+            return;
         }
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+            //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置状态栏颜色
             window.setStatusBarColor(calculateStatusColor(color, 0));
+            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+                // 去掉系统状态栏下的windowContentOverlay
+                View v = window.findViewById(android.R.id.content);
+                if (v != null) {
+                    v.setForeground(null);
+                }
+            }
         }
     }
 
     /**
-     * 状态栏着色的沉浸式
+     * 状态栏全透明沉浸式
      */
     public static void setTranslucent(Activity activity) {
         Window window=activity.getWindow();
