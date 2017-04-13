@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.R2;
 import com.renyu.imagelibrary.camera.CameraActivity;
@@ -99,7 +100,7 @@ public class PhotoPickerActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

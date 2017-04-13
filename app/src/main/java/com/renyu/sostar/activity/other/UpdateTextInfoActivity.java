@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
@@ -80,7 +81,7 @@ public class UpdateTextInfoActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

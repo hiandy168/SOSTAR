@@ -111,7 +111,7 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

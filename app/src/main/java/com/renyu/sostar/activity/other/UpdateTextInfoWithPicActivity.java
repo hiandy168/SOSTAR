@@ -24,6 +24,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
@@ -131,7 +132,7 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

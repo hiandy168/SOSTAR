@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.alipay.AliPayActivity;
@@ -73,7 +74,7 @@ public class RechargeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

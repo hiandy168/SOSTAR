@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.views.FlowLayout;
 import com.renyu.sostar.R;
 
@@ -93,7 +94,7 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

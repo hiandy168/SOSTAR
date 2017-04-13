@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.commonlibrary.views.ActionSheetUtils;
 import com.renyu.sostar.R;
@@ -97,7 +98,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 

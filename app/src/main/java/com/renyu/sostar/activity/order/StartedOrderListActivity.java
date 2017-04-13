@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.fragment.OrderListFragment;
 import com.renyu.sostar.params.CommonParams;
@@ -66,7 +67,7 @@ public class StartedOrderListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setDark(this);
+        BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
     }
 
