@@ -71,7 +71,7 @@ public class BarUtils {
     public static void setTranslucent(Activity activity) {
         Window window=activity.getWindow();
         WindowManager.LayoutParams params=window.getAttributes();
-        if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) {
             //将状态栏设置成全透明
             int bits=WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
             if ((params.flags & bits)==0) {
@@ -80,7 +80,7 @@ public class BarUtils {
                 window.setAttributes(params);
             }
         }
-        else if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+        else if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
             window.getDecorView().setSystemUiVisibility(window.getDecorView().getSystemUiVisibility() |
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             window.setStatusBarColor(Color.TRANSPARENT);
