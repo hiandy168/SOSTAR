@@ -13,6 +13,7 @@ import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.RechargeInfoResponse;
 import com.renyu.sostar.bean.RechargeResponse;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.StartMyOrderSignResponse;
@@ -220,4 +221,11 @@ public interface RetrofitImpl {
     @POST("sostar/api/cash/charge")
     Observable<Response<EmptyResponse>> charge(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/cash/center")
+    Observable<Response<RechargeInfoResponse>> rechargeInfo(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/cash/bind")
+    Observable<Response<EmptyResponse>> bindCashInfo(@Body RequestBody requestBody);
 }

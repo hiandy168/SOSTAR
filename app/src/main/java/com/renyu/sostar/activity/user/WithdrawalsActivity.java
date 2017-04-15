@@ -3,6 +3,7 @@ package com.renyu.sostar.activity.user;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,9 +19,10 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.BindCashInfoRequest;
 import com.renyu.sostar.bean.ChargeRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.RechargeInfoResponse;
 import com.renyu.sostar.bean.VCodeRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -83,7 +85,7 @@ public class WithdrawalsActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        getEmployerCashAvaliable();
+        getRechargeInfo();
     }
 
     @Override
@@ -109,7 +111,12 @@ public class WithdrawalsActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_withdrawals_commit:
-                charge();
+                if (ed_alipay_account.isEnabled() && ed_alipay_name.isEnabled()) {
+                    bindCashInfo();
+                }
+                else {
+                    charge();
+                }
                 break;
             case R.id.btn_alipay_getvcode:
                 getVCode();
@@ -117,22 +124,30 @@ public class WithdrawalsActivity extends BaseActivity {
         }
     }
 
-    private void getEmployerCashAvaliable() {
+    private void getRechargeInfo() {
         EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
         EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
         paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
-                .getEmployerCashAvaiable(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
+                .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeInfoResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
                 disposable=d;
             }
 
             @Override
-            public void onNext(EmployerCashAvaliableResponse value) {
+            public void onNext(RechargeInfoResponse value) {
                 tv_withdrawals_lastmoney.setText("可用余额: "+value.getCashAvaiable());
+                if (!TextUtils.isEmpty(value.getPayeeAccount())) {
+                    ed_alipay_account.setText(value.getPayeeAccount());
+                    ed_alipay_account.setEnabled(false);
+                }
+                if (!TextUtils.isEmpty(value.getPayeeRealName())) {
+                    ed_alipay_name.setText(value.getPayeeRealName());
+                    ed_alipay_name.setEnabled(false);
+                }
             }
 
             @Override
@@ -186,13 +201,45 @@ public class WithdrawalsActivity extends BaseActivity {
         });
     }
 
+    private void bindCashInfo() {
+        BindCashInfoRequest request=new BindCashInfoRequest();
+        BindCashInfoRequest.ParamBean paramBean=new BindCashInfoRequest.ParamBean();
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        paramBean.setCaptcha(ed_alipay_code.getText().toString());
+        paramBean.setPayeeAccount(ed_alipay_account.getText().toString());
+        paramBean.setPayeeRealName(ed_alipay_name.getText().toString());
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .bindCashInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                charge();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     private void charge() {
         ChargeRequest request=new ChargeRequest();
         ChargeRequest.ParamBean paramBean=new ChargeRequest.ParamBean();
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         paramBean.setAmount(Integer.parseInt(ed_withdrawals_money.getText().toString()));
-        paramBean.setPayeeAccount(ed_alipay_account.getText().toString());
-        paramBean.setPayeeRealName(ed_alipay_name.getText().toString());
+        paramBean.setCaptcha(ed_alipay_code.getText().toString());
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .charge(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
@@ -209,7 +256,7 @@ public class WithdrawalsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -11,16 +11,23 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
+import com.renyu.sostar.bean.RechargeInfoResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/4/9.
@@ -46,6 +53,10 @@ public class WealthActivity extends BaseActivity {
     SwipyRefreshLayout swipy_wealth;
     @BindView(R.id.rv_wealth)
     RecyclerView rv_wealth;
+    @BindView(R.id.tv_wealth_money)
+    TextView tv_wealth_money;
+
+    Disposable disposable;
 
     @Override
     public void initParams() {
@@ -97,6 +108,12 @@ public class WealthActivity extends BaseActivity {
         return 1;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getRechargeInfo();
+    }
+
     @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.tv_wealth_recharge, R.id.tv_wealth_withdrawals,
             R.id.tv_wealth_billing})
     public void onClick(View view) {
@@ -115,5 +132,35 @@ public class WealthActivity extends BaseActivity {
             case R.id.tv_wealth_billing:
                 break;
         }
+    }
+
+    private void getRechargeInfo() {
+        EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
+        EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeInfoResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
+
+            @Override
+            public void onNext(RechargeInfoResponse value) {
+                tv_wealth_money.setText(""+value.getCashAvaiable());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

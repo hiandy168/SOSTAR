@@ -6,13 +6,13 @@ import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.BuildConfig;
 
 /**
- * Created by renyu on 2017/4/9.
+ * Created by renyu on 2017/4/15.
  */
 
-public class ChargeRequest {
+public class BindCashInfoRequest {
     /**
      * deviceId : string
-     * param : {"amount":0,"captcha":"string","userId":"string"}
+     * param : {"captcha":"string","payeeAccount":"string","payeeRealName":"string","userId":"string"}
      * platform : string
      * sysversion : string
      * ver : string
@@ -66,22 +66,16 @@ public class ChargeRequest {
 
     public static class ParamBean {
         /**
-         * amount : 0
          * captcha : string
+         * payeeAccount : string
+         * payeeRealName : string
          * userId : string
          */
 
-        private int amount;
         private String captcha;
+        private String payeeAccount;
+        private String payeeRealName;
         private String userId;
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount = amount;
-        }
 
         public String getCaptcha() {
             return captcha;
@@ -89,6 +83,22 @@ public class ChargeRequest {
 
         public void setCaptcha(String captcha) {
             this.captcha = captcha;
+        }
+
+        public String getPayeeAccount() {
+            return payeeAccount;
+        }
+
+        public void setPayeeAccount(String payeeAccount) {
+            this.payeeAccount = payeeAccount;
+        }
+
+        public String getPayeeRealName() {
+            return payeeRealName;
+        }
+
+        public void setPayeeRealName(String payeeRealName) {
+            this.payeeRealName = payeeRealName;
         }
 
         public String getUserId() {
