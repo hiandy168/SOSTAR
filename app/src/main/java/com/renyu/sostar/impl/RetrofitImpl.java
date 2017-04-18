@@ -4,7 +4,6 @@ import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.network.params.Response;
 import com.renyu.commonlibrary.network.params.ResponseList;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
-import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.renyu.sostar.bean.FavListResponse;
@@ -14,7 +13,8 @@ import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.OrderResponse;
-import com.renyu.sostar.bean.RechargeInfoResponse;
+import com.renyu.sostar.bean.PayInfoResponse;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.RechargeResponse;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.StartMyOrderSignResponse;
@@ -101,10 +101,6 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/sys/userType/set")
     Observable<Response<EmptyResponse>> setUserType(@Body RequestBody requestBody);
-
-    @Headers({"Content-Type:application/json", "Accept:application/json"})
-    @POST("sostar/api/employer/getEmployerCashAvaiable")
-    Observable<Response<EmployerCashAvaliableResponse>> getEmployerCashAvaiable(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setEmployerOrder")
@@ -224,7 +220,7 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/center")
-    Observable<Response<RechargeInfoResponse>> rechargeInfo(@Body RequestBody requestBody);
+    Observable<Response<EmployerCashAvaliableResponse>> rechargeInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/bind")
@@ -234,4 +230,7 @@ public interface RetrofitImpl {
     @POST("sostar/api/cash/flow")
     Observable<ResponseList<FlowResponse>> flowList(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/getPayInfo")
+    Observable<Response<PayInfoResponse>> getPayInfo(@Body RequestBody requestBody);
 }

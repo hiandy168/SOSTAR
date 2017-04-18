@@ -19,13 +19,16 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.adapter.WealthAdapter;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.FlowResponse;
-import com.renyu.sostar.bean.RechargeInfoResponse;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,10 +60,11 @@ public class WealthActivity extends BaseActivity {
     SwipyRefreshLayout swipy_wealth;
     @BindView(R.id.rv_wealth)
     RecyclerView rv_wealth;
+    WealthAdapter adapter;
     @BindView(R.id.tv_wealth_money)
     TextView tv_wealth_money;
 
-    List<FlowResponse> beans;
+    List<Object> beans;
 
     Disposable disposable;
 
@@ -94,6 +98,8 @@ public class WealthActivity extends BaseActivity {
                 android.R.color.holo_orange_light, android.R.color.holo_green_light);
         rv_wealth.setHasFixedSize(true);
         rv_wealth.setLayoutManager(new LinearLayoutManager(this));
+        adapter=new WealthAdapter(this, beans);
+        rv_wealth.setAdapter(adapter);
     }
 
     @Override
@@ -150,14 +156,14 @@ public class WealthActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeInfoResponse>() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
                 disposable=d;
             }
 
             @Override
-            public void onNext(RechargeInfoResponse value) {
+            public void onNext(EmployerCashAvaliableResponse value) {
                 tv_wealth_money.setText(""+value.getCashAvaiable());
             }
 
@@ -188,7 +194,44 @@ public class WealthActivity extends BaseActivity {
 
             @Override
             public void onNext(List<FlowResponse> value) {
-                beans.addAll(value);
+                beans.clear();
+                // 第一条记录的年份
+                String lastYear="";
+                // 第一条记录的月份
+                String lastMonth="";
+                for (int i = 0; i < value.size(); i++) {
+                    SimpleDateFormat yearFormat=new SimpleDateFormat("yyyy");
+                    SimpleDateFormat momnthFormat=new SimpleDateFormat("MM");
+                    SimpleDateFormat timeFormat1=new SimpleDateFormat("MM月dd日");
+                    SimpleDateFormat timeFormat2=new SimpleDateFormat("HH:mm");
+                    Date date=new Date();
+                    date.setTime(Long.parseLong(value.get(i).getDate()));
+                    if (i==0) {
+
+                    }
+                    else {
+                        String currentYear=yearFormat.format(date);
+                        String currentMonth=momnthFormat.format(date);
+                        // 如果当前年份与月份都相同，则归并添加
+                        if (currentYear.equals(lastYear) && currentMonth.equals(lastMonth)) {
+
+                        }
+                        // 如果当前年份相同，月份不同，则添加显示空行
+                        else if (currentYear.equals(lastYear) && !currentMonth.equals(lastMonth)) {
+                            beans.add("");
+                        }
+                        // 如果当前年份与月份都不相同，则添加显示年份
+                        else if (currentYear.equals(lastYear) && currentMonth.equals(lastMonth)) {
+                            beans.add(currentYear+"年");
+                        }
+                    }
+                    lastYear=yearFormat.format(date);
+                    lastMonth=momnthFormat.format(date);
+                    FlowResponse response=value.get(i);
+                    response.setDate(timeFormat1.format(date)+"\n"+timeFormat2.format(date));
+                    beans.add(response);
+                }
+                adapter.notifyDataSetChanged();
             }
 
             @Override

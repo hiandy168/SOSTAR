@@ -32,8 +32,8 @@ import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.bean.UploadResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -233,7 +233,7 @@ public class ReleaseOrderActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        getEmployerCashAvaliable();
+        getRechargeInfo();
     }
 
     @Override
@@ -555,13 +555,13 @@ public class ReleaseOrderActivity extends BaseActivity {
         }
     }
 
-    private void getEmployerCashAvaliable() {
+    private void getRechargeInfo() {
         EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
         EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
         paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
-                .getEmployerCashAvaiable(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {

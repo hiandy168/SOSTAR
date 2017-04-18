@@ -508,7 +508,7 @@ public class MainActivity extends BaseActivity {
             tv_main_menu_auth2.setText("认证中");
         }
         tv_main_menu_evaluatelevel.setText(TextUtils.isEmpty(value.getStar())?"0":value.getStar());
-        tv_main_menu_order.setText(TextUtils.isEmpty(value.getOngoingOrder())?"0":value.getOngoingOrder());
+        tv_main_menu_order.setText(TextUtils.isEmpty(value.getFinishedOrderNum())?"0":value.getFinishedOrderNum());
         tv_main_menu_closerate.setText(TextUtils.isEmpty(value.getCloseRate())?"0":value.getCloseRate());
         if (TextUtils.isEmpty(value.getRangeArea())) {
             tv_main_menu_mycenter_area.setText("0公里");

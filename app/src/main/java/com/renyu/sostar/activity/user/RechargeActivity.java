@@ -17,7 +17,7 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.alipay.AliPayActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.RechargeInfoResponse;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.RechargeRequest;
 import com.renyu.sostar.bean.RechargeResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
@@ -97,14 +97,14 @@ public class RechargeActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeInfoResponse>() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
                 disposable=d;
             }
 
             @Override
-            public void onNext(RechargeInfoResponse value) {
+            public void onNext(EmployerCashAvaliableResponse value) {
                 tv_recharge_lastmoney.setText("可用余额: "+value.getCashAvaiable());
             }
 

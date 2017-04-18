@@ -57,6 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dip"
                     android:textSize="14sp"
+                    android:text="0"
                     android:textColor="#333333" />
             </LinearLayout>
             <View
@@ -85,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dip"
                     android:textSize="14sp"
+                    android:text="0"
                     android:textColor="#333333" />
             </LinearLayout>
         </LinearLayout>

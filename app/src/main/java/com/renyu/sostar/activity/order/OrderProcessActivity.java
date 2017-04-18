@@ -13,11 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.PayInfoResponse;
+import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import java.text.ParseException;
@@ -27,6 +32,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by renyu on 2017/3/21.
@@ -52,6 +59,10 @@ public class OrderProcessActivity extends BaseActivity {
     LinearLayout layout_orderprocess_money;
     @BindView(R.id.tv_orderprocess_hint)
     TextView tv_orderprocess_hint;
+    @BindView(R.id.tv_orderprocess_money)
+    TextView tv_orderprocess_money;
+    @BindView(R.id.tv_orderprocess_tip)
+    TextView tv_orderprocess_tip;
 
     int process;
     OrderResponse orderResponse;
@@ -86,6 +97,8 @@ public class OrderProcessActivity extends BaseActivity {
                 tv_orderprocess_hint.setVisibility(View.VISIBLE);
                 btn_orderprocess_commit.setText("确认支付");
                 btn_orderprocess_commit.setVisibility(View.VISIBLE);
+
+                getPayInfo();
             }
             // 已支付
             else if (orderResponse.getPayFlg()==1) {
@@ -314,6 +327,52 @@ public class OrderProcessActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    private void getPayInfo() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(orderResponse.getOrderId());
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getPayInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<PayInfoResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(PayInfoResponse value) {
+                int count=-1;
+                if (value.getStaffName().size()>3) {
+                    count=3;
+                }
+                else {
+                    count=value.getStaffName().size();
+                }
+                String names="";
+                for (int i = 0; i < count; i++) {
+                    names+=value.getStaffName().get(i)+",";
+                }
+                names=names.substring(0, names.length()-1);
+                tv_orderprocess.setText("订单完成\n本次订单将向"+names+"等"+value.getStaffName().size()+
+                        "人支付\n工资报酬总计"+value.getTotalMoney()+"元");
+                tv_orderprocess_money.setText(""+value.getWagesMoney());
+                tv_orderprocess_tip.setText(""+value.getTipsMoney());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.bean.BindCashInfoRequest;
 import com.renyu.sostar.bean.ChargeRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.RechargeInfoResponse;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.VCodeRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -131,14 +131,14 @@ public class WithdrawalsActivity extends BaseActivity {
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeInfoResponse>() {
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
                 disposable=d;
             }
 
             @Override
-            public void onNext(RechargeInfoResponse value) {
+            public void onNext(EmployerCashAvaliableResponse value) {
                 tv_withdrawals_lastmoney.setText("可用余额: "+value.getCashAvaiable());
                 if (!TextUtils.isEmpty(value.getPayeeAccount())) {
                     ed_alipay_account.setText(value.getPayeeAccount());
@@ -252,6 +252,7 @@ public class WithdrawalsActivity extends BaseActivity {
             @Override
             public void onNext(EmptyResponse value) {
                 Toast.makeText(WithdrawalsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override

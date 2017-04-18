@@ -19,9 +19,9 @@ import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.OverTimeRequest;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -76,7 +76,7 @@ public class OverTimeActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        getEmployerCashAvaliable();
+        getRechargeInfo();
     }
 
     @Override
@@ -142,13 +142,13 @@ public class OverTimeActivity extends BaseActivity {
         }
     }
 
-    private void getEmployerCashAvaliable() {
+    private void getRechargeInfo() {
         EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
         EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
         paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
-                .getEmployerCashAvaiable(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .rechargeInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
