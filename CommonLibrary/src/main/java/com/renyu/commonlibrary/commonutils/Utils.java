@@ -1,6 +1,8 @@
 package com.renyu.commonlibrary.commonutils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
@@ -160,5 +162,19 @@ public class Utils {
 
         }
         return "";
+    }
+
+    /**
+     * 通过getRunningTasks判断App是否位于前台
+     * getRunningTask方法在Android5.0以上已经被废弃，只会返回自己和系统的一些不敏感的task，不再返回其他应用的task，用此方法来判断自身App是否处于后台，仍然是有效的，但是无法判断其他应用是否位于前台，因为不再能获取信息
+     *
+     * @param context     上下文参数
+     * @param packageName 需要检查是否位于栈顶的App的包名
+     * @return
+     */
+    public static boolean getRunningTask(Context context, String packageName) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+        return !TextUtils.isEmpty(packageName) && packageName.equals(cn.getPackageName());
     }
 }
