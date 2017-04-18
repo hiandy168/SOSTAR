@@ -75,6 +75,7 @@ public class WealthAdapter extends RecyclerView.Adapter {
                 ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setTextColor(Color.parseColor("#999999"));
             }
             ((WealthInfoViewHolder) holder).tv_wealth_info_lastmoney.setText(""+((FlowResponse) beans.get(position)).getCashAmount());
+            ((WealthInfoViewHolder) holder).tv_wealth_info_text.setText(((FlowResponse) beans.get(position)).getDescri());
             // 最后一条
             if (position==beans.size()-1) {
                 ((WealthInfoViewHolder) holder).view_wealth_info.setVisibility(View.GONE);

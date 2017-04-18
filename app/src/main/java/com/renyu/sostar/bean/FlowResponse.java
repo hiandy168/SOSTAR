@@ -19,6 +19,7 @@ public class FlowResponse {
     private String date;
     private String orderId;
     private String type;
+    private String descri;
 
     public int getCashAmount() {
         return cashAmount;
@@ -58,5 +59,13 @@ public class FlowResponse {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getDescri() {
+        return descri;
+    }
+
+    public void setDescri(String descri) {
+        this.descri = descri;
     }
 }
