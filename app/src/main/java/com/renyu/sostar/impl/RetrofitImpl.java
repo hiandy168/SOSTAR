@@ -8,6 +8,7 @@ import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.renyu.sostar.bean.FavListResponse;
+import com.renyu.sostar.bean.FlowResponse;
 import com.renyu.sostar.bean.MsgListResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
@@ -228,4 +229,9 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/bind")
     Observable<Response<EmptyResponse>> bindCashInfo(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/cash/flow")
+    Observable<ResponseList<FlowResponse>> flowList(@Body RequestBody requestBody);
+
 }

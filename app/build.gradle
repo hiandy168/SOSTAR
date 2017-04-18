@@ -33,6 +33,16 @@ android {
                 throw new InvalidUserDataException(ex.toString())
             }
         }
+        debug {
+            try {
+                storeFile file("android.keystore")
+                storePassword KEYSTORE_PASSWORD
+                keyAlias "android.keystore"
+                keyPassword KEY_PASSWORD
+            } catch (ex) {
+                throw new InvalidUserDataException(ex.toString())
+            }
+        }
     }
     buildTypes {
         release {
@@ -79,7 +89,7 @@ dependencies {
     // andfix
     compile 'com.alipay.euler:andfix:0.5.0@aar'
     // walle  Android Signature V2 Scheme签名下的新一代渠道包打包神器
-    compile 'com.meituan.android.walle:library:1.1.0'
+    compile 'com.meituan.android.walle:library:1.1.1'
     compile project(':CommonLibrary')
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
@@ -95,4 +105,6 @@ walle {
     apkOutputFolder = new File("${project.buildDir}/outputs/channels");
     // 定制渠道包的APK的文件名称
     apkFileNameFormat = '${projectName}-${channel}-v${versionName}-${buildTime}.apk';
+    // 渠道配置文件
+    channelFile = new File("${project.getProjectDir()}/channel")
 }

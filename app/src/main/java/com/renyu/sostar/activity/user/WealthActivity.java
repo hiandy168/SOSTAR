@@ -20,9 +20,13 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
+import com.renyu.sostar.bean.FlowResponse;
 import com.renyu.sostar.bean.RechargeInfoResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,10 +60,14 @@ public class WealthActivity extends BaseActivity {
     @BindView(R.id.tv_wealth_money)
     TextView tv_wealth_money;
 
+    List<FlowResponse> beans;
+
     Disposable disposable;
 
     @Override
     public void initParams() {
+        beans=new ArrayList<>();
+
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
         tv_nav_title.setText("钱包");
         tv_nav_title.setTextColor(Color.WHITE);
@@ -112,6 +120,7 @@ public class WealthActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getRechargeInfo();
+        getFlowList();
     }
 
     @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.tv_wealth_recharge, R.id.tv_wealth_withdrawals,
@@ -150,6 +159,36 @@ public class WealthActivity extends BaseActivity {
             @Override
             public void onNext(RechargeInfoResponse value) {
                 tv_wealth_money.setText(""+value.getCashAvaiable());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void getFlowList() {
+        EmployerCashAvaliableRequest request=new EmployerCashAvaliableRequest();
+        EmployerCashAvaliableRequest.ParamBean paramBean=new EmployerCashAvaliableRequest.ParamBean();
+        paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .flowList(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.backgroundList()).subscribe(new Observer<List<FlowResponse>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<FlowResponse> value) {
+                beans.addAll(value);
             }
 
             @Override

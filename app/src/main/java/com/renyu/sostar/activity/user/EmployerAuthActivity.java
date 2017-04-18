@@ -254,7 +254,7 @@ public class EmployerAuthActivity extends BaseActivity {
             iv_employerauth_pic3.setController(draweeController);
             tv_employerauth_pic3.setVisibility(View.GONE);
         }
-        String url="http://114.215.18.160:9333/submit"+"?pos="+uploadPicPosition;
+        String url="http://106.15.46.105:9333/submit"+"?pos="+uploadPicPosition;
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         helper.asyncUpload(fileHashMap, url, new HashMap<>(), () -> {
@@ -265,7 +265,7 @@ public class EmployerAuthActivity extends BaseActivity {
                 Toast.makeText(EmployerAuthActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 Gson gson=new Gson();
                 UploadResponse response=gson.fromJson(string, UploadResponse.class);
-                String imageUrl="http://114.215.18.160:8081/"+response.getFid();
+                String imageUrl="http://106.15.46.105:8081/"+response.getFid();
                 if (uploadPicPosition==1) {
                     iv_employerauth_pic1.setTag(imageUrl);
                 }

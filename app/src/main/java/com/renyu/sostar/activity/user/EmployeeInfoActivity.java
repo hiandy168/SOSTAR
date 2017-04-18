@@ -328,14 +328,14 @@ public class EmployeeInfoActivity extends BaseActivity {
         HashMap<String, File> fileHashMap=new HashMap<>();
         fileHashMap.put("image", new File(path));
         OKHttpHelper helper=new OKHttpHelper();
-        helper.asyncUpload(fileHashMap, "http://114.215.18.160:9333/submit", new HashMap<>(), () -> {
+        helper.asyncUpload(fileHashMap, "http://106.15.46.105:9333/submit", new HashMap<>(), () -> {
 
         }, new OKHttpHelper.RequestListener() {
             @Override
             public void onSuccess(String string) {
                 Gson gson=new Gson();
                 UploadResponse response=gson.fromJson(string, UploadResponse.class);
-                String imageUrl="http://114.215.18.160:8081/"+response.getFid();
+                String imageUrl="http://106.15.46.105:8081/"+response.getFid();
                 updateTextInfo("picPath", imageUrl);
                 myCenterResponse.setPicPath(imageUrl);
             }
