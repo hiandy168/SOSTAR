@@ -6,7 +6,7 @@
     <ImageView
         android:src="@mipmap/ic_signinsignup_logo"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="222dip"
+        android:layout_marginTop="205dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ImageView

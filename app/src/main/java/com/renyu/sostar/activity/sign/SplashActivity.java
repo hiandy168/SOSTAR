@@ -15,6 +15,7 @@ import com.blankj.utilcode.utils.FileUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.commonlibrary.views.ProgressCircleView;
 import com.renyu.sostar.BuildConfig;
@@ -126,12 +127,16 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // 冷启动优化方案：在加载布局视图前，将主题修改回来
         setTheme(R.style.AppTheme);
+        BarUtils.setDark(this);
         // 如果程序已经打开则不进入启动页，直接显示之前的界面
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            isNeedOnCreate=false;
+            super.onCreate(savedInstanceState);
             finish();
-            return;
         }
-        super.onCreate(savedInstanceState);
+        else {
+            super.onCreate(savedInstanceState);
+        }
     }
 
     @OnClick({R.id.pcv_splash_jump})

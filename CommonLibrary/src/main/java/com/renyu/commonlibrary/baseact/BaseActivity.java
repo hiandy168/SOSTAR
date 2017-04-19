@@ -56,9 +56,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ProgressDialog networkDialg;
 
+    // 判断是否执行onCreate以下部分
+    public boolean isNeedOnCreate=true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isNeedOnCreate) {
+            return;
+        }
 
         if (initViews()!=0) {
             setContentView(initViews());
