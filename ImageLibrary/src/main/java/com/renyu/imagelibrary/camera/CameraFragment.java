@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.FileUtils;
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.params.CommonParams;
 
@@ -85,8 +86,8 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FileUtils.createOrExistsDir(CommonParams.IMAGECACHE);
-        dirPath=CommonParams.IMAGECACHE+"/"+System.currentTimeMillis()+".jpg";
+        FileUtils.createOrExistsDir(InitParams.IMAGE_PATH);
+        dirPath=InitParams.IMAGE_PATH+"/"+System.currentTimeMillis()+".jpg";
         FileUtils.createFileByDeleteOldFile(dirPath);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

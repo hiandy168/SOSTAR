@@ -13,6 +13,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -54,9 +55,9 @@ public class SostarApp extends MultiDexApplication {
             // 初始化fresco
             DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(this)
                     // 缓存文件目录
-                    .setBaseDirectoryPath(new File(CommonParams.FRESCO_CACHE_PATH))
+                    .setBaseDirectoryPath(new File(InitParams.FRESCO_CACHE_PATH))
                     // 缓存文件夹名
-                    .setBaseDirectoryName(CommonParams.FRESCO_CACHE_NAME)
+                    .setBaseDirectoryName(InitParams.FRESCO_CACHE_NAME)
                     .setDiskTrimmableRegistry(NoOpDiskTrimmableRegistry.getInstance())
                     .build();
             Fresco.initialize(this, ImagePipelineConfig.newBuilder(this).setMainDiskCacheConfig(diskCacheConfig)

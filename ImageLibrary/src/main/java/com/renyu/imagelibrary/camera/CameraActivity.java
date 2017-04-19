@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.imagelibrary.params.CommonParams;
@@ -64,7 +65,7 @@ public class CameraActivity extends BaseActivity {
 
     public void backTo(String filePath) {
         //刷新相册
-        Utils.refreshAlbum(this, filePath, CommonParams.IMAGECACHE);
+        Utils.refreshAlbum(this, filePath, InitParams.IMAGE_PATH);
         //返回上一级目录
         Intent intent=getIntent();
         Bundle bundle=new Bundle();

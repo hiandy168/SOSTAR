@@ -16,6 +16,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.PermissionsUtils;
 import com.renyu.commonlibrary.network.OKHttpHelper;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
+import com.renyu.commonlibrary.params.InitParams;
 import com.tencent.mars.xlog.Log;
 import com.tencent.mars.xlog.Xlog;
 
@@ -87,7 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         String[] permissionsSD={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (!PermissionsUtils.lacksPermissions(this, permissionsSD)) {
             // 初始化xlog
-            Xlog.open(true, Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, "", path, "sostar_log");
+            Xlog.open(true, Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, "", path, InitParams.LOG_NAME);
             Xlog.setConsoleLogOpen(true);
             Log.setLogImp(new Xlog());
         }
@@ -97,10 +98,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        openLog(InitParams.LOG_PATH);
+
         if (isCheckAgain) {
             isCheckAgain=false;
             checkPermission();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 关闭xlog，生成日志
+        Log.appenderClose();
     }
 
     public void checkPermission(String[] permissions, String deniedDesp, OnPermissionCheckedListener listener) {
@@ -184,12 +194,5 @@ public abstract class BaseActivity extends AppCompatActivity {
                         }).show();
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 关闭xlog，生成日志
-        Log.appenderClose();
     }
 }

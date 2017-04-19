@@ -373,7 +373,13 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                 // 当存在起始时间的时候，结束时间不能包括在之前已选的
                 if (!TextUtils.isEmpty(tv_updatetimeinfo_start.getText().toString())) {
                     long current2=format.parse(tv_updatetimeinfo_start.getText().toString()).getTime();
-                    if (current2>=end && current2<=start) {
+                    if (current2<start && current<start) {
+
+                    }
+                    else if (current2>end && current>end) {
+
+                    }
+                    else {
                         timeRepeat=true;
                         break;
                     }

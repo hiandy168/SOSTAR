@@ -15,6 +15,7 @@ import com.blankj.utilcode.utils.FileUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.commonlibrary.views.ProgressCircleView;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
@@ -58,21 +59,21 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void grant() {
                 // 初始化文件夹
-                FileUtils.createOrExistsDir(CommonParams.IMAGE_PATH);
-                FileUtils.createOrExistsDir(CommonParams.HOTFIX_PATH);
-                FileUtils.createOrExistsDir(CommonParams.FILE_PATH);
-                FileUtils.createOrExistsDir(CommonParams.LOG_PATH);
+                FileUtils.createOrExistsDir(InitParams.IMAGE_PATH);
+                FileUtils.createOrExistsDir(InitParams.HOTFIX_PATH);
+                FileUtils.createOrExistsDir(InitParams.FILE_PATH);
+                FileUtils.createOrExistsDir(InitParams.LOG_PATH);
 
                 if (ACache.get(SplashActivity.this).getAsString("hotfix_version")!=null &&
                         !ACache.get(SplashActivity.this).getAsString("hotfix_version").equals(BuildConfig.VERSION_NAME)) {
                     // 删除老版本的热修复补丁
-                    FileUtils.deleteFilesInDir(CommonParams.HOTFIX_PATH);
+                    FileUtils.deleteFilesInDir(InitParams.HOTFIX_PATH);
                     // 更新热修复补丁版本
                     ACache.get(SplashActivity.this).put("hotfix_version", BuildConfig.VERSION_NAME);
                 }
                 // 加载热修复补丁
                 ((SostarApp) getApplication()).mPatchManager.loadPatch();
-                List<File> hotfixs = FileUtils.listFilesInDir(CommonParams.HOTFIX_PATH);
+                List<File> hotfixs = FileUtils.listFilesInDir(InitParams.HOTFIX_PATH);
                 for (File hotfix : hotfixs) {
                     try {
                         ((SostarApp) getApplication()).mPatchManager.addPatch(hotfix.getPath());
@@ -80,8 +81,6 @@ public class SplashActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-
-                openLog(CommonParams.LOG_PATH);
 
                 valueAnimator=ValueAnimator.ofInt(100, 0);
                 valueAnimator.setDuration(3000);

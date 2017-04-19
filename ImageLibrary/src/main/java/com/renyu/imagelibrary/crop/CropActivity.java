@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.FileUtils;
 import com.edmodo.cropper.CropImageView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.R2;
-import com.renyu.imagelibrary.params.CommonParams;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,7 +48,7 @@ public class CropActivity extends BaseActivity {
 
 	@Override
 	public void initParams() {
-		FileUtils.createOrExistsDir(CommonParams.IMAGECACHE);
+		FileUtils.createOrExistsDir(InitParams.IMAGE_PATH);
 
 		nav_layout.setBackgroundColor(Color.parseColor("#80000000"));
 		ib_nav_left.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +112,7 @@ public class CropActivity extends BaseActivity {
 			public void subscribe(ObservableEmitter<String> e) throws Exception {
 				try {
 					cropBmp=mCropImage.getCroppedImage();
-					String path=writeImage(cropBmp, CommonParams.IMAGECACHE+"/"+System.currentTimeMillis()+".jpg", 100);
+					String path=writeImage(cropBmp, InitParams.IMAGE_PATH+"/"+System.currentTimeMillis()+".jpg", 100);
 					e.onNext(path);
 				} catch (Exception e1) {
 					e.onError(new Exception(getResources().getString(R.string.image_small_error)));

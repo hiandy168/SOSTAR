@@ -18,6 +18,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.bean.NotificationChangeRequest;
@@ -202,7 +203,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private String showCacheSize() {
-        File dir=new File(CommonParams.FRESCO_CACHE_PATH + File.separator + CommonParams.FRESCO_CACHE_NAME);
+        File dir=new File(InitParams.FRESCO_CACHE_PATH + File.separator + InitParams.FRESCO_CACHE_NAME);
         long cacheSize = FileUtils.getDirLength(dir);
         if (1< cacheSize && cacheSize<1024) {
             return cacheSize+"B";
