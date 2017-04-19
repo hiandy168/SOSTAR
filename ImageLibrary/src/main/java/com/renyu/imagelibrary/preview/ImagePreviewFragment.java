@@ -60,6 +60,9 @@ public class ImagePreviewFragment extends BaseFragment {
                 if (imageInfo == null) {
                     return;
                 }
+                if (onPicChangedListener==null) {
+                    return;
+                }
                 onPicChangedListener.picChanged(getArguments().getInt("position"), imageInfo);
                 photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
             }
