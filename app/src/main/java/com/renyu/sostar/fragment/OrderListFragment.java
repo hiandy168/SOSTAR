@@ -188,6 +188,7 @@ public class OrderListFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    // 支付状态发生变化以刷新
     // 员工状态变化以刷新
     // 雇员接单状态变化以刷新
     @Subscribe(threadMode = ThreadMode.MAIN)

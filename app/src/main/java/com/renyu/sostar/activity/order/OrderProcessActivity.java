@@ -12,18 +12,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
+import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.PayInfoResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -314,8 +318,13 @@ public class OrderProcessActivity extends BaseActivity {
                     }
                 }
                 else if (ACache.get(OrderProcessActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    if (process==3) {
-                        finish();
+                    if (orderResponse.getPayFlg()==0) {
+                        setOrderPay();
+                    }
+                    else {
+                        if (process==3) {
+                            finish();
+                        }
                     }
                 }
                 break;
@@ -366,6 +375,41 @@ public class OrderProcessActivity extends BaseActivity {
             @Override
             public void onError(Throwable e) {
 
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void setOrderPay() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setOrderId(orderResponse.getOrderId());
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .setOrderPay(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(EmptyResponse value) {
+                Toast.makeText(OrderProcessActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
+                EventBus.getDefault().post(new OrderResponse());
+
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(OrderProcessActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

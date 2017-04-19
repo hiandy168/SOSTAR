@@ -233,4 +233,9 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/getPayInfo")
     Observable<Response<PayInfoResponse>> getPayInfo(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/setOrderPay")
+    Observable<Response<EmptyResponse>> setOrderPay(@Body RequestBody requestBody);
+
 }
