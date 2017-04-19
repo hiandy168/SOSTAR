@@ -49,11 +49,16 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
     public void onBindViewHolder(MyEmployeeListViewHolder holder, int position) {
         holder.tv_adapter_employeelist_name.setText(beans.get(position).getNickName());
         holder.tv_adapter_employeelist_desp.setText("评价等级 "+beans.get(position).getEvaluateLevel());
+        DraweeController draweeController;
         if (!TextUtils.isEmpty(beans.get(position).getPicPath())) {
-            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+            draweeController = Fresco.newDraweeControllerBuilder()
                     .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
-            holder.iv_adapter_employeelist_avatar.setController(draweeController);
         }
+        else {
+            draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+        }
+        holder.iv_adapter_employeelist_avatar.setController(draweeController);
         // 未确认
         if (beans.get(position).getStaffStatus().equals("0")) {
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);

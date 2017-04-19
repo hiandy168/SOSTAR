@@ -86,11 +86,16 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
                 holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
             }
         }
+        DraweeController draweeController;
         if (!TextUtils.isEmpty(beans.get(position).getLogoPath())) {
-            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+            draweeController = Fresco.newDraweeControllerBuilder()
                     .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
-            holder.iv_orderlist_logo.setController(draweeController);
         }
+        else {
+            draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+        }
+        holder.iv_orderlist_logo.setController(draweeController);
         holder.layout_orderlist_root.setOnClickListener(v -> {
             if (onClickListener!=null) {
                 onClickListener.click(position);

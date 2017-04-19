@@ -436,11 +436,16 @@ public class OrderDetailActivity extends BaseActivity {
                     layout_orderdetail_employer.removeAllViews();
                     for (String s : value.getPicStaffArray()) {
                         View view= LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.adapter_orderdetail_employee, null, false);
+                        DraweeController draweeController;
                         if (!TextUtils.isEmpty(s)) {
-                            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                            draweeController = Fresco.newDraweeControllerBuilder()
                                     .setUri(Uri.parse(s)).setAutoPlayAnimations(true).build();
-                            ((SimpleDraweeView) view).setController(draweeController);
                         }
+                        else {
+                            draweeController = Fresco.newDraweeControllerBuilder()
+                                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+                        }
+                        ((SimpleDraweeView) view).setController(draweeController);
                         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(SizeUtils.dp2px(30), SizeUtils.dp2px(30));
                         params.leftMargin= SizeUtils.dp2px(2);
                         params.rightMargin= SizeUtils.dp2px(2);

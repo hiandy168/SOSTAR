@@ -3,6 +3,7 @@ package com.renyu.sostar.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,15 +46,17 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.FavListH
     public void onBindViewHolder(FavListHolder holder, int position) {
         holder.tv_adapter_favlist_name.setText(beans.get(position).getNickName());
         holder.tv_adapter_favlist_desp.setText("评价等级 "+beans.get(position).getStar());
-        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
+        DraweeController draweeController;
+        if (!TextUtils.isEmpty(beans.get(position).getPicPath())) {
+            draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
+        }
+        else {
+            draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+        }
         holder.iv_adapter_favlist_avatar.setController(draweeController);
-        holder.tv_adapter_favlist_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((FavListActivity) context).deleteFav(beans.get(position).getUserId());
-            }
-        });
+        holder.tv_adapter_favlist_delete.setOnClickListener(v -> ((FavListActivity) context).deleteFav(beans.get(position).getUserId()));
     }
 
     @Override
