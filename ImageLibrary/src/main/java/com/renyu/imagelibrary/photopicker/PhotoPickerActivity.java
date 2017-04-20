@@ -11,7 +11,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +30,7 @@ import com.renyu.imagelibrary.model.PhotoDirectory;
 import com.renyu.imagelibrary.params.CommonParams;
 import com.renyu.imagelibrary.preview.ImagePreviewActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -175,6 +175,7 @@ public class PhotoPickerActivity extends BaseActivity {
             public void show(String path) {
                 Intent intent=new Intent(PhotoPickerActivity.this, ImagePreviewActivity.class);
                 Bundle bundle=new Bundle();
+                bundle.putBoolean("canHead", false);
                 bundle.putBoolean("canDownload", false);
                 bundle.putInt("position", 0);
                 bundle.putBoolean("canEdit", false);
@@ -210,6 +211,7 @@ public class PhotoPickerActivity extends BaseActivity {
                 if (imagePaths.size()>0) {
                     Intent intent=new Intent(PhotoPickerActivity.this, ImagePreviewActivity.class);
                     Bundle bundle=new Bundle();
+                    bundle.putBoolean("canHead", false);
                     bundle.putBoolean("canDownload", false);
                     bundle.putInt("position", 0);
                     bundle.putBoolean("canEdit", true);
@@ -328,7 +330,14 @@ public class PhotoPickerActivity extends BaseActivity {
                     String bucketId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
                     String name = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
                     String path = data.getString(data.getColumnIndexOrThrow(DATA));
-                    Log.d("PhotoPickerActivity", bucketId+" "+name+" "+path);
+                    File file=new File(path);
+                    if (file.exists() && file.length()>0) {
+
+                    }
+                    else {
+                        continue;
+                    }
+//                    Log.d("PhotoPickerActivity", bucketId+" "+name+" "+path);
                     if (!hashMap.containsKey(bucketId)) {
                         PhotoDirectory photoDirectory = new PhotoDirectory();
                         photoDirectory.setId(bucketId);
@@ -360,7 +369,14 @@ public class PhotoPickerActivity extends BaseActivity {
     private void updateData(String key) {
         ((GridLayoutManager) photopicker_rv.getLayoutManager()).scrollToPositionWithOffset(0, 0);
         models.clear();
-        List<Photo> photos=allHashMap.get(key).getPhotos();
+        List<Photo> temp=allHashMap.get(key).getPhotos();
+        List<Photo> photos=new ArrayList<>();
+        for (Photo photo : temp) {
+            File file=new File(photo.getPath());
+            if (file.exists() & file.length()>0) {
+                photos.add(photo);
+            }
+        }
         for (Photo photo : photos) {
             if (imagePaths.contains(photo.getPath())) {
                 photo.setSelect(true);
@@ -373,11 +389,11 @@ public class PhotoPickerActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==CommonParams.RESULT_TAKECAMERA && resultCode==RESULT_OK) {
+        if (requestCode== CommonParams.RESULT_TAKECAMERA && resultCode==RESULT_OK) {
             String filePath=data.getExtras().getString("path");
             cropImage(filePath);
         }
-        else if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
+        else if (requestCode== CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String filePath=data.getExtras().getString("path");
             Intent intent=new Intent();
             Bundle bundle=new Bundle();
@@ -388,7 +404,7 @@ public class PhotoPickerActivity extends BaseActivity {
             setResult(RESULT_OK, intent);
             finish();
         }
-        else if (requestCode==CommonParams.RESULT_PREVIEW && resultCode==RESULT_OK) {
+        else if (requestCode== CommonParams.RESULT_PREVIEW && resultCode==RESULT_OK) {
             imagePaths.clear();
             for (String url : data.getStringArrayListExtra("urls")) {
                 imagePaths.add(url);
