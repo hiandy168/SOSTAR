@@ -135,7 +135,7 @@ public class OverTimeActivity extends BaseActivity {
                     caculateMoney();
                 }
                 if (data.getStringExtra("param").equals("money")) {
-                    tv_overtime_time.setText(data.getStringExtra("value")+"元/小时");
+                    tv_overtime_money.setText(data.getStringExtra("value")+"元/小时");
                     caculateMoney();
                 }
             }

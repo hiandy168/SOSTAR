@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -15,13 +14,14 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
-import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.bean.EmployeeIndexRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import org.greenrobot.eventbus.EventBus;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Retrofit;
 
 /**
@@ -108,7 +108,27 @@ public class LocationService extends Service {
             Retrofit retrofit = Retrofit2Utils.getBaseRetrofit();
             retrofit.create(RetrofitImpl.class)
                     .updatePosition(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                    .compose(Retrofit2Utils.background()).subscribe(o -> Log.d("LocationService", ((EmptyResponse) o).getMessage()));
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Object value) {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
         }
     }
 }
