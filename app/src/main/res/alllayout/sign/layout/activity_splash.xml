@@ -25,14 +25,14 @@
             android:id="@+id/tv_splash_version"
             android:text="VERSION："
             android:textSize="13sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dip"/>
         <TextView
             android:text="COPYRIGHT 2016-2017 SOSTAR"
             android:textSize="13sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -40,12 +40,13 @@
         android:id="@+id/pcv_splash_jump"
         app:progress="100"
         app:text="跳过"
+        app:text_size="10sp"
         app:pdirection="right"
         android:layout_alignParentRight="true"
         android:layout_margin="20dip"
         app:text_color="@android:color/white"
         app:foreground_color="#aa000000"
-        app:background_color="#80000000"
+        app:background_color="#b2000000"
         app:stoke_width="2dip"
         android:layout_width="40dip"
         android:layout_height="40dip" />

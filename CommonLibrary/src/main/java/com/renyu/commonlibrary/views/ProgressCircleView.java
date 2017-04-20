@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.R;
 
 /**
@@ -57,7 +58,7 @@ public class ProgressCircleView extends View {
         progress=array.getInt(R.styleable.ProgressCircleViewStyle_progress, 0);
         stoke_width= array.getDimensionPixelSize(R.styleable.ProgressCircleViewStyle_stoke_width, 10);
         width= array.getDimensionPixelSize(R.styleable.ProgressCircleViewStyle_width, 2);
-        text_size=array.getDimensionPixelSize(R.styleable.ProgressCircleViewStyle_text_size, 20);
+        text_size=array.getDimensionPixelSize(R.styleable.ProgressCircleViewStyle_text_size, 10);
         pdirection=array.getInt(R.styleable.ProgressCircleViewStyle_pdirection, 1);
         text_color=array.getColor(R.styleable.ProgressCircleViewStyle_text_color, foreground_color);
         text=array.getString(R.styleable.ProgressCircleViewStyle_text);
