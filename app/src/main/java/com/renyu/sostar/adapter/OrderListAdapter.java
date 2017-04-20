@@ -93,7 +93,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         }
         else {
             draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
         }
         holder.iv_orderlist_logo.setController(draweeController);
         holder.layout_orderlist_root.setOnClickListener(v -> {

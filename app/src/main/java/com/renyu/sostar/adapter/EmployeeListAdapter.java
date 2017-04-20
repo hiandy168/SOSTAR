@@ -56,7 +56,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         }
         else {
             draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
         }
         holder.iv_adapter_employeelist_avatar.setController(draweeController);
         // 未确认

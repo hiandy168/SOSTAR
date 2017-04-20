@@ -53,7 +53,7 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.FavListH
         }
         else {
             draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("res://"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
         }
         holder.iv_adapter_favlist_avatar.setController(draweeController);
         holder.tv_adapter_favlist_delete.setOnClickListener(v -> ((FavListActivity) context).deleteFav(beans.get(position).getUserId()));
