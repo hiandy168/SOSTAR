@@ -173,6 +173,7 @@ public class EmployeeListActivity extends BaseActivity {
                     if (bean.getUserId().equals(userId)) {
                         beanTemp=bean;
                         beans.remove(bean);
+                        break;
                     }
                 }
                 if (beanTemp!=null) {

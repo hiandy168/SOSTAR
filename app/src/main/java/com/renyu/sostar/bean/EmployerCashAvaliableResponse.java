@@ -13,17 +13,17 @@ public class EmployerCashAvaliableResponse {
      * payeeRealName : string
      */
 
-    private int cashAvaiable;
+    private String cashAvaiable;
     private int cashFrozen;
     private int cashTotal;
     private String payeeAccount;
     private String payeeRealName;
 
-    public int getCashAvaiable() {
+    public String getCashAvaiable() {
         return cashAvaiable;
     }
 
-    public void setCashAvaiable(int cashAvaiable) {
+    public void setCashAvaiable(String cashAvaiable) {
         this.cashAvaiable = cashAvaiable;
     }
 
