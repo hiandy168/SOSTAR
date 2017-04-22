@@ -618,8 +618,8 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "请填写工作报酬", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_type.getText().toString())) {
-            Toast.makeText(this, "请选择结算方式", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(tv_releaseorder_paytype.getText().toString())) {
+            Toast.makeText(this, "请填写结算方式", Toast.LENGTH_SHORT).show();
             return;
         }
         if (LocationService.lastBdLocation==null) {
