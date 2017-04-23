@@ -268,7 +268,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             case R.id.layout_releaseorder_type:
                 Intent intent_type=new Intent(ReleaseOrderActivity.this, UpdateTextinfoWithLabelActivity.class);
                 intent_type.putExtra("title", "用工类型");
-                intent_type.putExtra("source", tv_releaseorder_type.getText().toString());
+                intent_type.putExtra("source", tv_releaseorder_type.getText().toString().trim());
                 startActivityForResult(intent_type, CommonParams.RESULT_UPDATELABELINFO);
                 break;
             case R.id.layout_releaseorder_person:
@@ -276,7 +276,7 @@ public class ReleaseOrderActivity extends BaseActivity {
                 intent_person.putExtra("title", "需求人数");
                 intent_person.putExtra("param", "staffAccount");
                 intent_person.putExtra("needcommit", false);
-                intent_person.putExtra("source", tv_releaseorder_person.getText().toString());
+                intent_person.putExtra("source", tv_releaseorder_person.getText().toString().trim());
                 startActivityForResult(intent_person, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_releaseorder_sex:
@@ -286,27 +286,27 @@ public class ReleaseOrderActivity extends BaseActivity {
                 Intent intent_address=new Intent(ReleaseOrderActivity.this, UpdateAddressInfoActivity.class);
                 intent_address.putExtra("title", "工作地点");
                 intent_address.putExtra("param", "address");
-                intent_address.putExtra("source", tv_releaseorder_address.getText().toString());
+                intent_address.putExtra("source", tv_releaseorder_address.getText().toString().trim());
                 startActivityForResult(intent_address, CommonParams.RESULT_UPDATEADDRESSINFO);
                 break;
             case R.id.layout_releaseorder_aggregateaddress:
                 Intent intent_aggregateaddress=new Intent(ReleaseOrderActivity.this, UpdateAddressInfoActivity.class);
                 intent_aggregateaddress.putExtra("title", "集合地点");
                 intent_aggregateaddress.putExtra("param", "aggregateaddress");
-                intent_aggregateaddress.putExtra("source", tv_releaseorder_aggregateaddress.getText().toString());
+                intent_aggregateaddress.putExtra("source", tv_releaseorder_aggregateaddress.getText().toString().trim());
                 startActivityForResult(intent_aggregateaddress, CommonParams.RESULT_UPDATEADDRESSINFO);
                 break;
             case R.id.layout_releaseorder_desp:
                 Intent intent_desp=new Intent(ReleaseOrderActivity.this, UpdateTextInfoWithPicActivity.class);
                 intent_desp.putExtra("title", "工作描述");
                 intent_desp.putExtra("picPath", picPath);
-                intent_desp.putExtra("ed", tv_releaseorder_desp.getText().toString());
+                intent_desp.putExtra("ed", tv_releaseorder_desp.getText().toString().trim());
                 startActivityForResult(intent_desp, CommonParams.RESULT_UPDATEPICINFO);
                 break;
             case R.id.layout_releaseorder_price:
                 Intent intent_price=new Intent(ReleaseOrderActivity.this, UpdatePayInfoActivity.class);
                 intent_price.putExtra("title", "工作报酬");
-                intent_price.putExtra("source", tv_releaseorder_price.getText().toString());
+                intent_price.putExtra("source", tv_releaseorder_price.getText().toString().trim());
                 startActivityForResult(intent_price, CommonParams.RESULT_UPDATEPAYTYPEINFO);
                 break;
             case R.id.layout_releaseorder_paytype:
@@ -495,25 +495,25 @@ public class ReleaseOrderActivity extends BaseActivity {
      */
     private void changeUsedMoney() {
         // 确保用工人数的存在
-        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString().trim())) {
             tv_releaseorder_needmoney.setText("0");
             return;
         }
         int unitPriceType=-1;
         double unitPrice=-1;
         // 确保单价的存在
-        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim())) {
             tv_releaseorder_needmoney.setText("0");
             return;
         }
         else {
-            if (tv_releaseorder_price.getText().toString().split("/")[1].equals("小时")) {
+            if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("小时")) {
                 unitPriceType=2;
             }
-            else if (tv_releaseorder_price.getText().toString().split("/")[1].equals("天")) {
+            else if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("天")) {
                 unitPriceType=1;
             }
-            unitPrice=Double.parseDouble(tv_releaseorder_price.getText().toString().split("/")[0]);
+            unitPrice=Double.parseDouble(tv_releaseorder_price.getText().toString().trim().split("/")[0]);
         }
         // 确保用工日期的存在
         if (timeBeans.size()>0) {
@@ -529,18 +529,18 @@ public class ReleaseOrderActivity extends BaseActivity {
                 }
             }
             if (unitPriceType==1) {
-                tv_releaseorder_needmoney.setText(""+allTime*unitPrice*Integer.parseInt(tv_releaseorder_person.getText().toString()));
+                tv_releaseorder_needmoney.setText(""+allTime*unitPrice*Integer.parseInt(tv_releaseorder_person.getText().toString().trim()));
             }
             else if (unitPriceType==2) {
                 // 确保工作时间的存在
-                if (!TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString())) {
+                if (!TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString().trim())) {
                     double hourTime=0;
                     SimpleDateFormat format=new SimpleDateFormat("HH:mm");
                     try {
-                        long startHour=format.parse(tv_releaseorder_worktime.getText().toString().split("-")[0]).getTime();
-                        long endHour=format.parse(tv_releaseorder_worktime.getText().toString().split("-")[1]).getTime();
+                        long startHour=format.parse(tv_releaseorder_worktime.getText().toString().trim().split("-")[0]).getTime();
+                        long endHour=format.parse(tv_releaseorder_worktime.getText().toString().trim().split("-")[1]).getTime();
                         hourTime=((double) (endHour-startHour))/(1000*3600);
-                        tv_releaseorder_needmoney.setText(""+allTime*unitPrice*hourTime*Integer.parseInt(tv_releaseorder_person.getText().toString()));
+                        tv_releaseorder_needmoney.setText(""+allTime*unitPrice*hourTime*Integer.parseInt(tv_releaseorder_person.getText().toString().trim()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -586,7 +586,7 @@ public class ReleaseOrderActivity extends BaseActivity {
     }
 
     private void uploadPic(int orderStatus) {
-        if (TextUtils.isEmpty(tv_releaseorder_type.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_type.getText().toString().trim())) {
             Toast.makeText(this, "请选择用工类型", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -594,31 +594,31 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "请添加用工日期", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString().trim())) {
             Toast.makeText(this, "请选择工作时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString().trim())) {
             Toast.makeText(this, "请填写需求人数", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_sex.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_sex.getText().toString().trim())) {
             Toast.makeText(this, "请选择性别要求", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_address.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_address.getText().toString().trim())) {
             Toast.makeText(this, "请填写工作地点", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_desp.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_desp.getText().toString().trim())) {
             Toast.makeText(this, "请填写详细描述", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim())) {
             Toast.makeText(this, "请填写工作报酬", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_paytype.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_paytype.getText().toString().trim())) {
             Toast.makeText(this, "请填写结算方式", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -626,11 +626,11 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "暂无定位数据", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_aggregateaddress.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_aggregateaddress.getText().toString().trim())) {
             Toast.makeText(this, "请填写集合地点", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_aggregatetime.getText().toString())) {
+        if (TextUtils.isEmpty(tv_releaseorder_aggregatetime.getText().toString().trim())) {
             Toast.makeText(this, "请填写集合时间", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -683,38 +683,38 @@ public class ReleaseOrderActivity extends BaseActivity {
     private void releaseOrder(ArrayList<String> images, int orderStatus) {
         ReleaseOrderRequest request=new ReleaseOrderRequest();
         ReleaseOrderRequest.ParamBean paramBean=new ReleaseOrderRequest.ParamBean();
-        paramBean.setEndTime(tv_releaseorder_worktime.getText().toString().split("-")[1]);
-        paramBean.setStartTime(tv_releaseorder_worktime.getText().toString().split("-")[0]);
-        paramBean.setAddress(tv_releaseorder_address.getText().toString());
+        paramBean.setEndTime(tv_releaseorder_worktime.getText().toString().trim().split("-")[1]);
+        paramBean.setStartTime(tv_releaseorder_worktime.getText().toString().trim().split("-")[0]);
+        paramBean.setAddress(tv_releaseorder_address.getText().toString().trim());
         paramBean.setConfirmFlg(sb_releaseorder.isChecked()?"1":"0");
-        paramBean.setDescription(tv_releaseorder_desp.getText().toString());
-        paramBean.setJobType(tv_releaseorder_type.getText().toString());
+        paramBean.setDescription(tv_releaseorder_desp.getText().toString().trim());
+        paramBean.setJobType(tv_releaseorder_type.getText().toString().trim());
         paramBean.setLatitude(""+LocationService.lastBdLocation.getLatitude());
         paramBean.setLongitude(""+LocationService.lastBdLocation.getLongitude());
-        paramBean.setPaymentType(tv_releaseorder_paytype.getText().toString().equals("日结")?"1":"2");
+        paramBean.setPaymentType(tv_releaseorder_paytype.getText().toString().trim().equals("日结")?"1":"2");
         paramBean.setPicListArray(images);
-        if (tv_releaseorder_sex.getText().toString().equals("男")) {
+        if (tv_releaseorder_sex.getText().toString().trim().equals("男")) {
             paramBean.setSex("1");
         }
-        else if (tv_releaseorder_sex.getText().toString().equals("女")) {
+        else if (tv_releaseorder_sex.getText().toString().trim().equals("女")) {
             paramBean.setSex("2");
         }
         else {
             paramBean.setSex("0");
         }
-        paramBean.setStaffAccount(Integer.parseInt(tv_releaseorder_person.getText().toString()));
-        paramBean.setUnitPrice(tv_releaseorder_price.getText().toString().split("/")[0]);
-        if (tv_releaseorder_price.getText().toString().split("/")[1].equals("小时")) {
+        paramBean.setStaffAccount(Integer.parseInt(tv_releaseorder_person.getText().toString().trim()));
+        paramBean.setUnitPrice(tv_releaseorder_price.getText().toString().trim().split("/")[0]);
+        if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("小时")) {
             paramBean.setUnitPriceType("2");
         }
-        else if (tv_releaseorder_price.getText().toString().split("/")[1].equals("天")) {
+        else if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("天")) {
             paramBean.setUnitPriceType("1");
         }
         paramBean.setPeriodTimeList(timeBeans);
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         paramBean.setOrderStatus(""+orderStatus);
-        paramBean.setAggregateAddress(tv_releaseorder_aggregateaddress.getText().toString());
-        paramBean.setAggregateTime(tv_releaseorder_aggregatetime.getText().toString());
+        paramBean.setAggregateAddress(tv_releaseorder_aggregateaddress.getText().toString().trim());
+        paramBean.setAggregateTime(tv_releaseorder_aggregatetime.getText().toString().trim());
         if (getIntent().getSerializableExtra("value")!=null) {
             paramBean.setOrderId(orderResponse.getOrderId());
         }
