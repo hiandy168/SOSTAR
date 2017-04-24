@@ -3,7 +3,7 @@ ext {
     buildToolsVersion = "25.0.2"
 
     app = [
-            applicationId   : "com.renyu.sostar",
+            applicationId   : "com.renyu.sostarjob",
             minSdkVersion   : 21,
             targetSdkVersion: 25,
             versionCode     : getVersionCode(),
