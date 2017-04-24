@@ -168,7 +168,12 @@ public class InfoActivity extends BaseActivity {
                     tv_info_auth.setVisibility(View.INVISIBLE);
                 }
                 tv_info_name.setText(value.getName());
-                tv_info_sex.setText(value.getSex().equals("1")?"男":"女");
+                if (value.getSex()==null) {
+                    tv_info_sex.setText("未知");
+                }
+                else {
+                    tv_info_sex.setText(value.getSex().equals("1")?"男":"女");
+                }
                 tv_info_age.setText(value.getAge());
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
