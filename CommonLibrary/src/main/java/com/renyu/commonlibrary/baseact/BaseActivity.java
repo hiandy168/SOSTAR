@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     // 网络请求
     public OKHttpHelper httpHelper = null;
     public Retrofit retrofit=null;
-    public Retrofit retrofit_uploadimage=null;
+    public Retrofit retrofitUploadImage;
 
     public ProgressDialog networkDialg;
 
@@ -85,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         httpHelper = new OKHttpHelper();
         retrofit = Retrofit2Utils.getBaseRetrofit();
-        retrofit_uploadimage = Retrofit2Utils.getImageUploadRetrofit();
+        retrofitUploadImage = Retrofit2Utils.getImageUploadRetrofit();
 
         initParams();
         loadData();

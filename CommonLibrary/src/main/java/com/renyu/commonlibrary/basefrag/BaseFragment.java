@@ -26,7 +26,6 @@ public abstract class BaseFragment extends Fragment {
 
     public OKHttpHelper httpHelper;
     public Retrofit retrofit=null;
-    public Retrofit retrofit_uploadimage=null;
 
     @Nullable
     @Override
@@ -37,7 +36,6 @@ public abstract class BaseFragment extends Fragment {
 
             httpHelper=new OKHttpHelper();
             retrofit = Retrofit2Utils.getBaseRetrofit();
-            retrofit_uploadimage = Retrofit2Utils.getImageUploadRetrofit();
 
             initParams();
             loadData();

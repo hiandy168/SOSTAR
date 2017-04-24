@@ -32,10 +32,11 @@ import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.FileUploadImpl;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
@@ -46,7 +47,6 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,7 +56,10 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Response;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 /**
  * Created by renyu on 2017/3/7.
@@ -644,9 +647,11 @@ public class ReleaseOrderActivity extends BaseActivity {
                     images.add(s);
                     continue;
                 }
-                HashMap<String, File> fileHashMap=new HashMap<>();
-                fileHashMap.put("image", new File(s));
-                Response resp=helper.syncUpload(fileHashMap, url, new HashMap<>());
+                RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("image", new File(s).getName(), RequestBody.create(MediaType.parse("image/*"), new File(s)))
+                        .build();
+                FileUploadImpl fileUpload = retrofitUploadImage.create(FileUploadImpl.class);
+                retrofit2.Response<ResponseBody> resp=fileUpload.upload(requestBody).execute();
                 if (resp.isSuccessful()) {
                     Gson gson=new Gson();
                     UploadResponse response=gson.fromJson(resp.body().string(), UploadResponse.class);

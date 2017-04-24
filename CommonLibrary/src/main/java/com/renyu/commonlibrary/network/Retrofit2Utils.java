@@ -29,33 +29,38 @@ public class Retrofit2Utils {
 
     private static volatile Retrofit2Utils retrofit2Utils;
 
-    private OkHttpClient.Builder okBuilder;
     private static Retrofit retrofit;
-    private static Retrofit retrofit_uploadimage=null;
+    private static Retrofit retrofitUploadImage;
 
-    private Retrofit2Utils(String baseUrl, String uploadUrl) {
-        okBuilder=new OkHttpClient.Builder()
+    private Retrofit2Utils(String baseUrl) {
+        // 基础请求
+        OkHttpClient.Builder baseOkBuilder=new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS);
         //https默认信任全部证书
         HttpsUtils.SSLParams sslParams=HttpsUtils.getSslSocketFactory(null, null, null);
-        okBuilder.hostnameVerifier((hostname, session) -> true).sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+        baseOkBuilder.hostnameVerifier((hostname, session) -> true).sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
         retrofit=new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okBuilder.build()).baseUrl(baseUrl).build();
-        retrofit_uploadimage=new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(baseOkBuilder.build()).baseUrl(baseUrl).build();
+
+        // 图片上传请求
+        OkHttpClient.Builder imageUploadOkBuilder=new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS);
+        retrofitUploadImage=new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okBuilder.build()).baseUrl(uploadUrl).build();
+                .client(imageUploadOkBuilder.build()).baseUrl(baseUrl).build();
     }
 
-    public static void getInstance(String baseUrl, String uploadUrl) {
+    public static void getInstance(String baseUrl) {
         if (retrofit2Utils==null) {
             synchronized (Retrofit2Utils.class) {
                 if (retrofit2Utils==null) {
-                    retrofit2Utils=new Retrofit2Utils(baseUrl, uploadUrl);
+                    retrofit2Utils=new Retrofit2Utils(baseUrl);
                 }
             }
         }
@@ -66,7 +71,7 @@ public class Retrofit2Utils {
     }
 
     public static Retrofit getImageUploadRetrofit() {
-        return retrofit_uploadimage;
+        return retrofitUploadImage;
     }
 
     /**
