@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blankj.utilcode.utils.FileUtils;
+import com.blankj.utilcode.util.FileUtils;
 import com.edmodo.cropper.CropImageView;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.params.InitParams;

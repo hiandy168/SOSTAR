@@ -39,7 +39,7 @@ public class SostarApp extends MultiDexApplication {
 
             Retrofit2Utils.getInstance("http://106.15.46.51:8080/", "http://106.15.46.105:9333/");
 
-            com.blankj.utilcode.utils.Utils.init(this);
+            com.blankj.utilcode.util.Utils.init(this);
 
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);

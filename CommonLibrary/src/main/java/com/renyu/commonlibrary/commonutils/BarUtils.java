@@ -42,7 +42,7 @@ public class BarUtils {
 
             //给statusbar着色
             View view=new View(activity);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.utils.BarUtils.getStatusBarHeight(activity)));
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.util.BarUtils.getStatusBarHeight(activity)));
             view.setBackgroundColor(calculateStatusColor(color, 0));
             viewGroup.addView(view);
 
@@ -96,7 +96,7 @@ public class BarUtils {
      */
     private static int calculateStatusColor(int color, int alpha) {
         try {
-            Class BarUtilsClass=Class.forName("com.blankj.utilcode.utils.BarUtils");
+            Class BarUtilsClass=Class.forName("com.blankj.utilcode.util.BarUtils");
             Method calculateStatusColorMethod=BarUtilsClass.getDeclaredMethod("calculateStatusColor", int.class, int.class);
             calculateStatusColorMethod.setAccessible(true);
             return (int) calculateStatusColorMethod.invoke(null, color, alpha);
@@ -114,7 +114,7 @@ public class BarUtils {
 
     public static void adjustStatusBar(Activity activity, ViewGroup contentLayout, int color) {
         View view=new View(activity);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.utils.BarUtils.getStatusBarHeight(activity)));
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, com.blankj.utilcode.util.BarUtils.getStatusBarHeight(activity)));
         if (color!=-1) {
             view.setBackgroundColor(calculateStatusColor(color, 0));
         }

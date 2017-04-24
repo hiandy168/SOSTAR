@@ -11,7 +11,6 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.blankj.utilcode.utils.SizeUtils;
 import com.renyu.commonlibrary.R;
 
 /**
