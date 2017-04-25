@@ -15,8 +15,10 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyOrderListResponse;
+import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
 
 import java.util.ArrayList;
@@ -56,7 +58,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
     @Override
     public void onBindViewHolder(NotStartedOrderListHolder holder, int position) {
         holder.tv_orderlist_type.setText(beans.get(position).getJobType());
-        holder.tv_orderlist_person.setText(""+beans.get(position).getStaffAccount()+"人");
         String times="";
         String[] timeTemps=beans.get(position).getPeriodTime().split(",");
         for (String timeTemp : timeTemps) {
@@ -64,12 +65,26 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         }
         times=times.substring(0, times.length()-1);
         holder.tv_orderlist_time.setText(times);
-        holder.tv_orderlist_price.setText(""+beans.get(position).getUnitPrice());
-        if (beans.get(position).getPaymentType().equals("1")) {
-            holder.tv_orderlist_price_type.setText("/天");
+        if (ACache.get(context).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            holder.tv_orderlist_price.setText(""+beans.get(position).getUnitPrice());
+            holder.tv_orderlist_price_type.setVisibility(View.VISIBLE);
+            if (beans.get(position).getPaymentType().equals("1")) {
+                holder.tv_orderlist_price_type.setText("/天");
+            }
+            else if (beans.get(position).getPaymentType().equals("2")) {
+                holder.tv_orderlist_price_type.setText("/小时");
+            }
+            holder.tv_orderlist_person.setText(""+beans.get(position).getStaffAccount()+"人");
         }
-        else if (beans.get(position).getPaymentType().equals("2")) {
-            holder.tv_orderlist_price_type.setText("/小时");
+        else {
+            holder.tv_orderlist_price.setText(beans.get(position).getOkStaffAccount()+"/"+beans.get(position).getStaffAccount());
+            holder.tv_orderlist_price_type.setVisibility(View.GONE);
+            if (beans.get(position).getPaymentType().equals("1")) {
+                holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"/天");
+            }
+            else if (beans.get(position).getPaymentType().equals("2")) {
+                holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"/小时");
+            }
         }
         holder.tv_orderlist_comp.setText(beans.get(position).getCompanyName());
         if (LocationService.lastBdLocation==null || LocationService.lastBdLocation==null) {
