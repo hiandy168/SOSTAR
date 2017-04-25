@@ -64,8 +64,6 @@ public class EvaluateActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("评价");
         tv_evaluate_orderinfo.setText(getIntent().getStringExtra("userName")+" 订单编号 "+getIntent().getStringExtra("orderId"));
-        rb_evaluate.setMax(5);
-        rb_evaluate.setStepSize(1);
         rb_evaluate.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             EvaluateActivity.this.rating= (int) rating;
         });
