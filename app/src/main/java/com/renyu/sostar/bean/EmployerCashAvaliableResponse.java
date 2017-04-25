@@ -14,8 +14,8 @@ public class EmployerCashAvaliableResponse {
      */
 
     private String cashAvaiable;
-    private int cashFrozen;
-    private int cashTotal;
+    private String cashFrozen;
+    private String cashTotal;
     private String payeeAccount;
     private String payeeRealName;
 
@@ -27,19 +27,19 @@ public class EmployerCashAvaliableResponse {
         this.cashAvaiable = cashAvaiable;
     }
 
-    public int getCashFrozen() {
+    public String getCashFrozen() {
         return cashFrozen;
     }
 
-    public void setCashFrozen(int cashFrozen) {
+    public void setCashFrozen(String cashFrozen) {
         this.cashFrozen = cashFrozen;
     }
 
-    public int getCashTotal() {
+    public String getCashTotal() {
         return cashTotal;
     }
 
-    public void setCashTotal(int cashTotal) {
+    public void setCashTotal(String cashTotal) {
         this.cashTotal = cashTotal;
     }
 

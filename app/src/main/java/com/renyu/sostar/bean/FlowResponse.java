@@ -14,26 +14,26 @@ public class FlowResponse {
      * type : string
      */
 
-    private int cashAmount;
-    private int cashTotal;
+    private String cashAmount;
+    private String cashTotal;
     private String date;
     private String orderId;
     private String type;
     private String descri;
 
-    public int getCashAmount() {
+    public String getCashAmount() {
         return cashAmount;
     }
 
-    public void setCashAmount(int cashAmount) {
+    public void setCashAmount(String cashAmount) {
         this.cashAmount = cashAmount;
     }
 
-    public int getCashTotal() {
+    public String getCashTotal() {
         return cashTotal;
     }
 
-    public void setCashTotal(int cashTotal) {
+    public void setCashTotal(String cashTotal) {
         this.cashTotal = cashTotal;
     }
 
