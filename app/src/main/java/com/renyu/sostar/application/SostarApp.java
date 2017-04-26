@@ -55,7 +55,7 @@ public class SostarApp extends MultiDexApplication {
             // 初始化fresco
             DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(this)
                     // 缓存文件目录
-                    .setBaseDirectoryPath(new File(InitParams.FRESCO_CACHE_PATH))
+                    .setBaseDirectoryPath(new File(InitParams.CACHE_PATH))
                     // 缓存文件夹名
                     .setBaseDirectoryName(InitParams.FRESCO_CACHE_NAME)
                     .setDiskTrimmableRegistry(NoOpDiskTrimmableRegistry.getInstance())

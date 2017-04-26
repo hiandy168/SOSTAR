@@ -203,7 +203,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private String showCacheSize() {
-        File dir=new File(InitParams.FRESCO_CACHE_PATH + File.separator + InitParams.FRESCO_CACHE_NAME);
+        File dir=new File(InitParams.CACHE_PATH + File.separator + InitParams.FRESCO_CACHE_NAME);
         long cacheSize = FileUtils.getDirLength(dir);
         if (1< cacheSize && cacheSize<1024) {
             return cacheSize+"B";
