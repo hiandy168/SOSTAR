@@ -24,6 +24,4 @@ public class InitParams {
     public static final String CACHE_PATH= ROOT_PATH + File.separator + "cache";
     // fresco缓存目录
     public static final String FRESCO_CACHE_NAME= "fresco_cache";
-    // acache缓存目录
-    public static final String ACACHE_NAME= CACHE_PATH + File.separator + "acache";
 }
