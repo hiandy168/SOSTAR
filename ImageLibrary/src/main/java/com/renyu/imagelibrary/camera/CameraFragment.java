@@ -31,6 +31,7 @@ import com.blankj.utilcode.util.ScreenUtils;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.imagelibrary.R;
+import com.renyu.imagelibrary.params.CommonParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,7 +58,7 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
     private CameraOrientationListener mOrientationListener;
 
     boolean isSurfaceDestory=false;
-    
+
     String dirPath="";
     byte[] data;
 
@@ -107,7 +108,7 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
 
         mPreviewView = (SquareCameraPreview) view.findViewById(R.id.camera_preview_view);
         mPreviewView.getHolder().addCallback(CameraFragment.this);
-        progress=(ProgressBar) view.findViewById(R.id.progress); 
+        progress=(ProgressBar) view.findViewById(R.id.progress);
 
         final ImageView swapCameraBtn = (ImageView) view.findViewById(R.id.change_camera);
         PackageManager pm = getActivity().getPackageManager();
@@ -338,8 +339,8 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
         stopCameraPreview();
         mCamera.release();
 
-        getCamera(mCameraID);
-        startCameraPreview();
+        if (getCamera(mCameraID))
+            startCameraPreview();
     }
 
     private int getFrontCameraID() {
@@ -359,9 +360,9 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
      * Take a picture
      */
     private void takePicture() {
-    	progress.setVisibility(View.VISIBLE);
-    	takePhotoBtn.setVisibility(View.GONE);
-    	
+        progress.setVisibility(View.VISIBLE);
+        takePhotoBtn.setVisibility(View.GONE);
+
         mOrientationListener.rememberOrientation();
 
         // Shutter callback occurs after the image is captured. This can
@@ -411,8 +412,8 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
             isSurfaceDestory=false;
         }
         else {
-            getCamera(mCameraID);
-            startCameraPreview();
+            if (getCamera(mCameraID))
+                startCameraPreview();
         }
     }
 
@@ -436,9 +437,9 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
     public void onPictureTaken(byte[] data, Camera camera) {
         camera.startPreview();
         mPreviewView.onPictureTaken();
-        
+
         progress.setVisibility(View.GONE);
-    	takePhotoBtn.setVisibility(View.VISIBLE);
+        takePhotoBtn.setVisibility(View.VISIBLE);
 
         this.data=data;
 
@@ -511,7 +512,7 @@ public class CameraFragment extends BaseFragment implements SurfaceHolder.Callba
             return mRememberedNormalOrientation;
         }
     }
-    
+
     private int getCameraPictureRotation(int orientation) {
         CameraInfo info = new CameraInfo();
         Camera.getCameraInfo(mCameraID, info);
