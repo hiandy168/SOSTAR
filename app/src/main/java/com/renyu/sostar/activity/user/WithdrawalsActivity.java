@@ -67,8 +67,6 @@ public class WithdrawalsActivity extends BaseActivity {
     @BindView(R.id.btn_alipay_getvcode)
     Button btn_alipay_getvcode;
 
-    Disposable disposable;
-    Disposable network_disposable;
     Disposable vcode_disposable;
 
     @Override
@@ -134,11 +132,13 @@ public class WithdrawalsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmployerCashAvaliableResponse value) {
+                dismissNetworkDialog();
+
                 tv_withdrawals_lastmoney.setText("可用余额: "+value.getCashAvaiable());
                 if (!TextUtils.isEmpty(value.getPayeeAccount())) {
                     ed_alipay_account.setText(value.getPayeeAccount());
@@ -152,6 +152,8 @@ public class WithdrawalsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -172,12 +174,15 @@ public class WithdrawalsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                network_disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                 btn_alipay_getvcode.setEnabled(false);
                 vcode_disposable= Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
@@ -191,6 +196,8 @@ public class WithdrawalsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -214,7 +221,7 @@ public class WithdrawalsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
@@ -224,6 +231,8 @@ public class WithdrawalsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -246,17 +255,22 @@ public class WithdrawalsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                 finish();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(WithdrawalsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -272,9 +286,6 @@ public class WithdrawalsActivity extends BaseActivity {
         super.onDestroy();
         if (vcode_disposable!=null) {
             vcode_disposable.dispose();
-        }
-        if (network_disposable!=null) {
-            network_disposable.dispose();
         }
     }
 }

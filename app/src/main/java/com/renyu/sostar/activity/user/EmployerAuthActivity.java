@@ -353,12 +353,15 @@ public class EmployerAuthActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EmployerAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                 myCenterResponse.setAuthentication("2");
                 myCenterResponse.setCompanyName(tv_employerauth_name.getText().toString());
                 myCenterResponse.setCompanyCode(tv_employerauth_compcode.getText().toString());
@@ -371,6 +374,8 @@ public class EmployerAuthActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EmployerAuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

@@ -68,8 +68,6 @@ public class MessageListActivity extends BaseActivity {
 
     int page=1;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         beans=new ArrayList<>();
@@ -185,7 +183,7 @@ public class MessageListActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<MsgListResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+
             }
 
             @Override
@@ -239,11 +237,13 @@ public class MessageListActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 adapter.notifyItemRemoved(position);
@@ -273,6 +273,8 @@ public class MessageListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -293,7 +295,7 @@ public class MessageListActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+               
             }
 
             @Override
@@ -324,11 +326,13 @@ public class MessageListActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(MessageListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 beans.clear();
@@ -337,6 +341,8 @@ public class MessageListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(MessageListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

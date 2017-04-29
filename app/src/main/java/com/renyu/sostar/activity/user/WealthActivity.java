@@ -66,8 +66,6 @@ public class WealthActivity extends BaseActivity {
 
     List<Object> beans;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         beans=new ArrayList<>();
@@ -159,16 +157,20 @@ public class WealthActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmployerCashAvaliableResponse value) {
+                dismissNetworkDialog();
+
                 tv_wealth_money.setText(""+value.getCashAvaiable());
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 e.printStackTrace();
             }
 

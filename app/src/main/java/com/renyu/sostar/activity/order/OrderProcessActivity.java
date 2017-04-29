@@ -349,11 +349,13 @@ public class OrderProcessActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<PayInfoResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(PayInfoResponse value) {
+                dismissNetworkDialog();
+
                 int count=-1;
                 if (value.getStaffName().size()>3) {
                     count=3;
@@ -374,7 +376,7 @@ public class OrderProcessActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                dismissNetworkDialog();
             }
 
             @Override
@@ -395,11 +397,13 @@ public class OrderProcessActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderProcessActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 EventBus.getDefault().post(new OrderResponse());
@@ -409,6 +413,8 @@ public class OrderProcessActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderProcessActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

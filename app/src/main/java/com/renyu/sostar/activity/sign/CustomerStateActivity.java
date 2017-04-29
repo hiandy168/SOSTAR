@@ -27,8 +27,6 @@ import io.reactivex.disposables.Disposable;
 
 public class CustomerStateActivity extends BaseActivity {
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
 
@@ -84,11 +82,13 @@ public class CustomerStateActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(CustomerStateActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 ACache.get(CustomerStateActivity.this).put(CommonParams.USER_TYPE, ""+state);
@@ -101,6 +101,8 @@ public class CustomerStateActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(CustomerStateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

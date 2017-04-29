@@ -135,11 +135,13 @@ public class FavListActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(FavListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 for (FavListResponse bean : beans) {
                     if (bean.getUserId().equals(staffs)) {
@@ -152,6 +154,8 @@ public class FavListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(FavListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

@@ -107,8 +107,6 @@ public class ReleaseOrderActivity extends BaseActivity {
     ArrayList<String> picPath;
     ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> timeBeans;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -568,17 +566,19 @@ public class ReleaseOrderActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmployerCashAvaliableResponse value) {
+                dismissNetworkDialog();
+
                 tv_releaseorder_avaliablemoney.setText(""+value.getCashAvaiable());
             }
 
             @Override
             public void onError(Throwable e) {
-
+                dismissNetworkDialog();
             }
 
             @Override
@@ -663,8 +663,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ArrayList<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                networkDialg= ProgressDialog.show(ReleaseOrderActivity.this, null, "正在发布");
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
@@ -674,8 +673,9 @@ public class ReleaseOrderActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                networkDialg.dismiss();
             }
 
             @Override
@@ -729,12 +729,12 @@ public class ReleaseOrderActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+
             }
 
             @Override
             public void onNext(EmptyResponse value) {
-                networkDialg.dismiss();
+                dismissNetworkDialog();
 
                 // 发单成功刷新首页数据
                 // 发单成功刷新详情数据
@@ -746,7 +746,8 @@ public class ReleaseOrderActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                networkDialg.dismiss();
+                dismissNetworkDialog();
+
                 Toast.makeText(ReleaseOrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

@@ -76,8 +76,6 @@ public class EmployerInfoActivity extends BaseActivity {
 
     MyCenterEmployerResponse myCenterResponse;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         myCenterResponse= (MyCenterEmployerResponse) getIntent().getSerializableExtra("response");
@@ -277,12 +275,15 @@ public class EmployerInfoActivity extends BaseActivity {
                     .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-                    disposable=d;
+                    showNetworkDialog("正在操作，请稍后");
                 }
 
                 @Override
                 public void onNext(EmptyResponse value) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(EmployerInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                     if (param.equals("logoPath")) {
                         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                                 .setUri(Uri.parse(paramValue)).setAutoPlayAnimations(true).build();
@@ -293,6 +294,8 @@ public class EmployerInfoActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(EmployerInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
@@ -42,8 +43,6 @@ public class RechargeActivity extends BaseActivity {
     TextView tv_recharge_lastmoney;
     @BindView(R.id.ed_recharge_money)
     EditText ed_recharge_money;
-
-    Disposable disposable;
 
     @Override
     public void initParams() {
@@ -100,17 +99,19 @@ public class RechargeActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmployerCashAvaliableResponse value) {
+                dismissNetworkDialog();
+
                 tv_recharge_lastmoney.setText("可用余额: "+value.getCashAvaiable());
             }
 
             @Override
             public void onError(Throwable e) {
-
+                dismissNetworkDialog();
             }
 
             @Override
@@ -131,11 +132,13 @@ public class RechargeActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<RechargeResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(RechargeResponse value) {
+                dismissNetworkDialog();
+
                 Intent intent=new Intent(RechargeActivity.this, AliPayActivity.class);
                 intent.putExtra("payinfo", value.getOrderInfo());
                 startActivityForResult(intent, CommonParams.RESULT_PAY);
@@ -143,7 +146,9 @@ public class RechargeActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
 
+                Toast.makeText(RechargeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -50,7 +50,6 @@ public class FindPasswordActivity extends BaseActivity {
     Button btn_findpwd_getvcode;
 
     Disposable vcode_disposable;
-    Disposable network_disposable;
 
     @Override
     public void initParams() {
@@ -120,12 +119,15 @@ public class FindPasswordActivity extends BaseActivity {
                     .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-                    network_disposable=d;
+                    showNetworkDialog("正在操作，请稍后");
                 }
 
                 @Override
                 public void onNext(EmptyResponse value) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(FindPasswordActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                     ACache.get(FindPasswordActivity.this).put(CommonParams.USER_PASSWORD,
                             et_findpwd_pwd.getText().toString());
                     Intent intent=new Intent();
@@ -135,6 +137,8 @@ public class FindPasswordActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(FindPasswordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -160,12 +164,15 @@ public class FindPasswordActivity extends BaseActivity {
                     .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-                    network_disposable=d;
+                    showNetworkDialog("正在操作，请稍后");
                 }
 
                 @Override
                 public void onNext(EmptyResponse value) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(FindPasswordActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                     btn_findpwd_getvcode.setEnabled(false);
                     vcode_disposable= Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
                             .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
@@ -179,6 +186,8 @@ public class FindPasswordActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(FindPasswordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 

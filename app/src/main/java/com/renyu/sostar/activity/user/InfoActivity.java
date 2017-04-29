@@ -143,11 +143,13 @@ public class InfoActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<MyCenterEmployeeResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(MyCenterEmployeeResponse value) {
+                dismissNetworkDialog();
+
                 employeeResponse=value;
                 if (!TextUtils.isEmpty(value.getNickName())) {
                     tv_info_nickname.setText(value.getNickName());
@@ -182,6 +184,8 @@ public class InfoActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(InfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -205,11 +209,13 @@ public class InfoActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<MyCenterEmployerResponse>()  {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(MyCenterEmployerResponse value) {
+                dismissNetworkDialog();
+
                 employerResponse=value;
                 if (!TextUtils.isEmpty(value.getCompanyName())) {
                     tv_info_nickname.setText(value.getCompanyName());
@@ -239,6 +245,8 @@ public class InfoActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(InfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

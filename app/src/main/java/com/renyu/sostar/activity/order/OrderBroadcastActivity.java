@@ -111,16 +111,20 @@ public class OrderBroadcastActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderBroadcastActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderBroadcastActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

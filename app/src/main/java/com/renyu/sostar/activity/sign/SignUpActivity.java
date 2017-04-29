@@ -52,7 +52,6 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.layout_signup_rootview)
     LinearLayout layout_signup_rootview;
 
-    Disposable network_disposable;
     Disposable vcode_disposable;
 
     @Override
@@ -150,12 +149,15 @@ public class SignUpActivity extends BaseActivity {
                     .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-                    network_disposable=d;
+                    showNetworkDialog("正在操作，请稍后");
                 }
 
                 @Override
                 public void onNext(EmptyResponse value) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(SignUpActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                     btn_signup_getvcode.setEnabled(false);
                     vcode_disposable= Observable.intervalRange(0, 60, 0, 1, TimeUnit.SECONDS)
                             .observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
@@ -169,6 +171,8 @@ public class SignUpActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -202,11 +206,13 @@ public class SignUpActivity extends BaseActivity {
                     .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-
+                    showNetworkDialog("正在操作，请稍后");
                 }
 
                 @Override
                 public void onNext(SigninResponse value) {
+                    dismissNetworkDialog();
+
                     ACache.get(SignUpActivity.this).put(CommonParams.USER_PHONE, signup_phone.getText().toString());
                     ACache.get(SignUpActivity.this).put(CommonParams.USER_PASSWORD, signup_pwd.getText().toString());
                     ACache.get(SignUpActivity.this).put(CommonParams.USER_ID, value.getUserId());
@@ -219,6 +225,8 @@ public class SignUpActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    dismissNetworkDialog();
+
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -235,9 +243,6 @@ public class SignUpActivity extends BaseActivity {
         super.onDestroy();
         if (vcode_disposable!=null) {
             vcode_disposable.dispose();
-        }
-        if (network_disposable!=null) {
-            network_disposable.dispose();
         }
     }
 }

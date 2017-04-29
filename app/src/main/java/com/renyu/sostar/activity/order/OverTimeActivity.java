@@ -57,8 +57,6 @@ public class OverTimeActivity extends BaseActivity {
 
     OrderResponse orderResponse;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -152,17 +150,19 @@ public class OverTimeActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerCashAvaliableResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmployerCashAvaliableResponse value) {
+                dismissNetworkDialog();
+
                 tv_overtime_avaliablemoney.setText(""+value.getCashAvaiable());
             }
 
             @Override
             public void onError(Throwable e) {
-
+                dismissNetworkDialog();
             }
 
             @Override
@@ -195,17 +195,21 @@ public class OverTimeActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OverTimeActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OverTimeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

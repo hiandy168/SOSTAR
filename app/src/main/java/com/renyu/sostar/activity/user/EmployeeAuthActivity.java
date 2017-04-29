@@ -72,8 +72,6 @@ public class EmployeeAuthActivity extends BaseActivity {
     // 当前选中图片位置
     private int choicePicPosition=-1;
 
-    Disposable disposable;
-
     MyCenterEmployeeResponse myCenterResponse;
 
     @Override
@@ -218,12 +216,15 @@ public class EmployeeAuthActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EmployeeAuthActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+
                 myCenterResponse.setAuthentication("2");
                 myCenterResponse.setName(tv_userauth_name.getText().toString());
                 myCenterResponse.setCertificateId(tv_userauth_id.getText().toString());
@@ -235,6 +236,8 @@ public class EmployeeAuthActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EmployeeAuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

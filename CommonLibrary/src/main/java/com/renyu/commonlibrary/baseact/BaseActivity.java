@@ -202,4 +202,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void showNetworkDialog(String content) {
+        if (networkDialg==null || (networkDialg!=null && !networkDialg.isShowing()))
+        networkDialg=ProgressDialog.show(this, "", content);
+    }
+
+    public void dismissNetworkDialog() {
+        if (networkDialg!=null && networkDialg.isShowing()) {
+            networkDialg.dismiss();
+            networkDialg=null;
+        }
+    }
 }

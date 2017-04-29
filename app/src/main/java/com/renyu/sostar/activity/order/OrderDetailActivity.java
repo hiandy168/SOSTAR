@@ -118,8 +118,6 @@ public class OrderDetailActivity extends BaseActivity {
     ArrayList<String> images;
     ArrayList<View> views;
 
-    Disposable disposable;
-
     // 订单当前状态
     OrderResponse orderResponse;
 
@@ -293,7 +291,7 @@ public class OrderDetailActivity extends BaseActivity {
         observable.subscribe(new Observer<OrderResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+
             }
 
             @Override
@@ -553,11 +551,13 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 EventBus.getDefault().post(new OrderResponse());
@@ -565,6 +565,8 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -587,11 +589,13 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 EventBus.getDefault().post(new OrderResponse());
@@ -599,6 +603,8 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -621,11 +627,13 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                 isNotReceive=false;
@@ -637,6 +645,8 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -659,17 +669,21 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(Object value) {
+                dismissNetworkDialog();
+
                 EventBus.getDefault().post(new OrderResponse());
                 showQRCode();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -693,11 +707,13 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(Object value) {
+                dismissNetworkDialog();
+
                 getOrderDetail();
 
                 Intent intent=new Intent(OrderDetailActivity.this, OrderProcessActivity.class);
@@ -707,6 +723,8 @@ public class OrderDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -729,16 +747,20 @@ public class OrderDetailActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(Object value) {
+                dismissNetworkDialog();
+
                 EventBus.getDefault().post(new OrderResponse());
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

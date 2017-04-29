@@ -42,8 +42,6 @@ public class FeedbackActivity extends BaseActivity {
     @BindView(R.id.tv_feedback_numbers)
     TextView tv_feedback_numbers;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -116,17 +114,21 @@ public class FeedbackActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(FeedbackActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(FeedbackActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

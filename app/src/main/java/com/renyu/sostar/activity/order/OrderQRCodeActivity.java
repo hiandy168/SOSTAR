@@ -170,11 +170,13 @@ public class OrderQRCodeActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<StartMyOrderSignResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(StartMyOrderSignResponse value) {
+                dismissNetworkDialog();
+
                 Observable.just(value.getTag()).map(s -> QRCodeEncoder.syncEncodeQRCode(s,
                         BGAQRCodeUtil.dp2px(OrderQRCodeActivity.this, 210)))
                         .subscribeOn(Schedulers.io())
@@ -184,6 +186,8 @@ public class OrderQRCodeActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(OrderQRCodeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

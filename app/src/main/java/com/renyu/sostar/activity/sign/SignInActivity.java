@@ -41,8 +41,6 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.layout_signin_rootview)
     LinearLayout layout_signin_rootview;
 
-    Disposable disposable=null;
-
     @Override
     public void initParams() {
         if (!TextUtils.isEmpty(ACache.get(SignInActivity.this).getAsString(CommonParams.USER_PHONE))) {
@@ -140,11 +138,13 @@ public class SignInActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(SigninResponse value) {
+                dismissNetworkDialog();
+
                 ACache.get(SignInActivity.this).put(CommonParams.USER_PHONE, signin_phone.getText().toString());
                 ACache.get(SignInActivity.this).put(CommonParams.USER_PASSWORD, signin_pwd.getText().toString());
                 ACache.get(SignInActivity.this).put(CommonParams.USER_ID, value.getUserId());
@@ -166,6 +166,8 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 

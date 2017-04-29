@@ -51,8 +51,6 @@ public class SettingsActivity extends BaseActivity {
     @BindView(R.id.sb_settings_message)
     SwitchButton sb_settings_message;
 
-    Disposable disposable;
-
     boolean userChange=false;
 
     @Override
@@ -144,17 +142,21 @@ public class SettingsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SettingsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 signin();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -176,11 +178,13 @@ public class SettingsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<SigninResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(SigninResponse value) {
+                dismissNetworkDialog();
+
                 ACache.get(SettingsActivity.this).put(CommonParams.USER_TYPE, value.getUserType());
                 ACache.get(SettingsActivity.this).put(CommonParams.USER_ID, value.getUserId());
 
@@ -192,6 +196,8 @@ public class SettingsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -236,16 +242,20 @@ public class SettingsActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SettingsActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 if (sb_settings_message.isChecked()) {
                     sb_settings_message.setChecked(false);

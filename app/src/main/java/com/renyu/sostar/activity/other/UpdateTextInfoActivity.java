@@ -46,8 +46,6 @@ public class UpdateTextInfoActivity extends BaseActivity {
     @BindView(R.id.et_updatetextinfo)
     EditText et_updatetextinfo;
 
-    Disposable disposable;
-
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
@@ -123,11 +121,13 @@ public class UpdateTextInfoActivity extends BaseActivity {
                         .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        disposable=d;
+                        showNetworkDialog("正在操作，请稍后");
                     }
 
                     @Override
                     public void onNext(EmptyResponse value) {
+                        dismissNetworkDialog();
+
                         Toast.makeText(UpdateTextInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent();
                         intent.putExtra("param", getIntent().getStringExtra("param"));
@@ -138,6 +138,8 @@ public class UpdateTextInfoActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        dismissNetworkDialog();
+
                         Toast.makeText(UpdateTextInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -153,11 +155,13 @@ public class UpdateTextInfoActivity extends BaseActivity {
                         .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        disposable=d;
+                        showNetworkDialog("正在操作，请稍后");
                     }
 
                     @Override
                     public void onNext(EmptyResponse value) {
+                        dismissNetworkDialog();
+
                         Toast.makeText(UpdateTextInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent();
                         intent.putExtra("param", getIntent().getStringExtra("param"));
@@ -168,6 +172,8 @@ public class UpdateTextInfoActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        dismissNetworkDialog();
+
                         Toast.makeText(UpdateTextInfoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 

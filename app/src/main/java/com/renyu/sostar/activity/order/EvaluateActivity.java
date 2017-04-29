@@ -164,11 +164,13 @@ public class EvaluateActivity extends BaseActivity {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
             public void onNext(EmptyResponse value) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EvaluateActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent();
                 intent.putExtra("userId", getIntent().getStringExtra("userId"));
@@ -178,6 +180,8 @@ public class EvaluateActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EvaluateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
