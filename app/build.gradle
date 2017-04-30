@@ -33,18 +33,13 @@ android {
                 throw new InvalidUserDataException(ex.toString())
             }
         }
-        debug {
-            try {
-                storeFile file("android.keystore")
-                storePassword KEYSTORE_PASSWORD
-                keyAlias "android.keystore"
-                keyPassword KEY_PASSWORD
-            } catch (ex) {
-                throw new InvalidUserDataException(ex.toString())
-            }
-        }
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             signingConfig signingConfigs.release
