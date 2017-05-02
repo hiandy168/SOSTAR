@@ -306,7 +306,7 @@ public class OrderDetailActivity extends BaseActivity {
                 LinearLayout layout_pop= (LinearLayout) popView.findViewById(R.id.layout_pop);
 
                 tv_orderdetail_type.setText(value.getJobType());
-                tv_orderdetail_person.setText(""+value.getStaffAccount());
+                tv_orderdetail_person.setText(""+value.getStaffAccount()+"人");
                 int dayNum=value.getPeriodTime().split(",").length;
                 // 按天
                 if (value.getUnitPriceType().equals("1")) {
@@ -359,7 +359,7 @@ public class OrderDetailActivity extends BaseActivity {
                 tv_orderdetail_desp.setText(value.getDescription());
 
                 if (ACache.get(OrderDetailActivity.this).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                    tv_orderdetail_person.setVisibility(View.GONE);
+                    tv_orderdetail_priceall.setVisibility(View.GONE);
                     // 订单状态
                     // -1.未接单
                     if (value.getOrderStatus().equals("-1")) {
@@ -429,7 +429,7 @@ public class OrderDetailActivity extends BaseActivity {
                     }
                 }
                 else if (ACache.get(OrderDetailActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    tv_orderdetail_priceall.setVisibility(View.GONE);
+                    tv_orderdetail_person.setVisibility(View.GONE);
                     layout_orderdetail_info3.setVisibility(View.VISIBLE);
                     layout_orderdetail_employer.removeAllViews();
                     for (String s : value.getPicStaffArray()) {
@@ -640,7 +640,9 @@ public class OrderDetailActivity extends BaseActivity {
                 getOrderDetail();
 
                 // 雇员接单状态变化以刷新
-                EventBus.getDefault().post(new OrderResponse());
+                OrderResponse orderResponse=new OrderResponse();
+                orderResponse.setOrderId(getIntent().getStringExtra("orderId"));
+                EventBus.getDefault().post(orderResponse);
             }
 
             @Override

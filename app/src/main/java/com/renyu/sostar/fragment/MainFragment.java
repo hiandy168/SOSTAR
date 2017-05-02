@@ -46,6 +46,7 @@ import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
+import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -89,14 +90,14 @@ public class MainFragment extends BaseFragment {
     BDLocation bdLocation;
     // 用户marker
     Marker avatarMarker;
-    // 所有其他marker
-    ArrayList<Marker> otherMarkers;
+    // 所有订单marker
+    ArrayList<Marker> allOrdersMarkers;
 
     Disposable disposable;
 
     @Override
     public void initParams() {
-        otherMarkers=new ArrayList<>();
+        allOrdersMarkers=new ArrayList<>();
 
         mBaiduMap=mv_main.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
@@ -123,20 +124,19 @@ public class MainFragment extends BaseFragment {
             }
         });
         mBaiduMap.setOnMarkerClickListener(marker -> {
-            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                if (marker.getZIndex()!=0) {
+            // 点击不是自己的头像
+            if (marker.getZIndex()!=0) {
+                if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
                     Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
                     intent.putExtra("orderId", ""+marker.getZIndex());
+                    intent.putExtra("typeIsCommit", true);
                     startActivity(intent);
                 }
-                else {
+                else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
                     Intent intent=new Intent(getActivity(), InfoActivity.class);
                     intent.putExtra("userId", ""+marker.getZIndex());
                     startActivity(intent);
                 }
-            }
-            else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
-
             }
             return false;
         });
@@ -279,6 +279,16 @@ public class MainFragment extends BaseFragment {
         tv_main_open_space.setVisibility(View.VISIBLE);
     }
 
+    // 雇员接单成功后删除相应的marker
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(OrderResponse response) {
+        for (Marker allOrdersMarker : allOrdersMarkers) {
+            if (allOrdersMarker.getZIndex()==Integer.parseInt(response.getOrderId())) {
+                allOrdersMarker.remove();
+            }
+        }
+    }
+
     private void loadAvatarBitmap(String avatarUrl) {
         if (TextUtils.isEmpty(avatarUrl)) {
             avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
@@ -409,12 +419,15 @@ public class MainFragment extends BaseFragment {
         view.destroyDrawingCache();
         view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         BitmapDescriptor bd= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
-        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude())).icon(bd).zIndex(0);
+        MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude()))
+                .icon(bd)
+                .zIndex(0);
         oo.animateType(MarkerOptions.MarkerAnimateType.grow);
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
     }
 
     private void addEmployeeOverLay(EmployeeIndexResponse value) {
+        allOrdersMarkers.clear();
         EmployeeIndexResponse.OrdersBean[] beans=new EmployeeIndexResponse.OrdersBean[value.getOrders().size()];
         for (int i = 0; i < value.getOrders().size(); i++) {
             beans[i]=value.getOrders().get(i);
@@ -429,7 +442,7 @@ public class MainFragment extends BaseFragment {
                     .icon(bd)
                     .zIndex(Integer.parseInt(ordersBean.getOrderId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+            allOrdersMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 
@@ -451,7 +464,6 @@ public class MainFragment extends BaseFragment {
                     .icon(bd)
                     .zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            otherMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 

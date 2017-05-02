@@ -85,7 +85,12 @@ public class WealthAdapter extends RecyclerView.Adapter {
                     ((WealthInfoViewHolder) holder).view_wealth_info.setVisibility(View.GONE);
                 }
                 else if (beans.get(position) instanceof FlowResponse) {
-                    ((WealthInfoViewHolder) holder).view_wealth_info.setVisibility(View.VISIBLE);
+                    if (beans.get(position+1) instanceof FlowResponse) {
+                        ((WealthInfoViewHolder) holder).view_wealth_info.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        ((WealthInfoViewHolder) holder).view_wealth_info.setVisibility(View.GONE);
+                    }
                 }
             }
         }

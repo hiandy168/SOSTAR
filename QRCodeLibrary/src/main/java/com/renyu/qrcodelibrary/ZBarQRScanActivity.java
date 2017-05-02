@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
 
@@ -42,6 +41,12 @@ public class ZBarQRScanActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.WHITE);
         tv_nav_title.setText("扫码签到");
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
+        ib_nav_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         BarUtils.adjustStatusBar(this, (ViewGroup) ((ViewGroup) zbar_scan_view.getParent()).getChildAt(2), -1);
 
@@ -146,15 +151,6 @@ public class ZBarQRScanActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    @OnClick({R2.id.ib_nav_left})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R2.id.ib_nav_left:
-                finish();
-                break;
         }
     }
 }
