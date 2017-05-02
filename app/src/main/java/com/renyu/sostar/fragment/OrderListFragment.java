@@ -43,7 +43,6 @@ public class OrderListFragment extends BaseFragment {
     @BindView(R.id.rv_orderlist)
     RecyclerView rv_orderlist;
     OrderListAdapter adapter;
-    OrderListType orderListType;
     // 订单列表类型
     public enum OrderListType {
         myOrderList("雇员待接单", 1),
@@ -86,7 +85,14 @@ public class OrderListFragment extends BaseFragment {
 
         rv_orderlist.setHasFixedSize(true);
         rv_orderlist.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter=new OrderListAdapter(getActivity(), beans);
+        boolean isShowDistance=false;
+        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            // 雇员待接单
+            if (getArguments().getInt("orderListType")==1) {
+                isShowDistance=true;
+            }
+        }
+        adapter=new OrderListAdapter(getActivity(), beans, isShowDistance);
         adapter.setOnClickListener(position -> {
             Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
             intent.putExtra("orderId", beans.get(position).getOrderId());

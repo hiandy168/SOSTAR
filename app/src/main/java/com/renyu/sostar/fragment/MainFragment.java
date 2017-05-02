@@ -289,17 +289,6 @@ public class MainFragment extends BaseFragment {
         tv_main_open_space.setVisibility(View.VISIBLE);
     }
 
-    // 雇员接单成功后删除相应的marker
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(OrderResponse response) {
-        for (Marker allOrdersMarker : allMarkers) {
-            if (allOrdersMarker.getZIndex()==Integer.parseInt(response.getOrderId())) {
-                allOrdersMarker.remove();
-            }
-        }
-        allMarkers.clear();
-    }
-
     private void loadAvatarBitmap(String avatarUrl) {
         if (TextUtils.isEmpty(avatarUrl)) {
             avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);

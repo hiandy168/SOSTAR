@@ -34,6 +34,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
 
     Context context;
     ArrayList<MyOrderListResponse.DataBean> beans;
+    boolean isShowDistance;
     OnClickListener onClickListener;
 
     public interface OnClickListener {
@@ -44,9 +45,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         this.onClickListener = onClickListener;
     }
 
-    public OrderListAdapter(Context context, ArrayList<MyOrderListResponse.DataBean> beans) {
+    public OrderListAdapter(Context context, ArrayList<MyOrderListResponse.DataBean> beans, boolean isShowDistance) {
         this.context = context;
         this.beans = beans;
+        this.isShowDistance = isShowDistance;
     }
 
     @Override
@@ -87,18 +89,61 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
             }
         }
         holder.tv_orderlist_comp.setText(beans.get(position).getCompanyName());
-        if (LocationService.lastBdLocation==null || LocationService.lastBdLocation==null) {
-            holder.tv_orderlist_distance.setVisibility(View.GONE);
-        }
-        else {
-            LatLng userLatlng=new LatLng(LocationService.lastBdLocation.getLatitude(), LocationService.lastBdLocation.getLongitude());
-            LatLng orderLatlng=new LatLng(Double.parseDouble(beans.get(position).getLatitude()), Double.parseDouble(beans.get(position).getLongitude()));
-            if (Double.parseDouble(beans.get(position).getLatitude())<1 || Double.parseDouble(beans.get(position).getLongitude())<1) {
+        if (isShowDistance) {
+            if (LocationService.lastBdLocation==null || LocationService.lastBdLocation==null) {
                 holder.tv_orderlist_distance.setVisibility(View.GONE);
             }
             else {
+                LatLng userLatlng=new LatLng(LocationService.lastBdLocation.getLatitude(), LocationService.lastBdLocation.getLongitude());
+                LatLng orderLatlng=new LatLng(Double.parseDouble(beans.get(position).getLatitude()), Double.parseDouble(beans.get(position).getLongitude()));
+                if (Double.parseDouble(beans.get(position).getLatitude())<1 || Double.parseDouble(beans.get(position).getLongitude())<1) {
+                    holder.tv_orderlist_distance.setVisibility(View.GONE);
+                }
+                else {
+                    holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
+                    holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+                }
+            }
+        }
+        else {
+            if (ACache.get(context).getAsString(CommonParams.USER_TYPE).equals("0")) {
                 holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
-                holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+                if (beans.get(position).getOrderStatus().equals("1")) {
+                    holder.tv_orderlist_distance.setText("已确认");
+                }
+                else if (beans.get(position).getOrderStatus().equals("2")) {
+                    holder.tv_orderlist_distance.setText("已拒绝");
+                }
+                else if (beans.get(position).getOrderStatus().equals("3")) {
+                    holder.tv_orderlist_distance.setText("已取消");
+                }
+                else if (beans.get(position).getOrderStatus().equals("4")) {
+                    holder.tv_orderlist_distance.setText("已完成");
+                }
+                else if (beans.get(position).getOrderStatus().equals("8")) {
+                    holder.tv_orderlist_distance.setText("已开始");
+                }
+                else if (beans.get(position).getOrderStatus().equals("9")) {
+                    holder.tv_orderlist_distance.setText("已取消");
+                }
+                else if (beans.get(position).getOrderStatus().equals("10")) {
+                    holder.tv_orderlist_distance.setText("已解雇");
+                }
+                else if (beans.get(position).getOrderStatus().equals("11")) {
+                    holder.tv_orderlist_distance.setText("申请离职中");
+                }
+                else if (beans.get(position).getOrderStatus().equals("12")) {
+                    holder.tv_orderlist_distance.setText("已离职");
+                }
+                else if (beans.get(position).getOrderStatus().equals("13")) {
+                    holder.tv_orderlist_distance.setText("已取消");
+                }
+                else if (beans.get(position).getOrderStatus().equals("14")) {
+                    holder.tv_orderlist_distance.setText("已取消");
+                }
+            }
+            else {
+                holder.tv_orderlist_distance.setVisibility(View.GONE);
             }
         }
         DraweeController draweeController;

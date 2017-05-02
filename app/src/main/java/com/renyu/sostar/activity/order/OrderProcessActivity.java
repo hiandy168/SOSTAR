@@ -148,15 +148,20 @@ public class OrderProcessActivity extends BaseActivity {
                 iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
                 tv_orderprocess.setText("支付成功\n订单号"+orderResponse.getOrderId()+"  任务已完成");
                 if (process==4 || process==5) {
-                    btn_orderprocess_commit.setText("评价雇主");
-                    btn_orderprocess_commit.setVisibility(View.VISIBLE);
-                    btn_orderprocess_commit.setOnClickListener(v -> {
-                        Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
-                        intent_employees.putExtra("orderId", orderResponse.getOrderId());
-                        intent_employees.putExtra("userName", "");
-                        intent_employees.putExtra("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
-                        startActivityForResult(intent_employees, CommonParams.RESULT_EVALUATE);
-                    });
+                    if (orderResponse.getEvaFlg().equals("0")) {
+                        btn_orderprocess_commit.setText("评价雇主");
+                        btn_orderprocess_commit.setVisibility(View.VISIBLE);
+                        btn_orderprocess_commit.setOnClickListener(v -> {
+                            Intent intent_employees=new Intent(OrderProcessActivity.this, EvaluateActivity.class);
+                            intent_employees.putExtra("orderId", orderResponse.getOrderId());
+                            intent_employees.putExtra("userName", "");
+                            intent_employees.putExtra("userId", ACache.get(this).getAsString(CommonParams.USER_ID));
+                            startActivityForResult(intent_employees, CommonParams.RESULT_EVALUATE);
+                        });
+                    }
+                    else {
+                        btn_orderprocess_commit.setVisibility(View.GONE);
+                    }
                 }
             }
             // 不可支付

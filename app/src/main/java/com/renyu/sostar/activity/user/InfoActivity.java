@@ -179,7 +179,7 @@ public class InfoActivity extends BaseActivity {
                 tv_info_age.setText(value.getAge());
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
-                tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate()+"%");
+                tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate());
             }
 
             @Override

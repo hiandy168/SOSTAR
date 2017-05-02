@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.order;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -207,100 +208,110 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 解雇
     public void fireStaff(String userId) {
-        OrderRequest request=new OrderRequest();
-        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
-        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
-        paramBean.setUserId(userId);
-        request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .fireStaff(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                showNetworkDialog("正在操作，请稍后");
-            }
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认解雇？")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    OrderRequest request=new OrderRequest();
+                    OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+                    paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+                    paramBean.setUserId(userId);
+                    request.setParam(paramBean);
+                    retrofit.create(RetrofitImpl.class)
+                            .fireStaff(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                            .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            showNetworkDialog("正在操作，请稍后");
+                        }
 
-            @Override
-            public void onNext(EmptyResponse value) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onNext(EmptyResponse value) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                EmployerStaffListResponse beanTemp=null;
-                for (EmployerStaffListResponse bean : beans) {
-                    if (bean.getUserId().equals(userId)) {
-                        beanTemp=bean;
-                        beans.remove(bean);
-                    }
-                }
-                if (beanTemp!=null) {
-                    adapter.notifyDataSetChanged();
-                }
+                            Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                            EmployerStaffListResponse beanTemp=null;
+                            for (EmployerStaffListResponse bean : beans) {
+                                if (bean.getUserId().equals(userId)) {
+                                    beanTemp=bean;
+                                    beans.remove(bean);
+                                }
+                            }
+                            if (beanTemp!=null) {
+                                adapter.notifyDataSetChanged();
+                            }
 
-                // 员工身份变化需要刷新
-                EventBus.getDefault().post(new OrderResponse());
-            }
+                            // 员工身份变化需要刷新
+                            EventBus.getDefault().post(new OrderResponse());
+                        }
 
-            @Override
-            public void onError(Throwable e) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onError(Throwable e) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                            Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
-            @Override
-            public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-            }
-        });
+                        }
+                    });
+                }).setNegativeButton("取消", (dialog, which) -> {
+
+        }).show();
     }
 
     // 确认离职
     public void comfirmResignation(String userId) {
-        OrderRequest request=new OrderRequest();
-        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
-        paramBean.setOrderId(getIntent().getStringExtra("orderId"));
-        paramBean.setUserId(userId);
-        request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .comfirmResignation(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                showNetworkDialog("正在操作，请稍后");
-            }
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认离职？")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    OrderRequest request=new OrderRequest();
+                    OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+                    paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+                    paramBean.setUserId(userId);
+                    request.setParam(paramBean);
+                    retrofit.create(RetrofitImpl.class)
+                            .comfirmResignation(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                            .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            showNetworkDialog("正在操作，请稍后");
+                        }
 
-            @Override
-            public void onNext(EmptyResponse value) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onNext(EmptyResponse value) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                EmployerStaffListResponse beanTemp=null;
-                for (EmployerStaffListResponse bean : beans) {
-                    if (bean.getUserId().equals(userId)) {
-                        beanTemp=bean;
-                        beans.remove(bean);
-                    }
-                }
-                if (beanTemp!=null) {
-                    adapter.notifyDataSetChanged();
-                }
+                            Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                            EmployerStaffListResponse beanTemp=null;
+                            for (EmployerStaffListResponse bean : beans) {
+                                if (bean.getUserId().equals(userId)) {
+                                    beanTemp=bean;
+                                    beans.remove(bean);
+                                }
+                            }
+                            if (beanTemp!=null) {
+                                adapter.notifyDataSetChanged();
+                            }
 
-                // 员工身份变化需要刷新
-                EventBus.getDefault().post(new OrderResponse());
-            }
+                            // 员工身份变化需要刷新
+                            EventBus.getDefault().post(new OrderResponse());
+                        }
 
-            @Override
-            public void onError(Throwable e) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onError(Throwable e) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                            Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
-            @Override
-            public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-            }
-        });
+                        }
+                    });
+                }).setNegativeButton("取消", (dialog, which) -> {
+
+        }).show();
     }
 
     // 评价雇员

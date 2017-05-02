@@ -63,6 +63,7 @@ public class OrderResponse implements Serializable {
     private List<String> picListArray;
     private List<String> picStaffArray;
     private int payFlg;
+    private String evaFlg;
 
     public String getAddress() {
         return address;
@@ -286,5 +287,13 @@ public class OrderResponse implements Serializable {
 
     public void setPayFlg(int payFlg) {
         this.payFlg = payFlg;
+    }
+
+    public String getEvaFlg() {
+        return evaFlg;
+    }
+
+    public void setEvaFlg(String evaFlg) {
+        this.evaFlg = evaFlg;
     }
 }

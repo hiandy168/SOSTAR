@@ -109,7 +109,7 @@ public class SearchOrderActivtiy extends BaseActivity {
         }
         rv_searchorder.setHasFixedSize(true);
         rv_searchorder.setLayoutManager(new LinearLayoutManager(this));
-        adapter=new OrderListAdapter(this, beans);
+        adapter=new OrderListAdapter(this, beans, true);
         adapter.setOnClickListener(position -> {
             Intent intent=new Intent(SearchOrderActivtiy.this, OrderDetailActivity.class);
             intent.putExtra("orderId", beans.get(position).getOrderId());
