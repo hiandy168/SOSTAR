@@ -90,14 +90,16 @@ public class MainFragment extends BaseFragment {
     BDLocation bdLocation;
     // 用户marker
     Marker avatarMarker;
-    // 所有订单marker
-    ArrayList<Marker> allOrdersMarkers;
+    // 所有marker
+    ArrayList<Marker> allMarkers;
+    // 地图加载成功
+    boolean isMapLoaded=false;
 
     Disposable disposable;
 
     @Override
     public void initParams() {
-        allOrdersMarkers=new ArrayList<>();
+        allMarkers=new ArrayList<>();
 
         mBaiduMap=mv_main.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
@@ -105,7 +107,15 @@ public class MainFragment extends BaseFragment {
         mBaiduMap.setOnMapLoadedCallback(() ->  {
             if (bdLocation!=null) {
                 addUserOverLay(avatarBmp, bdLocation);
+                // 分别加载地图相关信息
+                if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    loadEmployeeIndex(bdLocation);
+                }
+                else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    loadEmployerIndex(bdLocation);
+                }
             }
+            isMapLoaded=true;
         });
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
@@ -170,7 +180,7 @@ public class MainFragment extends BaseFragment {
         super.onResume();
         mv_main.onResume();
 
-        if (bdLocation!=null) {
+        if (bdLocation!=null && isMapLoaded) {
             // 分别加载地图相关信息
             if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
                 loadEmployeeIndex(bdLocation);
@@ -282,11 +292,12 @@ public class MainFragment extends BaseFragment {
     // 雇员接单成功后删除相应的marker
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(OrderResponse response) {
-        for (Marker allOrdersMarker : allOrdersMarkers) {
+        for (Marker allOrdersMarker : allMarkers) {
             if (allOrdersMarker.getZIndex()==Integer.parseInt(response.getOrderId())) {
                 allOrdersMarker.remove();
             }
         }
+        allMarkers.clear();
     }
 
     private void loadAvatarBitmap(String avatarUrl) {
@@ -427,7 +438,10 @@ public class MainFragment extends BaseFragment {
     }
 
     private void addEmployeeOverLay(EmployeeIndexResponse value) {
-        allOrdersMarkers.clear();
+        for (Marker allOrdersMarker : allMarkers) {
+            allOrdersMarker.remove();
+        }
+        allMarkers.clear();
         EmployeeIndexResponse.OrdersBean[] beans=new EmployeeIndexResponse.OrdersBean[value.getOrders().size()];
         for (int i = 0; i < value.getOrders().size(); i++) {
             beans[i]=value.getOrders().get(i);
@@ -442,7 +456,7 @@ public class MainFragment extends BaseFragment {
                     .icon(bd)
                     .zIndex(Integer.parseInt(ordersBean.getOrderId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            allOrdersMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+            allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 
@@ -450,6 +464,10 @@ public class MainFragment extends BaseFragment {
     }
 
     private void addEmployerOverLay(EmployerIndexResponse value) {
+        for (Marker allOrdersMarker : allMarkers) {
+            allOrdersMarker.remove();
+        }
+        allMarkers.clear();
         EmployerIndexResponse.StaffsBean[] beans=new EmployerIndexResponse.StaffsBean[value.getStaffs().size()];
         for (int i = 0; i < value.getStaffs().size(); i++) {
             beans[i]=value.getStaffs().get(i);
@@ -464,7 +482,7 @@ public class MainFragment extends BaseFragment {
                     .icon(bd)
                     .zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            allOrdersMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+            allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 

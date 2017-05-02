@@ -367,6 +367,7 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("接单");
                         tv_orderdetail_tip.setVisibility(View.VISIBLE);
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                     // 0.未确认
                     else if (value.getOrderStatus().equals("0")) {
@@ -374,6 +375,7 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("待确认");
                         tv_orderdetail_tip.setVisibility(View.GONE);
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                     // 1.已确认
                     else if (value.getOrderStatus().equals("1")) {
@@ -384,18 +386,21 @@ public class OrderDetailActivity extends BaseActivity {
                             cancelEmployeeOrder();
                             popupWindow.dismiss();
                         }));
+                        ib_nav_right.setVisibility(View.VISIBLE);
                     }
                     // 2.已被拒绝
                     else if (value.getOrderStatus().equals("2")) {
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("已拒绝");
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                     // 3.主动取消
                     else if (value.getOrderStatus().equals("3")) {
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("已取消");
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                     // 4.已完成(待支付)  5.已完成(已支付)  8.已开始  9.雇主取消定单
                     // 10.雇主解雇员工  12.离职  13.超过时间签到自动终止  14.雇主超时未开工订单自动取消
@@ -419,6 +424,10 @@ public class OrderDetailActivity extends BaseActivity {
                                 sign();
                                 popupWindow.dismiss();
                             }));
+                            ib_nav_right.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            ib_nav_right.setVisibility(View.GONE);
                         }
                     }
                     // 11.申请离职中
@@ -426,6 +435,7 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         btn_orderdetail_cancel.setVisibility(View.VISIBLE);
                         btn_orderdetail_cancel.setText("申请离职中");
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                 }
                 else if (ACache.get(OrderDetailActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
@@ -462,6 +472,7 @@ public class OrderDetailActivity extends BaseActivity {
                             cancleMyOrder();
                             popupWindow.dismiss();
                         }));
+                        ib_nav_right.setVisibility(View.VISIBLE);
                     }
                     // 2.已成单  3.已开始  4.已过期  5.已完成  9.已取消
                     else if (value.getOrderStatus().equals("4") ||
@@ -486,18 +497,24 @@ public class OrderDetailActivity extends BaseActivity {
                                 cancleMyOrder();
                                 popupWindow.dismiss();
                             }));
+                            ib_nav_right.setVisibility(View.VISIBLE);
                         }
-                        if (value.getOrderStatus().equals("2")) {
+                        else if (value.getOrderStatus().equals("2")) {
                             layout_pop.addView(getPopupTextView("取消订单", v -> {
                                 cancleMyOrder();
                                 popupWindow.dismiss();
                             }));
+                            ib_nav_right.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            ib_nav_right.setVisibility(View.GONE);
                         }
                     }
                     // 草稿
                     else if (value.getOrderStatus().equals("0")) {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("重发");
+                        ib_nav_right.setVisibility(View.GONE);
                     }
                 }
                 views=new ArrayList<>();
