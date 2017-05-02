@@ -21,8 +21,8 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.WealthAdapter;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
-import com.renyu.sostar.bean.FlowResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.FlowResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -78,6 +78,7 @@ public class WealthActivity extends BaseActivity {
         BarUtils.adjustStatusBar(this, (ViewGroup) layout_wealth_top.getChildAt(1), ContextCompat.getColor(this, R.color.colorPrimary));
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             tv_wealth_tip.setText("可用余额不包括冻结金额");
+            tv_wealth_billing.setVisibility(View.GONE);
         }
         else {
             tv_wealth_tip.setText("预计下笔订单收入为 0");
@@ -86,10 +87,7 @@ public class WealthActivity extends BaseActivity {
         }
         swipy_wealth.setOnRefreshListener(direction -> {
             if (direction==SwipyRefreshLayoutDirection.TOP) {
-
-            }
-            else if (direction==SwipyRefreshLayoutDirection.BOTTOM) {
-
+                getFlowList();
             }
         });
         swipy_wealth.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
@@ -165,6 +163,9 @@ public class WealthActivity extends BaseActivity {
                 dismissNetworkDialog();
 
                 tv_wealth_money.setText(""+value.getCashAvaiable());
+                if (ACache.get(WealthActivity.this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    tv_wealth_tip.setText("预计下笔订单收入为 "+value.getForcastCash());
+                }
             }
 
             @Override
@@ -234,11 +235,12 @@ public class WealthActivity extends BaseActivity {
                     beans.add(response);
                 }
                 adapter.notifyDataSetChanged();
+                swipy_wealth.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                swipy_wealth.setRefreshing(false);
             }
 
             @Override

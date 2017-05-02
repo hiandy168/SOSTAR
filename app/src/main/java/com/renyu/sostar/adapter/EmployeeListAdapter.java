@@ -134,6 +134,10 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
     @Override
     public long getHeaderId(int position) {
+        if (beans.get(position).getStaffStatus().equals("4") ||
+                beans.get(position).getStaffStatus().equals("5")) {
+            return Integer.parseInt(beans.get(position).getEvaluateFlg());
+        }
         return Integer.parseInt(beans.get(position).getStaffStatus());
     }
 

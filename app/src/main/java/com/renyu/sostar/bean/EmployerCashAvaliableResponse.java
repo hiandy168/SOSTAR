@@ -18,6 +18,7 @@ public class EmployerCashAvaliableResponse {
     private String cashTotal;
     private String payeeAccount;
     private String payeeRealName;
+    private String forcastCash;
 
     public String getCashAvaiable() {
         return cashAvaiable;
@@ -57,5 +58,13 @@ public class EmployerCashAvaliableResponse {
 
     public void setPayeeRealName(String payeeRealName) {
         this.payeeRealName = payeeRealName;
+    }
+
+    public String getForcastCash() {
+        return forcastCash;
+    }
+
+    public void setForcastCash(String forcastCash) {
+        this.forcastCash = forcastCash;
     }
 }

@@ -464,6 +464,7 @@ public class MainFragment extends BaseFragment {
                     .icon(bd)
                     .zIndex(Integer.parseInt(staffsBean.getUserId()));
             oo.animateType(MarkerOptions.MarkerAnimateType.grow);
+            allOrdersMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 
