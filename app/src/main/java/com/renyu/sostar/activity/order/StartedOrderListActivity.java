@@ -32,7 +32,7 @@ public class StartedOrderListActivity extends BaseActivity {
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
-        tv_nav_title.setText("订单");
+        tv_nav_title.setText("进行中的订单");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         Fragment fragment=null;

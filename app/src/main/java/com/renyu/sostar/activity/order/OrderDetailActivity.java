@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.qrcodelibrary.ZBarQRScanActivity;
@@ -310,14 +311,14 @@ public class OrderDetailActivity extends BaseActivity {
                 int dayNum=value.getPeriodTime().split(",").length;
                 // 按天
                 if (value.getUnitPriceType().equals("1")) {
-                    tv_orderdetail_priceall.setText("总价"+dayNum*value.getUnitPrice()*dayNum);
+                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*dayNum)+"元");
                 }
                 // 按小时
                 else if (value.getUnitPriceType().equals("2")) {
                     String startTime=value.getStartTime().split(":")[0]+value.getStartTime().split(":")[1];
                     String endTime=value.getEndTime().split(":")[0]+value.getEndTime().split(":")[1];
                     double timeNum=(Integer.parseInt(endTime)-Integer.parseInt(startTime))*1.0f/100;
-                    tv_orderdetail_priceall.setText("总价"+dayNum*value.getUnitPrice()*dayNum*timeNum);
+                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*dayNum*timeNum)+"元");
                 }
                 String times="";
                 String[] timeTemps=value.getPeriodTime().split(",");
@@ -326,12 +327,12 @@ public class OrderDetailActivity extends BaseActivity {
                 }
                 times=times.substring(0, times.length()-1);
                 tv_orderdetail_time.setText(times);
-                tv_orderdetail_price.setText(""+value.getUnitPrice());
+                tv_orderdetail_price.setText(Utils.removeZero(""+value.getUnitPrice()));
                 if (value.getUnitPriceType().equals("1")) {
-                    tv_orderdetail_price_type.setText("/天");
+                    tv_orderdetail_price_type.setText("元/天");
                 }
                 else if (value.getUnitPriceType().equals("2")) {
-                    tv_orderdetail_price_type.setText("/小时");
+                    tv_orderdetail_price_type.setText("元/小时");
                 }
                 if (!TextUtils.isEmpty(value.getLogoPath())) {
                     DraweeController logoDraweeController = Fresco.newDraweeControllerBuilder()

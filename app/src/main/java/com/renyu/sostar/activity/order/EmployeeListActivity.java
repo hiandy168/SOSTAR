@@ -152,58 +152,63 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 确认雇员
     public void confirmStaff(String userId, int status) {
-        ComfirmEmployeeRequest request=new ComfirmEmployeeRequest();
-        ComfirmEmployeeRequest.ParamBean paramBean=new ComfirmEmployeeRequest.ParamBean();
-        paramBean.setOrderId(Integer.parseInt(getIntent().getStringExtra("orderId")));
-        paramBean.setUserId(userId);
-        paramBean.setStatus(status);
-        request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .confirmStaff(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                showNetworkDialog("正在操作，请稍后");
-            }
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认雇佣？")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    ComfirmEmployeeRequest request=new ComfirmEmployeeRequest();
+                    ComfirmEmployeeRequest.ParamBean paramBean=new ComfirmEmployeeRequest.ParamBean();
+                    paramBean.setOrderId(Integer.parseInt(getIntent().getStringExtra("orderId")));
+                    paramBean.setUserId(userId);
+                    paramBean.setStatus(status);
+                    request.setParam(paramBean);
+                    retrofit.create(RetrofitImpl.class)
+                            .confirmStaff(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                            .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            showNetworkDialog("正在操作，请稍后");
+                        }
 
-            @Override
-            public void onNext(EmptyResponse value) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onNext(EmptyResponse value) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                EmployerStaffListResponse beanTemp=null;
-                for (EmployerStaffListResponse bean : beans) {
-                    if (bean.getUserId().equals(userId)) {
-                        beanTemp=bean;
-                        beans.remove(bean);
-                        break;
-                    }
-                }
-                if (beanTemp!=null) {
-                    // 确认
-                    if (status==1) {
-                        beanTemp.setStaffStatus("1");
-                        beans.add(0, beanTemp);
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                            Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                            EmployerStaffListResponse beanTemp=null;
+                            for (EmployerStaffListResponse bean : beans) {
+                                if (bean.getUserId().equals(userId)) {
+                                    beanTemp=bean;
+                                    beans.remove(bean);
+                                    break;
+                                }
+                            }
+                            if (beanTemp!=null) {
+                                // 确认
+                                if (status==1) {
+                                    beanTemp.setStaffStatus("1");
+                                    beans.add(0, beanTemp);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
 
-                // 员工身份变化需要刷新
-                EventBus.getDefault().post(new OrderResponse());
-            }
+                            // 员工身份变化需要刷新
+                            EventBus.getDefault().post(new OrderResponse());
+                        }
 
-            @Override
-            public void onError(Throwable e) {
-                dismissNetworkDialog();
+                        @Override
+                        public void onError(Throwable e) {
+                            dismissNetworkDialog();
 
-                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                            Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
-            @Override
-            public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-            }
-        });
+                        }
+                    });
+                }).setNegativeButton("取消", (dialog, which) -> {
+
+        }).show();
     }
 
     // 解雇
@@ -325,40 +330,45 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 收藏
     public void collection(String userId) {
-        FavRequest request=new FavRequest();
-        FavRequest.ParamBean paramBean=new FavRequest.ParamBean();
-        paramBean.setEmployer(ACache.get(this).getAsString(CommonParams.USER_ID));
-        paramBean.setStaff(userId);
-        request.setParam(paramBean);
-        retrofit.create(RetrofitImpl.class)
-                .doFav(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
-                .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认收藏？")
+                .setPositiveButton("确定", (dialog, which) -> {
+            FavRequest request=new FavRequest();
+            FavRequest.ParamBean paramBean=new FavRequest.ParamBean();
+            paramBean.setEmployer(ACache.get(this).getAsString(CommonParams.USER_ID));
+            paramBean.setStaff(userId);
+            request.setParam(paramBean);
+            retrofit.create(RetrofitImpl.class)
+                    .doFav(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onNext(EmptyResponse value) {
-                Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
-                for (EmployerStaffListResponse bean : beans) {
-                    if (bean.getUserId().equals(userId)) {
-                        bean.setFavFlg("1");
-                    }
                 }
-                adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onNext(EmptyResponse value) {
+                    Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                    for (EmployerStaffListResponse bean : beans) {
+                        if (bean.getUserId().equals(userId)) {
+                            bean.setFavFlg("1");
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onComplete() {
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
 
-            }
-        });
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        }).setNegativeButton("取消", (dialog, which) -> {
+
+        }).show();
     }
 
     @Override

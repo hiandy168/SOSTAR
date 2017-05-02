@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.FlowResponse;
 
@@ -67,14 +68,17 @@ public class WealthAdapter extends RecyclerView.Adapter {
             if (((FlowResponse) beans.get(position)).getType().equals("1") ||
                     ((FlowResponse) beans.get(position)).getType().equals("3") ||
                     ((FlowResponse) beans.get(position)).getType().equals("5")) {
-                ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setText("+"+((FlowResponse) beans.get(position)).getCashTotal());
+                ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney
+                        .setText("+"+Utils.removeZero(((FlowResponse) beans.get(position)).getCashTotal()));
                 ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setTextColor(Color.parseColor("#33acde"));
             }
             else {
-                ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setText("-"+((FlowResponse) beans.get(position)).getCashTotal());
+                ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney
+                        .setText("-"+Utils.removeZero(((FlowResponse) beans.get(position)).getCashTotal()));
                 ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setTextColor(Color.parseColor("#999999"));
             }
-            ((WealthInfoViewHolder) holder).tv_wealth_info_lastmoney.setText(""+((FlowResponse) beans.get(position)).getCashAmount());
+            ((WealthInfoViewHolder) holder).tv_wealth_info_lastmoney
+                    .setText(Utils.removeZero(((FlowResponse) beans.get(position)).getCashAmount()));
             ((WealthInfoViewHolder) holder).tv_wealth_info_text.setText(((FlowResponse) beans.get(position)).getDescri());
             // 最后一条
             if (position==beans.size()-1) {

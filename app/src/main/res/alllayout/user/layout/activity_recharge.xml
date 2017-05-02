@@ -77,7 +77,7 @@
             android:layout_height="28dip"
             android:textSize="12sp"
             android:textColor="#999999"
-            android:text="请以实际到账时间为准  参见快活钱包使用规则"
+            android:text="请以实际到账时间为准  参见开工啦钱包使用规则"
             android:paddingLeft="12dip"
             android:gravity="center_vertical"
             android:background="#f2f2f2"/>

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
@@ -43,6 +45,9 @@ public class OrderListFragment extends BaseFragment {
     @BindView(R.id.rv_orderlist)
     RecyclerView rv_orderlist;
     OrderListAdapter adapter;
+    @BindView(R.id.layout_empty_orderlist)
+    LinearLayout layout_empty_orderlist;
+
     // 订单列表类型
     public enum OrderListType {
         myOrderList("雇员待接单", 1),
@@ -171,13 +176,27 @@ public class OrderListFragment extends BaseFragment {
                 }
                 beans.addAll(value.getData());
                 adapter.notifyDataSetChanged();
-                page++;
+
                 swipy_orderlist.setRefreshing(false);
+                if (page==1 && beans.size()==0) {
+                    layout_empty_orderlist.setVisibility(View.VISIBLE);
+                }
+                else {
+                    layout_empty_orderlist.setVisibility(View.GONE);
+                }
+
+                page++;
             }
 
             @Override
             public void onError(Throwable e) {
                 swipy_orderlist.setRefreshing(false);
+                if (page==1 && beans.size()==0) {
+                    layout_empty_orderlist.setVisibility(View.VISIBLE);
+                }
+                else {
+                    layout_empty_orderlist.setVisibility(View.GONE);
+                }
             }
 
             @Override

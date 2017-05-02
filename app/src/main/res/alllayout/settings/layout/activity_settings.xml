@@ -191,7 +191,7 @@
                 android:layout_marginStart="12dip"
                 android:textSize="14sp"
                 android:textColor="#333333"
-                android:text="关于快活"/>
+                android:text="关于开工啦"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

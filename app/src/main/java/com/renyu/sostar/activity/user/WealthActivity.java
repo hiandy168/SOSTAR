@@ -17,6 +17,7 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutD
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.WealthAdapter;
@@ -81,7 +82,7 @@ public class WealthActivity extends BaseActivity {
             tv_wealth_billing.setVisibility(View.GONE);
         }
         else {
-            tv_wealth_tip.setText("预计下笔订单收入为 0");
+            tv_wealth_tip.setText("预计下笔订单收入为 0元");
             tv_wealth_recharge.setVisibility(View.GONE);
             tv_wealth_billing.setVisibility(View.GONE);
         }
@@ -162,9 +163,9 @@ public class WealthActivity extends BaseActivity {
             public void onNext(EmployerCashAvaliableResponse value) {
                 dismissNetworkDialog();
 
-                tv_wealth_money.setText(""+value.getCashAvaiable());
+                tv_wealth_money.setText(Utils.removeZero(value.getCashAvaiable()));
                 if (ACache.get(WealthActivity.this).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                    tv_wealth_tip.setText("预计下笔订单收入为 "+value.getForcastCash());
+                    tv_wealth_tip.setText("预计下笔订单收入为 "+ Utils.removeZero(value.getForcastCash())+" 元");
                 }
             }
 

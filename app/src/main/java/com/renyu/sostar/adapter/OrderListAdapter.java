@@ -16,6 +16,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.params.CommonParams;
@@ -68,13 +69,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         times=times.substring(0, times.length()-1);
         holder.tv_orderlist_time.setText(times);
         if (ACache.get(context).getAsString(CommonParams.USER_TYPE).equals("0")) {
-            holder.tv_orderlist_price.setText(""+beans.get(position).getUnitPrice());
+            holder.tv_orderlist_price.setText(Utils.removeZero(beans.get(position).getUnitPrice()));
             holder.tv_orderlist_price_type.setVisibility(View.VISIBLE);
             if (beans.get(position).getPaymentType().equals("1")) {
-                holder.tv_orderlist_price_type.setText("/天");
+                holder.tv_orderlist_price_type.setText("元/天");
             }
             else if (beans.get(position).getPaymentType().equals("2")) {
-                holder.tv_orderlist_price_type.setText("/小时");
+                holder.tv_orderlist_price_type.setText("元/小时");
             }
             holder.tv_orderlist_person.setText(""+beans.get(position).getStaffAccount()+"人");
         }
@@ -82,10 +83,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
             holder.tv_orderlist_price.setText(beans.get(position).getOkStaffAccount()+"/"+beans.get(position).getStaffAccount());
             holder.tv_orderlist_price_type.setVisibility(View.GONE);
             if (beans.get(position).getPaymentType().equals("1")) {
-                holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"/天");
+                holder.tv_orderlist_person.setText(Utils.removeZero(beans.get(position).getUnitPrice())+"元/天");
             }
             else if (beans.get(position).getPaymentType().equals("2")) {
-                holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"/小时");
+                holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"元/小时");
             }
         }
         holder.tv_orderlist_comp.setText(beans.get(position).getCompanyName());
@@ -101,14 +102,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
                 }
                 else {
                     holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
-                    holder.tv_orderlist_distance.setText(((int) DistanceUtil.getDistance(userLatlng, orderLatlng))+"m");
+                    holder.tv_orderlist_distance.setText(Utils.caculateDistance((int) DistanceUtil.getDistance(userLatlng, orderLatlng)));
                 }
             }
         }
         else {
             if (ACache.get(context).getAsString(CommonParams.USER_TYPE).equals("0")) {
                 holder.tv_orderlist_distance.setVisibility(View.VISIBLE);
-                if (beans.get(position).getOrderStatus().equals("1")) {
+                if (beans.get(position).getOrderStatus().equals("0")) {
+                    holder.tv_orderlist_distance.setText("待确认");
+                }
+                else if (beans.get(position).getOrderStatus().equals("1")) {
                     holder.tv_orderlist_distance.setText("已确认");
                 }
                 else if (beans.get(position).getOrderStatus().equals("2")) {
