@@ -80,7 +80,7 @@ public class EmployerInfoActivity extends BaseActivity {
     public void initParams() {
         myCenterResponse= (MyCenterEmployerResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
-        tv_nav_title.setText("企业信息");
+        tv_nav_title.setText("企业资料");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getLogoPath())) {
@@ -111,7 +111,7 @@ public class EmployerInfoActivity extends BaseActivity {
         }
         tv_employerinfo_web.setText(myCenterResponse.getWebAddress());
         tv_employerinfo_evaluate.setText(TextUtils.isEmpty(myCenterResponse.getStar())?"0":myCenterResponse.getStar());
-        tv_employerinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate()+"%");
+        tv_employerinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate());
     }
 
     @Override

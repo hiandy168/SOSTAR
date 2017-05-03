@@ -81,7 +81,7 @@ public class EmployeeInfoActivity extends BaseActivity {
     public void initParams() {
         myCenterResponse= (MyCenterEmployeeResponse) getIntent().getSerializableExtra("response");
         nav_layout.setBackgroundColor(Color.WHITE);
-        tv_nav_title.setText("个人信息");
+        tv_nav_title.setText("个人资料");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getPicPath())) {
@@ -119,7 +119,7 @@ public class EmployeeInfoActivity extends BaseActivity {
             }
         }
         tv_employeeinfo_evaluate.setText(TextUtils.isEmpty(myCenterResponse.getEvaluateLevel())?"0":myCenterResponse.getEvaluateLevel());
-        tv_employeeinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate()+"%");
+        tv_employeeinfo_completionrate.setText(TextUtils.isEmpty(myCenterResponse.getCloseRate())?"0%":myCenterResponse.getCloseRate());
     }
 
     @Override
