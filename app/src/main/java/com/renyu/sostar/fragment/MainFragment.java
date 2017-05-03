@@ -17,11 +17,11 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
@@ -46,7 +46,6 @@ import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
-import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
@@ -73,7 +72,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainFragment extends BaseFragment {
 
     @BindView(R.id.mv_main)
-    MapView mv_main;
+    TextureMapView mv_main;
     BaiduMap mBaiduMap;
     @BindView(R.id.tv_main_notstartorder_num)
     TextView tv_main_notstartorder_num;
