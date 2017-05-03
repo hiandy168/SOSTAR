@@ -7,11 +7,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -118,6 +120,12 @@ public class SearchOrderActivtiy extends BaseActivity {
             startActivity(intent);
         });
         rv_searchorder.setAdapter(adapter);
+        rv_searchorder.setOnTouchListener((v, event) -> {
+            if (event.getAction()==MotionEvent.ACTION_MOVE) {
+                KeyboardUtils.hideSoftInput(SearchOrderActivtiy.this);
+            }
+            return false;
+        });
     }
 
     @Override
