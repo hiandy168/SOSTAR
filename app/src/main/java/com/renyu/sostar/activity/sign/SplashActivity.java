@@ -183,4 +183,9 @@ public class SplashActivity extends BaseActivity {
         }
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
