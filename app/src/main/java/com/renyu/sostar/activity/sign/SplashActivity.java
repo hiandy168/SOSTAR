@@ -75,11 +75,13 @@ public class SplashActivity extends BaseActivity {
                 // 加载热修复补丁
                 ((SostarApp) getApplication()).mPatchManager.loadPatch();
                 List<File> hotfixs = FileUtils.listFilesInDir(InitParams.HOTFIX_PATH);
-                for (File hotfix : hotfixs) {
-                    try {
-                        ((SostarApp) getApplication()).mPatchManager.addPatch(hotfix.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                if (hotfixs!=null) {
+                    for (File hotfix : hotfixs) {
+                        try {
+                            ((SostarApp) getApplication()).mPatchManager.addPatch(hotfix.getPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
