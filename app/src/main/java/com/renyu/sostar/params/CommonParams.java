@@ -1,9 +1,5 @@
 package com.renyu.sostar.params;
 
-import android.os.Environment;
-
-import java.io.File;
-
 /**
  * Created by renyu on 2016/12/26.
  */

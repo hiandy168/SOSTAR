@@ -26,7 +26,6 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.WebActivity;
-import com.renyu.sostar.activity.sign.SignUpActivity;
 import com.renyu.sostar.bean.BindCashInfoRequest;
 import com.renyu.sostar.bean.ChargeRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
