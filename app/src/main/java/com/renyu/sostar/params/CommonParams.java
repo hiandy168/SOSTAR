@@ -54,7 +54,7 @@ public class CommonParams {
     public static String CITY=null;
 
     // 钱包协议url
-    public static String WealthProtocal="http://1.nanjing.applinzi.com/index2.php";
+    public static String WealthProtocal="http://1.nanjing.applinzi.com/protocal/moneyprotocal.html ";
     // 服务协议url
-    public static String ServiceProtocal="http://1.nanjing.applinzi.com/index.php";
+    public static String ServiceProtocal="http://1.nanjing.applinzi.com/protocal/serviceprotocal.html";
 }
