@@ -8,7 +8,9 @@ import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.disk.NoOpDiskTrimmableRegistry;
+import com.facebook.common.internal.Supplier;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.cache.MemoryCacheParams;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
@@ -61,6 +63,12 @@ public class SostarApp extends MultiDexApplication {
                     .setDiskTrimmableRegistry(NoOpDiskTrimmableRegistry.getInstance())
                     .build();
             Fresco.initialize(this, ImagePipelineConfig.newBuilder(this).setMainDiskCacheConfig(diskCacheConfig)
+                    .setBitmapMemoryCacheParamsSupplier(() -> new MemoryCacheParams(
+                            (int) Runtime.getRuntime().maxMemory() / 5, // 内存缓存中总图片的最大大小,以字节为单位。
+                            Integer.MAX_VALUE, // 内存缓存中图片的最大数量。
+                            (int) Runtime.getRuntime().maxMemory() / 5,  // 内存缓存中准备清除但尚未被删除的总图片的最大大小,以字节为单位。
+                            Integer.MAX_VALUE, // 内存缓存中准备清除的总图片的最大数量。
+                            Integer.MAX_VALUE)) // 内存缓存中单个图片的最大大小。
                     .setDownsampleEnabled(true)
                     .build());
 

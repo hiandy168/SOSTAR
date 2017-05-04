@@ -13,9 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -84,8 +88,10 @@ public class EmployerInfoActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
 
         if (!TextUtils.isEmpty(myCenterResponse.getLogoPath())) {
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getLogoPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(27), SizeUtils.dp2px(27))).build();
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getLogoPath())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_employerinfo_avatar.setController(draweeController);
         }
         if (!TextUtils.isEmpty(myCenterResponse.getCompanyName())) {
@@ -285,8 +291,10 @@ public class EmployerInfoActivity extends BaseActivity {
                     Toast.makeText(EmployerInfoActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
 
                     if (param.equals("logoPath")) {
+                        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(paramValue))
+                                .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(27), SizeUtils.dp2px(27))).build();
                         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                                .setUri(Uri.parse(paramValue)).setAutoPlayAnimations(true).build();
+                                .setImageRequest(request).setAutoPlayAnimations(true).build();
                         iv_employerinfo_avatar.setController(draweeController);
                         myCenterResponse.setLogoPath(paramValue);
                     }

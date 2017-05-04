@@ -23,9 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -46,7 +50,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -129,6 +136,9 @@ public class OrderDetailActivity extends BaseActivity {
 
     String[] permissions={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
+    // 当前时间在哪个环节
+    long lastStatueTime=-1;
+
     @Override
     public void initParams() {
         layout_orderdetail_nav.setBackgroundColor(Color.parseColor("#60000000"));
@@ -168,6 +178,13 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     public int setStatusBarTranslucent() {
         return 1;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        needStateRefresh();
     }
 
     public class OrderDetailAdapter extends PagerAdapter {
@@ -311,14 +328,21 @@ public class OrderDetailActivity extends BaseActivity {
                 int dayNum=value.getPeriodTime().split(",").length;
                 // 按天
                 if (value.getUnitPriceType().equals("1")) {
-                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*dayNum)+"元");
+                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*value.getStaffAccount())+"元");
                 }
                 // 按小时
                 else if (value.getUnitPriceType().equals("2")) {
-                    String startTime=value.getStartTime().split(":")[0]+value.getStartTime().split(":")[1];
-                    String endTime=value.getEndTime().split(":")[0]+value.getEndTime().split(":")[1];
-                    double timeNum=(Integer.parseInt(endTime)-Integer.parseInt(startTime))*1.0f/100;
-                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*dayNum*timeNum)+"元");
+                    try {
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        String currentTime=format.format(new Date());
+                        long startTime=format.parse(currentTime.split(" ")[0]+" "+value.getStartTime()).getTime();
+                        long endTime=format.parse(currentTime.split(" ")[0]+" "+value.getEndTime()).getTime();
+                        // 计算每天工作时间
+                        double workTime=((double) (endTime-startTime)/1000)/3600;
+                        tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*workTime*value.getStaffAccount())+"元");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 String times="";
                 String[] timeTemps=value.getPeriodTime().split(",");
@@ -445,15 +469,17 @@ public class OrderDetailActivity extends BaseActivity {
                     layout_orderdetail_employer.removeAllViews();
                     for (String s : value.getPicStaffArray()) {
                         View view= LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.adapter_orderdetail_employee, null, false);
-                        DraweeController draweeController;
+                        ImageRequest request;
                         if (!TextUtils.isEmpty(s)) {
-                            draweeController = Fresco.newDraweeControllerBuilder()
-                                    .setUri(Uri.parse(s)).setAutoPlayAnimations(true).build();
+                            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(s))
+                                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(30), SizeUtils.dp2px(30))).build();
                         }
                         else {
-                            draweeController = Fresco.newDraweeControllerBuilder()
-                                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+                            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+                                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(30), SizeUtils.dp2px(30))).build();
                         }
+                        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                                .setImageRequest(request).setAutoPlayAnimations(true).build();
                         ((SimpleDraweeView) view).setController(draweeController);
                         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(SizeUtils.dp2px(30), SizeUtils.dp2px(30));
                         params.leftMargin= SizeUtils.dp2px(2);
@@ -531,6 +557,8 @@ public class OrderDetailActivity extends BaseActivity {
                 indicator_orderdetail.setViewPager(vp_orderdetail);
 
                 initPop(popView);
+
+                lastStatueTime=System.currentTimeMillis();
             }
 
             @Override
@@ -847,5 +875,83 @@ public class OrderDetailActivity extends BaseActivity {
 
             }
         });
+    }
+
+    /**
+     * 时间发生变化，估摸着订单状态也发生变化了，请求主动刷新
+     */
+    private void needStateRefresh() {
+        if (orderResponse!=null) {
+            // 判断当前时间是否有任务
+            boolean hasJob=false;
+            SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
+            String today=format.format(new Date());
+            for (String s : orderResponse.getPeriodTime().split(",")) {
+                if (s.equals(today)) {
+                    hasJob=true;
+                }
+            }
+            // 一直没有任务，直接忽略
+            if (!hasJob && lastStatueTime==-1) {
+
+            }
+            // 之前没有任务，现在发现有任务了，需要刷新
+            else if (hasJob && lastStatueTime==-1) {
+                getOrderDetail();
+            }
+            // 之前有任务，但是现在没有任务了，需要刷新
+            else if (!hasJob && lastStatueTime!=-1) {
+                getOrderDetail();
+            }
+            // 之前有任务，现在也有任务了，根据条件判断
+            else if (hasJob && lastStatueTime!=-1) {
+                SimpleDateFormat lastStateFormat=new SimpleDateFormat("HHmm");
+                Date lastStatueDate=new Date(lastStatueTime);
+                // 最后一次状态获取时间
+                int lastStatueTimeHM=Integer.parseInt(lastStateFormat.format(lastStatueDate));
+                int startTimeHM=Integer.parseInt(orderResponse.getStartTime().split(":")[0]+orderResponse.getStartTime().split(":")[1]);
+                int endTimeHM=Integer.parseInt(orderResponse.getEndTime().split(":")[0]+orderResponse.getEndTime().split(":")[1]);
+                // 最后一次状态
+                int lastState=-1;
+                if (lastStatueTimeHM<startTimeHM) {
+                    lastState=0;
+                }
+                else if (lastStatueTimeHM>endTimeHM) {
+                    lastState=1;
+                }
+                else {
+                    lastState=2;
+                }
+
+                // 当前状态获取时间
+                SimpleDateFormat currentStateFormat=new SimpleDateFormat("HHmm");
+                Date currentStateDate=new Date(System.currentTimeMillis());
+                int currentStatueTimeHM=Integer.parseInt(currentStateFormat.format(currentStateDate));
+                // 当前状态
+                int currentState=-1;
+                if (currentStatueTimeHM<startTimeHM) {
+                    currentState=0;
+                }
+                else if (currentStatueTimeHM>endTimeHM) {
+                    currentState=1;
+                }
+                else {
+                    currentState=2;
+                }
+
+                // 不一致则刷新
+                if (currentState!=lastState) {
+                    getOrderDetail();
+                }
+                // 如果一致，要判断当前时间与最后一次状态获取时间是不是同一天，不是同一天还是要刷新
+                else {
+                    SimpleDateFormat compareFormat=new SimpleDateFormat("yyyy-MM-dd");
+                    // 同一天不刷新
+                    if (!compareFormat.format(lastStatueDate).equals(compareFormat.format(currentStateDate))) {
+                        getOrderDetail();
+                    }
+                }
+            }
+        }
     }
 }

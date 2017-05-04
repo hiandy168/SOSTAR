@@ -13,9 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -156,8 +160,10 @@ public class InfoActivity extends BaseActivity {
                 }
                 tv_info_userId.setText("普工:"+getIntent().getStringExtra("userId"));
                 if (!TextUtils.isEmpty(value.getPicPath())) {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(value.getPicPath()))
+                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(60), SizeUtils.dp2px(60))).build();
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(value.getPicPath())).setAutoPlayAnimations(true).build();
+                            .setImageRequest(request).setAutoPlayAnimations(true).build();
                     iv_info_avatar.setController(draweeController);
                 }
                 if (TextUtils.isEmpty(value.getAuthentication()) || value.getAuthentication().equals("0")) {
@@ -222,8 +228,10 @@ public class InfoActivity extends BaseActivity {
                 }
                 tv_info_userId.setText("机构识别代码:"+value.getCompanyCode());
                 if (!TextUtils.isEmpty(value.getLogoPath())) {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(value.getLogoPath()))
+                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(value.getLogoPath())).setAutoPlayAnimations(true).build();
+                            .setImageRequest(request).setAutoPlayAnimations(true).build();
                     iv_info_avatar.setController(draweeController);
                 }
                 if (TextUtils.isEmpty(value.getAuthentication()) || value.getAuthentication().equals("0")) {

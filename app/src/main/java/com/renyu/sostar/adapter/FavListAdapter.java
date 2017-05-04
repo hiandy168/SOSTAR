@@ -10,9 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.settings.FavListActivity;
 import com.renyu.sostar.bean.FavListResponse;
@@ -46,15 +50,17 @@ public class FavListAdapter extends RecyclerView.Adapter<FavListAdapter.FavListH
     public void onBindViewHolder(FavListHolder holder, int position) {
         holder.tv_adapter_favlist_name.setText(beans.get(position).getNickName());
         holder.tv_adapter_favlist_desp.setText("评价等级 "+beans.get(position).getStar());
-        DraweeController draweeController;
+        ImageRequest request;
         if (!TextUtils.isEmpty(beans.get(position).getPicPath())) {
-            draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(beans.get(position).getPicPath())).setAutoPlayAnimations(true).build();
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(beans.get(position).getPicPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(40), SizeUtils.dp2px(40))).build();
         }
         else {
-            draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(40), SizeUtils.dp2px(40))).build();
         }
+        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request).setAutoPlayAnimations(true).build();
         holder.iv_adapter_favlist_avatar.setController(draweeController);
         holder.tv_adapter_favlist_delete.setOnClickListener(v -> ((FavListActivity) context).deleteFav(beans.get(position).getUserId()));
     }

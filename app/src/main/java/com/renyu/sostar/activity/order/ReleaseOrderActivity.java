@@ -1,6 +1,5 @@
 package com.renyu.sostar.activity.order;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;

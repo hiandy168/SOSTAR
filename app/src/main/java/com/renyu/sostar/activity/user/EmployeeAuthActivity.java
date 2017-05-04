@@ -13,9 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -92,15 +96,19 @@ public class EmployeeAuthActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(myCenterResponse.getPicCerpos())) {
             iv_userauth_positive.setTag(myCenterResponse.getPicCerpos());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getPicCerpos()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getPicCerpos())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_userauth_positive.setController(draweeController);
             tv_userauth_positive.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(myCenterResponse.getPicCerOppo())) {
             iv_userauth_negative.setTag(myCenterResponse.getPicCerOppo());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getPicCerOppo()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getPicCerOppo())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_userauth_negative.setController(draweeController);
             tv_userauth_negative.setVisibility(View.GONE);
         }
@@ -285,14 +293,18 @@ public class EmployeeAuthActivity extends BaseActivity {
 
     private void uploadFile(String path, int uploadPicPosition) {
         if (uploadPicPosition==1) {
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("file://"+path))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_userauth_positive.setController(draweeController);
             tv_userauth_positive.setVisibility(View.GONE);
         }
         else if (uploadPicPosition==2) {
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("file://"+path))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("file://"+path)).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_userauth_negative.setController(draweeController);
             tv_userauth_negative.setVisibility(View.GONE);
         }
@@ -321,15 +333,19 @@ public class EmployeeAuthActivity extends BaseActivity {
             public void onError() {
                 Toast.makeText(EmployeeAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
                 if (uploadPicPosition==1) {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
+                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
+                            .setImageRequest(request).setAutoPlayAnimations(true).build();
                     iv_userauth_positive.setController(draweeController);
                     tv_userauth_positive.setVisibility(View.VISIBLE);
                     iv_userauth_positive.setTag("");
                 }
                 else if (uploadPicPosition==2) {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
+                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
                     DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white)).setAutoPlayAnimations(true).build();
+                            .setImageRequest(request).setAutoPlayAnimations(true).build();
                     iv_userauth_negative.setController(draweeController);
                     tv_userauth_negative.setVisibility(View.VISIBLE);
                     tv_userauth_negative.setTag("");

@@ -12,9 +12,13 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
@@ -150,15 +154,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
                 holder.tv_orderlist_distance.setVisibility(View.GONE);
             }
         }
-        DraweeController draweeController;
+        ImageRequest request;
         if (!TextUtils.isEmpty(beans.get(position).getLogoPath())) {
-            draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(beans.get(position).getLogoPath())).setAutoPlayAnimations(true).build();
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(beans.get(position).getLogoPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(118), SizeUtils.dp2px(118))).build();
         }
         else {
-            draweeController = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("res:///"+R.mipmap.ic_avatar_small)).setAutoPlayAnimations(true).build();
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(118), SizeUtils.dp2px(118))).build();
         }
+        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request).setAutoPlayAnimations(true).build();
         holder.iv_orderlist_logo.setController(draweeController);
         holder.layout_orderlist_root.setOnClickListener(v -> {
             if (onClickListener!=null) {

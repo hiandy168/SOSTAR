@@ -7,10 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.R2;
@@ -51,7 +55,9 @@ public class ImagePreviewFragment extends BaseFragment {
     public void initParams() {
         String url=getArguments().getString("url");
         PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-        controller.setUri(Uri.parse(url.indexOf("http")!=-1?url:"file://"+url));
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url.indexOf("http")!=-1?url:"file://"+url))
+                .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(480), SizeUtils.dp2px(800))).build();
+        controller.setImageRequest(request);
         controller.setOldController(photoDraweeView.getController());
         controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
             @Override
