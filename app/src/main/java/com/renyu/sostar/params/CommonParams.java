@@ -50,7 +50,7 @@ public class CommonParams {
     public static String CITY=null;
 
     // 钱包协议url
-    public static String WealthProtocal="http://1.nanjing.applinzi.com/protocal/moneyprotocal.html ";
+    public static String WealthProtocal="http://106.15.46.51:8080/sostar/protocal/moneyprotocal.html";
     // 服务协议url
-    public static String ServiceProtocal="http://1.nanjing.applinzi.com/protocal/serviceprotocal.html";
+    public static String ServiceProtocal="http://106.15.46.51:8080/sostar/protocal/serviceprotocal.html";
 }
