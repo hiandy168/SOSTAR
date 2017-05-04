@@ -56,7 +56,7 @@ public class ImagePreviewFragment extends BaseFragment {
         String url=getArguments().getString("url");
         PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url.indexOf("http")!=-1?url:"file://"+url))
-                .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(480), SizeUtils.dp2px(800))).build();
+                .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(360), SizeUtils.dp2px(640))).build();
         controller.setImageRequest(request);
         controller.setOldController(photoDraweeView.getController());
         controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
