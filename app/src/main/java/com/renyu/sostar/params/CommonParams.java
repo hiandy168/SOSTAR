@@ -52,4 +52,9 @@ public class CommonParams {
 
     // 当前城市
     public static String CITY=null;
+
+    // 钱包协议url
+    public static String WealthProtocal="http://1.nanjing.applinzi.com/index2.php";
+    // 服务协议url
+    public static String ServiceProtocal="http://1.nanjing.applinzi.com/index.php";
 }

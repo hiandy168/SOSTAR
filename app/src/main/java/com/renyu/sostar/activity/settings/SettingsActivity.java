@@ -20,6 +20,7 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.bean.NotificationChangeRequest;
 import com.renyu.sostar.bean.SetUserTypeRequest;
@@ -94,8 +95,8 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rolechange,
-            R.id.btn_settings_sign_out, R.id.ib_nav_left, R.id.layout_settings_feedback})
+    @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rolechange, R.id.btn_settings_sign_out,
+            R.id.ib_nav_left, R.id.layout_settings_feedback, R.id.layout_settings_protocal})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_settings_cache:
@@ -122,6 +123,11 @@ public class SettingsActivity extends BaseActivity {
                 break;
             case R.id.layout_settings_feedback:
                 startActivity(new Intent(SettingsActivity.this, FeedbackActivity.class));
+                break;
+            case R.id.layout_settings_protocal:
+                Intent intent_protocal=new Intent(SettingsActivity.this, WebActivity.class);
+                intent_protocal.putExtra("url", CommonParams.ServiceProtocal);
+                startActivity(intent_protocal);
                 break;
         }
     }

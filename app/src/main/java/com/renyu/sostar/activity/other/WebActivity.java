@@ -3,12 +3,14 @@ package com.renyu.sostar.activity.other;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
@@ -24,6 +26,8 @@ public class WebActivity extends BaseActivity {
 
     @BindView(R.id.web_webview)
     WebView web_webview;
+    @BindView(R.id.tv_nav_title)
+    TextView tv_nav_title;
 
     @Override
     public int setStatusBarColor() {
@@ -43,6 +47,9 @@ public class WebActivity extends BaseActivity {
 
     @Override
     public void initParams() {
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("title"))) {
+            tv_nav_title.setText(getIntent().getStringExtra("title"));
+        }
         web_webview.setSaveEnabled(true);
         web_webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         web_webview.setWebViewClient(new WebViewClient() {
@@ -77,7 +84,7 @@ public class WebActivity extends BaseActivity {
         settings.setNeedInitialFocus(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
         settings.setBuiltInZoomControls(false);
-        web_webview.loadUrl(getIntent().getExtras().getString("url"));
+        web_webview.loadUrl(getIntent().getStringExtra("url"));
     }
 
     @Override

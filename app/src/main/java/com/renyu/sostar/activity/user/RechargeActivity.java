@@ -4,18 +4,24 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SpannableStringUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.alipay.AliPayActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
@@ -43,12 +49,31 @@ public class RechargeActivity extends BaseActivity {
     TextView tv_recharge_lastmoney;
     @BindView(R.id.ed_recharge_money)
     EditText ed_recharge_money;
+    @BindView(R.id.tv_recharge_protocal)
+    TextView tv_recharge_protocal;
 
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("账户充值");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        tv_recharge_protocal.setMovementMethod(LinkMovementMethod.getInstance());
+        tv_recharge_protocal.setText(new SpannableStringUtils.Builder()
+                .append("请以实际到账时间为准  参见").append("《开工啦钱包使用规则》")
+                .setForegroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setClickSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Intent intent=new Intent(RechargeActivity.this, WebActivity.class);
+                        intent.putExtra("url", CommonParams.WealthProtocal);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        ds.setUnderlineText(false);
+                    }
+                }).create());
     }
 
     @Override

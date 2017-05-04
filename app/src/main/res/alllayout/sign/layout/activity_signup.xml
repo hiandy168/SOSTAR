@@ -128,7 +128,7 @@
             android:layout_marginEnd="16dip"
             android:layout_marginStart="16dip"
             android:layout_marginBottom="32dip"
-            android:text="点击注册即表示你同意《开工啦用户协议》"/>
+            android:text="点击注册即表示你同意《开工啦用户服务协议》"/>
         <Button
             android:id="@+id/btn_signup_signin"
             android:layout_width="wrap_content"

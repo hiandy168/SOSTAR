@@ -4,14 +4,20 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.SpannableStringUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -20,6 +26,7 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ClearEditText;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.SignupRequest;
 import com.renyu.sostar.bean.VCodeRequest;
@@ -51,11 +58,30 @@ public class SignUpActivity extends BaseActivity {
     Button btn_signup_getvcode;
     @BindView(R.id.layout_signup_rootview)
     LinearLayout layout_signup_rootview;
+    @BindView(R.id.btn_signup_protocal)
+    TextView btn_signup_protocal;
 
     Disposable vcode_disposable;
 
     @Override
     public void initParams() {
+        btn_signup_protocal.setMovementMethod(LinkMovementMethod.getInstance());
+        btn_signup_protocal.setText(new SpannableStringUtils.Builder()
+                .append("点击注册即表示你同意").append("《开工啦用户服务协议》")
+                .setForegroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setClickSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Intent intent=new Intent(SignUpActivity.this, WebActivity.class);
+                        intent.putExtra("url", CommonParams.ServiceProtocal);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        ds.setUnderlineText(false);
+                    }
+                }).create());
         // 软键盘监听
         getWindow().getDecorView().getViewTreeObserver()
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

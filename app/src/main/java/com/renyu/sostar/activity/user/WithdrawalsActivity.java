@@ -1,9 +1,14 @@
 package com.renyu.sostar.activity.user;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SpannableStringUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -19,6 +25,8 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
+import com.renyu.sostar.activity.sign.SignUpActivity;
 import com.renyu.sostar.bean.BindCashInfoRequest;
 import com.renyu.sostar.bean.ChargeRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
@@ -66,6 +74,8 @@ public class WithdrawalsActivity extends BaseActivity {
     EditText ed_alipay_code;
     @BindView(R.id.btn_alipay_getvcode)
     Button btn_alipay_getvcode;
+    @BindView(R.id.tv_withdrawals_protocal)
+    TextView tv_withdrawals_protocal;
 
     Disposable vcode_disposable;
 
@@ -74,6 +84,23 @@ public class WithdrawalsActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("账户提现");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        tv_withdrawals_protocal.setMovementMethod(LinkMovementMethod.getInstance());
+        tv_withdrawals_protocal.setText(new SpannableStringUtils.Builder()
+                .append("请以实际到账时间为准  参见").append("《开工啦钱包使用规则》")
+                .setForegroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setClickSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Intent intent=new Intent(WithdrawalsActivity.this, WebActivity.class);
+                        intent.putExtra("url", CommonParams.WealthProtocal);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        ds.setUnderlineText(false);
+                    }
+                }).create());
     }
 
     @Override

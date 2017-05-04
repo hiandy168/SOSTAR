@@ -73,11 +73,12 @@
                 android:src="@mipmap/ic_alipay"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_recharge_protocal"
             android:layout_width="match_parent"
             android:layout_height="28dip"
             android:textSize="12sp"
             android:textColor="#999999"
-            android:text="请以实际到账时间为准  参见开工啦钱包使用规则"
+            android:text="请以实际到账时间为准  参见《开工啦钱包使用规则》"
             android:paddingLeft="12dip"
             android:gravity="center_vertical"
             android:background="#f2f2f2"/>
