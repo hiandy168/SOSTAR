@@ -600,7 +600,8 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "请选择工作时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString().trim())) {
+        if (TextUtils.isEmpty(tv_releaseorder_person.getText().toString().trim()) ||
+                Integer.parseInt(tv_releaseorder_person.getText().toString().trim())<=0) {
             Toast.makeText(this, "请填写需求人数", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -616,7 +617,8 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "请填写详细描述", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim())) {
+        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim()) ||
+                Double.parseDouble(tv_releaseorder_price.getText().toString().trim())<=0) {
             Toast.makeText(this, "请填写工作报酬", Toast.LENGTH_SHORT).show();
             return;
         }

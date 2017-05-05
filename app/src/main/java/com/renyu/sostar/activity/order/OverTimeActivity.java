@@ -19,9 +19,9 @@ import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
+import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.OverTimeRequest;
-import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -181,12 +181,22 @@ public class OverTimeActivity extends BaseActivity {
     }
 
     private void setExtrawork() {
+        int time=Integer.parseInt(tv_overtime_time.getText().toString().substring(0, tv_overtime_time.getText().toString().indexOf("小时")));
+        int money=Integer.parseInt(tv_overtime_money.getText().toString().substring(0, tv_overtime_money.getText().toString().indexOf("元")));
+
+        if (time<=0) {
+            Toast.makeText(this, "加班时长必须大于0小时", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (money<=0) {
+            Toast.makeText(this, "加班报酬必须大于0元", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         OverTimeRequest request=new OverTimeRequest();
         OverTimeRequest.ParamBean paramBean=new OverTimeRequest.ParamBean();
         paramBean.setOrderId(Integer.parseInt(orderResponse.getOrderId()));
-        int time=Integer.parseInt(tv_overtime_time.getText().toString().substring(0, tv_overtime_time.getText().toString().indexOf("小时")));
         paramBean.setExtraTime(time);
-        int money=Integer.parseInt(tv_overtime_money.getText().toString().substring(0, tv_overtime_money.getText().toString().indexOf("元")));
         paramBean.setExtraPrice(money);
         paramBean.setUserId(Integer.parseInt(ACache.get(this).getAsString(CommonParams.USER_ID)));
         request.setParam(paramBean);
