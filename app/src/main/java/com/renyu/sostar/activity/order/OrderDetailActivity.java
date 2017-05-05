@@ -145,6 +145,7 @@ public class OrderDetailActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.WHITE);
         tv_nav_title.setText("订单详情");
         ib_nav_right.setImageResource(R.mipmap.ic_order_more);
+        ib_nav_right.setVisibility(View.GONE);
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
 
         btn_orderdetail_commit.setVisibility(View.GONE);
@@ -231,6 +232,7 @@ public class OrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ib_nav_right:
+                if (popupWindow!=null)
                 popupWindow.showAsDropDown(ib_nav_right, 0, -SizeUtils.dp2px(15));
                 break;
             case R.id.layout_orderdetail_info3:
