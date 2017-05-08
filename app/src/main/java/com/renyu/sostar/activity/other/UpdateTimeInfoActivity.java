@@ -71,8 +71,13 @@ public class UpdateTimeInfoActivity extends BaseActivity {
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         layout_updatetimeinfo_root.post(() -> maxHeight=layout_updatetimeinfo_root.getMeasuredHeight()- SizeUtils.dp2px(122));
-        for (int i = 0; i < beans.size(); i++) {
-            add(""+i, beans.get(i));
+        if (beans.size()==0) {
+            add("0", null);
+        }
+        else {
+            for (int i = 0; i < beans.size(); i++) {
+                add(""+i, beans.get(i));
+            }
         }
     }
 
@@ -106,26 +111,28 @@ public class UpdateTimeInfoActivity extends BaseActivity {
         View view= LayoutInflater.from(this).inflate(R.layout.view_updatetimeinfo, null, false);
         view.setTag(tag);
         TextView tv_updatetimeinfo_start= (TextView) view.findViewById(R.id.tv_updatetimeinfo_start);
-        if (bean!=null) {
-            tv_updatetimeinfo_start.setText(bean.getStartTime());
-            String[] values=bean.getStartTime().split("/");
-            tv_updatetimeinfo_start.setTag(values[0]+values[1]+values[2]);
-        }
         TextView tv_updatetimeinfo_end= (TextView) view.findViewById(R.id.tv_updatetimeinfo_end);
-        if (bean!=null) {
-            tv_updatetimeinfo_end.setText(bean.getEndTime());
-            String[] values=bean.getEndTime().split("/");
-            tv_updatetimeinfo_end.setTag(values[0]+values[1]+values[2]);
-        }
         TextView tv_updatetimeinfo_all= (TextView) view.findViewById(R.id.tv_updatetimeinfo_all);
         if (bean!=null) {
-            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
-            try {
-                long startDate=dateFormat.parse(bean.getStartTime()).getTime();
-                long endDate=dateFormat.parse(bean.getEndTime()).getTime();
-                tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
-            } catch (ParseException e) {
-                e.printStackTrace();
+            {
+                tv_updatetimeinfo_start.setText(bean.getStartTime());
+                String[] values=bean.getStartTime().split("/");
+                tv_updatetimeinfo_start.setTag(values[0]+values[1]+values[2]);
+            }
+            {
+                tv_updatetimeinfo_end.setText(bean.getEndTime());
+                String[] values=bean.getEndTime().split("/");
+                tv_updatetimeinfo_end.setTag(values[0]+values[1]+values[2]);
+            }
+            {
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd");
+                try {
+                    long startDate=dateFormat.parse(bean.getStartTime()).getTime();
+                    long endDate=dateFormat.parse(bean.getEndTime()).getTime();
+                    tv_updatetimeinfo_all.setText(((endDate-startDate)/(24*3600*1000)+1)+"天");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         tv_updatetimeinfo_start.setOnClickListener(v -> actionSheetFragment=showAfterDateWithoutDismiss(UpdateTimeInfoActivity.this.getSupportFragmentManager(),

@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -22,8 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.TimeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -37,8 +38,10 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.commonlibrary.views.LocalImageHolderView;
 import com.renyu.qrcodelibrary.ZBarQRScanActivity;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.user.InfoActivity;
 import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
@@ -50,10 +53,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -61,7 +64,6 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by renyu on 2017/3/10.
@@ -80,10 +82,7 @@ public class OrderDetailActivity extends BaseActivity {
     @BindView(R.id.ib_nav_right)
     ImageButton ib_nav_right;
     @BindView(R.id.vp_orderdetail)
-    ViewPager vp_orderdetail;
-    OrderDetailAdapter adapter;
-    @BindView(R.id.indicator_orderdetail)
-    CircleIndicator indicator_orderdetail;
+    ConvenientBanner vp_orderdetail;
     @BindView(R.id.tv_orderdetail_type)
     TextView tv_orderdetail_type;
     @BindView(R.id.tv_orderdetail_person)
@@ -185,30 +184,16 @@ public class OrderDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        vp_orderdetail.startTurning(5000);
+
         needStateRefresh();
     }
 
-    public class OrderDetailAdapter extends PagerAdapter {
-        @Override
-        public int getCount() {
-            return views.size();
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view==object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(views.get(position));
-            return views.get(position);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(views.get(position));
-        }
+        vp_orderdetail.stopTurning();
     }
 
     @Override
@@ -225,7 +210,8 @@ public class OrderDetailActivity extends BaseActivity {
         popupWindow.setOutsideTouchable(true);
     }
 
-    @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_orderdetail_info3, R.id.btn_orderdetail_commit})
+    @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_orderdetail_info3, R.id.btn_orderdetail_commit,
+            R.id.layout_orderdetail_employerinfo})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -281,6 +267,15 @@ public class OrderDetailActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 }
+                break;
+            case R.id.layout_orderdetail_employerinfo:
+                // 雇员点击后可以查看到雇主信息
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    Intent intent=new Intent(OrderDetailActivity.this, InfoActivity.class);
+                    intent.putExtra("userId", orderResponse.getCreateUserId());
+                    startActivity(intent);
+                }
+                break;
         }
     }
 
@@ -330,7 +325,10 @@ public class OrderDetailActivity extends BaseActivity {
                 int dayNum=value.getPeriodTime().split(",").length;
                 // 按天
                 if (value.getUnitPriceType().equals("1")) {
-                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*value.getStaffAccount())+"元");
+                    BigDecimal bigDecimal1 = new BigDecimal(""+dayNum);
+                    BigDecimal bigDecimal2 = new BigDecimal(Double.toString(value.getUnitPrice()));
+                    BigDecimal bigDecimal3 = new BigDecimal(""+value.getStaffAccount());
+                    tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(bigDecimal1.multiply(bigDecimal2).multiply(bigDecimal3).toString())+"元");
                 }
                 // 按小时
                 else if (value.getUnitPriceType().equals("2")) {
@@ -341,7 +339,11 @@ public class OrderDetailActivity extends BaseActivity {
                         long endTime=format.parse(currentTime.split(" ")[0]+" "+value.getEndTime()).getTime();
                         // 计算每天工作时间
                         double workTime=((double) (endTime-startTime)/1000)/3600;
-                        tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+dayNum*value.getUnitPrice()*workTime*value.getStaffAccount())+"元");
+                        BigDecimal bigDecimal1 = new BigDecimal(""+dayNum);
+                        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(value.getUnitPrice()));
+                        BigDecimal bigDecimal3 = new BigDecimal(""+value.getStaffAccount());
+                        BigDecimal bigDecimal4 = new BigDecimal(""+workTime);
+                        tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+bigDecimal1.multiply(bigDecimal2).multiply(bigDecimal3).multiply(bigDecimal4))+"元");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -546,17 +548,40 @@ public class OrderDetailActivity extends BaseActivity {
                         ib_nav_right.setVisibility(View.GONE);
                     }
                 }
-                views=new ArrayList<>();
+                ArrayList<Uri> imagesList=new ArrayList<Uri>();
                 for (String image : value.getPicListArray()) {
-                    View view= LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.adapter_orderdetail, null, false);
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setUri(Uri.parse(image)).setAutoPlayAnimations(true).build();
-                    ((SimpleDraweeView) view).setController(draweeController);
-                    views.add(view);
+                    imagesList.add(Uri.parse(image));
                 }
-                adapter=new OrderDetailAdapter();
-                vp_orderdetail.setAdapter(adapter);
-                indicator_orderdetail.setViewPager(vp_orderdetail);
+                vp_orderdetail.setPages(
+                        new CBViewHolderCreator<LocalImageHolderView>() {
+                            @Override
+                            public LocalImageHolderView createHolder() {
+                                return new LocalImageHolderView();
+                            }
+                        }, imagesList)
+                        .setPageIndicator(new int[]{R.mipmap.ic_page_indicator, R.mipmap.ic_page_indicator_focused})
+                        .setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        })
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+
+                            }
+                        });
 
                 initPop(popView);
 

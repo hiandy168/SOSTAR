@@ -96,10 +96,6 @@ public class ReleaseOrderActivity extends BaseActivity {
     TextView tv_releaseorder_avaliablemoney;
     @BindView(R.id.sb_releaseorder)
     SwitchButton sb_releaseorder;
-    @BindView(R.id.tv_releaseorder_aggregateaddress)
-    TextView tv_releaseorder_aggregateaddress;
-    @BindView(R.id.tv_releaseorder_aggregatetime)
-    TextView tv_releaseorder_aggregatetime;
 
     // 旧数据
     OrderResponse orderResponse;
@@ -188,12 +184,6 @@ public class ReleaseOrderActivity extends BaseActivity {
             // 设置工作地点
             tv_releaseorder_address.setText(orderResponse.getAddress());
 
-            // 设置集合地点
-            tv_releaseorder_aggregateaddress.setText(orderResponse.getAggregateAddress());
-
-            // 设置集合时间
-            tv_releaseorder_aggregatetime.setText(orderResponse.getAggregateTime());
-
             // 设置详细描述
             tv_releaseorder_desp.setText(orderResponse.getDescription());
             // 设置详细描述图片
@@ -203,10 +193,10 @@ public class ReleaseOrderActivity extends BaseActivity {
 
             // 设置工作报酬
             if (orderResponse.getUnitPriceType().equals("2")) {
-                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"/小时");
+                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"元/小时");
             }
             else if (orderResponse.getUnitPriceType().equals("1")) {
-                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"/天");
+                tv_releaseorder_price.setText(orderResponse.getUnitPrice()+"元/天");
             }
 
             // 设置结算方式
@@ -255,8 +245,7 @@ public class ReleaseOrderActivity extends BaseActivity {
     @OnClick({R.id.ib_nav_left, R.id.tv_nav_right, R.id.layout_releaseorder_type, R.id.layout_releaseorder_person,
             R.id.layout_releaseorder_sex, R.id.layout_releaseorder_address, R.id.layout_releaseorder_desp,
             R.id.layout_releaseorder_price, R.id.layout_releaseorder_paytype, R.id.layout_releaseorder_time,
-            R.id.layout_releaseorder_worktime, R.id.btn_releaseorder_commit, R.id.layout_releaseorder_aggregateaddress,
-            R.id.layout_releaseorder_aggregatetime})
+            R.id.layout_releaseorder_worktime, R.id.btn_releaseorder_commit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_nav_right:
@@ -289,13 +278,6 @@ public class ReleaseOrderActivity extends BaseActivity {
                 intent_address.putExtra("source", tv_releaseorder_address.getText().toString().trim());
                 startActivityForResult(intent_address, CommonParams.RESULT_UPDATEADDRESSINFO);
                 break;
-            case R.id.layout_releaseorder_aggregateaddress:
-                Intent intent_aggregateaddress=new Intent(ReleaseOrderActivity.this, UpdateAddressInfoActivity.class);
-                intent_aggregateaddress.putExtra("title", "集合地点");
-                intent_aggregateaddress.putExtra("param", "aggregateaddress");
-                intent_aggregateaddress.putExtra("source", tv_releaseorder_aggregateaddress.getText().toString().trim());
-                startActivityForResult(intent_aggregateaddress, CommonParams.RESULT_UPDATEADDRESSINFO);
-                break;
             case R.id.layout_releaseorder_desp:
                 Intent intent_desp=new Intent(ReleaseOrderActivity.this, UpdateTextInfoWithPicActivity.class);
                 intent_desp.putExtra("title", "工作描述");
@@ -306,7 +288,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             case R.id.layout_releaseorder_price:
                 Intent intent_price=new Intent(ReleaseOrderActivity.this, UpdatePayInfoActivity.class);
                 intent_price.putExtra("title", "工作报酬");
-                intent_price.putExtra("source", tv_releaseorder_price.getText().toString().trim());
+                intent_price.putExtra("source", tv_releaseorder_price.getText().toString());
                 startActivityForResult(intent_price, CommonParams.RESULT_UPDATEPAYTYPEINFO);
                 break;
             case R.id.layout_releaseorder_paytype:
@@ -378,18 +360,6 @@ public class ReleaseOrderActivity extends BaseActivity {
             case R.id.btn_releaseorder_commit:
                 uploadPic(1);
                 break;
-            case R.id.layout_releaseorder_aggregatetime:
-                ActionSheetFragment.build(getSupportFragmentManager())
-                        .setChoice(ActionSheetFragment.CHOICE.TIME)
-                        .setTitle("请选择集合时间")
-                        .setOkTitle("确认")
-                        .setCancelTitle("取消")
-                        .setOnOKListener(value -> tv_releaseorder_aggregatetime.setText(value.toString()))
-                        .setOnCancelListener(() -> {
-
-                        })
-                        .show();
-                break;
         }
     }
 
@@ -411,12 +381,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             tv_releaseorder_desp.setText(data.getStringExtra("ed"));
         }
         if (requestCode==CommonParams.RESULT_UPDATEADDRESSINFO && resultCode==RESULT_OK) {
-            if (data.getStringExtra("param").equals("address")) {
-                tv_releaseorder_address.setText(data.getStringExtra("value"));
-            }
-            else {
-                tv_releaseorder_aggregateaddress.setText(data.getStringExtra("value"));
-            }
+            tv_releaseorder_address.setText(data.getStringExtra("value"));
         }
         if (requestCode==CommonParams.RESULT_UPDATETIMEINFO && resultCode==RESULT_OK) {
             ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean> beans= (ArrayList<ReleaseOrderRequest.ParamBean.PeriodTimeListBean>) data.getSerializableExtra("value");
@@ -513,7 +478,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             else if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("天")) {
                 unitPriceType=1;
             }
-            unitPrice=Double.parseDouble(tv_releaseorder_price.getText().toString().trim().split("/")[0]);
+            unitPrice=Double.parseDouble(tv_releaseorder_price.getText().toString().trim().split("元")[0]);
         }
         // 确保用工日期的存在
         if (timeBeans.size()>0) {
@@ -617,8 +582,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "请填写详细描述", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim()) ||
-                Double.parseDouble(tv_releaseorder_price.getText().toString().trim())<=0) {
+        if (TextUtils.isEmpty(tv_releaseorder_price.getText().toString().trim())) {
             Toast.makeText(this, "请填写工作报酬", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -628,14 +592,6 @@ public class ReleaseOrderActivity extends BaseActivity {
         }
         if (LocationService.lastBdLocation==null) {
             Toast.makeText(this, "暂无定位数据", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(tv_releaseorder_aggregateaddress.getText().toString().trim())) {
-            Toast.makeText(this, "请填写集合地点", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(tv_releaseorder_aggregatetime.getText().toString().trim())) {
-            Toast.makeText(this, "请填写集合时间", Toast.LENGTH_SHORT).show();
             return;
         }
         OKHttpHelper helper=new OKHttpHelper();
@@ -709,7 +665,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             paramBean.setSex("0");
         }
         paramBean.setStaffAccount(Integer.parseInt(tv_releaseorder_person.getText().toString().trim()));
-        paramBean.setUnitPrice(tv_releaseorder_price.getText().toString().trim().split("/")[0]);
+        paramBean.setUnitPrice(tv_releaseorder_price.getText().toString().trim().split("元")[0]);
         if (tv_releaseorder_price.getText().toString().trim().split("/")[1].equals("小时")) {
             paramBean.setUnitPriceType("2");
         }
@@ -719,8 +675,8 @@ public class ReleaseOrderActivity extends BaseActivity {
         paramBean.setPeriodTimeList(timeBeans);
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         paramBean.setOrderStatus(""+orderStatus);
-        paramBean.setAggregateAddress(tv_releaseorder_aggregateaddress.getText().toString().trim());
-        paramBean.setAggregateTime(tv_releaseorder_aggregatetime.getText().toString().trim());
+        paramBean.setAggregateAddress("");
+        paramBean.setAggregateTime("");
         if (getIntent().getSerializableExtra("value")!=null) {
             paramBean.setOrderId(orderResponse.getOrderId());
         }

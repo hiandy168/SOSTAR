@@ -50,7 +50,7 @@ public class UpdatePayInfoActivity extends BaseActivity {
 
         source=getIntent().getStringExtra("source");
         if (source.indexOf("/")!=-1) {
-            ed_updatepayinfo_money.setText(source.split("/")[0]);
+            ed_updatepayinfo_money.setText(source.split("元")[0]);
             tv_updatepayinfo_type.setText("每"+source.split("/")[1]);
         }
     }
@@ -125,7 +125,7 @@ public class UpdatePayInfoActivity extends BaseActivity {
             return;
         }
         Intent intent=new Intent();
-        intent.putExtra("value", ed_updatepayinfo_money.getText().toString()+"/"+tv_updatepayinfo_type.getText().toString().substring(1));
+        intent.putExtra("value", ed_updatepayinfo_money.getText().toString()+"元/"+tv_updatepayinfo_type.getText().toString().substring(1));
         setResult(RESULT_OK, intent);
         finish();
     }

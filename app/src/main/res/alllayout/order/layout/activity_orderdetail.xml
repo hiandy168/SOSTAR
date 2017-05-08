@@ -14,26 +14,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <RelativeLayout
-                    android:id="@+id/layout_orderdetail_info0"
+                <com.bigkoo.convenientbanner.ConvenientBanner
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/vp_orderdetail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/vp_orderdetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="176dip">
-
-                    </android.support.v4.view.ViewPager>
-                    <me.relex.circleindicator.CircleIndicator
-                        android:id="@+id/indicator_orderdetail"
-                        android:layout_alignBottom="@id/vp_orderdetail"
-                        android:layout_marginBottom="12dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
-                </RelativeLayout>
+                    android:layout_height="176dip"
+                    app:canLoop="true" />
                 <LinearLayout
                     android:id="@+id/layout_orderdetail_info1"
-                    android:layout_below="@id/layout_orderdetail_info0"
+                    android:layout_below="@id/vp_orderdetail"
                     android:orientation="vertical"
                     android:layout_marginEnd="12dip"
                     android:layout_marginStart="12dip"
@@ -123,6 +112,7 @@
 
                     </View>
                     <RelativeLayout
+                        android:id="@+id/layout_orderdetail_employerinfo"
                         android:layout_width="match_parent"
                         android:layout_height="35dip">
                         <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"

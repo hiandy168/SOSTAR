@@ -145,7 +145,7 @@ public class ZBarQRScanActivity extends BaseActivity {
                 // 任务还未开始
                 else if (currentTime1<startTime) {
                     int minute= (int) ((startTime- currentTime1)/(1000*60));
-                    tv_zbar_scan_view_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
+                    tv_zbar_scan_view_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快扫码签到开工");
                     break;
                 }
             } catch (ParseException e) {

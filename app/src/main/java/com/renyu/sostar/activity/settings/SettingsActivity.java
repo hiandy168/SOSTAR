@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,10 +20,13 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.params.InitParams;
+import com.renyu.commonlibrary.views.ActionSheetFragment;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;
 import com.renyu.sostar.bean.NotificationChangeRequest;
+import com.renyu.sostar.bean.OrderRequest;
+import com.renyu.sostar.bean.PushResponse;
 import com.renyu.sostar.bean.SetUserTypeRequest;
 import com.renyu.sostar.bean.SigninRequest;
 import com.renyu.sostar.bean.SigninResponse;
@@ -51,14 +55,21 @@ public class SettingsActivity extends BaseActivity {
     TextView tv_settings_cache;
     @BindView(R.id.sb_settings_message)
     SwitchButton sb_settings_message;
+    @BindView(R.id.tv_settings_rulechange)
+    TextView tv_settings_rulechange;
 
-    boolean userChange=false;
+    // 手动切换推送开关
+    boolean userChange=true;
+
+    boolean canChangeRole=false;
 
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("通用设置");
+
+        canChangeRole=getIntent().getBooleanExtra("canChangeRole", false);
 
         sb_settings_message.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (userChange) {
@@ -67,6 +78,12 @@ public class SettingsActivity extends BaseActivity {
             }
             changeNotificationState();
         });
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            tv_settings_rulechange.setText("我是雇员");
+        }
+        else {
+            tv_settings_rulechange.setText("我是雇主");
+        }
     }
 
     @Override
@@ -76,7 +93,7 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-
+        getPushInfo();
     }
 
     @Override
@@ -105,7 +122,27 @@ public class SettingsActivity extends BaseActivity {
                 tv_settings_cache.setText("0MB");
                 break;
             case R.id.layout_settings_rolechange:
-                changeRole();
+                if (!canChangeRole) {
+                    Toast.makeText(this, "请先完成身份认证，认证通过之后才可以切换身份", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                View view_clearmessage= LayoutInflater.from(SettingsActivity.this)
+                        .inflate(R.layout.view_actionsheet_button_2, null, false);
+                ActionSheetFragment actionSheetFragment=ActionSheetFragment.build(getSupportFragmentManager())
+                        .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
+                        .setTitle("切换身份")
+                        .setCustomerView(view_clearmessage)
+                        .show();
+                TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice);
+                pop_double_choice.setTextColor(Color.parseColor("#333333"));
+                pop_double_choice.setText(ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")?"切换雇主":"切换雇员");
+                pop_double_choice.setOnClickListener(v -> {
+                    actionSheetFragment.dismiss();
+                    changeRole();
+                });
+                TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel);
+                pop_double_cancel.setText("取消");
+                pop_double_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
                 break;
             case R.id.btn_settings_sign_out:
                 // 清除登录状态
@@ -240,7 +277,7 @@ public class SettingsActivity extends BaseActivity {
     private void changeNotificationState() {
         NotificationChangeRequest request=new NotificationChangeRequest();
         NotificationChangeRequest.ParamBean paramBean=new NotificationChangeRequest.ParamBean();
-        paramBean.setMsgFlg(sb_settings_message.isChecked()?"0":"1");
+        paramBean.setMsgFlg(sb_settings_message.isChecked()?"1":"0");
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
@@ -263,13 +300,45 @@ public class SettingsActivity extends BaseActivity {
                 dismissNetworkDialog();
 
                 Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                userChange=true;
                 if (sb_settings_message.isChecked()) {
                     sb_settings_message.setChecked(false);
                 }
                 else {
                     sb_settings_message.setChecked(true);
                 }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void getPushInfo() {
+        OrderRequest request=new OrderRequest();
+        OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        retrofit.create(RetrofitImpl.class)
+                .getPushInfo(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                .compose(Retrofit2Utils.background()).subscribe(new Observer<PushResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(PushResponse value) {
                 userChange=true;
+                sb_settings_message.post(() -> sb_settings_message.setChecked(value.getMsgFlg().equals("1")?true:false));
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
 
             @Override

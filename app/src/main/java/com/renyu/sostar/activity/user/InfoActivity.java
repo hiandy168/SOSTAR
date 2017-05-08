@@ -95,17 +95,18 @@ public class InfoActivity extends BaseActivity {
     public void initParams() {
         nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tv_nav_title.setTextColor(Color.WHITE);
-        tv_nav_title.setText("个人详情");
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             layout_info_compname.setVisibility(View.GONE);
             layout_info_compphone.setVisibility(View.GONE);
             layout_info_web.setVisibility(View.GONE);
+            tv_nav_title.setText("公司详情");
         }
         else {
             layout_info_name.setVisibility(View.GONE);
             layout_info_sex.setVisibility(View.GONE);
             layout_info_age.setVisibility(View.GONE);
+            tv_nav_title.setText("个人详情");
         }
     }
 
@@ -120,7 +121,7 @@ public class InfoActivity extends BaseActivity {
             getEmployeeInfo();
         }
         else {
-            getEmployeeInfo2();
+            getEmployerInfo();
         }
     }
 
@@ -202,7 +203,7 @@ public class InfoActivity extends BaseActivity {
         });
     }
 
-    private void getEmployeeInfo2() {
+    private void getEmployerInfo() {
         if (TextUtils.isEmpty(ACache.get(this).getAsString(CommonParams.USER_ID))) {
             return;
         }
@@ -248,7 +249,7 @@ public class InfoActivity extends BaseActivity {
                 tv_info_web.setText(value.getWebAddress());
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getStar())?"0":value.getStar());
-                tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate()+"%");
+                tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate());
             }
 
             @Override

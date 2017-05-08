@@ -315,7 +315,24 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.layout_main_menu_mycenter_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                Intent intent_setting=new Intent(MainActivity.this, SettingsActivity.class);
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                    if (myCenterEmployerResponse != null && myCenterEmployerResponse.getAuthentication() != null && myCenterEmployerResponse.getAuthentication().equals("1")) {
+                        intent_setting.putExtra("canChangeRole", true);
+                    }
+                    else {
+                        intent_setting.putExtra("canChangeRole", false);
+                    }
+                }
+                else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    if (myCenterEmployeeResponse != null && myCenterEmployeeResponse.getAuthentication()!=null && myCenterEmployeeResponse.getAuthentication().equals("1")) {
+                        intent_setting.putExtra("canChangeRole", true);
+                    }
+                    else {
+                        intent_setting.putExtra("canChangeRole", false);
+                    }
+                }
+                startActivity(intent_setting);
                 break;
             case R.id.layout_main_menu_message:
                 if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {

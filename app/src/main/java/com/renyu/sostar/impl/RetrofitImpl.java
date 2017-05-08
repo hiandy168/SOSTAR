@@ -15,6 +15,7 @@ import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.PayInfoResponse;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
+import com.renyu.sostar.bean.PushResponse;
 import com.renyu.sostar.bean.RechargeResponse;
 import com.renyu.sostar.bean.SigninResponse;
 import com.renyu.sostar.bean.StartMyOrderSignResponse;
@@ -238,4 +239,7 @@ public interface RetrofitImpl {
     @POST("sostar/api/employer/setOrderPay")
     Observable<Response<EmptyResponse>> setOrderPay(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/employer/isPush")
+    Observable<Response<PushResponse>> getPushInfo(@Body RequestBody requestBody);
 }

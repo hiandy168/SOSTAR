@@ -152,7 +152,7 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 确认雇员
     public void confirmStaff(String userId, int status) {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认雇佣？")
+        new AlertDialog.Builder(this).setTitle("提示").setMessage(status==1?"确认雇佣？":"拒绝雇佣？")
                 .setPositiveButton("确定", (dialog, which) -> {
                     ComfirmEmployeeRequest request=new ComfirmEmployeeRequest();
                     ComfirmEmployeeRequest.ParamBean paramBean=new ComfirmEmployeeRequest.ParamBean();

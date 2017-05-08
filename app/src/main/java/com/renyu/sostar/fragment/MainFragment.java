@@ -55,6 +55,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -94,7 +95,10 @@ public class MainFragment extends BaseFragment {
     // 地图加载成功
     boolean isMapLoaded=false;
 
-    Disposable disposable;
+    // 地图请求Disposable
+    Disposable infoDisposable;
+    // 定时刷新Disposable
+    Disposable refreshDisposable;
 
     @Override
     public void initParams() {
@@ -104,16 +108,6 @@ public class MainFragment extends BaseFragment {
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null));
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
         mBaiduMap.setOnMapLoadedCallback(() ->  {
-            if (bdLocation!=null) {
-                addUserOverLay(avatarBmp, bdLocation);
-                // 分别加载地图相关信息
-                if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                    loadEmployeeIndex(bdLocation);
-                }
-                else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    loadEmployerIndex(bdLocation);
-                }
-            }
             isMapLoaded=true;
         });
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
@@ -178,16 +172,6 @@ public class MainFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mv_main.onResume();
-
-        if (bdLocation!=null && isMapLoaded) {
-            // 分别加载地图相关信息
-            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                loadEmployeeIndex(bdLocation);
-            }
-            else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                loadEmployerIndex(bdLocation);
-            }
-        }
     }
 
     @Override
@@ -204,6 +188,13 @@ public class MainFragment extends BaseFragment {
 
         mv_main.onDestroy();
         mv_main = null;
+
+        if (refreshDisposable!=null) {
+            refreshDisposable.dispose();
+        }
+        if (infoDisposable!=null) {
+            infoDisposable.dispose();
+        }
     }
 
     @Override
@@ -245,21 +236,43 @@ public class MainFragment extends BaseFragment {
                 .latitude(bdLocation.getLatitude())
                 .longitude(bdLocation.getLongitude()).build();
         mBaiduMap.setMyLocationData(locData);
+        MainFragment.this.bdLocation=bdLocation;
+        addUserOverLay(avatarBmp, bdLocation);
         if (isFirstLoc) {
             isFirstLoc = false;
             LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.target(ll);
             mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-        }
-        MainFragment.this.bdLocation=bdLocation;
-        addUserOverLay(avatarBmp, bdLocation);
-        // 分别加载地图相关信息
-        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-            loadEmployeeIndex(bdLocation);
-        }
-        else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
-            loadEmployerIndex(bdLocation);
+            // 开启定时分别加载地图相关信息
+            Observable.interval(0, 1, TimeUnit.MINUTES).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Long>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    refreshDisposable=d;
+                }
+
+                @Override
+                public void onNext(Long value) {
+                    if (isMapLoaded) {
+                        if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                            loadEmployeeIndex(bdLocation);
+                        }
+                        else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
+                            loadEmployerIndex(bdLocation);
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
         }
     }
 
@@ -288,6 +301,10 @@ public class MainFragment extends BaseFragment {
         tv_main_open_space.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 头像改变之后刷新头像
+     * @param avatarUrl
+     */
     private void loadAvatarBitmap(String avatarUrl) {
         if (TextUtils.isEmpty(avatarUrl)) {
             avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
@@ -314,6 +331,10 @@ public class MainFragment extends BaseFragment {
         }, CallerThreadExecutor.getInstance());
     }
 
+    /**
+     * 雇员加载订单信息
+     * @param bdLocation
+     */
     private void loadEmployeeIndex(BDLocation bdLocation) {
         EmployeeIndexRequest request=new EmployeeIndexRequest();
         EmployeeIndexRequest.ParamBean paramBean=new EmployeeIndexRequest.ParamBean();
@@ -326,7 +347,7 @@ public class MainFragment extends BaseFragment {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployeeIndexResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                infoDisposable=d;
             }
 
             @Override
@@ -355,6 +376,10 @@ public class MainFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 雇主加载雇员信息
+     * @param bdLocation
+     */
     private void loadEmployerIndex(BDLocation bdLocation) {
         EmployeeIndexRequest request=new EmployeeIndexRequest();
         EmployeeIndexRequest.ParamBean paramBean=new EmployeeIndexRequest.ParamBean();
@@ -367,7 +392,7 @@ public class MainFragment extends BaseFragment {
                 .compose(Retrofit2Utils.background()).subscribe(new Observer<EmployerIndexResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                disposable=d;
+                infoDisposable=d;
             }
 
             @Override
@@ -396,6 +421,11 @@ public class MainFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 刷新使用者的位置
+     * @param bitmap
+     * @param bdLocation
+     */
     private void addUserOverLay(Bitmap bitmap, BDLocation bdLocation) {
         if (bitmap==null) {
             return;
