@@ -49,8 +49,8 @@
                             <TextView
                                 android:id="@+id/tv_orderdetail_person"
                                 android:layout_marginTop="10dip"
-                                android:textSize="11sp"
-                                android:textColor="#999999"
+                                android:textSize="12sp"
+                                android:textColor="#333333"
                                 android:text="0人"
                                 android:drawableLeft="@mipmap/ic_order_member"
                                 android:drawablePadding="7dip"
@@ -59,8 +59,8 @@
                             <TextView
                                 android:id="@+id/tv_orderdetail_priceall"
                                 android:layout_marginTop="10dip"
-                                android:textSize="11sp"
-                                android:textColor="#999999"
+                                android:textSize="12sp"
+                                android:textColor="#333333"
                                 android:drawableLeft="@mipmap/ic_order_money"
                                 android:drawablePadding="7dip"
                                 android:layout_width="wrap_content"
@@ -78,8 +78,8 @@
                                 <TextView
                                     android:id="@+id/tv_orderdetail_time"
                                     android:layout_marginStart="7dip"
-                                    android:textSize="11sp"
-                                    android:textColor="#999999"
+                                    android:textSize="12sp"
+                                    android:textColor="#333333"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
