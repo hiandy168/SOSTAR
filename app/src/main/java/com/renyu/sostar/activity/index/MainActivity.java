@@ -51,7 +51,6 @@ import com.renyu.sostar.bean.MyCenterRequest;
 import com.renyu.sostar.fragment.MainFragment;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
-import com.renyu.sostar.service.LocationService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -123,9 +122,6 @@ public class MainActivity extends BaseActivity {
     public void initParams() {
         // 设置当前用户已经上线
         ACache.get(this).put(CommonParams.USER_SIGNIN, "1");
-
-        // 开启定位上报
-        startService(new Intent(this, LocationService.class));
 
         // 注册极光alias
         JPushInterface.setAliasAndTags(getApplicationContext(), ACache.get(this).getAsString(CommonParams.USER_ID), null, (i, s, set) -> {
@@ -228,12 +224,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public int setStatusBarTranslucent() {
         return 1;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopService(new Intent(this, LocationService.class));
     }
 
     @OnClick({R.id.ib_nav_left, R.id.ib_nav_right, R.id.layout_main_menu_mycenter_info,

@@ -49,6 +49,7 @@ import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+import com.renyu.sostar.service.LocationService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -109,6 +110,10 @@ public class MainFragment extends BaseFragment {
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
         mBaiduMap.setOnMapLoadedCallback(() ->  {
             isMapLoaded=true;
+
+            // 开启定位上报
+            getActivity().startService(new Intent(getActivity(), LocationService.class));
+
         });
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
@@ -183,6 +188,8 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        getActivity().stopService(new Intent(getActivity(), LocationService.class));
 
         EventBus.getDefault().unregister(this);
 
