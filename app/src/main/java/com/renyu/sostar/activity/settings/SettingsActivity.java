@@ -331,10 +331,7 @@ public class SettingsActivity extends BaseActivity {
 
             @Override
             public void onNext(PushResponse value) {
-                if (!value.getMsgFlg().equals("1")) {
-                    userChange=true;
-                }
-                else {
+                if (value.getMsgFlg().equals("1")) {
                     userChange=false;
                 }
                 sb_settings_message.post(() -> sb_settings_message.setChecked(value.getMsgFlg().equals("1")?true:false));
