@@ -8,7 +8,7 @@
 
     <application>
         <activity android:name=".camera.CameraActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
-        <activity android:name=".crop.CropActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
+        <activity android:name=".crop.CropUActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
         <activity android:name=".preview.ImagePreviewActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
         <activity android:name=".photopicker.PhotoPickerActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme"></activity>
     </application>

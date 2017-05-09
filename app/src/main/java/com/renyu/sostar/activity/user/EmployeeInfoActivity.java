@@ -217,7 +217,7 @@ public class EmployeeInfoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            Utils.cropImage(path, EmployeeInfoActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(path, EmployeeInfoActivity.this, CommonParams.RESULT_CROP, 1);
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
             ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
@@ -227,7 +227,7 @@ public class EmployeeInfoActivity extends BaseActivity {
             if (filePaths.size()!=1) {
                 return;
             }
-            Utils.cropImage(filePaths.get(0), EmployeeInfoActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(filePaths.get(0), EmployeeInfoActivity.this, CommonParams.RESULT_CROP, 1);
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");

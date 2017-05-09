@@ -24,7 +24,7 @@ import com.renyu.imagelibrary.R;
 import com.renyu.imagelibrary.R2;
 import com.renyu.imagelibrary.camera.CameraActivity;
 import com.renyu.imagelibrary.commonutils.PhotoDirectoryLoader;
-import com.renyu.imagelibrary.crop.CropActivity;
+import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.imagelibrary.model.Photo;
 import com.renyu.imagelibrary.model.PhotoDirectory;
 import com.renyu.imagelibrary.params.CommonParams;
@@ -391,7 +391,8 @@ public class PhotoPickerActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode== CommonParams.RESULT_TAKECAMERA && resultCode==RESULT_OK) {
             String filePath=data.getExtras().getString("path");
-            cropImage(filePath);
+            Utils.cropImage(filePath, PhotoPickerActivity.this, CommonParams.RESULT_CROP, 0);
+
         }
         else if (requestCode== CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String filePath=data.getExtras().getString("path");
@@ -411,17 +412,5 @@ public class PhotoPickerActivity extends BaseActivity {
             }
             loadImages();
         }
-    }
-
-    /**
-     * 剪裁头像
-     * @param path
-     */
-    public void cropImage(String path) {
-        Intent intent=new Intent(this, CropActivity.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("path", path);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, CommonParams.RESULT_CROP);
     }
 }

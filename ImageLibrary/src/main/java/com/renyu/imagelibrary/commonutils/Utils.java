@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.imagelibrary.camera.CameraActivity;
-import com.renyu.imagelibrary.crop.CropActivity;
+import com.renyu.imagelibrary.crop.UCrop;
 import com.renyu.imagelibrary.photopicker.PhotoPickerActivity;
 
 import java.io.File;
@@ -45,14 +45,23 @@ public class Utils {
 
     /**
      * 剪裁头像
-     * @param path
+     * @param sourcePath
+     * @param activity
+     * @param requestCode
+     * @param ratio 宽/高
      */
-    public static void cropImage(String path, Activity activity, int requestCode) {
-        Intent intent=new Intent(activity, CropActivity.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("path", path);
-        intent.putExtras(bundle);
-        activity.startActivityForResult(intent, requestCode);
+    public static void cropImage(String sourcePath, Activity activity, int requestCode, float ratio) {
+        String destinationPath=InitParams.IMAGE_PATH+"/"+System.currentTimeMillis()+".jpg";
+        UCrop uCrop = UCrop.of(Uri.fromFile(new File(sourcePath)), Uri.fromFile(new File(destinationPath)));
+        UCrop.Options options = new UCrop.Options();
+        if (ratio!=0) {
+            options.withAspectRatio(ratio, 1);
+        }
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setCompressionQuality(80);
+        options.setHideBottomControls(true);
+        uCrop.withOptions(options);
+        uCrop.start(activity, requestCode);
     }
 
     /**

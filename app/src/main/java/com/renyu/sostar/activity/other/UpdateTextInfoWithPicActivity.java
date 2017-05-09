@@ -164,7 +164,7 @@ public class UpdateTextInfoWithPicActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            Utils.cropImage(path, UpdateTextInfoWithPicActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(path, UpdateTextInfoWithPicActivity.this, CommonParams.RESULT_CROP, 2);
             return;
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {

@@ -149,7 +149,7 @@ public class ImagePreviewActivity extends BaseActivity {
                     Toast.makeText(ImagePreviewActivity.this, "网络图片不能修改", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Utils.cropImage(urls.get(imagepreview_viewpager.getCurrentItem()), ImagePreviewActivity.this, CommonParams.RESULT_CROP);
+                Utils.cropImage(urls.get(imagepreview_viewpager.getCurrentItem()), ImagePreviewActivity.this, CommonParams.RESULT_CROP, 0);
             }
         });
     }

@@ -245,7 +245,7 @@ public class EmployerAuthActivity extends BaseActivity {
         }
         if (requestCode==CommonParams.RESULT_TAKEPHOTO && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
-            Utils.cropImage(path, EmployerAuthActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(path, EmployerAuthActivity.this, CommonParams.RESULT_CROP, 1);
         }
         if (requestCode==CommonParams.RESULT_ALUMNI && resultCode==RESULT_OK) {
             ArrayList<String> filePaths=data.getExtras().getStringArrayList("choiceImages");
@@ -255,7 +255,7 @@ public class EmployerAuthActivity extends BaseActivity {
             if (filePaths.size()!=1) {
                 return;
             }
-            Utils.cropImage(filePaths.get(0), EmployerAuthActivity.this, CommonParams.RESULT_CROP);
+            Utils.cropImage(filePaths.get(0), EmployerAuthActivity.this, CommonParams.RESULT_CROP, 1);
         }
         if (requestCode==CommonParams.RESULT_CROP && resultCode==RESULT_OK) {
             String path=data.getExtras().getString("path");
