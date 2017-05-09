@@ -240,6 +240,6 @@ public interface RetrofitImpl {
     Observable<Response<EmptyResponse>> setOrderPay(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
-    @POST("sostar/api/employer/isPush")
+    @POST("sostar/api/sys/userType/getPushFlg")
     Observable<Response<PushResponse>> getPushInfo(@Body RequestBody requestBody);
 }
