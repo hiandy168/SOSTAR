@@ -104,22 +104,28 @@ public class EmployerAuthActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(myCenterResponse.getCerPath())) {
             iv_employerauth_pic1.setTag(myCenterResponse.getCerPath());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getCerPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController1 = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getCerPath())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_employerauth_pic1.setController(draweeController1);
             tv_employerauth_pic1.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(myCenterResponse.getLicPath())) {
             iv_employerauth_pic2.setTag(myCenterResponse.getLicPath());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getLicPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController2 = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getLicPath())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_employerauth_pic2.setController(draweeController2);
             tv_employerauth_pic2.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(myCenterResponse.getRifPath())) {
             iv_employerauth_pic3.setTag(myCenterResponse.getRifPath());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getRifPath()))
+                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
             DraweeController draweeController3 = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(myCenterResponse.getRifPath())).setAutoPlayAnimations(true).build();
+                    .setImageRequest(request).setAutoPlayAnimations(true).build();
             iv_employerauth_pic3.setController(draweeController3);
             tv_employerauth_pic3.setVisibility(View.GONE);
         }
@@ -167,18 +173,30 @@ public class EmployerAuthActivity extends BaseActivity {
                 commitAuth();
                 break;
             case R.id.layout_employerauth_pic1:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 choicePicPosition=1;
                 choicePic();
                 break;
             case R.id.layout_employerauth_pic2:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 choicePicPosition=2;
                 choicePic();
                 break;
             case R.id.layout_employerauth_pic3:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 choicePicPosition=3;
                 choicePic();
                 break;
             case R.id.layout_employerauth_name:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_employerauth_name=new Intent(EmployerAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_employerauth_name.putExtra("title", "企业名称");
                 intent_employerauth_name.putExtra("param", "companyName");
@@ -187,6 +205,9 @@ public class EmployerAuthActivity extends BaseActivity {
                 startActivityForResult(intent_employerauth_name, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employerauth_phone:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_employerauth_phone=new Intent(EmployerAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_employerauth_phone.putExtra("title", "联系方式");
                 intent_employerauth_phone.putExtra("param", "contactPhone");
@@ -195,6 +216,9 @@ public class EmployerAuthActivity extends BaseActivity {
                 startActivityForResult(intent_employerauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_employerauth_compcode:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_employerauth_compcode=new Intent(EmployerAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_employerauth_compcode.putExtra("title", "机构识别代码");
                 intent_employerauth_compcode.putExtra("param", "companyCode");

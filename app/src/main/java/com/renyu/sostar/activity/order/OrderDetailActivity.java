@@ -773,6 +773,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void staffSign(String value) {
         StaffSignRequest request=new StaffSignRequest();
         StaffSignRequest.ParamBean paramBean=new StaffSignRequest.ParamBean();
+        paramBean.setOrderId(orderResponse.getOrderId());
         paramBean.setTag(value);
         paramBean.setSignTime(""+new Date().getTime());
         paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));

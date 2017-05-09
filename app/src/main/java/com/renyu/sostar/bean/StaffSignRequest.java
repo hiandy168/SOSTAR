@@ -72,6 +72,7 @@ public class StaffSignRequest {
          * userId : string
          */
 
+        private String orderId;
         private String signTime;
         private String tag;
         private String userId;
@@ -98,6 +99,14 @@ public class StaffSignRequest {
 
         public void setUserId(String userId) {
             this.userId = userId;
+        }
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(String orderId) {
+            this.orderId = orderId;
         }
     }
 }

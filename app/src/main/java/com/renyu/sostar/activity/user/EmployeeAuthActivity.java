@@ -152,6 +152,9 @@ public class EmployeeAuthActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_userauth_name:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_userauth_name=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_name.putExtra("title", "真实姓名");
                 intent_userauth_name.putExtra("param", "name");
@@ -160,6 +163,9 @@ public class EmployeeAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_name, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_phone:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_userauth_phone=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_phone.putExtra("title", "联系电话");
                 intent_userauth_phone.putExtra("param", "phone");
@@ -168,6 +174,9 @@ public class EmployeeAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_id:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 Intent intent_userauth_id=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
                 intent_userauth_id.putExtra("title", "身份证号");
                 intent_userauth_id.putExtra("param", "certificateId");
@@ -176,10 +185,16 @@ public class EmployeeAuthActivity extends BaseActivity {
                 startActivityForResult(intent_userauth_id, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.layout_userauth_positive:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 choicePicPosition=1;
                 choicePic();
                 break;
             case R.id.layout_userauth_negative:
+                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
+                    return;
+                }
                 choicePicPosition=2;
                 choicePic();
                 break;

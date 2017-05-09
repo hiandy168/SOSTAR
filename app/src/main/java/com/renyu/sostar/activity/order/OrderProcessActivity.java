@@ -33,11 +33,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by renyu on 2017/3/21.
@@ -71,10 +75,10 @@ public class OrderProcessActivity extends BaseActivity {
     int process;
     OrderResponse orderResponse;
 
+    Disposable repeatDisposable;
+
     @Override
     public void initParams() {
-        process=Integer.parseInt(getIntent().getStringExtra("process"));
-
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -86,7 +90,6 @@ public class OrderProcessActivity extends BaseActivity {
             btn_orderprocess_commit.setText("确认");
         }
         if ((process==3 || process==4 || process==5 || process==9) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
             tv_nav_title.setText("订单进度");
             if ((process!=4 && process!=9) && orderResponse.getPayFlg()!=1) {
@@ -132,10 +135,32 @@ public class OrderProcessActivity extends BaseActivity {
             else {
                 iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
                 tv_orderprocess.setText("订单正在进行中。\n已进行"+getWorkTime());
+
+                // 1min刷新一次
+                Observable.timer(1, TimeUnit.MINUTES).observeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        repeatDisposable=d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                        getOrderDetail();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
             }
         }
         if ((process==4 || process==5 || process==8) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
-            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             tv_nav_title.setText("订单进度");
 
             // 未支付
@@ -168,10 +193,32 @@ public class OrderProcessActivity extends BaseActivity {
             else {
                 iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
                 tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
+
+                // 1min刷新一次
+                Observable.timer(1, TimeUnit.MINUTES).observeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        repeatDisposable=d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                        getOrderDetail();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
             }
         }
         if (process==9 || process==10 || process==12 || process==13 || process==14) {
-            orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
             tv_nav_title.setText("订单进度");
 
             iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);
@@ -307,7 +354,38 @@ public class OrderProcessActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         BarUtils.setDark(this);
+
+        if (savedInstanceState!=null) {
+            process=savedInstanceState.getInt("process");
+            if (savedInstanceState.getSerializable("params")!=null) {
+                orderResponse= (OrderResponse) savedInstanceState.getSerializable("params");
+            }
+        }
+        else {
+            process=Integer.parseInt(getIntent().getStringExtra("process"));
+            if (getIntent().getSerializableExtra("params")!=null) {
+                orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
+            }
+        }
+
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("params", orderResponse);
+        outState.putInt("process", process);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (repeatDisposable!=null && !repeatDisposable.isDisposed()) {
+            repeatDisposable.dispose();
+        }
     }
 
     @OnClick({R.id.ib_nav_left, R.id.btn_orderprocess_commit, R.id.tv_nav_right})
@@ -336,7 +414,7 @@ public class OrderProcessActivity extends BaseActivity {
             case R.id.tv_nav_right:
                 if (ACache.get(OrderProcessActivity.this).getAsString(CommonParams.USER_TYPE).equals("1")) {
                     Intent intent=new Intent(OrderProcessActivity.this, OverTimeActivity.class);
-                    intent.putExtra("params", getIntent().getSerializableExtra("params"));
+                    intent.putExtra("params", orderResponse);
                     startActivity(intent);
                 }
                 break;
@@ -438,5 +516,47 @@ public class OrderProcessActivity extends BaseActivity {
                 btn_orderprocess_commit.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void getOrderDetail() {
+        OrderRequest request = new OrderRequest();
+        OrderRequest.ParamBean paramBean = new OrderRequest.ParamBean();
+        paramBean.setOrderId(orderResponse.getOrderId());
+        paramBean.setUserId(ACache.get(this).getAsString(CommonParams.USER_ID));
+        request.setParam(paramBean);
+        Observable observable = null;
+        if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            observable = retrofit.create(RetrofitImpl.class)
+                    .staffOrderDetail(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .compose(Retrofit2Utils.background());
+        } else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
+            observable = retrofit.create(RetrofitImpl.class)
+                    .employeeOrderDetail(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .compose(Retrofit2Utils.background());
+        }
+        observable.subscribe(new Observer<OrderResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(OrderResponse value) {
+                process=Integer.parseInt(orderResponse.getOrderStatus());
+                orderResponse=value;
+
+                recreate();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }
