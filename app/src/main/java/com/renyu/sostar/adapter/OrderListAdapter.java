@@ -75,10 +75,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         if (ACache.get(context).getAsString(CommonParams.USER_TYPE).equals("0")) {
             holder.tv_orderlist_price.setText(Utils.removeZero(beans.get(position).getUnitPrice()));
             holder.tv_orderlist_price_type.setVisibility(View.VISIBLE);
-            if (beans.get(position).getPaymentType().equals("1")) {
+            if (beans.get(position).getUnitPriceType().equals("1")) {
                 holder.tv_orderlist_price_type.setText("元/天");
             }
-            else if (beans.get(position).getPaymentType().equals("2")) {
+            else if (beans.get(position).getUnitPriceType().equals("2")) {
                 holder.tv_orderlist_price_type.setText("元/小时");
             }
             holder.tv_orderlist_person.setText(""+beans.get(position).getStaffAccount()+"人");
@@ -86,10 +86,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         else {
             holder.tv_orderlist_price.setText(beans.get(position).getOkStaffAccount()+"/"+beans.get(position).getStaffAccount());
             holder.tv_orderlist_price_type.setVisibility(View.GONE);
-            if (beans.get(position).getPaymentType().equals("1")) {
+            if (beans.get(position).getUnitPriceType().equals("1")) {
                 holder.tv_orderlist_person.setText(Utils.removeZero(beans.get(position).getUnitPrice())+"元/天");
             }
-            else if (beans.get(position).getPaymentType().equals("2")) {
+            else if (beans.get(position).getUnitPriceType().equals("2")) {
                 holder.tv_orderlist_person.setText(beans.get(position).getUnitPrice()+"元/小时");
             }
         }

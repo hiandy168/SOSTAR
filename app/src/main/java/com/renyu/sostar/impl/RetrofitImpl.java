@@ -133,7 +133,7 @@ public interface RetrofitImpl {
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/getEmployerOrderDetail")
-    Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
+    Observable<Response<OrderResponse>> employerOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/cancleMyOrder")
@@ -154,6 +154,10 @@ public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/orderCenter")
     Observable<Response<MyOrderListResponse>> employeeOrderCenter(@Body RequestBody requestBody);
+
+    @Headers({"Content-Type:application/json", "Accept:application/json"})
+    @POST("sostar/api/staff/orderDetail")
+    Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/startMyOrder")

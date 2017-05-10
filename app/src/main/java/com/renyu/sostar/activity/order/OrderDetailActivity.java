@@ -300,7 +300,7 @@ public class OrderDetailActivity extends BaseActivity {
         }
         else if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             observable=retrofit.create(RetrofitImpl.class)
-                    .employeeOrderDetail(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                    .employerOrderDetail(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
                     .compose(Retrofit2Utils.background());
         }
         observable.subscribe(new Observer<OrderResponse>() {

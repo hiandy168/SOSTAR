@@ -87,6 +87,14 @@ public class UpdateTextInfoActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_nav_right:
+                if (getIntent().getStringExtra("param").equals("webAddress")) {
+                    // 网页必须检查http或者https
+                    if (et_updatetextinfo.getText().toString().indexOf("http")==-1 &&
+                            et_updatetextinfo.getText().toString().indexOf("https")==-1) {
+                        Toast.makeText(this, "请填写完整的网址，包括http或者https", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 updateTextInfo();
                 break;
             case R.id.ib_nav_left:

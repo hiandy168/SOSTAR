@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.SpannableStringUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -25,6 +28,7 @@ import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.bean.MyCenterEmployeeResponse;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.MyCenterRequest;
@@ -246,7 +250,16 @@ public class InfoActivity extends BaseActivity {
                 }
                 tv_info_compname.setText(value.getCompanyName());
                 tv_info_compphone.setText(value.getContactPhone());
-                tv_info_web.setText(value.getWebAddress());
+                tv_info_web.setMovementMethod(LinkMovementMethod.getInstance());
+                tv_info_web.setText(new SpannableStringUtils.Builder().append(value.getWebAddress()).setUnderline()
+                        .setClickSpan(new ClickableSpan() {
+                            @Override
+                            public void onClick(View widget) {
+                                Intent intent=new Intent(InfoActivity.this, WebActivity.class);
+                                intent.putExtra("url", value.getWebAddress());
+                                startActivity(intent);
+                            }
+                        }).create());
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getStar())?"0":value.getStar());
                 tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate());
