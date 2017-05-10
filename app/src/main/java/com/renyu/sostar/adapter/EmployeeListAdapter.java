@@ -134,6 +134,15 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         holder.layout_adapter_employeelist.setOnClickListener(v -> {
             Intent intent=new Intent(context, InfoActivity.class);
             intent.putExtra("userId", beans.get(position).getUserId());
+            if (beans.get(position).getStaffStatus().equals("1") ||
+                    beans.get(position).getStaffStatus().equals("4") ||
+                    beans.get(position).getStaffStatus().equals("8") ||
+                    beans.get(position).getStaffStatus().equals("11")) {
+                intent.putExtra("canphone", true);
+            }
+            else {
+                intent.putExtra("canphone", false);
+            }
             context.startActivity(intent);
         });
     }

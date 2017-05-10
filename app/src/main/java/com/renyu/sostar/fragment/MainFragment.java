@@ -145,6 +145,7 @@ public class MainFragment extends BaseFragment {
                 else if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("1")) {
                     Intent intent=new Intent(getActivity(), InfoActivity.class);
                     intent.putExtra("userId", ""+marker.getZIndex());
+                    intent.putExtra("canphone", false);
                     startActivity(intent);
                 }
             }

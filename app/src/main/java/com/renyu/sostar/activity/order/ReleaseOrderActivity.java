@@ -18,7 +18,6 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.network.OKHttpHelper;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
@@ -30,6 +29,7 @@ import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.activity.other.UpdateTextInfoWithPicActivity;
 import com.renyu.sostar.activity.other.UpdateTextinfoWithLabelActivity;
 import com.renyu.sostar.activity.other.UpdateTimeInfoActivity;
+import com.renyu.sostar.activity.user.RechargeActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.OrderResponse;
@@ -594,8 +594,11 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "暂无定位数据", Toast.LENGTH_SHORT).show();
             return;
         }
-        OKHttpHelper helper=new OKHttpHelper();
-        String url="http://106.15.46.105:9333/submit";
+        if (Double.parseDouble(tv_releaseorder_avaliablemoney.getText().toString())<Double.parseDouble(tv_releaseorder_needmoney.getText().toString())) {
+            Toast.makeText(this, "可用余额不足，请充值", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(ReleaseOrderActivity.this, RechargeActivity.class));
+            return;
+        }
         Observable.create((ObservableOnSubscribe<ArrayList<String>>) e -> {
             ArrayList<String> images=new ArrayList<>();
             for (String s : picPath) {

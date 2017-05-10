@@ -102,7 +102,7 @@ public class OrderListFragment extends BaseFragment {
             Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
             intent.putExtra("orderId", beans.get(position).getOrderId());
             if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                // 雇员待接单采用雇主订单详情
+                // 雇员未接单详情采用特殊订单详情接口
                 if (getArguments().getInt("orderListType")==1) {
                     intent.putExtra("typeIsCommit", true);
                 }

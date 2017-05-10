@@ -91,6 +91,8 @@ public class InfoActivity extends BaseActivity {
     TextView tv_info_evaluate;
     @BindView(R.id.tv_info_completionrate)
     TextView tv_info_completionrate;
+    @BindView(R.id.tv_info_call)
+    ImageView tv_info_call;
 
     MyCenterEmployeeResponse employeeResponse;
     MyCenterEmployerResponse employerResponse;
@@ -104,13 +106,13 @@ public class InfoActivity extends BaseActivity {
             layout_info_compname.setVisibility(View.GONE);
             layout_info_compphone.setVisibility(View.GONE);
             layout_info_web.setVisibility(View.GONE);
-            tv_nav_title.setText("公司详情");
+            tv_nav_title.setText("个人详情");
         }
         else {
             layout_info_name.setVisibility(View.GONE);
             layout_info_sex.setVisibility(View.GONE);
             layout_info_age.setVisibility(View.GONE);
-            tv_nav_title.setText("个人详情");
+            tv_nav_title.setText("公司详情");
         }
     }
 
@@ -191,6 +193,12 @@ public class InfoActivity extends BaseActivity {
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getEvaluateLevel())?"0":value.getEvaluateLevel());
                 tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate());
+                if (getIntent().getBooleanExtra("canphone", false)) {
+                    tv_info_call.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tv_info_call.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -263,6 +271,14 @@ public class InfoActivity extends BaseActivity {
                 tv_info_summary.setText(value.getIntroduction());
                 tv_info_evaluate.setText(TextUtils.isEmpty(value.getStar())?"0":value.getStar());
                 tv_info_completionrate.setText(TextUtils.isEmpty(value.getCloseRate())?"0%":value.getCloseRate());
+                if (getIntent().getBooleanExtra("canphone", false)) {
+                    tv_info_call.setVisibility(View.VISIBLE);
+                    tv_info_compphone.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tv_info_call.setVisibility(View.GONE);
+                    tv_info_compphone.setVisibility(View.GONE);
+                }
             }
 
             @Override

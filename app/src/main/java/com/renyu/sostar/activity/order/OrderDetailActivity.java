@@ -123,7 +123,6 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tv_orderdetail_tip;
 
     ArrayList<String> images;
-    ArrayList<View> views;
 
     // 订单当前状态
     OrderResponse orderResponse;
@@ -270,9 +269,19 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case R.id.layout_orderdetail_employerinfo:
                 // 雇员点击后可以查看到雇主信息
-                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0") &&
+                        orderResponse!=null) {
                     Intent intent=new Intent(OrderDetailActivity.this, InfoActivity.class);
                     intent.putExtra("userId", orderResponse.getCreateUserId());
+                    if (orderResponse.getOrderStatus().equals("1") ||
+                            orderResponse.getOrderStatus().equals("4") ||
+                            orderResponse.getOrderStatus().equals("8") ||
+                            orderResponse.getOrderStatus().equals("11")) {
+                        intent.putExtra("canphone", true);
+                    }
+                    else {
+                        intent.putExtra("canphone", false);
+                    }
                     startActivity(intent);
                 }
                 break;
