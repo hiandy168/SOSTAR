@@ -95,6 +95,8 @@ public class MainFragment extends BaseFragment {
     ArrayList<Marker> allMarkers;
     // 地图加载成功
     boolean isMapLoaded=false;
+    // 雇员或者雇主图标
+    BitmapDescriptor bd;
 
     // 地图请求Disposable
     Disposable infoDisposable;
@@ -471,7 +473,7 @@ public class MainFragment extends BaseFragment {
         for (int i = 0; i < value.getOrders().size(); i++) {
             beans[i]=value.getOrders().get(i);
         }
-        BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
+        bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
         Observable.fromArray(beans).map(ordersBean -> {
             if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
                 return false;
@@ -497,7 +499,7 @@ public class MainFragment extends BaseFragment {
         for (int i = 0; i < value.getStaffs().size(); i++) {
             beans[i]=value.getStaffs().get(i);
         }
-        BitmapDescriptor bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
+        bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
         Observable.fromArray(beans).map(staffsBean -> {
             if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
                 return false;
