@@ -887,7 +887,7 @@ public class OrderDetailActivity extends BaseActivity {
         getOrderDetail();
     }
 
-    // 发单成功以刷新
+    // 收到推送以刷新
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(NotificationBean response) {
         JSONObject jsonObject= null;

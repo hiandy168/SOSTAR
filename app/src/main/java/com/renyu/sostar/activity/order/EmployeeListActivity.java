@@ -19,6 +19,7 @@ import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
+import com.renyu.jpushlibrary.bean.NotificationBean;
 import com.renyu.sostar.R;
 import com.renyu.sostar.adapter.EmployeeListAdapter;
 import com.renyu.sostar.bean.ComfirmEmployeeRequest;
@@ -26,11 +27,16 @@ import com.renyu.sostar.bean.EmployerStaffListResponse;
 import com.renyu.sostar.bean.FavRequest;
 import com.renyu.sostar.bean.OrderRequest;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +109,15 @@ public class EmployeeListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         BarUtils.setDark(this);
         super.onCreate(savedInstanceState);
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.ib_nav_left, R.id.ib_nav_right})
@@ -134,6 +149,7 @@ public class EmployeeListActivity extends BaseActivity {
 
             @Override
             public void onNext(List<EmployerStaffListResponse> value) {
+                beans.clear();
                 beans.addAll(value);
                 adapter.notifyDataSetChanged();
             }
@@ -392,5 +408,21 @@ public class EmployeeListActivity extends BaseActivity {
                 }
             }
         }
+    }
+
+    // 收到推送以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(NotificationBean response) {
+        JSONObject jsonObject= null;
+        try {
+            jsonObject = new JSONObject(response.getExtra());
+            // 相同订单进行刷新
+            if (jsonObject.getString("orderId").equals(getIntent().getStringExtra("orderId"))) {
+                getEmployerStaffList();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
