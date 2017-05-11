@@ -19,13 +19,14 @@ public class NotificationReceiver extends BroadcastReceiver {
         String extra=intent.getStringExtra("cn.jpush.android.EXTRA");
         try {
             JSONObject jsonObject=new JSONObject(extra);
-            String orderId=jsonObject.getString("orderId");
-
-            Intent intent_=new Intent(context, OrderDetailActivity.class);
-            intent_.putExtra("orderId", orderId);
-            intent_.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent_);
-
+            // 1:订单推送  2:系统推送
+            if (jsonObject.getInt("type")==1) {
+                String orderId=jsonObject.getString("orderId");
+                Intent intent_=new Intent(context, OrderDetailActivity.class);
+                intent_.putExtra("orderId", orderId);
+                intent_.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent_);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

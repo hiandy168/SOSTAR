@@ -66,7 +66,9 @@ public class JPushReceiver extends BroadcastReceiver {
             }
 
             // 将消息传递出去
-            EventBus.getDefault().post(new NotificationBean());
+            NotificationBean notificationBean=new NotificationBean();
+            notificationBean.setExtra(bundle.getString(JPushInterface.EXTRA_EXTRA));
+            EventBus.getDefault().post(notificationBean);
 
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知");

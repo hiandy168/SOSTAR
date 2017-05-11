@@ -5,4 +5,13 @@ package com.renyu.jpushlibrary.bean;
  */
 
 public class NotificationBean {
+    String extra;
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
 }

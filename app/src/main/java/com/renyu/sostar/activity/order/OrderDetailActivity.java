@@ -39,6 +39,7 @@ import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.LocalImageHolderView;
+import com.renyu.jpushlibrary.bean.NotificationBean;
 import com.renyu.qrcodelibrary.ZBarQRScanActivity;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.user.InfoActivity;
@@ -52,6 +53,8 @@ import com.renyu.sostar.params.CommonParams;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -136,6 +139,8 @@ public class OrderDetailActivity extends BaseActivity {
 
     // 当前时间在哪个环节
     long lastStatueTime=-1;
+
+    Disposable orderDisposable;
 
     @Override
     public void initParams() {
@@ -289,6 +294,9 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void getOrderDetail() {
+        if (orderDisposable!=null && !orderDisposable.isDisposed()) {
+            orderDisposable.dispose();
+        }
         OrderRequest request=new OrderRequest();
         OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
         paramBean.setOrderId(getIntent().getStringExtra("orderId"));
@@ -315,7 +323,7 @@ public class OrderDetailActivity extends BaseActivity {
         observable.subscribe(new Observer<OrderResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                orderDisposable=d;
             }
 
             @Override
@@ -877,6 +885,22 @@ public class OrderDetailActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(OrderResponse response) {
         getOrderDetail();
+    }
+
+    // 发单成功以刷新
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(NotificationBean response) {
+        JSONObject jsonObject= null;
+        try {
+            jsonObject = new JSONObject(response.getExtra());
+            // 相同订单进行刷新
+            if (orderResponse!=null && jsonObject.getString("orderId").equals(orderResponse.getOrderId())) {
+                getOrderDetail();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // 显示二维码
