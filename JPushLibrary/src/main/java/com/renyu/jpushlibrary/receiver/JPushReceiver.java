@@ -38,7 +38,7 @@ public class JPushReceiver extends BroadcastReceiver {
             printBundle(bundle);
 
             // 构造点击intent
-            Intent intent_no=new Intent("NotificationReceiver");
+            Intent intent_no=new Intent("com.renyu.sostarjob.NotificationReceiver");
             intent_no.putExtra("cn.jpush.android.EXTRA", bundle.getString(JPushInterface.EXTRA_EXTRA));
             intent_no.putExtra("cn.jpush.android.MESSAGE", bundle.getString(JPushInterface.EXTRA_MESSAGE));
             int type=-1;

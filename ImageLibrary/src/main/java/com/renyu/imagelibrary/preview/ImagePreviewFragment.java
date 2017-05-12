@@ -77,7 +77,9 @@ public class ImagePreviewFragment extends BaseFragment {
         photoDraweeView.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
-                getActivity().finish();
+                if (getActivity()!=null) {
+                    getActivity().finish();
+                }
             }
         });
         photoDraweeView.setOnLongClickListener(new View.OnLongClickListener() {

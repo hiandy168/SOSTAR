@@ -87,7 +87,7 @@
         <!-- 通知栏 -->
         <receiver android:name=".receiver.NotificationReceiver">
             <intent-filter>
-                <action android:name="NotificationReceiver"></action>
+                <action android:name="com.renyu.sostarjob.NotificationReceiver"></action>
             </intent-filter>
         </receiver>
     </application>
