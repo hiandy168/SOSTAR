@@ -30,6 +30,7 @@
         <activity android:name=".activity.settings.SettingsActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.settings.FeedbackActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.settings.FavListActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.settings.AboutActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.message.MessageListActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployeeInfoActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.user.EmployerInfoActivity" android:screenOrientation="portrait"></activity>

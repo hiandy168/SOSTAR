@@ -113,7 +113,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     @OnClick({R.id.layout_settings_cache, R.id.layout_settings_rolechange, R.id.btn_settings_sign_out,
-            R.id.ib_nav_left, R.id.layout_settings_feedback, R.id.layout_settings_protocal})
+            R.id.ib_nav_left, R.id.layout_settings_feedback, R.id.layout_settings_protocal, R.id.layout_settings_about})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_settings_cache:
@@ -165,6 +165,9 @@ public class SettingsActivity extends BaseActivity {
                 Intent intent_protocal=new Intent(SettingsActivity.this, WebActivity.class);
                 intent_protocal.putExtra("url", CommonParams.ServiceProtocal);
                 startActivity(intent_protocal);
+                break;
+            case R.id.layout_settings_about:
+                startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
                 break;
         }
     }

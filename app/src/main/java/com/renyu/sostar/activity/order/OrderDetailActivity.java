@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,8 +73,6 @@ import io.reactivex.disposables.Disposable;
 
 public class OrderDetailActivity extends BaseActivity {
 
-    @BindView(R.id.nav_layout)
-    RelativeLayout nav_layout;
     @BindView(R.id.layout_orderdetail_nav)
     LinearLayout layout_orderdetail_nav;
     @BindView(R.id.tv_nav_title)

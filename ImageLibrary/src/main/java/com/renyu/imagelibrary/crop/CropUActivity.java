@@ -90,9 +90,8 @@ public class CropUActivity extends BaseActivity {
 
     private void crop() {
         mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {
-
             @Override
-            public void onBitmapCropped(@NonNull Uri resultUri, int imageWidth, int imageHeight) {
+            public void onBitmapCropped(@NonNull Uri resultUri, int offsetX, int offsetY, int imageWidth, int imageHeight) {
                 Intent intent=getIntent();
                 Bundle bundle=new Bundle();
                 bundle.putString("path", resultUri.getPath());
@@ -103,7 +102,7 @@ public class CropUActivity extends BaseActivity {
 
             @Override
             public void onCropFailure(@NonNull Throwable t) {
-                finish();
+
             }
         });
     }

@@ -57,6 +57,9 @@ public class Utils {
         if (ratio!=0) {
             options.withAspectRatio(ratio, 1);
         }
+        else {
+            options.setFreeStyleCropEnabled(true);
+        }
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setCompressionQuality(80);
         options.setHideBottomControls(true);
