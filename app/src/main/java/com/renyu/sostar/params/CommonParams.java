@@ -54,7 +54,7 @@ public class CommonParams {
     // 服务协议url
     public static String ServiceProtocal="http://106.15.46.51:8080/sostar/protocal/serviceprotocal.html";
     // 联系我们url
-    public static String contactUs="http://1.nanjing.applinzi.com/about/contact.html";
+    public static String contactUs="http://106.15.46.51:8080/sostar/about/contact.html";
     // 版本信息url
-    public static String versionUrl="http://1.nanjing.applinzi.com/about/versioninfo.html";
+    public static String versionUrl="http://106.15.46.51:8080/sostar/about/versioninfo.html";
 }
