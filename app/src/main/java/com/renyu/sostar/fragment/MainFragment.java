@@ -35,6 +35,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.NotStartedOrderListActivity;
@@ -450,14 +451,10 @@ public class MainFragment extends BaseFragment {
         View view=LayoutInflater.from(getActivity()).inflate(R.layout.view_mapitem, null, false);
         CircleImageView iv_mapitem_avatar= (CircleImageView) view.findViewById(R.id.iv_mapitem_avatar);
         iv_mapitem_avatar.setImageBitmap(bitmap);
-        view.setDrawingCacheEnabled(true);
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        view.destroyDrawingCache();
-        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        BitmapDescriptor bd= BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
+        BitmapDescriptor bd= BitmapDescriptorFactory.fromBitmap(Utils.getViewBitmap(view));
         MarkerOptions oo = new MarkerOptions().position(new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude()))
                 .icon(bd)
                 .zIndex(0);

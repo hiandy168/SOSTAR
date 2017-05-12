@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
@@ -205,5 +207,17 @@ public class Utils {
         else {
             return ""+num;
         }
+    }
+
+    /**
+     * 获取view截图
+     * @param view
+     * @return
+     */
+    public static Bitmap getViewBitmap(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
     }
 }
