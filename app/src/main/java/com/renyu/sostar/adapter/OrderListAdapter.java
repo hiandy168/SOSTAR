@@ -160,7 +160,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(118), SizeUtils.dp2px(118))).build();
         }
         else {
-            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar))
                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(118), SizeUtils.dp2px(118))).build();
         }
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()

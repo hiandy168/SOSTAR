@@ -493,7 +493,7 @@ public class OrderDetailActivity extends BaseActivity {
                                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(30), SizeUtils.dp2px(30))).build();
                         }
                         else {
-                            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+                            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar))
                                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(30), SizeUtils.dp2px(30))).build();
                         }
                         DraweeController draweeController = Fresco.newDraweeControllerBuilder()

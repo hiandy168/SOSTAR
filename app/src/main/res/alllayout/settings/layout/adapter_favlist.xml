@@ -27,11 +27,11 @@
                     android:layout_width="40dip"
                     android:layout_height="40dip"
                     fresco:roundedCornerRadius="5dp"
-                    fresco:placeholderImage="@mipmap/ic_avatar_small"
+                    fresco:placeholderImage="@mipmap/ic_avatar"
                     fresco:placeholderImageScaleType="centerCrop"
-                    fresco:retryImage="@mipmap/ic_avatar_small"
+                    fresco:retryImage="@mipmap/ic_avatar"
                     fresco:retryImageScaleType="centerCrop"
-                    fresco:failureImage="@mipmap/ic_avatar_small"
+                    fresco:failureImage="@mipmap/ic_avatar"
                     fresco:failureImageScaleType="centerCrop" />
                 <LinearLayout
                     android:layout_width="match_parent"

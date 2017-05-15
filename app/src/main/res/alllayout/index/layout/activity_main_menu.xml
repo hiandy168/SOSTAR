@@ -28,11 +28,11 @@
                     fresco:roundedCornerRadius="10dp"
                     fresco:roundingBorderWidth="1dp"
                     fresco:roundingBorderColor="#10cc84"
-                    fresco:placeholderImage="@mipmap/ic_avatar_large"
+                    fresco:placeholderImage="@mipmap/ic_avatar"
                     fresco:placeholderImageScaleType="centerCrop"
-                    fresco:retryImage="@mipmap/ic_avatar_large"
+                    fresco:retryImage="@mipmap/ic_avatar"
                     fresco:retryImageScaleType="focusCrop"
-                    fresco:failureImage="@mipmap/ic_avatar_large"
+                    fresco:failureImage="@mipmap/ic_avatar"
                     fresco:failureImageScaleType="focusCrop"/>
                 <LinearLayout
                     android:id="@+id/layout_main_menu_info"

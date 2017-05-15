@@ -59,7 +59,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(40), SizeUtils.dp2px(40))).build();
         }
         else {
-            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar_small))
+            request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.mipmap.ic_avatar))
                     .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(40), SizeUtils.dp2px(40))).build();
         }
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()

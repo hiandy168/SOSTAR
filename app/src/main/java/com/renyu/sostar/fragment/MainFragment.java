@@ -318,7 +318,7 @@ public class MainFragment extends BaseFragment {
      */
     private void loadAvatarBitmap(String avatarUrl) {
         if (TextUtils.isEmpty(avatarUrl)) {
-            avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
+            avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar);
             addUserOverLay(avatarBmp, bdLocation);
             return;
         }
@@ -336,7 +336,7 @@ public class MainFragment extends BaseFragment {
 
             @Override
             protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
-                avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar_large);
+                avatarBmp= BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_avatar);
                 addUserOverLay(avatarBmp, bdLocation);
             }
         }, CallerThreadExecutor.getInstance());
