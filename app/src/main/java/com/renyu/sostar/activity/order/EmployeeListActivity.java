@@ -168,7 +168,7 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 确认雇员
     public void confirmStaff(String userId, int status) {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage(status==1?"确认雇佣？":"拒绝雇佣？")
+        new AlertDialog.Builder(this).setTitle("提示").setMessage(status==1?"确认雇佣该员工？":"拒绝雇佣该员工？")
                 .setPositiveButton("确定", (dialog, which) -> {
                     ComfirmEmployeeRequest request=new ComfirmEmployeeRequest();
                     ComfirmEmployeeRequest.ParamBean paramBean=new ComfirmEmployeeRequest.ParamBean();
@@ -229,7 +229,7 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 解雇
     public void fireStaff(String userId) {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认解雇？")
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认解雇该员工？")
                 .setPositiveButton("确定", (dialog, which) -> {
                     OrderRequest request=new OrderRequest();
                     OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -284,7 +284,7 @@ public class EmployeeListActivity extends BaseActivity {
 
     // 确认离职
     public void comfirmResignation(String userId) {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认离职？")
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("确认该员工离职？")
                 .setPositiveButton("确定", (dialog, which) -> {
                     OrderRequest request=new OrderRequest();
                     OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
@@ -317,6 +317,60 @@ public class EmployeeListActivity extends BaseActivity {
 
                             // 员工身份变化需要刷新
                             EventBus.getDefault().post(new OrderResponse());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            dismissNetworkDialog();
+
+                            Toast.makeText(EmployeeListActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+                }).setNegativeButton("取消", (dialog, which) -> {
+
+        }).show();
+    }
+
+    // 拒绝同意离职
+    public void refuseResignation(String userId) {
+        new AlertDialog.Builder(this).setTitle("提示").setMessage("拒绝该员工离职？")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    OrderRequest request=new OrderRequest();
+                    OrderRequest.ParamBean paramBean=new OrderRequest.ParamBean();
+                    paramBean.setOrderId(getIntent().getStringExtra("orderId"));
+                    paramBean.setUserId(userId);
+                    request.setParam(paramBean);
+                    retrofit.create(RetrofitImpl.class)
+                            .refuseResignation(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
+                            .compose(Retrofit2Utils.background()).subscribe(new Observer<EmptyResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            showNetworkDialog("正在操作，请稍后");
+                        }
+
+                        @Override
+                        public void onNext(EmptyResponse value) {
+                            dismissNetworkDialog();
+
+                            Toast.makeText(EmployeeListActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                            EmployerStaffListResponse beanTemp=null;
+                            for (EmployerStaffListResponse bean : beans) {
+                                if (bean.getUserId().equals(userId)) {
+                                    beanTemp=bean;
+                                    beans.remove(bean);
+                                    break;
+                                }
+                            }
+                            if (beanTemp!=null) {
+                                beanTemp.setStaffStatus("8");
+                                beans.add(0, beanTemp);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
 
                         @Override

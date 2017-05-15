@@ -128,8 +128,10 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             holder.tv_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
             holder.tv_adapter_employeelist_oper1.setText("确认");
             holder.tv_adapter_employeelist_oper1.setOnClickListener(v -> ((EmployeeListActivity) context).comfirmResignation(beans.get(position).getUserId()));
-            holder.tv_adapter_employeelist_oper2.setVisibility(View.GONE);
-            holder.v_adapter_employeelist_oper1.setVisibility(View.GONE);
+            holder.tv_adapter_employeelist_oper2.setVisibility(View.VISIBLE);
+            holder.tv_adapter_employeelist_oper2.setText("拒绝");
+            holder.tv_adapter_employeelist_oper2.setOnClickListener(v -> ((EmployeeListActivity) context).refuseResignation(beans.get(position).getUserId()));
+            holder.v_adapter_employeelist_oper1.setVisibility(View.VISIBLE);
         }
         holder.layout_adapter_employeelist.setOnClickListener(v -> {
             Intent intent=new Intent(context, InfoActivity.class);

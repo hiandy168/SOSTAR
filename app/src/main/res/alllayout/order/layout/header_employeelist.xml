@@ -22,7 +22,6 @@
             android:paddingLeft="14dip"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
-            android:text="选择"
             android:textSize="12sp"
             android:textColor="#33aadc"/>
     </RelativeLayout>
