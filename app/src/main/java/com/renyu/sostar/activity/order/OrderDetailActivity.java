@@ -275,8 +275,8 @@ public class OrderDetailActivity extends BaseActivity {
                         orderResponse!=null) {
                     Intent intent=new Intent(OrderDetailActivity.this, InfoActivity.class);
                     intent.putExtra("userId", orderResponse.getCreateUserId());
+                    // 未开始、已结束的订单不可以查看到敏感信息
                     if (orderResponse.getOrderStatus().equals("1") ||
-                            orderResponse.getOrderStatus().equals("4") ||
                             orderResponse.getOrderStatus().equals("8") ||
                             orderResponse.getOrderStatus().equals("11")) {
                         intent.putExtra("canphone", true);

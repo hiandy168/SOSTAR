@@ -402,6 +402,9 @@ public class ReleaseOrderActivity extends BaseActivity {
             tv_releaseorder_price.setText(data.getStringExtra("value"));
             changeUsedMoney();
         }
+        if (requestCode==CommonParams.RESULT_PAY && resultCode==RESULT_OK) {
+            getRechargeInfo();
+        }
     }
 
     private void choiceSex() {
@@ -596,7 +599,8 @@ public class ReleaseOrderActivity extends BaseActivity {
         }
         if (Double.parseDouble(tv_releaseorder_avaliablemoney.getText().toString())<Double.parseDouble(tv_releaseorder_needmoney.getText().toString())) {
             Toast.makeText(this, "可用余额不足，请充值", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(ReleaseOrderActivity.this, RechargeActivity.class));
+            Intent intent=new Intent(ReleaseOrderActivity.this, RechargeActivity.class);
+            startActivityForResult(intent, CommonParams.RESULT_PAY);
             return;
         }
         Observable.create((ObservableOnSubscribe<ArrayList<String>>) e -> {
