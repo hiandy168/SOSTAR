@@ -227,7 +227,7 @@
     <Button
         android:id="@+id/btn_employerauth_commit"
         android:text="立即认证"
-        android:background="@drawable/shape_rounded_solid_green"
+        android:background="@drawable/shape_rounded_solid_orange"
         android:textColor="@android:color/white"
         android:layout_marginEnd="16dip"
         android:layout_marginStart="16dip"

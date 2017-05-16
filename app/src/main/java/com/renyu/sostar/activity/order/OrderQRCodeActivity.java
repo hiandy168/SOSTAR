@@ -59,7 +59,7 @@ public class OrderQRCodeActivity extends BaseActivity {
     @Override
     public void initParams() {
         nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tv_nav_title.setTextColor(Color.WHITE);
+        tv_nav_title.setTextColor(ContextCompat.getColor(this, R.color.colorText1));
         tv_nav_title.setText("扫码签到");
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 

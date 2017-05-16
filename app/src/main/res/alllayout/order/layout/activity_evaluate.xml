@@ -52,8 +52,8 @@
         </com.renyu.commonlibrary.views.FlowLayout>
         <Button
             android:id="@+id/btn_evaluate_commit"
-            android:background="@drawable/shape_rounded_solid_green"
-            android:textColor="@android:color/white"
+            android:background="@drawable/shape_rounded_solid_orange"
+            android:textColor="@color/colorText1"
             android:layout_marginTop="12dip"
             android:layout_marginEnd="16dip"
             android:layout_marginStart="16dip"

@@ -196,7 +196,7 @@
         android:id="@+id/btn_withdrawals_commit"
         android:text="提现"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shape_rounded_solid_green"
+        android:background="@drawable/shape_rounded_solid_orange"
         android:textColor="@color/colorText1"
         android:layout_marginEnd="16dip"
         android:layout_marginStart="16dip"
