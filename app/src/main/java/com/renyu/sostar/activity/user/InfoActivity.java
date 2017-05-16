@@ -101,7 +101,7 @@ public class InfoActivity extends BaseActivity {
     public void initParams() {
         nav_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tv_nav_title.setTextColor(Color.WHITE);
-        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             layout_info_compname.setVisibility(View.GONE);
             layout_info_compphone.setVisibility(View.GONE);

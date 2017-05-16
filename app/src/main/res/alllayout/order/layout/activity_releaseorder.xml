@@ -393,7 +393,7 @@
                     android:textSize="14sp"
                     android:gravity="right|center_vertical"
                     android:text="支付总额:  ¥ "
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorText1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
                 <TextView
@@ -402,7 +402,7 @@
                     android:gravity="right|center_vertical"
                     android:text="0"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorText1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -416,7 +416,7 @@
                     android:textSize="14sp"
                     android:gravity="right|center_vertical"
                     android:text="可用余额:  ¥ "
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorText1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
                 <TextView
@@ -425,7 +425,7 @@
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorText1"
                     android:text="0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -442,7 +442,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dip" />
         <TextView
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorText1"
             android:text="发布成功超过1小时后取消订单，将收取一定比例的违约金并可能会影响你的信誉评价，请确认订单"
             android:layout_weight="1"
             android:textSize="11sp"

@@ -40,7 +40,7 @@ public class SignInSignUpActivity extends BaseActivity {
         return 1;
     }
 
-    @OnClick({R.id.btn_signinsignup_signin, R.id.btn_signinsignup_signup, R.id.btn_signinsignup_nosignin})
+    @OnClick({R.id.btn_signinsignup_signin, R.id.btn_signinsignup_signup})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_signinsignup_signin:
@@ -48,9 +48,6 @@ public class SignInSignUpActivity extends BaseActivity {
                 break;
             case R.id.btn_signinsignup_signup:
                 startActivity(new Intent(SignInSignUpActivity.this, SignUpActivity.class));
-                break;
-            case R.id.btn_signinsignup_nosignin:
-                startActivity(new Intent(SignInSignUpActivity.this, MainActivity.class));
                 break;
         }
     }

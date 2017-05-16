@@ -71,11 +71,11 @@ public class WealthActivity extends BaseActivity {
     public void initParams() {
         beans=new ArrayList<>();
 
-        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
         tv_nav_title.setText("钱包");
-        tv_nav_title.setTextColor(Color.WHITE);
+        tv_nav_title.setTextColor(ContextCompat.getColor(this, R.color.colorText1));
         tv_nav_right.setText("规则");
-        tv_nav_right.setTextColor(Color.WHITE);
+        tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorText1));
         BarUtils.adjustStatusBar(this, (ViewGroup) layout_wealth_top.getChildAt(1), ContextCompat.getColor(this, R.color.colorPrimary));
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
             tv_wealth_tip.setText("可用余额不包括冻结金额");

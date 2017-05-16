@@ -40,7 +40,7 @@ public class ZBarQRScanActivity extends BaseActivity {
     public void initParams() {
         tv_nav_title.setTextColor(Color.WHITE);
         tv_nav_title.setText("扫码签到");
-        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
         ib_nav_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

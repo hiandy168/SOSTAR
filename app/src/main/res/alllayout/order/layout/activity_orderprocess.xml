@@ -117,7 +117,7 @@
             android:layout_marginBottom="20dip"
             android:textSize="10sp"
             android:textColor="#999999"
-            android:drawableLeft="@mipmap/ic_order_tips"
+            android:drawableLeft="@mipmap/ic_releaseorder_tip"
             android:drawablePadding="12dip"
             android:text="订单完成后，请立即确认并支付，在1小时内未确认，系统将自动完成本次支付，请确认。 支付有问题 >"
             android:layout_width="match_parent"
