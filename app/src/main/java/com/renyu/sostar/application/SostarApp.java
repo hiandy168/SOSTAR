@@ -39,7 +39,7 @@ public class SostarApp extends MultiDexApplication {
         String processName= Utils.getProcessName(android.os.Process.myPid());
         if (processName.equals(getPackageName())) {
 
-            Retrofit2Utils.getInstance("http://106.15.46.51:8080/");
+            Retrofit2Utils.getInstance(CommonParams.BaseUrl);
 
             com.blankj.utilcode.util.Utils.init(this);
 

@@ -1,10 +1,13 @@
 package com.renyu.sostar.impl;
 
+import com.renyu.sostar.params.CommonParams;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 /**
  * Created by renyu on 2017/4/24.
@@ -12,6 +15,9 @@ import retrofit2.http.POST;
 
 public interface FileUploadImpl {
 
-    @POST("http://106.15.46.105:9333/submit")
+    @POST(CommonParams.UploadUrl+"submit")
     Call<ResponseBody> upload(@Body RequestBody Body);
+
+    @POST
+    Call<ResponseBody> uploadDynamicUrl(@Url String url, @Body RequestBody Body);
 }

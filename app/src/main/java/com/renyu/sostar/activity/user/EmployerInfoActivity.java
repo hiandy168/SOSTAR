@@ -24,7 +24,6 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.network.OKHttpHelper;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.ActionSheetFragment;
@@ -34,6 +33,7 @@ import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.FileUploadImpl;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -42,12 +42,19 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 /**
  * Created by renyu on 2017/2/25.
@@ -318,24 +325,44 @@ public class EmployerInfoActivity extends BaseActivity {
     }
 
     private void uploadFile(String path) {
-        HashMap<String, File> fileHashMap=new HashMap<>();
-        fileHashMap.put("image", new File(path));
-        OKHttpHelper helper=new OKHttpHelper();
-        helper.asyncUpload(fileHashMap, "http://106.15.46.105:9333/submit", new HashMap<>(), () -> {
-
-        }, new OKHttpHelper.RequestListener() {
-            @Override
-            public void onSuccess(String string) {
+        Observable.create((ObservableOnSubscribe<String>) e -> {
+            RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("image", new File(path).getName(), RequestBody.create(MediaType.parse("image/*"), new File(path)))
+                    .build();
+            FileUploadImpl fileUpload = retrofitUploadImage.create(FileUploadImpl.class);
+            retrofit2.Response<ResponseBody> resp=fileUpload.upload(requestBody).execute();
+            if (resp.isSuccessful()) {
                 Gson gson=new Gson();
-                UploadResponse response=gson.fromJson(string, UploadResponse.class);
-                String imageUrl="http://106.15.46.105:8081/"+response.getFid();
-                updateTextInfo("logoPath", imageUrl);
-                myCenterResponse.setLogoPath(imageUrl);
+                UploadResponse response=gson.fromJson(resp.body().string(), UploadResponse.class);
+                String imageUrl=CommonParams.ImageUrl+response.getFid();
+                e.onNext(imageUrl);
+            }
+            else {
+                e.onError(new Exception());
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                showNetworkDialog("正在操作，请稍后");
             }
 
             @Override
-            public void onError() {
+            public void onNext(String value) {
+                updateTextInfo("logoPath", value);
+                myCenterResponse.setLogoPath(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                dismissNetworkDialog();
+
                 Toast.makeText(EmployerInfoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }

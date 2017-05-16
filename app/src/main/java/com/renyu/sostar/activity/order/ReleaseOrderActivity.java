@@ -615,7 +615,7 @@ public class ReleaseOrderActivity extends BaseActivity {
                 if (resp.isSuccessful()) {
                     Gson gson=new Gson();
                     UploadResponse response=gson.fromJson(resp.body().string(), UploadResponse.class);
-                    String imageUrl="http://106.15.46.105:8081/"+response.getFid();
+                    String imageUrl=CommonParams.ImageUrl+response.getFid();
                     images.add(imageUrl);
                 }
             }

@@ -34,17 +34,25 @@ import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
 import com.renyu.sostar.bean.EmployerAuthRequest;
 import com.renyu.sostar.bean.MyCenterEmployerResponse;
 import com.renyu.sostar.bean.UploadResponse;
+import com.renyu.sostar.impl.FileUploadImpl;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 /**
  * Created by renyu on 2017/2/25.
@@ -288,61 +296,84 @@ public class EmployerAuthActivity extends BaseActivity {
             iv_employerauth_pic3.setController(draweeController);
             tv_employerauth_pic3.setVisibility(View.GONE);
         }
-        String url="http://106.15.46.105:9333/submit"+"?pos="+uploadPicPosition;
-        HashMap<String, File> fileHashMap=new HashMap<>();
-        fileHashMap.put("image", new File(path));
-        helper.asyncUpload(fileHashMap, url, new HashMap<>(), () -> {
-            helper.cancel(url);
-        }, new OKHttpHelper.RequestListener() {
-            @Override
-            public void onSuccess(String string) {
-                Toast.makeText(EmployerAuthActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+        String url=CommonParams.UploadUrl+"submit?pos="+uploadPicPosition;
+        Observable.create((ObservableOnSubscribe<String>) e -> {
+            RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("image", new File(path).getName(), RequestBody.create(MediaType.parse("image/*"), new File(path)))
+                    .build();
+            FileUploadImpl fileUpload = retrofitUploadImage.create(FileUploadImpl.class);
+            retrofit2.Response<ResponseBody> resp=fileUpload.uploadDynamicUrl(url, requestBody).execute();
+            if (resp.isSuccessful()) {
                 Gson gson=new Gson();
-                UploadResponse response=gson.fromJson(string, UploadResponse.class);
-                String imageUrl="http://106.15.46.105:8081/"+response.getFid();
-                if (uploadPicPosition==1) {
-                    iv_employerauth_pic1.setTag(imageUrl);
-                }
-                else if (uploadPicPosition==2) {
-                    iv_employerauth_pic2.setTag(imageUrl);
-                }
-                else if (uploadPicPosition==3) {
-                    iv_employerauth_pic3.setTag(imageUrl);
-                }
+                UploadResponse response=gson.fromJson(resp.body().string(), UploadResponse.class);
+                String imageUrl=CommonParams.ImageUrl+response.getFid();
+                e.onNext(imageUrl);
             }
+            else {
+                e.onError(new Exception());
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        showNetworkDialog("正在操作，请稍后");
+                    }
 
-            @Override
-            public void onError() {
-                Toast.makeText(EmployerAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
-                if (uploadPicPosition==1) {
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
-                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic1.setController(draweeController);
-                    tv_employerauth_pic1.setVisibility(View.VISIBLE);
-                    tv_employerauth_pic1.setTag("");
-                }
-                else if (uploadPicPosition==2) {
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
-                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic2.setController(draweeController);
-                    tv_employerauth_pic2.setVisibility(View.VISIBLE);
-                    tv_employerauth_pic2.setTag("");
-                }
-                else if (uploadPicPosition==3) {
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
-                            .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
-                    DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request).setAutoPlayAnimations(true).build();
-                    iv_employerauth_pic3.setController(draweeController);
-                    tv_employerauth_pic3.setVisibility(View.VISIBLE);
-                    tv_employerauth_pic3.setTag("");
-                }
-            }
-        });
+                    @Override
+                    public void onNext(String value) {
+                        dismissNetworkDialog();
+
+                        Toast.makeText(EmployerAuthActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                        if (uploadPicPosition==1) {
+                            iv_employerauth_pic1.setTag(value);
+                        }
+                        else if (uploadPicPosition==2) {
+                            iv_employerauth_pic2.setTag(value);
+                        }
+                        else if (uploadPicPosition==3) {
+                            iv_employerauth_pic3.setTag(value);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        dismissNetworkDialog();
+
+                        Toast.makeText(EmployerAuthActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                        if (uploadPicPosition==1) {
+                            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
+                                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
+                            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                                    .setImageRequest(request).setAutoPlayAnimations(true).build();
+                            iv_employerauth_pic1.setController(draweeController);
+                            tv_employerauth_pic1.setVisibility(View.VISIBLE);
+                            tv_employerauth_pic1.setTag("");
+                        }
+                        else if (uploadPicPosition==2) {
+                            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
+                                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
+                            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                                    .setImageRequest(request).setAutoPlayAnimations(true).build();
+                            iv_employerauth_pic2.setController(draweeController);
+                            tv_employerauth_pic2.setVisibility(View.VISIBLE);
+                            tv_employerauth_pic2.setTag("");
+                        }
+                        else if (uploadPicPosition==3) {
+                            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("res:///"+R.drawable.shape_rounded_solid_stroke_white))
+                                    .setResizeOptions(new ResizeOptions(SizeUtils.dp2px(55), SizeUtils.dp2px(55))).build();
+                            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                                    .setImageRequest(request).setAutoPlayAnimations(true).build();
+                            iv_employerauth_pic3.setController(draweeController);
+                            tv_employerauth_pic3.setVisibility(View.VISIBLE);
+                            tv_employerauth_pic3.setTag("");
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override

@@ -49,12 +49,18 @@ public class CommonParams {
     // 当前城市
     public static String CITY=null;
 
+    // 基础url
+    public static final String BaseUrl="http://106.15.46.51:8080/";
+    // 上传url
+    public static final String UploadUrl="http://106.15.46.105:9333/";
+    // 图片url
+    public static final String ImageUrl="http://106.15.46.105:8081/";
     // 钱包协议url
-    public static String WealthProtocal="http://106.15.46.51:8080/sostar/protocal/moneyprotocal.html";
+    public static final String WealthProtocal=BaseUrl+"sostar/protocal/moneyprotocal.html";
     // 服务协议url
-    public static String ServiceProtocal="http://106.15.46.51:8080/sostar/protocal/serviceprotocal.html";
+    public static final String ServiceProtocal=BaseUrl+"sostar/protocal/serviceprotocal.html";
     // 联系我们url
-    public static String contactUs="http://106.15.46.51:8080/sostar/about/contact.html";
+    public static final String contactUs=BaseUrl+"sostar/about/contact.html";
     // 版本信息url
-    public static String versionUrl="http://106.15.46.51:8080/sostar/about/versioninfo.html";
+    public static final String versionUrl=BaseUrl+"sostar/about/versioninfo.html";
 }
