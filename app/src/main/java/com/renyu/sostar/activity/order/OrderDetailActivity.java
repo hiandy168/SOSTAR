@@ -340,7 +340,7 @@ public class OrderDetailActivity extends BaseActivity {
                 // 按天
                 if (value.getUnitPriceType().equals("1")) {
                     BigDecimal bigDecimal1 = new BigDecimal(""+dayNum);
-                    BigDecimal bigDecimal2 = new BigDecimal(Double.toString(value.getUnitPrice()));
+                    BigDecimal bigDecimal2 = new BigDecimal(value.getUnitPrice());
                     BigDecimal bigDecimal3 = new BigDecimal(""+value.getStaffAccount());
                     tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(bigDecimal1.multiply(bigDecimal2).multiply(bigDecimal3).toString())+"元");
                 }
@@ -354,7 +354,7 @@ public class OrderDetailActivity extends BaseActivity {
                         // 计算每天工作时间
                         double workTime=((double) (endTime-startTime)/1000)/3600;
                         BigDecimal bigDecimal1 = new BigDecimal(""+dayNum);
-                        BigDecimal bigDecimal2 = new BigDecimal(Double.toString(value.getUnitPrice()));
+                        BigDecimal bigDecimal2 = new BigDecimal(value.getUnitPrice());
                         BigDecimal bigDecimal3 = new BigDecimal(""+value.getStaffAccount());
                         BigDecimal bigDecimal4 = new BigDecimal(""+workTime);
                         tv_orderdetail_priceall.setText("总价"+ Utils.removeZero(""+bigDecimal1.multiply(bigDecimal2).multiply(bigDecimal3).multiply(bigDecimal4))+"元");
@@ -369,7 +369,7 @@ public class OrderDetailActivity extends BaseActivity {
                 }
                 times=times.substring(0, times.length()-1);
                 tv_orderdetail_time.setText(times);
-                tv_orderdetail_price.setText(Utils.removeZero(""+value.getUnitPrice()));
+                tv_orderdetail_price.setText(Utils.removeZero(value.getUnitPrice()));
                 if (value.getUnitPriceType().equals("1")) {
                     tv_orderdetail_price_type.setText("元/天");
                 }

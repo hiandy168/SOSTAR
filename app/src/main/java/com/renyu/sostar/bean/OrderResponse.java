@@ -58,7 +58,7 @@ public class OrderResponse implements Serializable {
     private String sex;
     private int staffAccount;
     private String startTime;
-    private double unitPrice;
+    private String unitPrice;
     private String unitPriceType;
     private List<String> picListArray;
     private List<String> picStaffArray;
@@ -233,11 +233,11 @@ public class OrderResponse implements Serializable {
         this.startTime = startTime;
     }
 
-    public double getUnitPrice() {
+    public String getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(String unitPrice) {
         this.unitPrice = unitPrice;
     }
 
