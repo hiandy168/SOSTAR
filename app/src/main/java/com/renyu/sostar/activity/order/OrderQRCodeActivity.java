@@ -128,11 +128,11 @@ public class OrderQRCodeActivity extends BaseActivity {
                 if (currentTime1 <startTime) {
                     int minute= (int) ((startTime- currentTime1)/(1000*60));
                     tv_orderqrcode_tip.setText("提示：距离开工还有 "+minute+" 分钟\n请尽快提醒你的雇员扫码签到开工");
-                    break;
                 }
                 else {
                     tv_orderqrcode_tip.setText("提示：已经开工");
                 }
+                break;
             } catch (ParseException e) {
                 e.printStackTrace();
             }

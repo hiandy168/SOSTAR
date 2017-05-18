@@ -141,6 +141,7 @@ public class ZBarQRScanActivity extends BaseActivity {
                     else {
                         tv_zbar_scan_view_tip.setText("提示：已经开工");
                     }
+                    break;
                 }
                 // 任务还未开始
                 else if (currentTime1<startTime) {
