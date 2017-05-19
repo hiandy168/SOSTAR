@@ -25,7 +25,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.views.ActionSheetFragment;
+import com.renyu.commonlibrary.views.actionsheet.ActionSheetFragment;
 import com.renyu.imagelibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.params.CommonParams;

@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.views.ActionSheetFragment;
+import com.renyu.commonlibrary.views.actionsheet.ActionSheetFragment;
 import com.renyu.sostar.R;
 
 import butterknife.BindView;

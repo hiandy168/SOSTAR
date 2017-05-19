@@ -20,7 +20,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.params.InitParams;
-import com.renyu.commonlibrary.views.ActionSheetFragment;
+import com.renyu.commonlibrary.views.actionsheet.ActionSheetFragment;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.activity.sign.SignInSignUpActivity;

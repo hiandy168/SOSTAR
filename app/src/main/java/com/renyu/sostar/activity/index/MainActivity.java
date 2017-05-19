@@ -1,7 +1,6 @@
 package com.renyu.sostar.activity.index;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,7 +30,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
-import com.renyu.commonlibrary.views.ActionSheetUtils;
+import com.renyu.commonlibrary.views.actionsheet.ActionSheetUtils;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.message.MessageListActivity;
