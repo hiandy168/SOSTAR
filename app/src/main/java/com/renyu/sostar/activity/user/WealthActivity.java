@@ -20,6 +20,7 @@ import com.renyu.commonlibrary.commonutils.BarUtils;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.sostar.R;
+import com.renyu.sostar.activity.other.WebActivity;
 import com.renyu.sostar.adapter.WealthAdapter;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
@@ -134,6 +135,9 @@ public class WealthActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_nav_right:
+                Intent intent=new Intent(WealthActivity.this, WebActivity.class);
+                intent.putExtra("url", CommonParams.WealthProtocal);
+                startActivity(intent);
                 break;
             case R.id.tv_wealth_recharge:
                 startActivity(new Intent(WealthActivity.this, RechargeActivity.class));
