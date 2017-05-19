@@ -14,17 +14,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayout;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.renyu.commonlibrary.R;
@@ -211,7 +210,7 @@ public class ActionSheetFragment extends Fragment {
         else if (getArguments().getInt("type")==2) {
             GridLayout pop_grid= (GridLayout) view.findViewById(R.id.pop_grid);
             pop_grid.setVisibility(View.VISIBLE);
-            int width=(getScreenWidth(getActivity())-dp2px(getActivity(), 20))/(getArguments().getStringArray("items").length<4?getArguments().getStringArray("items").length:4);
+            int width=(ScreenUtils.getScreenWidth()-SizeUtils.dp2px(20))/(getArguments().getStringArray("items").length<4?getArguments().getStringArray("items").length:4);
             for (int i=0;i<getArguments().getStringArray("items").length;i++) {
                 final int i_=i;
                 View viewChild=LayoutInflater.from(getActivity()).inflate(R.layout.adapter_share, null, false);
@@ -228,7 +227,7 @@ public class ActionSheetFragment extends Fragment {
                 adapter_share_text.setText(getArguments().getStringArray("items")[i]);
                 GridLayout.LayoutParams params=new GridLayout.LayoutParams();
                 params.width=width;
-                params.height=dp2px(getActivity(), 120);
+                params.height=SizeUtils.dp2px(120);
                 params.columnSpec = GridLayout.spec(i%4);
                 params.rowSpec= GridLayout.spec(i/4);
                 pop_grid.addView(viewChild, params);
@@ -652,7 +651,7 @@ public class ActionSheetFragment extends Fragment {
                     ArgbEvaluator argbEvaluator=new ArgbEvaluator();
                     realView.setBackgroundColor((Integer) argbEvaluator.evaluate(animation.getAnimatedFraction(), Color.parseColor("#00000000"), Color.parseColor("#70000000")));
                     //当底部存在导航栏并且decorView获取的高度不包含底部状态栏的时候，需要去掉这个高度差
-                    if (BarUtils.getNavBarHeight(pop_child_layout.getContext())>0 && decorView.getMeasuredHeight()!=getScreenHeight(pop_child_layout.getContext())) {
+                    if (BarUtils.getNavBarHeight(pop_child_layout.getContext())>0 && decorView.getMeasuredHeight()!=ScreenUtils.getScreenHeight()) {
                         pop_child_layout.setTranslationY((moveHeight+BarUtils.getNavBarHeight(pop_child_layout.getContext()))*(1-animation.getAnimatedFraction())-BarUtils.getNavBarHeight(pop_child_layout.getContext()));
                     }
                     else {
@@ -672,7 +671,7 @@ public class ActionSheetFragment extends Fragment {
             valueAnimator.addUpdateListener(animation -> {
                 ArgbEvaluator argbEvaluator=new ArgbEvaluator();
                 realView.setBackgroundColor((Integer) argbEvaluator.evaluate(animation.getAnimatedFraction(), Color.parseColor("#70000000"), Color.parseColor("#00000000")));
-                if (BarUtils.getNavBarHeight(pop_child_layout.getContext())>0 && decorView.getMeasuredHeight()!=getScreenHeight(pop_child_layout.getContext())) {
+                if (BarUtils.getNavBarHeight(pop_child_layout.getContext())>0 && decorView.getMeasuredHeight()!= ScreenUtils.getScreenHeight()) {
                     pop_child_layout.setTranslationY((moveHeight+BarUtils.getNavBarHeight(pop_child_layout.getContext()))*animation.getAnimatedFraction()-BarUtils.getNavBarHeight(pop_child_layout.getContext()));
                 }
                 else {
@@ -856,47 +855,5 @@ public class ActionSheetFragment extends Fragment {
             fragment.setCanDismiss(canDismiss);
             return fragment;
         }
-    }
-
-    public static int dp2px(Context context, float dp) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
-
-    /**
-     * 获取状态栏高度
-     * @param context
-     * @return
-     */
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    /**
-     * 得到屏幕高度
-     * @return 单位:px
-     */
-    public static int getScreenHeight(Context context) {
-        WindowManager wm=(WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm=new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels;
-    }
-
-    /**
-     * 得到屏幕宽度
-     * @param context
-     * @return
-     */
-    public static int getScreenWidth(Context context) {
-        WindowManager manager= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm=new DisplayMetrics();
-        manager.getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels;
     }
 }
