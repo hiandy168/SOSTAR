@@ -127,20 +127,22 @@ public class SettingsActivity extends BaseActivity {
                     return;
                 }
                 View view_clearmessage= LayoutInflater.from(SettingsActivity.this)
-                        .inflate(R.layout.view_actionsheet_button_2, null, false);
+                        .inflate(R.layout.view_actionsheet_button_2_tip, null, false);
                 ActionSheetFragment actionSheetFragment=ActionSheetFragment.build(getSupportFragmentManager())
                         .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
                         .setTitle("切换身份")
                         .setCustomerView(view_clearmessage)
                         .show();
-                TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice);
+                TextView pop_double_tip= (TextView) view_clearmessage.findViewById(R.id.pop_double_tip);
+                pop_double_tip.setText("一旦完成身份切换，您的新身份需重新进行认证，\n并且认证通过之前您不能再次进行身份切换");
+                TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice_tip);
                 pop_double_choice.setTextColor(Color.parseColor("#333333"));
                 pop_double_choice.setText(ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")?"切换雇主":"切换雇员");
                 pop_double_choice.setOnClickListener(v -> {
                     actionSheetFragment.dismiss();
                     changeRole();
                 });
-                TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel);
+                TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel_tip);
                 pop_double_cancel.setText("取消");
                 pop_double_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
                 break;
