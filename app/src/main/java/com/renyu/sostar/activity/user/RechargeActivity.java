@@ -188,6 +188,7 @@ public class RechargeActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==RESULT_OK) {
             if (requestCode==CommonParams.RESULT_PAY) {
+                setResult(RESULT_OK, new Intent());
                 finish();
             }
         }

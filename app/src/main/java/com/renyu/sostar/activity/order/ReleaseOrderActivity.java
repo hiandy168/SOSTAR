@@ -597,7 +597,7 @@ public class ReleaseOrderActivity extends BaseActivity {
             Toast.makeText(this, "暂无定位数据", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (Double.parseDouble(tv_releaseorder_avaliablemoney.getText().toString())<Double.parseDouble(tv_releaseorder_needmoney.getText().toString())) {
+        if (orderStatus==1 && (Double.parseDouble(tv_releaseorder_avaliablemoney.getText().toString())<Double.parseDouble(tv_releaseorder_needmoney.getText().toString()))) {
             Toast.makeText(this, "可用余额不足，请充值", Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(ReleaseOrderActivity.this, RechargeActivity.class);
             startActivityForResult(intent, CommonParams.RESULT_PAY);
