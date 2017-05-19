@@ -59,7 +59,10 @@ public class SignInSignUpActivity extends BaseActivity {
             startActivity(new Intent(SignInSignUpActivity.this, MainActivity.class));
         }
         if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.CUSTOMER_STATE) {
-            startActivity(new Intent(SignInSignUpActivity.this, CustomerStateActivity.class));
+            Intent intent_cs=new Intent(SignInSignUpActivity.this, CustomerStateActivity.class);
+            intent_cs.putExtra("rec", intent.getStringExtra("rec"));
+            startActivity(intent_cs);
+
         }
         if (intent.getIntExtra(CommonParams.FROM, -1)==CommonParams.SIGNIN) {
             startActivity(new Intent(SignInSignUpActivity.this, SignInActivity.class));

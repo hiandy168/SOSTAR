@@ -152,6 +152,7 @@ public class SignInActivity extends BaseActivity {
                 if (TextUtils.isEmpty(value.getUserType()) || value.getUserType().equals("-1")) {
                     Intent intent_sisu=new Intent(SignInActivity.this, SignInSignUpActivity.class);
                     intent_sisu.putExtra(CommonParams.FROM, CommonParams.CUSTOMER_STATE);
+                    intent_sisu.putExtra("rec", "");
                     intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent_sisu);
                 }

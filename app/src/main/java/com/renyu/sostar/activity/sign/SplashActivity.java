@@ -172,6 +172,7 @@ public class SplashActivity extends BaseActivity {
                 if (TextUtils.isEmpty(ACache.get(SplashActivity.this).getAsString(CommonParams.USER_TYPE))) {
                     intents[0]=new Intent(SplashActivity.this, SignInSignUpActivity.class);
                     intents[1]=new Intent(SplashActivity.this, CustomerStateActivity.class);
+                    intents[1].putExtra("rec", "");
                     startActivities(intents);
                 }
                 else {

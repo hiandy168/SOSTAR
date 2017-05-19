@@ -118,6 +118,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
+            <LinearLayout
+                android:background="@drawable/shape_rounded_corner_gray"
+                android:layout_marginTop="6dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="45dip">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dip"
+                    android:layout_marginStart="16dip"
+                    android:textSize="14sp"
+                    android:textColor="#999999"
+                    android:text="邀请码(选填)"/>
+                <com.renyu.commonlibrary.views.ClearEditText
+                    android:id="@+id/signup_rec"
+                    android:layout_marginEnd="16dip"
+                    android:background="@android:color/transparent"
+                    android:textSize="14sp"
+                    android:textColor="#999999"
+                    android:singleLine="true"
+                    android:hint=""
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </LinearLayout>
         <TextView
             android:id="@+id/btn_signup_protocal"
@@ -129,16 +156,6 @@
             android:layout_marginStart="16dip"
             android:layout_marginBottom="32dip"
             android:text="点击注册即表示你同意《开工啦用户服务协议》"/>
-        <Button
-            android:id="@+id/btn_signup_signin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dip"
-            android:textColor="@color/colorPrimary"
-            android:background="@android:color/transparent"
-            android:text="已有账号登录"/>
         <Button
             android:id="@+id/btn_signup"
             android:layout_width="match_parent"

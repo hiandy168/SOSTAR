@@ -76,6 +76,7 @@ public class CustomerStateActivity extends BaseActivity {
         paramBean.setUserId(ACache.get(CustomerStateActivity.this).getAsString(CommonParams.USER_ID));
         paramBean.setPhone(ACache.get(CustomerStateActivity.this).getAsString(CommonParams.USER_PHONE));
         paramBean.setUserType(""+state);
+        paramBean.setRecommend(getIntent().getStringExtra("rec"));
         request.setParam(paramBean);
         retrofit.create(RetrofitImpl.class)
                 .setUserState(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))

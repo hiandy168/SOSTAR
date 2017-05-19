@@ -40,6 +40,7 @@ public class UserTypeRequest {
         private String phone;
         private String userId;
         private String userType;
+        private String recommend;
 
         public String getPhone() {
             return phone;
@@ -63,6 +64,14 @@ public class UserTypeRequest {
 
         public void setUserType(String userType) {
             this.userType = userType;
+        }
+
+        public String getRecommend() {
+            return recommend;
+        }
+
+        public void setRecommend(String recommend) {
+            this.recommend = recommend;
         }
     }
 }

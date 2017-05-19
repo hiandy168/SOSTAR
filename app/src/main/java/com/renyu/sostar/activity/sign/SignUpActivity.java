@@ -54,6 +54,8 @@ public class SignUpActivity extends BaseActivity {
     ClearEditText signup_vcode;
     @BindView(R.id.signup_pwd)
     ClearEditText signup_pwd;
+    @BindView(R.id.signup_rec)
+    ClearEditText signup_rec;
     @BindView(R.id.btn_signup_getvcode)
     Button btn_signup_getvcode;
     @BindView(R.id.layout_signup_rootview)
@@ -140,7 +142,7 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @OnClick({R.id.btn_signup_getvcode, R.id.btn_signup, R.id.btn_signup_signin, R.id.btn_signup_protocal})
+    @OnClick({R.id.btn_signup_getvcode, R.id.btn_signup, R.id.btn_signup_protocal})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_signup_getvcode:
@@ -148,12 +150,6 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.btn_signup:
                 signup();
-                break;
-            case R.id.btn_signup_signin:
-                Intent intent_signin=new Intent(this, SignInSignUpActivity.class);
-                intent_signin.putExtra(CommonParams.FROM, CommonParams.SIGNIN);
-                intent_signin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent_signin);
                 break;
             case R.id.btn_signup_protocal:
                 startActivity(new Intent(this, ProtocalActivity.class));
@@ -245,6 +241,7 @@ public class SignUpActivity extends BaseActivity {
 
                     Intent intent_sisu=new Intent(SignUpActivity.this, SignInSignUpActivity.class);
                     intent_sisu.putExtra(CommonParams.FROM, CommonParams.CUSTOMER_STATE);
+                    intent_sisu.putExtra("rec", signup_rec.getText().toString());
                     intent_sisu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent_sisu);
                 }
