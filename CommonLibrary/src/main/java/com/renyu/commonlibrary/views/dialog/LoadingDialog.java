@@ -35,10 +35,10 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by RG on 2016/4/11.
  */
-public class MyLoadingDialog extends DialogFragment {
+public class LoadingDialog extends DialogFragment {
 
     FragmentManager fragmentManager;
-    boolean isDismiss;
+    boolean isDismiss = true;
 
     RelativeLayout loading_container;
     TextView loading_container_cancel;
@@ -124,8 +124,8 @@ public class MyLoadingDialog extends DialogFragment {
         this.onDialogProceedListener = onDialogProceedListener;
     }
 
-    public static MyLoadingDialog getInstance(int type) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance(int type) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         dialog.setArguments(bundle);
@@ -137,8 +137,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param text
      * @return
      */
-    public static MyLoadingDialog getInstance_TextSuccessWithOutClose(String text) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_TextSuccessWithOutClose(String text) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 7);
         bundle.putString("text", text);
@@ -151,8 +151,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param text
      * @return
      */
-    public static MyLoadingDialog getInstance_TextSuccessWithClose(String text) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_TextSuccessWithClose(String text) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 8);
         bundle.putString("text", text);
@@ -160,8 +160,8 @@ public class MyLoadingDialog extends DialogFragment {
         return dialog;
     }
 
-    public static MyLoadingDialog getInstance_TextImageSuccessWithOutClose(String title, int image) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_TextImageSuccessWithOutClose(String title, int image) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 9);
         bundle.putString("title", title);
@@ -170,8 +170,8 @@ public class MyLoadingDialog extends DialogFragment {
         return dialog;
     }
 
-    public static MyLoadingDialog getInstance_TextImageSuccessWithClose(String title, int image) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_TextImageSuccessWithClose(String title, int image) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 10);
         bundle.putString("title", title);
@@ -187,8 +187,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      * @return
      */
-    public static MyLoadingDialog getInstance_NoCloseChoice(String title, String pos, String neg) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_NoCloseChoice(String title, String pos, String neg) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 3);
         bundle.putString("title", title);
@@ -205,8 +205,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      * @return
      */
-    public static MyLoadingDialog getInstance_CloseChoice(String title, String pos, String neg) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_CloseChoice(String title, String pos, String neg) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 4);
         bundle.putString("title", title);
@@ -224,8 +224,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      * @return
      */
-    public static MyLoadingDialog getInstance_NoCloseChoiceWithTitle(String title, String content, String pos, String neg) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_NoCloseChoiceWithTitle(String title, String content, String pos, String neg) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 5);
         bundle.putString("content", content);
@@ -245,8 +245,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      * @return
      */
-    public static MyLoadingDialog getInstance_CloseChoiceWithTitle(String title, String content, String pos, String neg) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_CloseChoiceWithTitle(String title, String content, String pos, String neg) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 6);
         bundle.putString("content", content);
@@ -264,8 +264,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param image
      * @return
      */
-    public static MyLoadingDialog getInstance_TitleImageContent(String title, String content, int image) {
-        MyLoadingDialog dialog = new MyLoadingDialog();
+    public static LoadingDialog getInstance_TitleImageContent(String title, String content, int image) {
+        LoadingDialog dialog = new LoadingDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("type", 11);
         bundle.putString("content", content);
@@ -281,8 +281,8 @@ public class MyLoadingDialog extends DialogFragment {
      * @param pos
      * @return
      */
-    public static MyLoadingDialog getInstance_TextCommit(String content, String pos) {
-        MyLoadingDialog dialog=new MyLoadingDialog();
+    public static LoadingDialog getInstance_TextCommit(String content, String pos) {
+        LoadingDialog dialog=new LoadingDialog();
         Bundle bundle=new Bundle();
         bundle.putInt("type", 12);
         bundle.putString("content", content);
@@ -313,7 +313,7 @@ public class MyLoadingDialog extends DialogFragment {
             return false;
         });
 
-        View view = inflater.inflate(R.layout.dialog_myloading, container, false);
+        View view = inflater.inflate(R.layout.dialog_loading, container, false);
 
         loading_container = (RelativeLayout) view.findViewById(R.id.loading_container);
         loading_container_cancel = (TextView) view.findViewById(R.id.loading_container_cancel);
@@ -421,46 +421,47 @@ public class MyLoadingDialog extends DialogFragment {
      * @param image
      */
     public void setTitleImageContent(String title, String content, int image) {
-        closeAll();
-        if (toast_titletext_container_image == null || toast_titletext_container_title == null || toast_titletext_container_content == null || toast_titletext_container == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        toast_titletext_container.setVisibility(View.VISIBLE);
-        if (image==0) {
-            toast_titletext_container_image.setVisibility(View.GONE);
-        }
-        else {
-            toast_titletext_container_image.setImageResource(image);
-        }
-        if (TextUtils.isEmpty(title)) {
-            toast_titletext_container_title.setVisibility(View.GONE);
-        } else {
-            toast_titletext_container_title.setText(title);
-        }
-        if (TextUtils.isEmpty(content)) {
-            toast_titletext_container_content.setVisibility(View.GONE);
-        } else {
-            toast_titletext_container_content.setText(content);
-        }
-        Observable.timer(2000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(Long aLong) throws Exception {
-                if (getFragmentManager() != null) {
-                    try {
-                        dismiss();
-                    } catch (Exception e) {
+        new Handler().post(() -> {
+            closeAll();
+            if (toast_titletext_container_image == null || toast_titletext_container_title == null || toast_titletext_container_content == null || toast_titletext_container == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            toast_titletext_container.setVisibility(View.VISIBLE);
+            if (image==0) {
+                toast_titletext_container_image.setVisibility(View.GONE);
+            }
+            else {
+                toast_titletext_container_image.setImageResource(image);
+            }
+            if (TextUtils.isEmpty(title)) {
+                toast_titletext_container_title.setVisibility(View.GONE);
+            } else {
+                toast_titletext_container_title.setText(title);
+            }
+            if (TextUtils.isEmpty(content)) {
+                toast_titletext_container_content.setVisibility(View.GONE);
+            } else {
+                toast_titletext_container_content.setText(content);
+            }
+            Observable.timer(2000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(Long aLong) throws Exception {
+                    if (getFragmentManager() != null) {
+                        try {
+                            dismiss();
+                        } catch (Exception e) {
 
-                    }
-                    if (onDialogDismissListener != null) {
-                        onDialogDismissListener.onDismiss();
+                        }
+                        if (onDialogDismissListener != null) {
+                            onDialogDismissListener.onDismiss();
+                        }
                     }
                 }
-            }
+            });
         });
-
     }
 
     /**
@@ -480,21 +481,23 @@ public class MyLoadingDialog extends DialogFragment {
      * @param text
      */
     public void setTextSuccessWithOutClose(String text) {
-        closeAll();
-        if (toast_text_container == null || toast_text_container_content == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        toast_text_container.setVisibility(View.VISIBLE);
-        toast_text_container_content.setText(text);
-        Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            if (getFragmentManager() != null) {
-                if (onDialogProceedListener != null) {
-                    onDialogProceedListener.proceed();
-                }
+        new Handler().post(() -> {
+            closeAll();
+            if (toast_text_container == null || toast_text_container_content == null) {
+                return;
             }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            toast_text_container.setVisibility(View.VISIBLE);
+            toast_text_container_content.setText(text);
+            Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                if (getFragmentManager() != null) {
+                    if (onDialogProceedListener != null) {
+                        onDialogProceedListener.proceed();
+                    }
+                }
+            });
         });
     }
 
@@ -504,24 +507,26 @@ public class MyLoadingDialog extends DialogFragment {
      * @param text
      */
     public void setTextSuccessWithClose(String text) {
-        closeAll();
-        if (toast_text_container == null || toast_text_container_content == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        toast_text_container.setVisibility(View.VISIBLE);
-        toast_text_container_content.setText(text);
-        Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            try {
-                dismiss();
-            } catch (Exception e) {
+        new Handler().post(() -> {
+            closeAll();
+            if (toast_text_container == null || toast_text_container_content == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            toast_text_container.setVisibility(View.VISIBLE);
+            toast_text_container_content.setText(text);
+            Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                try {
+                    dismiss();
+                } catch (Exception e) {
 
-            }
-            if (onDialogDismissListener != null) {
-                onDialogDismissListener.onDismiss();
-            }
+                }
+                if (onDialogDismissListener != null) {
+                    onDialogDismissListener.onDismiss();
+                }
+            });
         });
     }
 
@@ -531,27 +536,29 @@ public class MyLoadingDialog extends DialogFragment {
      * @param image
      */
     public void setTextImageSuccessWithOutClose(String text, int image) {
-        closeAll();
-        if (toast_textimage_container == null || toast_textimage_container_image == null || toast_textimage_container_content == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        toast_textimage_container.setVisibility(View.VISIBLE);
-        if (image==0) {
-            toast_textimage_container_image.setVisibility(View.GONE);
-        }
-        else {
-            toast_textimage_container_image.setImageResource(image);
-        }
-        toast_textimage_container_content.setText(text);
-        Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            if (getFragmentManager() != null) {
-                if (onDialogProceedListener != null) {
-                    onDialogProceedListener.proceed();
-                }
+        new Handler().post(() -> {
+            closeAll();
+            if (toast_textimage_container == null || toast_textimage_container_image == null || toast_textimage_container_content == null) {
+                return;
             }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            toast_textimage_container.setVisibility(View.VISIBLE);
+            if (image==0) {
+                toast_textimage_container_image.setVisibility(View.GONE);
+            }
+            else {
+                toast_textimage_container_image.setImageResource(image);
+            }
+            toast_textimage_container_content.setText(text);
+            Observable.timer(2000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                if (getFragmentManager() != null) {
+                    if (onDialogProceedListener != null) {
+                        onDialogProceedListener.proceed();
+                    }
+                }
+            });
         });
     }
 
@@ -561,32 +568,34 @@ public class MyLoadingDialog extends DialogFragment {
      * @param image
      */
     public void setTextImageSuccessWithClose(String text, int image) {
-        closeAll();
-        if (toast_textimage_container == null || toast_textimage_container_image == null || toast_textimage_container_content == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        toast_textimage_container.setVisibility(View.VISIBLE);
-        if (image==0) {
-            toast_textimage_container_image.setVisibility(View.GONE);
-        }
-        else {
-            toast_textimage_container_image.setImageResource(image);
-        }
-        toast_textimage_container_content.setText(text);
-        Observable.timer(2000, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                    try {
-                        dismiss();
-                    } catch (Exception e) {
+        new Handler().post(() -> {
+            closeAll();
+            if (toast_textimage_container == null || toast_textimage_container_image == null || toast_textimage_container_content == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            toast_textimage_container.setVisibility(View.VISIBLE);
+            if (image==0) {
+                toast_textimage_container_image.setVisibility(View.GONE);
+            }
+            else {
+                toast_textimage_container_image.setImageResource(image);
+            }
+            toast_textimage_container_content.setText(text);
+            Observable.timer(2000, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                try {
+                    dismiss();
+                } catch (Exception e) {
 
-                    }
-                    if (onDialogDismissListener != null) {
-                        onDialogDismissListener.onDismiss();
-                    }
-                });
+                }
+                if (onDialogDismissListener != null) {
+                    onDialogDismissListener.onDismiss();
+                }
+            });
+        });
     }
 
     /**
@@ -603,20 +612,22 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      */
     public void setCloseChoice(String title, String pos, String neg) {
-        closeAll();
-        if (choice_container == null || choice_container_title==null || choice_container_content==null ||
-                choice_container_negative == null || choice_container_positive == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        choice_container.setVisibility(View.VISIBLE);
-        choice_container_title.setVisibility(View.GONE);
-        choice_container_content.setText(title);
-        choice_container_positive.setText(pos);
-        choice_container_negative.setText(neg);
-        isChoiceNeedClose = true;
+        new Handler().post(() -> {
+            closeAll();
+            if (choice_container == null || choice_container_title==null || choice_container_content==null ||
+                    choice_container_negative == null || choice_container_positive == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            choice_container.setVisibility(View.VISIBLE);
+            choice_container_title.setVisibility(View.GONE);
+            choice_container_content.setText(title);
+            choice_container_positive.setText(pos);
+            choice_container_negative.setText(neg);
+            isChoiceNeedClose = true;
+        });
     }
 
     /**
@@ -626,8 +637,10 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      */
     public void setNoCloseChoice(String title, String pos, String neg) {
-        setCloseChoice(title, pos, neg);
-        isChoiceNeedClose = false;
+        new Handler().post(() -> {
+            setCloseChoice(title, pos, neg);
+            isChoiceNeedClose = false;
+        });
     }
 
     /**
@@ -638,20 +651,22 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      */
     public void setNoCloseChoiceWithTitle(String title, String content, String pos, String neg) {
-        closeAll();
-        if (choice_container == null || choice_container_title==null || choice_container_content==null ||
-                choice_container_negative == null || choice_container_positive == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        choice_container.setVisibility(View.VISIBLE);
-        choice_container_title.setText(title);
-        choice_container_content.setText(content);
-        choice_container_positive.setText(pos);
-        choice_container_negative.setText(neg);
-        isChoiceNeedClose = false;
+        new Handler().post(() -> {
+            closeAll();
+            if (choice_container == null || choice_container_title==null || choice_container_content==null ||
+                    choice_container_negative == null || choice_container_positive == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            choice_container.setVisibility(View.VISIBLE);
+            choice_container_title.setText(title);
+            choice_container_content.setText(content);
+            choice_container_positive.setText(pos);
+            choice_container_negative.setText(neg);
+            isChoiceNeedClose = false;
+        });
     }
 
     /**
@@ -662,8 +677,10 @@ public class MyLoadingDialog extends DialogFragment {
      * @param neg
      */
     public void setCloseChoiceWithTitle(String title, String content, String pos, String neg) {
-        setNoCloseChoiceWithTitle(title, content, pos, neg);
-        isChoiceNeedClose = true;
+        new Handler().post(() -> {
+            setNoCloseChoiceWithTitle(title, content, pos, neg);
+            isChoiceNeedClose = true;
+        });
     }
 
     /**
@@ -672,32 +689,27 @@ public class MyLoadingDialog extends DialogFragment {
      * @param pos
      */
     public void setTextCommit(String title, String pos) {
-        closeAll();
-        if (choice_container == null || choice_container_title==null || choice_container_content==null ||
-                choice_container_negative == null || choice_container_positive == null || choice_container_line == null) {
-            return;
-        }
-        if (onDialogStartListener != null) {
-            onDialogStartListener.onStart();
-        }
-        choice_container.setVisibility(View.VISIBLE);
-        choice_container_title.setVisibility(View.GONE);
-        choice_container_line.setVisibility(View.GONE);
-        choice_container_negative.setVisibility(View.GONE);
-        choice_container_content.setText(title);
-        choice_container_positive.setText(pos);
-        isChoiceNeedClose = true;
+        new Handler().post(() -> {
+            closeAll();
+            if (choice_container == null || choice_container_title==null || choice_container_content==null ||
+                    choice_container_negative == null || choice_container_positive == null || choice_container_line == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            choice_container.setVisibility(View.VISIBLE);
+            choice_container_title.setVisibility(View.GONE);
+            choice_container_line.setVisibility(View.GONE);
+            choice_container_negative.setVisibility(View.GONE);
+            choice_container_content.setText(title);
+            choice_container_positive.setText(pos);
+            isChoiceNeedClose = true;
+        });
     }
 
     public void setFinish() {
-        try {
-            dismiss();
-        } catch (Exception e) {
-
-        }
-        if (onDialogDismissListener != null) {
-            onDialogDismissListener.onDismiss();
-        }
+        dismiss();
     }
 
     private void closeAll() {
@@ -721,7 +733,7 @@ public class MyLoadingDialog extends DialogFragment {
         isDismiss=false;
         new Handler().post(() -> {
             FragmentTransaction transaction=manager.beginTransaction();
-            transaction.add(MyLoadingDialog.this, tag);
+            transaction.add(LoadingDialog.this, tag);
             transaction.addToBackStack(null);
             transaction.commitAllowingStateLoss();
         });
@@ -735,7 +747,7 @@ public class MyLoadingDialog extends DialogFragment {
         new Handler().post(() -> {
             fragmentManager.popBackStack();
             FragmentTransaction transaction=fragmentManager.beginTransaction();
-            transaction.remove(MyLoadingDialog.this);
+            transaction.remove(LoadingDialog.this);
             transaction.commitAllowingStateLoss();
         });
     }
