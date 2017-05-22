@@ -75,7 +75,7 @@ public class AboutActivity extends BaseActivity {
                 break;
             case R.id.layout_contact_us:
                 Intent intent_contact=new Intent(AboutActivity.this, WebActivity.class);
-                intent_contact.putExtra("title", "联系我们");
+                intent_contact.putExtra("title", "关于我们");
                 intent_contact.putExtra("url", CommonParams.contactUs);
                 startActivity(intent_contact);
                 break;

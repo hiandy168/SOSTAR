@@ -59,7 +59,7 @@ public class CommonParams {
     public static final String WealthProtocal=BaseUrl+"sostar/protocal/moneyprotocal.html";
     // 服务协议url
     public static final String ServiceProtocal=BaseUrl+"sostar/protocal/serviceprotocal.html";
-    // 联系我们url
+    // 关于我们url
     public static final String contactUs=BaseUrl+"sostar/about/contact.html";
     // 版本信息url
     public static final String versionUrl=BaseUrl+"sostar/about/versioninfo.html";
