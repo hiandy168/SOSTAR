@@ -66,6 +66,9 @@ public class LoadingDialog extends DialogFragment {
 
     RelativeLayout customer_container;
 
+    // 自定义的View
+    View customerView;
+
     //是否需要关闭
     boolean isChoiceNeedClose = false;
 
@@ -93,12 +96,17 @@ public class LoadingDialog extends DialogFragment {
         void proceed();
     }
 
+    public interface OnDialogCreate {
+        void create(View view);
+    }
+
     OnDialogCancel onDialogCancelListener;
     OnDialogStart onDialogStartListener;
     OnDialogDismiss onDialogDismissListener;
     OnDialogPos onDialogPosListener;
     OnDialogNeg onDialogNegListener;
     OnDialogProceed onDialogProceedListener;
+    OnDialogCreate onDialogCreate;
 
     public void setOnDialogCancelListener(OnDialogCancel onDialogCancelListener) {
         this.onDialogCancelListener = onDialogCancelListener;
@@ -122,6 +130,10 @@ public class LoadingDialog extends DialogFragment {
 
     public void setOnDialogProceedListener(OnDialogProceed onDialogProceedListener) {
         this.onDialogProceedListener = onDialogProceedListener;
+    }
+
+    public void setOnDialogCreate(OnDialogCreate onDialogCreate) {
+        this.onDialogCreate = onDialogCreate;
     }
 
     public static LoadingDialog getInstance(int type) {
@@ -291,6 +303,20 @@ public class LoadingDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * 添加自定义的view
+     * @param viewId
+     * @return
+     */
+    public static LoadingDialog getInstance_CustomerView(int viewId) {
+        LoadingDialog dialog=new LoadingDialog();
+        Bundle bundle=new Bundle();
+        bundle.putInt("type", 13);
+        bundle.putInt("customerViewId", viewId);
+        dialog.setArguments(bundle);
+        return dialog;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -409,7 +435,13 @@ public class LoadingDialog extends DialogFragment {
         if (getArguments().getInt("type")==12) {
             setTextCommit(getArguments().getString("content"), getArguments().getString("pos"));
         }
+        if (getArguments().getInt("type")==13) {
+            setCustomer(getArguments().getInt("customerViewId"));
+        }
 
+        if (onDialogCreate!=null) {
+            onDialogCreate.create(view);
+        }
         return view;
     }
 
@@ -638,7 +670,19 @@ public class LoadingDialog extends DialogFragment {
      */
     public void setNoCloseChoice(String title, String pos, String neg) {
         new Handler().post(() -> {
-            setCloseChoice(title, pos, neg);
+            closeAll();
+            if (choice_container == null || choice_container_title==null || choice_container_content==null ||
+                    choice_container_negative == null || choice_container_positive == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            choice_container.setVisibility(View.VISIBLE);
+            choice_container_title.setVisibility(View.GONE);
+            choice_container_content.setText(title);
+            choice_container_positive.setText(pos);
+            choice_container_negative.setText(neg);
             isChoiceNeedClose = false;
         });
     }
@@ -678,7 +722,19 @@ public class LoadingDialog extends DialogFragment {
      */
     public void setCloseChoiceWithTitle(String title, String content, String pos, String neg) {
         new Handler().post(() -> {
-            setNoCloseChoiceWithTitle(title, content, pos, neg);
+            closeAll();
+            if (choice_container == null || choice_container_title==null || choice_container_content==null ||
+                    choice_container_negative == null || choice_container_positive == null) {
+                return;
+            }
+            if (onDialogStartListener != null) {
+                onDialogStartListener.onStart();
+            }
+            choice_container.setVisibility(View.VISIBLE);
+            choice_container_title.setText(title);
+            choice_container_content.setText(content);
+            choice_container_positive.setText(pos);
+            choice_container_negative.setText(neg);
             isChoiceNeedClose = true;
         });
     }
@@ -708,8 +764,25 @@ public class LoadingDialog extends DialogFragment {
         });
     }
 
+    public void setCustomer(int viewId) {
+        closeAll();
+        if (customer_container == null) {
+            return;
+        }
+        if (onDialogStartListener != null) {
+            onDialogStartListener.onStart();
+        }
+        customer_container.setVisibility(View.VISIBLE);
+        customerView=LayoutInflater.from(getActivity()).inflate(viewId, null, false);
+        customer_container.addView(customerView);
+        isChoiceNeedClose = true;
+    }
+
     public void setFinish() {
         dismiss();
+        if (onDialogDismissListener != null) {
+            onDialogDismissListener.onDismiss();
+        }
     }
 
     private void closeAll() {
@@ -764,5 +837,9 @@ public class LoadingDialog extends DialogFragment {
         if (savedInstanceState!=null) {
             isDismiss=savedInstanceState.getBoolean("isDismiss");
         }
+    }
+
+    public View getCustomerView() {
+        return customerView;
     }
 }

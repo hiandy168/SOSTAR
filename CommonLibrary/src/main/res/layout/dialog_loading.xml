@@ -129,7 +129,7 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:text="确定"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="#ffac00"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
@@ -227,8 +227,7 @@
     <RelativeLayout
         android:id="@+id/customer_container"
         android:layout_width="match_parent"
-        android:layout_height="160dip"
-        android:background="@drawable/shape_loadingdialog"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:visibility="gone"
         android:layout_marginLeft="16dip"
