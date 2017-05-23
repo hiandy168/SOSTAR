@@ -18,6 +18,7 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateTextInfoActivity;
+import com.renyu.sostar.activity.user.RechargeActivity;
 import com.renyu.sostar.bean.EmployerCashAvaliableRequest;
 import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.OrderResponse;
@@ -137,6 +138,9 @@ public class OverTimeActivity extends BaseActivity {
                     caculateMoney();
                 }
             }
+            if (requestCode==CommonParams.RESULT_PAY) {
+                getRechargeInfo();
+            }
         }
     }
 
@@ -190,6 +194,12 @@ public class OverTimeActivity extends BaseActivity {
         }
         if (money<=0) {
             Toast.makeText(this, "加班报酬必须大于0元", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (Double.parseDouble(tv_overtime_allmoney.getText().toString())>Double.parseDouble(tv_overtime_avaliablemoney.getText().toString())) {
+            Toast.makeText(this, "可用余额不足，请充值", Toast.LENGTH_SHORT).show();
+            Intent intent=new Intent(OverTimeActivity.this, RechargeActivity.class);
+            startActivityForResult(intent, CommonParams.RESULT_PAY);
             return;
         }
 
