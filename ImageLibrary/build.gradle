@@ -38,7 +38,7 @@ dependencies {
     // PhotoDraweeView  PhotoView For Fresco
     compile 'me.relex:photodraweeview:1.1.2'
     // butterknife
-    apt 'com.jakewharton:butterknife-compiler:8.5.1'
+    apt 'com.jakewharton:butterknife-compiler:8.6.0'
     // uCrop  Image Cropping Library for Android
     compile 'com.github.yalantis:ucrop:2.2.1'
 }
