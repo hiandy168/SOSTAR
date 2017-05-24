@@ -84,15 +84,14 @@ dependencies {
     // andfix
     compile 'com.alipay.euler:andfix:0.5.0@aar'
     // walle  Android Signature V2 Scheme签名下的新一代渠道包打包神器
-    compile 'com.meituan.android.walle:library:1.1.1'
+    compile 'com.meituan.android.walle:library:1.1.3'
     compile project(':CommonLibrary')
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
     compile project(':ImageLibrary')
-    compile project(':HyphenateLibrary')
     compile project(':QRCodeLibrary')
     // freeline
-//    debugCompile project(":runtime:runtime")
+    //    debugCompile project(":runtime:runtime")
 }
 
 walle {
