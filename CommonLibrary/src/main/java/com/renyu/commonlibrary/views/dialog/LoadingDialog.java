@@ -779,7 +779,11 @@ public class LoadingDialog extends DialogFragment {
     }
 
     public void setFinish() {
-        dismiss();
+        try {
+            dismiss();
+        } catch (Exception e) {
+
+        }
         if (onDialogDismissListener != null) {
             onDialogDismissListener.onDismiss();
         }
@@ -818,6 +822,9 @@ public class LoadingDialog extends DialogFragment {
         }
         isDismiss=true;
         new Handler().post(() -> {
+            if (getActivity()!=null && getActivity().isFinishing()) {
+                return;
+            }
             fragmentManager.popBackStack();
             FragmentTransaction transaction=fragmentManager.beginTransaction();
             transaction.remove(LoadingDialog.this);
