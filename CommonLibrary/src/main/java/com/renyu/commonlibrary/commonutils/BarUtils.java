@@ -84,7 +84,6 @@ public class BarUtils {
                 //如果是取消全透明，params.flags &= ~bits;
                 window.setAttributes(params);
             }
-            window.setStatusBarColor(Color.TRANSPARENT);
         }
     }
 
