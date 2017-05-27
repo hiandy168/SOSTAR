@@ -204,7 +204,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showNetworkDialog(String content) {
-        if (networkDialg==null || (networkDialg!=null && !networkDialg.isShowing()))
+        if (networkDialg==null || (networkDialg!=null && !networkDialg.isShowing()) && !isFinishing() && !isDestroyed())
         networkDialg=ProgressDialog.show(this, "", content);
     }
 

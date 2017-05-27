@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -450,9 +451,14 @@ public class OrderProcessActivity extends BaseActivity {
                 for (int i = 0; i < count; i++) {
                     names+=value.getStaffName().get(i)+",";
                 }
-                names=names.substring(0, names.length()-1);
-                tv_orderprocess.setText("订单完成\n本次订单将向"+names+"等"+value.getStaffName().size()+
-                        "人支付\n工资报酬总计"+value.getTotalMoney()+"元");
+                if (!TextUtils.isEmpty(names)) {
+                    names=names.substring(0, names.length()-1);
+                    tv_orderprocess.setText("订单完成\n本次订单将向"+names+"等"+value.getStaffName().size()+
+                            "人支付\n工资报酬总计"+value.getTotalMoney()+"元");
+                }
+                else {
+                    tv_orderprocess.setText("订单完成\n本次订单将支付工资报酬总计"+value.getTotalMoney()+"元");
+                }
                 tv_orderprocess_money.setText(""+value.getWagesMoney());
                 tv_orderprocess_tip.setText(""+value.getTipsMoney());
             }

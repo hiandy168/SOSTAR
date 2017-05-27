@@ -88,6 +88,9 @@ public class EmployeeInfoActivity extends BaseActivity {
 
     MyCenterEmployeeResponse myCenterResponse;
 
+    Disposable textDisposable;
+    Disposable uploadDisposable;
+
     @Override
     public void initParams() {
         myCenterResponse= (MyCenterEmployeeResponse) getIntent().getSerializableExtra("response");
@@ -294,6 +297,8 @@ public class EmployeeInfoActivity extends BaseActivity {
                 @Override
                 public void onSubscribe(Disposable d) {
                     showNetworkDialog("正在操作，请稍后");
+
+                    textDisposable=d;
                 }
 
                 @Override
@@ -363,6 +368,8 @@ public class EmployeeInfoActivity extends BaseActivity {
                     @Override
                     public void onSubscribe(Disposable d) {
                         showNetworkDialog("正在操作，请稍后");
+
+                        uploadDisposable=d;
                     }
 
                     @Override
@@ -408,5 +415,17 @@ public class EmployeeInfoActivity extends BaseActivity {
         TextView pop_three_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_three_cancel);
         pop_three_cancel.setText("取消");
         pop_three_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (uploadDisposable!=null && !uploadDisposable.isDisposed()) {
+            uploadDisposable.dispose();
+        }
+        if (textDisposable!=null && !textDisposable.isDisposed()) {
+            textDisposable.dispose();
+        }
     }
 }

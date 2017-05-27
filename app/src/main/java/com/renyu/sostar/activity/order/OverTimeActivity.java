@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
@@ -177,11 +178,11 @@ public class OverTimeActivity extends BaseActivity {
     }
 
     private void caculateMoney() {
-        int time=Integer.parseInt(tv_overtime_time.getText().toString().substring(0, tv_overtime_time.getText().toString().indexOf("小时")));
-        int money=Integer.parseInt(tv_overtime_money.getText().toString().substring(0, tv_overtime_money.getText().toString().indexOf("元")));
-        int allMoney=time*money*orderResponse.getOkStaffAccount();
-        tv_overtime_allmoney.setText(""+allMoney);
-        tv_overtime_needmoney.setText(""+allMoney);
+        double time=Double.parseDouble(tv_overtime_time.getText().toString().substring(0, tv_overtime_time.getText().toString().indexOf("小时")));
+        double money=Double.parseDouble(tv_overtime_money.getText().toString().substring(0, tv_overtime_money.getText().toString().indexOf("元")));
+        double allMoney=time*money*orderResponse.getOkStaffAccount();
+        tv_overtime_allmoney.setText(Utils.removeZero(""+allMoney));
+        tv_overtime_needmoney.setText(Utils.removeZero(""+allMoney));
     }
 
     private void setExtrawork() {

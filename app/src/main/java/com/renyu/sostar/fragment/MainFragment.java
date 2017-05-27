@@ -462,7 +462,7 @@ public class MainFragment extends BaseFragment {
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
     }
 
-    private void addEmployeeOverLay(EmployeeIndexResponse value) {
+    private synchronized void addEmployeeOverLay(EmployeeIndexResponse value) {
         for (Marker allOrdersMarker : allMarkers) {
             allOrdersMarker.remove();
         }
@@ -488,7 +488,7 @@ public class MainFragment extends BaseFragment {
         });
     }
 
-    private void addEmployerOverLay(EmployerIndexResponse value) {
+    private synchronized void addEmployerOverLay(EmployerIndexResponse value) {
         for (Marker allOrdersMarker : allMarkers) {
             allOrdersMarker.remove();
         }

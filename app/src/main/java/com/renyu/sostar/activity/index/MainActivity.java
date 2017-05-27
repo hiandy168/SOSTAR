@@ -280,6 +280,9 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.layout_main_menu_mycenter_area:
+                if (myCenterEmployerResponse==null) {
+                    return;
+                }
                 int[] realArea=new int[] {3, 5, 10, 10000};
                 String[] despArea=new String[] {"3公里", "5公里", "10公里", "不限范围"};
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
