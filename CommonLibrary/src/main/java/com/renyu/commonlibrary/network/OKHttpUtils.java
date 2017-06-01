@@ -328,6 +328,9 @@ public class OKHttpUtils {
      * @param progressListener
      */
     public void download(final String url, final String dirPath, final OnDownloadListener downloadListener, final ProgressListener progressListener) {
+        if (!new File(dirPath).exists()) {
+            new File(dirPath).mkdirs();
+        }
         Request request=new Request.Builder().tag(url).url(url).build();
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
