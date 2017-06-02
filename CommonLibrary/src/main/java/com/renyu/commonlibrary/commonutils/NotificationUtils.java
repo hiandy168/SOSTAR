@@ -265,7 +265,9 @@ public class NotificationUtils {
 		RemoteViews views=new RemoteViews(context.getPackageName(), R.layout.view_notification);
 		views.setProgressBar(R.id.no_pb, 100, 0, false);
 		views.setTextViewText(R.id.no_title, title);
+		views.setInt(R.id.no_title, "setTextColor", isDarkNotificationTheme(context)?Color.WHITE:Color.BLACK);
 		views.setTextViewText(R.id.no_pb_num, "0%");
+		views.setInt(R.id.no_pb_num, "setTextColor", isDarkNotificationTheme(context)?Color.WHITE:Color.BLACK);
 		NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
 		builder.setSmallIcon(smallIcon);
 		builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon));
