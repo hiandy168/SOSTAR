@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.layout_main_menu_mycenter_area:
-                if (myCenterEmployerResponse==null) {
+                if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
                     return;
                 }
                 int[] realArea=new int[] {3, 5, 10, 10000};
