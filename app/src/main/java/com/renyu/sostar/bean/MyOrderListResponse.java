@@ -85,6 +85,7 @@ public class MyOrderListResponse {
         private String startTime;
         private String unitPrice;
         private String unitPriceType;
+        private int webFlg;
         private List<String> picListArray;
 
         public String getAddress() {
@@ -285,6 +286,14 @@ public class MyOrderListResponse {
 
         public void setPicListArray(List<String> picListArray) {
             this.picListArray = picListArray;
+        }
+
+        public int getWebFlg() {
+            return webFlg;
+        }
+
+        public void setWebFlg(int webFlg) {
+            this.webFlg = webFlg;
         }
     }
 }

@@ -1,16 +1,16 @@
-package com.renyu.qrcodelibrary;
+package com.renyu.sostar.activity.order;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.BarUtils;
+import com.renyu.sostar.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,15 +25,15 @@ import cn.bingoogolapple.qrcode.zbar.ZBarView;
 
 public class ZBarQRScanActivity extends BaseActivity {
 
-    @BindView(R2.id.tv_nav_title)
+    @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
-    @BindView(R2.id.ib_nav_left)
+    @BindView(R.id.ib_nav_left)
     ImageButton ib_nav_left;
-    @BindView(R2.id.zbar_scan_view)
+    @BindView(R.id.zbar_scan_view)
     ZBarView zbar_scan_view;
-    @BindView(R2.id.tv_zbar_scan_view_time)
+    @BindView(R.id.tv_zbar_scan_view_time)
     TextView tv_zbar_scan_view_time;
-    @BindView(R2.id.tv_zbar_scan_view_tip)
+    @BindView(R.id.tv_zbar_scan_view_tip)
     TextView tv_zbar_scan_view_tip;
 
     @Override
@@ -41,12 +41,7 @@ public class ZBarQRScanActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.WHITE);
         tv_nav_title.setText("扫码签到");
         ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
-        ib_nav_left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        ib_nav_left.setOnClickListener(v -> finish());
 
         BarUtils.adjustStatusBar(this, (ViewGroup) ((ViewGroup) zbar_scan_view.getParent()).getChildAt(2), -1);
 
@@ -101,12 +96,7 @@ public class ZBarQRScanActivity extends BaseActivity {
         zbar_scan_view.startCamera();
 //        zbar_scan_view.startCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
         zbar_scan_view.showScanRect();
-        zbar_scan_view.post(new Runnable() {
-            @Override
-            public void run() {
-                zbar_scan_view.startSpot();
-            }
-        });
+        zbar_scan_view.post(() -> zbar_scan_view.startSpot());
     }
 
     @Override

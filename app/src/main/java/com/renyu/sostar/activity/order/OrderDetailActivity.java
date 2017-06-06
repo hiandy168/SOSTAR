@@ -39,7 +39,6 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.LocalImageHolderView;
 import com.renyu.jpushlibrary.bean.NotificationBean;
-import com.renyu.qrcodelibrary.ZBarQRScanActivity;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.user.InfoActivity;
 import com.renyu.sostar.bean.OrderRequest;

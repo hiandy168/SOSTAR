@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
@@ -99,15 +100,20 @@ public class OrderListFragment extends BaseFragment {
         }
         adapter=new OrderListAdapter(getActivity(), beans, isShowDistance);
         adapter.setOnClickListener(position -> {
-            Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
-            intent.putExtra("orderId", beans.get(position).getOrderId());
-            if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
-                // 雇员未接单详情采用特殊订单详情接口
-                if (getArguments().getInt("orderListType")==1) {
-                    intent.putExtra("typeIsCommit", true);
+            if (beans.get(position).getWebFlg()==1) {
+                Intent intent=new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("orderId", beans.get(position).getOrderId());
+                if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
+                    // 雇员未接单详情采用特殊订单详情接口
+                    if (getArguments().getInt("orderListType")==1) {
+                        intent.putExtra("typeIsCommit", true);
+                    }
                 }
+                startActivity(intent);
             }
-            startActivity(intent);
+            else {
+                Toast.makeText(getActivity(), "订单正在审核，请稍后查看", Toast.LENGTH_SHORT).show();
+            }
         });
         rv_orderlist.setAdapter(adapter);
         swipy_orderlist.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
