@@ -45,6 +45,8 @@ public class SostarApp extends MultiDexApplication {
             strategy.setAppPackageName(getPackageName());
             // 设置是否为上报进程
             strategy.setUploadProcess(processName == null || processName.equals(getPackageName()));
+            // 设置自定义Map参数
+            CrashReport.putUserData(this, "VERSION_CODE", ""+BuildConfig.VERSION_CODE);
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
             // 初始化fresco
