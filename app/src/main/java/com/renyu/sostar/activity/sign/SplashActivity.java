@@ -64,6 +64,7 @@ public class SplashActivity extends BaseActivity {
                 FileUtils.createOrExistsDir(InitParams.HOTFIX_PATH);
                 FileUtils.createOrExistsDir(InitParams.FILE_PATH);
                 FileUtils.createOrExistsDir(InitParams.LOG_PATH);
+                FileUtils.createOrExistsDir(InitParams.CACHE_PATH);
 
                 if (ACache.get(SplashActivity.this).getAsString("hotfix_version")!=null &&
                         !ACache.get(SplashActivity.this).getAsString("hotfix_version").equals(BuildConfig.VERSION_NAME)) {
