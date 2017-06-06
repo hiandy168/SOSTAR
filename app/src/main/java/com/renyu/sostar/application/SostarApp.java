@@ -1,6 +1,7 @@
 package com.renyu.sostar.application;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -11,9 +12,12 @@ import com.meituan.android.walle.WalleChannelReader;
 import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.commonutils.ImagePipelineConfigUtils;
+import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
 import com.tencent.bugly.crashreport.CrashReport;
+
+import java.io.File;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -35,6 +39,24 @@ public class SostarApp extends MultiDexApplication {
             Retrofit2Utils.getInstance(CommonParams.BaseUrl);
 
             com.blankj.utilcode.util.Utils.init(this);
+
+            // 初始化相关配置参数
+            // 项目根目录
+            // 请注意修改xml文件夹下filepaths.xml中的external-path节点，此值需与ROOT_PATH值相同，作为fileprovider使用
+            InitParams.ROOT_PATH= Environment.getExternalStorageDirectory().getPath()+ File.separator + "sostar";
+            // 项目图片目录
+            InitParams.IMAGE_PATH= InitParams.ROOT_PATH + File.separator + "image";
+            // 项目文件目录
+            InitParams.FILE_PATH= InitParams.ROOT_PATH + File.separator + "file";
+            // 项目热修复目录
+            InitParams.HOTFIX_PATH= InitParams.ROOT_PATH + File.separator + "hotfix";
+            // 项目日志目录
+            InitParams.LOG_PATH= InitParams.ROOT_PATH + File.separator + "log";
+            InitParams.LOG_NAME= "sostar_log";
+            // 缓存目录
+            InitParams.CACHE_PATH= InitParams.ROOT_PATH + File.separator + "cache";
+            // fresco缓存目录
+            InitParams.FRESCO_CACHE_NAME= "fresco_cache";
 
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);

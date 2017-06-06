@@ -38,7 +38,7 @@ dependencies {
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
-    compile project(':CommonLibrary')
+    compile 'com.github.r17171709:AndroidCommonLibrary:v1.0.0'
     // butterknife
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
 }

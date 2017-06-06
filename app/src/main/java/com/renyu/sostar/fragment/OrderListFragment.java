@@ -13,13 +13,13 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutD
 import com.renyu.commonlibrary.basefrag.BaseFragment;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
-import com.renyu.commonlibrary.network.params.Response;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.order.OrderDetailActivity;
 import com.renyu.sostar.adapter.OrderListAdapter;
 import com.renyu.sostar.bean.MyOrderListRequest;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.bean.OrderResponse;
+import com.renyu.sostar.bean.SostarResponse;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
 
@@ -145,7 +145,7 @@ public class OrderListFragment extends BaseFragment {
         paramBean.setType(""+getArguments().getInt("type"));
         paramBean.setPagination(paginationBean);
         request.setParam(paramBean);
-        Observable<Response<MyOrderListResponse>> observable=null;
+        Observable<SostarResponse<MyOrderListResponse>> observable=null;
         if (ACache.get(getActivity()).getAsString(CommonParams.USER_TYPE).equals("0")) {
             // 雇员待接单
             if (getArguments().getInt("orderListType")==1) {

@@ -1,8 +1,6 @@
 package com.renyu.sostar.impl;
 
 import com.renyu.commonlibrary.network.params.EmptyResponse;
-import com.renyu.commonlibrary.network.params.Response;
-import com.renyu.commonlibrary.network.params.ResponseList;
 import com.renyu.sostar.bean.EmployeeIndexResponse;
 import com.renyu.sostar.bean.EmployerIndexResponse;
 import com.renyu.sostar.bean.EmployerStaffListResponse;
@@ -18,6 +16,8 @@ import com.renyu.sostar.bean.EmployerCashAvaliableResponse;
 import com.renyu.sostar.bean.PushResponse;
 import com.renyu.sostar.bean.RechargeResponse;
 import com.renyu.sostar.bean.SigninResponse;
+import com.renyu.sostar.bean.SostarResponse;
+import com.renyu.sostar.bean.SostarResponseList;
 import com.renyu.sostar.bean.StartMyOrderSignResponse;
 
 import io.reactivex.Observable;
@@ -33,221 +33,221 @@ import retrofit2.http.POST;
 public interface RetrofitImpl {
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/login")
-    Observable<Response<SigninResponse>> signin(@Body RequestBody requestBody);
+    Observable<SostarResponse<SigninResponse>> signin(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/verification/get")
-    Observable<Response<EmptyResponse>> getVcode(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> getVcode(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/register")
-    Observable<Response<SigninResponse>> signup(@Body RequestBody requestBody);
+    Observable<SostarResponse<SigninResponse>> signup(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/resetpass")
-    Observable<Response<EmptyResponse>> resetPwd(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> resetPwd(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/center")
-    Observable<Response<MyCenterEmployeeResponse>> getMyEmployeeCenter(@Body RequestBody requestBody);
+    Observable<SostarResponse<MyCenterEmployeeResponse>> getMyEmployeeCenter(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/setUserType")
-    Observable<Response<EmptyResponse>> setUserState(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setUserState(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/setStaffInfo")
-    Observable<Response<EmptyResponse>> setStaffInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setStaffInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/setStaffAuthentica")
-    Observable<Response<EmptyResponse>> setStaffAuthentica(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setStaffAuthentica(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/center")
-    Observable<Response<MyCenterEmployerResponse>> getMyEmployerCenter(@Body RequestBody requestBody);
+    Observable<SostarResponse<MyCenterEmployerResponse>> getMyEmployerCenter(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setEmployerInfo")
-    Observable<Response<EmptyResponse>> setEmployerInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setEmployerInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setEmployerAuthentica")
-    Observable<Response<EmptyResponse>> setEmployerAuthentica(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setEmployerAuthentica(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setSuggest")
-    Observable<Response<EmptyResponse>> setSuggest(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setSuggest(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/all/msgList")
-    Observable<Response<MsgListResponse>> msgList(@Body RequestBody requestBody);
+    Observable<SostarResponse<MsgListResponse>> msgList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/all/deleteMsg")
-    Observable<Response<EmptyResponse>> deleteMsg(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> deleteMsg(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/all/readMsg")
-    Observable<Response<EmptyResponse>> readMsg(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> readMsg(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/all/deleteMsgList")
-    Observable<Response<EmptyResponse>> deleteMsgList(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> deleteMsgList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/sys/set")
-    Observable<Response<EmptyResponse>> setNotificationState(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setNotificationState(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/sys/userType/set")
-    Observable<Response<EmptyResponse>> setUserType(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setUserType(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setEmployerOrder")
-    Observable<Response<EmptyResponse>> releaseOrder(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> releaseOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/myOrderList")
-    Observable<Response<MyOrderListResponse>> myStaffOrderList(@Body RequestBody requestBody);
+    Observable<SostarResponse<MyOrderListResponse>> myStaffOrderList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/myOrderList")
-    Observable<Response<MyOrderListResponse>> myEmployerOrderList(@Body RequestBody requestBody);
+    Observable<SostarResponse<MyOrderListResponse>> myEmployerOrderList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/homepage/staff")
-    Observable<Response<EmployeeIndexResponse>> getEmployeeIndex(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmployeeIndexResponse>> getEmployeeIndex(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/homepage/employer")
-    Observable<Response<EmployerIndexResponse>> getEmployerIndex(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmployerIndexResponse>> getEmployerIndex(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/user/updatePosition")
-    Observable<Response<EmptyResponse>> updatePosition(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> updatePosition(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/orderRelationDetail")
-    Observable<Response<OrderResponse>> staffOrderDetail(@Body RequestBody requestBody);
+    Observable<SostarResponse<OrderResponse>> staffOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/getEmployerOrderDetail")
-    Observable<Response<OrderResponse>> employerOrderDetail(@Body RequestBody requestBody);
+    Observable<SostarResponse<OrderResponse>> employerOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/cancleMyOrder")
-    Observable<Response<EmptyResponse>> cancleMyOrder(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> cancleMyOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/getEmployerStaffList")
-    Observable<ResponseList<EmployerStaffListResponse>> getEmployerStaffList(@Body RequestBody requestBody);
+    Observable<SostarResponseList<EmployerStaffListResponse>> getEmployerStaffList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/cancelOrder")
-    Observable<Response<EmptyResponse>> cancelEmployeeOrder(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> cancelEmployeeOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/receiveOrder")
-    Observable<Response<EmptyResponse>> receiveOrder(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> receiveOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/orderCenter")
-    Observable<Response<MyOrderListResponse>> employeeOrderCenter(@Body RequestBody requestBody);
+    Observable<SostarResponse<MyOrderListResponse>> employeeOrderCenter(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/orderDetail")
-    Observable<Response<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
+    Observable<SostarResponse<OrderResponse>> employeeOrderDetail(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/startMyOrder")
-    Observable<Response<EmptyResponse>> startMyOrder(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> startMyOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/confirmStaff")
-    Observable<Response<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> confirmStaff(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/startMyOrderSign")
-    Observable<Response<StartMyOrderSignResponse>> startMyOrderSign(@Body RequestBody requestBody);
+    Observable<SostarResponse<StartMyOrderSignResponse>> startMyOrderSign(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/sign")
-    Observable<Response<EmptyResponse>> staffSign(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> staffSign(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/staff/applyOff")
-    Observable<Response<EmptyResponse>> applyOff(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> applyOff(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/fireStaff")
-    Observable<Response<EmptyResponse>> fireStaff(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> fireStaff(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/comfirmResignation")
-    Observable<Response<EmptyResponse>> comfirmResignation(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> comfirmResignation(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/refuseResignation")
-    Observable<Response<EmptyResponse>> refuseResignation(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> refuseResignation(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setMsg")
-    Observable<Response<EmptyResponse>> setMsg(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setMsg(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/evaluateStaff")
-    Observable<Response<EmptyResponse>> evaluateStaff(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> evaluateStaff(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/doFav")
-    Observable<Response<EmptyResponse>> doFav(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> doFav(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/searchFav")
-    Observable<ResponseList<FavListResponse>> searchFav(@Body RequestBody requestBody);
+    Observable<SostarResponseList<FavListResponse>> searchFav(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/outFav")
-    Observable<Response<EmptyResponse>> outFav(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> outFav(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setExtrawork")
-    Observable<Response<EmptyResponse>> setExtrawork(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setExtrawork(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/homepage/staffDetail")
-    Observable<ResponseList<MyOrderListResponse.DataBean>> searchOrder(@Body RequestBody requestBody);
+    Observable<SostarResponseList<MyOrderListResponse.DataBean>> searchOrder(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/recharge")
-    Observable<Response<RechargeResponse>> recharge(@Body RequestBody requestBody);
+    Observable<SostarResponse<RechargeResponse>> recharge(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/charge")
-    Observable<Response<EmptyResponse>> charge(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> charge(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/center")
-    Observable<Response<EmployerCashAvaliableResponse>> rechargeInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmployerCashAvaliableResponse>> rechargeInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/bind")
-    Observable<Response<EmptyResponse>> bindCashInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> bindCashInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/cash/flow")
-    Observable<ResponseList<FlowResponse>> flowList(@Body RequestBody requestBody);
+    Observable<SostarResponseList<FlowResponse>> flowList(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/getPayInfo")
-    Observable<Response<PayInfoResponse>> getPayInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<PayInfoResponse>> getPayInfo(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/employer/setOrderPay")
-    Observable<Response<EmptyResponse>> setOrderPay(@Body RequestBody requestBody);
+    Observable<SostarResponse<EmptyResponse>> setOrderPay(@Body RequestBody requestBody);
 
     @Headers({"Content-Type:application/json", "Accept:application/json"})
     @POST("sostar/api/sys/userType/getPushFlg")
-    Observable<Response<PushResponse>> getPushInfo(@Body RequestBody requestBody);
+    Observable<SostarResponse<PushResponse>> getPushInfo(@Body RequestBody requestBody);
 }
