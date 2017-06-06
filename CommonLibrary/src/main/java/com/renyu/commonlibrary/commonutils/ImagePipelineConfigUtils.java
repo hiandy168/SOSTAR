@@ -1,4 +1,4 @@
-package com.renyu.imagelibrary.commonutils;
+package com.renyu.commonlibrary.commonutils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
