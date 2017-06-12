@@ -65,8 +65,6 @@ public class EmployeeAuthActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.tv_userauth_name)
     TextView tv_userauth_name;
-    @BindView(R.id.tv_userauth_phone)
-    TextView tv_userauth_phone;
     @BindView(R.id.tv_userauth_id)
     TextView tv_userauth_id;
     @BindView(R.id.iv_userauth_positive)
@@ -97,9 +95,6 @@ public class EmployeeAuthActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(myCenterResponse.getCertificateId())) {
             tv_userauth_id.setText(myCenterResponse.getCertificateId());
-        }
-        if (!TextUtils.isEmpty(myCenterResponse.getPhone())) {
-            tv_userauth_phone.setText(myCenterResponse.getPhone());
         }
         if (!TextUtils.isEmpty(myCenterResponse.getPicCerpos())) {
             iv_userauth_positive.setTag(myCenterResponse.getPicCerpos());
@@ -151,8 +146,7 @@ public class EmployeeAuthActivity extends BaseActivity {
     }
 
     @OnClick({R.id.ib_nav_left, R.id.btn_userauth_commit, R.id.layout_userauth_negative,
-            R.id.layout_userauth_positive, R.id.tv_userauth_id, R.id.tv_userauth_phone,
-            R.id.tv_userauth_name})
+            R.id.layout_userauth_positive, R.id.tv_userauth_id, R.id.tv_userauth_name})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ib_nav_left:
@@ -168,17 +162,6 @@ public class EmployeeAuthActivity extends BaseActivity {
                 intent_userauth_name.putExtra("needcommit", false);
                 intent_userauth_name.putExtra("source", tv_userauth_name.getText().toString());
                 startActivityForResult(intent_userauth_name, CommonParams.RESULT_UPDATEUSERINFO);
-                break;
-            case R.id.tv_userauth_phone:
-                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
-                    return;
-                }
-                Intent intent_userauth_phone=new Intent(EmployeeAuthActivity.this, UpdateTextInfoActivity.class);
-                intent_userauth_phone.putExtra("title", "联系电话");
-                intent_userauth_phone.putExtra("param", "phone");
-                intent_userauth_phone.putExtra("needcommit", false);
-                intent_userauth_phone.putExtra("source", tv_userauth_phone.getText().toString());
-                startActivityForResult(intent_userauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_userauth_id:
                 if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
@@ -212,10 +195,6 @@ public class EmployeeAuthActivity extends BaseActivity {
     }
 
     private void commitAuth() {
-        if (TextUtils.isEmpty(tv_userauth_phone.getText().toString())) {
-            Toast.makeText(this, "请填写联系电话", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (TextUtils.isEmpty(tv_userauth_name.getText().toString())) {
             Toast.makeText(this, "请填写真实姓名", Toast.LENGTH_SHORT).show();
             return;
@@ -234,7 +213,6 @@ public class EmployeeAuthActivity extends BaseActivity {
         }
         EmployeeAuthRequest request=new EmployeeAuthRequest();
         EmployeeAuthRequest.ParamBean paramBean=new EmployeeAuthRequest.ParamBean();
-        paramBean.setPhone(tv_userauth_phone.getText().toString());
         paramBean.setCertificateId(tv_userauth_id.getText().toString());
         paramBean.setName(tv_userauth_name.getText().toString());
         paramBean.setPicCerpos(iv_userauth_positive.getTag().toString());
@@ -258,7 +236,6 @@ public class EmployeeAuthActivity extends BaseActivity {
                 myCenterResponse.setAuthentication("2");
                 myCenterResponse.setName(tv_userauth_name.getText().toString());
                 myCenterResponse.setCertificateId(tv_userauth_id.getText().toString());
-                myCenterResponse.setPhone(tv_userauth_phone.getText().toString());
                 myCenterResponse.setPicCerpos(iv_userauth_positive.getTag().toString());
                 myCenterResponse.setPicCerOppo(iv_userauth_negative.getTag().toString());
                 onBackPressed();
@@ -284,10 +261,6 @@ public class EmployeeAuthActivity extends BaseActivity {
         if (resultCode==RESULT_OK && requestCode==CommonParams.RESULT_UPDATEUSERINFO) {
             if (data.getStringExtra("param").equals("name")) {
                 tv_userauth_name.setText(data.getStringExtra("value"));
-            }
-            if (data.getStringExtra("param").equals("phone")) {
-                tv_userauth_phone.setText(data.getStringExtra("value"));
-                myCenterResponse.setPhone(tv_userauth_phone.getText().toString());
             }
             if (data.getStringExtra("param").equals("certificateId")) {
                 tv_userauth_id.setText(data.getStringExtra("value"));

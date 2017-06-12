@@ -1,6 +1,6 @@
 ext {
     compileSdkVersion = 25
-    buildToolsVersion = "25.0.3"
+    buildToolsVersion = "26.0.0"
 
     app = [
             applicationId   : "com.renyu.sostarjob",
@@ -11,7 +11,9 @@ ext {
     ]
 
     dependencies = [
-            supportLibraryVersion: "25.3.1"
+            supportLibraryVersion: "25.3.1",
+            AndroidCommonLibrary : "v1.0.12",
+            AndroidImageLibrary : "v1.0.7",
     ]
 }
 

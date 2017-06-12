@@ -91,10 +91,8 @@ dependencies {
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
-//    compile project(':CommonLibrary')
-    compile 'com.github.r17171709:AndroidCommonLibrary:v1.0.0'
-//    compile project(':ImageLibrary')
-    compile 'com.github.r17171709:AndroidImageLibrary:v1.0.2'
+    compile "com.github.r17171709:AndroidCommonLibrary:${rootProject.ext.dependencies.AndroidCommonLibrary}"
+    compile "com.github.r17171709:AndroidImageLibrary:${rootProject.ext.dependencies.AndroidImageLibrary}"
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
     // freeline

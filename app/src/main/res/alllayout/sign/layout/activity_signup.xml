@@ -133,7 +133,7 @@
                     android:layout_marginStart="16dip"
                     android:textSize="14sp"
                     android:textColor="#999999"
-                    android:text="邀请码(选填)"/>
+                    android:text="邀请码    "/>
                 <com.renyu.commonlibrary.views.ClearEditText
                     android:id="@+id/signup_rec"
                     android:layout_marginEnd="16dip"

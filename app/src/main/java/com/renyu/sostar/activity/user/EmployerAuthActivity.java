@@ -66,8 +66,6 @@ public class EmployerAuthActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.tv_employerauth_name)
     TextView tv_employerauth_name;
-    @BindView(R.id.tv_employerauth_phone)
-    TextView tv_employerauth_phone;
     @BindView(R.id.tv_employerauth_compcode)
     TextView tv_employerauth_compcode;
     @BindView(R.id.iv_employerauth_pic1)
@@ -103,9 +101,6 @@ public class EmployerAuthActivity extends BaseActivity {
 
         if (!TextUtils.isEmpty(myCenterResponse.getCompanyName())) {
             tv_employerauth_name.setText(myCenterResponse.getCompanyName());
-        }
-        if (!TextUtils.isEmpty(myCenterResponse.getContactPhone())) {
-            tv_employerauth_phone.setText(myCenterResponse.getContactPhone());
         }
         if (!TextUtils.isEmpty(myCenterResponse.getCompanyCode())) {
             tv_employerauth_compcode.setText(myCenterResponse.getCompanyCode());
@@ -170,7 +165,7 @@ public class EmployerAuthActivity extends BaseActivity {
 
     @OnClick({R.id.btn_employerauth_commit, R.id.layout_employerauth_pic1,
             R.id.layout_employerauth_pic2, R.id.layout_employerauth_pic3,
-            R.id.layout_employerauth_name, R.id.layout_employerauth_phone,
+            R.id.layout_employerauth_name,
             R.id.layout_employerauth_compcode, R.id.ib_nav_left})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -212,17 +207,6 @@ public class EmployerAuthActivity extends BaseActivity {
                 intent_employerauth_name.putExtra("source", tv_employerauth_name.getText().toString());
                 startActivityForResult(intent_employerauth_name, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
-            case R.id.layout_employerauth_phone:
-                if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
-                    return;
-                }
-                Intent intent_employerauth_phone=new Intent(EmployerAuthActivity.this, UpdateTextInfoActivity.class);
-                intent_employerauth_phone.putExtra("title", "联系方式");
-                intent_employerauth_phone.putExtra("param", "contactPhone");
-                intent_employerauth_phone.putExtra("needcommit", false);
-                intent_employerauth_phone.putExtra("source", tv_employerauth_phone.getText().toString());
-                startActivityForResult(intent_employerauth_phone, CommonParams.RESULT_UPDATEUSERINFO);
-                break;
             case R.id.layout_employerauth_compcode:
                 if (!TextUtils.isEmpty(myCenterResponse.getAuthentication()) && myCenterResponse.getAuthentication().equals("1")) {
                     return;
@@ -243,9 +227,6 @@ public class EmployerAuthActivity extends BaseActivity {
         if (resultCode==RESULT_OK && requestCode==CommonParams.RESULT_UPDATEUSERINFO) {
             if (data.getStringExtra("param").equals("companyName")) {
                 tv_employerauth_name.setText(data.getStringExtra("value"));
-            }
-            if (data.getStringExtra("param").equals("contactPhone")) {
-                tv_employerauth_phone.setText(data.getStringExtra("value"));
             }
             if (data.getStringExtra("param").equals("companyCode")) {
                 tv_employerauth_compcode.setText(data.getStringExtra("value"));
@@ -385,10 +366,6 @@ public class EmployerAuthActivity extends BaseActivity {
     }
 
     private void commitAuth() {
-        if (TextUtils.isEmpty(tv_employerauth_phone.getText().toString())) {
-            Toast.makeText(this, "请填写联系方式", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (TextUtils.isEmpty(tv_employerauth_name.getText().toString())) {
             Toast.makeText(this, "请填写企业名称", Toast.LENGTH_SHORT).show();
             return;
@@ -411,7 +388,6 @@ public class EmployerAuthActivity extends BaseActivity {
         }
         EmployerAuthRequest request=new EmployerAuthRequest();
         EmployerAuthRequest.ParamBean paramBean=new EmployerAuthRequest.ParamBean();
-        paramBean.setContactPhone(tv_employerauth_phone.getText().toString());
         paramBean.setCompanyName(tv_employerauth_name.getText().toString());
         paramBean.setCompanyCode(tv_employerauth_compcode.getText().toString());
         paramBean.setCerPath(iv_employerauth_pic1.getTag().toString());
@@ -436,7 +412,6 @@ public class EmployerAuthActivity extends BaseActivity {
                 myCenterResponse.setAuthentication("2");
                 myCenterResponse.setCompanyName(tv_employerauth_name.getText().toString());
                 myCenterResponse.setCompanyCode(tv_employerauth_compcode.getText().toString());
-                myCenterResponse.setContactPhone(tv_employerauth_phone.getText().toString());
                 myCenterResponse.setCerPath(iv_employerauth_pic1.getTag().toString());
                 myCenterResponse.setLicPath(iv_employerauth_pic2.getTag().toString());
                 myCenterResponse.setRifPath(iv_employerauth_pic3.getTag().toString());
