@@ -40,6 +40,7 @@ public class SignupRequest {
         private String captcha;
         private String password;
         private String phone;
+        private String recommend;
 
         public String getCaptcha() {
             return captcha;
@@ -63,6 +64,14 @@ public class SignupRequest {
 
         public void setPhone(String phone) {
             this.phone = phone;
+        }
+
+        public String getRecommend() {
+            return recommend;
+        }
+
+        public void setRecommend(String recommend) {
+            this.recommend = recommend;
         }
     }
 }

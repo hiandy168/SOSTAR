@@ -216,12 +216,16 @@ public class SignUpActivity extends BaseActivity {
         else if (TextUtils.isEmpty(signup_pwd.getText().toString())) {
             Toast.makeText(this, "请输入登录密码", Toast.LENGTH_SHORT).show();
         }
+        else if (TextUtils.isEmpty(signup_rec.getText().toString())) {
+            Toast.makeText(this, "请输入邀请码", Toast.LENGTH_SHORT).show();
+        }
         else {
             SignupRequest request=new SignupRequest();
             SignupRequest.ParamBean paramBean=new SignupRequest.ParamBean();
             paramBean.setPhone(signup_phone.getText().toString());
             paramBean.setPassword(signup_pwd.getText().toString());
             paramBean.setCaptcha(signup_vcode.getText().toString());
+            paramBean.setRecommend(signup_rec.getText().toString());
             request.setParam(paramBean);
             retrofit.create(RetrofitImpl.class)
                     .signup(Retrofit2Utils.postJsonPrepare(new Gson().toJson(request)))
