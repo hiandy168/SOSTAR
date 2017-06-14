@@ -44,11 +44,11 @@ public class NotStartedOrderListActivity extends BaseActivity {
     @Override
     public void initParams() {
         fragments=new ArrayList<>();
-        fragments.add(OrderListFragment.newInstance(2, OrderListFragment.OrderListType.myOrderList));
         fragments.add(OrderListFragment.newInstance(1, OrderListFragment.OrderListType.myOrderList));
+        fragments.add(OrderListFragment.newInstance(2, OrderListFragment.OrderListType.myOrderList));
         titles=new ArrayList<>();
-        titles.add("推荐");
         titles.add("最新");
+        titles.add("推荐");
 
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("订单");
