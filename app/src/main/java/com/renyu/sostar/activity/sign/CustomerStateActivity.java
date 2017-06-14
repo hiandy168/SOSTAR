@@ -1,5 +1,6 @@
 package com.renyu.sostar.activity.sign;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -62,7 +63,11 @@ public class CustomerStateActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_state_employer:
-                choice(1);
+                new AlertDialog.Builder(this).setTitle("提示").setMessage("选择雇主，您将无法接单。需要接单请选择雇员")
+                        .setPositiveButton("确定选择", (dialog, which) -> choice(1))
+                        .setNegativeButton("重新选择", (dialog, which) -> {
+
+                        }).show();
                 break;
             case R.id.layout_state_employee:
                 choice(0);
