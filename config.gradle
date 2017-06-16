@@ -12,7 +12,7 @@ ext {
 
     dependencies = [
             supportLibraryVersion : "26.0.0-alpha1",
-            AndroidCommonLibrary : "v1.1.0",
+            AndroidCommonLibrary : "v1.1.4",
             AndroidImageLibrary : "v1.0.7"
     ]
 }
