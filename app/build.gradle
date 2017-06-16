@@ -73,6 +73,12 @@ android {
 //    }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force "com.github.r17171709:AndroidCommonLibrary:${rootProject.ext.dependencies.AndroidCommonLibrary}"
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
