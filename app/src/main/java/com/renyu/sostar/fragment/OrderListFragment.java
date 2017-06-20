@@ -142,6 +142,9 @@ public class OrderListFragment extends BaseFragment {
     }
 
     private void getMyOrderList() {
+        if (getActivity()==null) {
+            return;
+        }
         MyOrderListRequest request=new MyOrderListRequest();
         MyOrderListRequest.ParamBean paramBean=new MyOrderListRequest.ParamBean();
         paramBean.setUserId(ACache.get(getActivity()).getAsString(CommonParams.USER_ID));

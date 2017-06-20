@@ -139,6 +139,10 @@ public class WithdrawalsActivity extends BaseActivity {
                     bindCashInfo();
                 }
                 else {
+                    if (TextUtils.isEmpty(ed_withdrawals_money.getText().toString())) {
+                        Toast.makeText(this, "请输入待提现的金额", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     charge();
                 }
                 break;
