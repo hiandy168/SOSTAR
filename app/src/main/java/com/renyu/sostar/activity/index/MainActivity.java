@@ -283,7 +283,7 @@ public class MainActivity extends BaseActivity {
                 if (myCenterEmployeeResponse==null && myCenterEmployerResponse==null) {
                     return;
                 }
-                int[] realArea=new int[] {3, 5, 10, 10000};
+                int[] realArea=new int[] {3, 5, 10, 0};
                 String[] despArea=new String[] {"3公里", "5公里", "10公里", "不限范围"};
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
                     ActionSheetUtils.showList(getSupportFragmentManager(), "发单范围",

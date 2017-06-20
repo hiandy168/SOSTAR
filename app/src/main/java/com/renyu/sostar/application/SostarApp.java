@@ -38,7 +38,6 @@ public class SostarApp extends MultiDexApplication {
 
         String processName= Utils.getProcessName(android.os.Process.myPid());
         if (processName.equals(getPackageName())) {
-
             // 初始化网络请求
             Retrofit2Utils retrofit2Utils=Retrofit2Utils.getInstance(CommonParams.BaseUrl);
             OkHttpClient.Builder baseBuilder=new OkHttpClient.Builder()
