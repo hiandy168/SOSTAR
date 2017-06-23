@@ -12,7 +12,6 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,16 +58,8 @@ public class WithdrawalsActivity extends BaseActivity {
     TextView tv_withdrawals_lastmoney;
     @BindView(R.id.ed_alipay_account)
     EditText ed_alipay_account;
-    @BindView(R.id.view_alipay_account)
-    View view_alipay_account;
-    @BindView(R.id.layout_alipay_name)
-    LinearLayout layout_alipay_name;
     @BindView(R.id.ed_alipay_name)
     EditText ed_alipay_name;
-    @BindView(R.id.view_alipay_name)
-    View view_alipay_name;
-    @BindView(R.id.layout_alipay_code)
-    LinearLayout layout_alipay_code;
     @BindView(R.id.ed_alipay_code)
     EditText ed_alipay_code;
     @BindView(R.id.btn_alipay_getvcode)
