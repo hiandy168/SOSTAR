@@ -16,6 +16,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
+        multiDexKeepProguard file('multiDexKeep.pro')
+        multiDexKeepFile file('multiDexKeep.txt')
 
         ndk {
             //选择要添加的对应cpu类型的.so库。
