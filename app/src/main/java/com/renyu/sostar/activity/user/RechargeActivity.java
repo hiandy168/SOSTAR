@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
@@ -109,6 +110,10 @@ public class RechargeActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_recharge_commit:
+                if (TextUtils.isEmpty(ed_recharge_money.getText().toString())) {
+                    Toast.makeText(this, "请输入充值金额", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 recharge();
                 break;
         }
