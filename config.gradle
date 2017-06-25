@@ -5,15 +5,15 @@ ext {
     app = [
             applicationId   : "com.renyu.sostarjob",
             minSdkVersion   : 19,
-            targetSdkVersion: 25,
+            targetSdkVersion: 26,
             versionCode     : getVersionCode(),
             versionName     : "1.0.1"
     ]
 
     dependencies = [
-            supportLibraryVersion : "26.0.0-alpha1",
-            AndroidCommonLibrary : "v1.1.5",
-            AndroidImageLibrary : "v1.0.7"
+            supportLibraryVersion : "26.+",
+            AndroidCommonLibrary : "v1.1.6",
+            AndroidImageLibrary : "v1.0.9"
     ]
 }
 
