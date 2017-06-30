@@ -1,6 +1,7 @@
 package com.renyu.sostar.activity.order;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -425,8 +426,13 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setVisibility(View.VISIBLE);
                         btn_orderdetail_commit.setText("立即签到");
                         layout_pop.addView(getPopupTextView("取消订单", v -> {
-                            cancelEmployeeOrder();
-                            popupWindow.dismiss();
+                            new AlertDialog.Builder(OrderDetailActivity.this).setTitle("提示").setMessage("取消订单将降低个人成交率，影响个人接单，您确定取消吗？")
+                                    .setPositiveButton("确定", (dialogInterface, i) -> {
+                                        cancelEmployeeOrder();
+                                        popupWindow.dismiss();
+                                    }).setNegativeButton("取消", (dialogInterface, i) -> {
+
+                            }).show();
                         }));
                         ib_nav_right.setVisibility(View.VISIBLE);
                     }
@@ -459,8 +465,13 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_commit.setText("查看进度");
                         if (value.getOrderStatus().equals("8")) {
                             layout_pop.addView(getPopupTextView("申请离职", v -> {
-                                staffApplyOff();
-                                popupWindow.dismiss();
+                                new AlertDialog.Builder(OrderDetailActivity.this).setTitle("提示").setMessage("确认申请离职？")
+                                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                                            staffApplyOff();
+                                            popupWindow.dismiss();
+                                        }).setNegativeButton("取消", (dialogInterface, i) -> {
+
+                                        }).show();
                             }));
                             layout_pop.addView(getPopupTextView("立即签到", v -> {
                                 sign();
@@ -513,8 +524,13 @@ public class OrderDetailActivity extends BaseActivity {
                         btn_orderdetail_cancel.setVisibility(View.GONE);
                         btn_orderdetail_commit.setVisibility(View.GONE);
                         layout_pop.addView(getPopupTextView("取消订单", v -> {
-                            cancleMyOrder();
-                            popupWindow.dismiss();
+                            new AlertDialog.Builder(OrderDetailActivity.this).setTitle("提示").setMessage("取消订单将降低企业成交率，影响企业招聘人员，您确定取消吗？")
+                                    .setPositiveButton("确定", (dialogInterface, i) -> {
+                                        cancleMyOrder();
+                                        popupWindow.dismiss();
+                                    }).setNegativeButton("取消", (dialogInterface, i) -> {
+
+                            }).show();
                         }));
                         ib_nav_right.setVisibility(View.VISIBLE);
                     }
@@ -538,15 +554,25 @@ public class OrderDetailActivity extends BaseActivity {
                                 popupWindow.dismiss();
                             }));
                             layout_pop.addView(getPopupTextView("取消订单", v -> {
-                                cancleMyOrder();
-                                popupWindow.dismiss();
+                                new AlertDialog.Builder(OrderDetailActivity.this).setTitle("提示").setMessage("取消订单将降低企业成交率，影响企业招聘人员，您确定取消吗？")
+                                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                                            cancleMyOrder();
+                                            popupWindow.dismiss();
+                                        }).setNegativeButton("取消", (dialogInterface, i) -> {
+
+                                }).show();
                             }));
                             ib_nav_right.setVisibility(View.VISIBLE);
                         }
                         else if (value.getOrderStatus().equals("2")) {
                             layout_pop.addView(getPopupTextView("取消订单", v -> {
-                                cancleMyOrder();
-                                popupWindow.dismiss();
+                                new AlertDialog.Builder(OrderDetailActivity.this).setTitle("提示").setMessage("取消订单将降低企业成交率，影响企业招聘人员，您确定取消吗？")
+                                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                                            cancleMyOrder();
+                                            popupWindow.dismiss();
+                                        }).setNegativeButton("取消", (dialogInterface, i) -> {
+
+                                }).show();
                             }));
                             ib_nav_right.setVisibility(View.VISIBLE);
                         }
