@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.SpannableStringUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -75,7 +75,7 @@ public class WithdrawalsActivity extends BaseActivity {
         tv_nav_title.setText("账户提现");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_withdrawals_protocal.setMovementMethod(LinkMovementMethod.getInstance());
-        tv_withdrawals_protocal.setText(new SpannableStringUtils.Builder()
+        tv_withdrawals_protocal.setText(new SpanUtils()
                 .append("请以实际到账时间为准  参见").append("《开工啦钱包使用规则》")
                 .setForegroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setClickSpan(new ClickableSpan() {

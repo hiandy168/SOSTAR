@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.SpannableStringUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
@@ -68,7 +68,7 @@ public class SignUpActivity extends BaseActivity {
     @Override
     public void initParams() {
         btn_signup_protocal.setMovementMethod(LinkMovementMethod.getInstance());
-        btn_signup_protocal.setText(new SpannableStringUtils.Builder()
+        btn_signup_protocal.setText(new SpanUtils()
                 .append("点击注册即表示你同意").append("《开工啦用户服务协议》")
                 .setForegroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setClickSpan(new ClickableSpan() {

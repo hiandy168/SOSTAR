@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.SpannableStringUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -259,7 +259,7 @@ public class InfoActivity extends BaseActivity {
                 tv_info_compname.setText(value.getCompanyName());
                 tv_info_compphone.setText(value.getContactPhone());
                 tv_info_web.setMovementMethod(LinkMovementMethod.getInstance());
-                tv_info_web.setText(new SpannableStringUtils.Builder().append(value.getWebAddress()).setUnderline()
+                tv_info_web.setText(new SpanUtils().append(value.getWebAddress()).setUnderline()
                         .setClickSpan(new ClickableSpan() {
                             @Override
                             public void onClick(View widget) {
