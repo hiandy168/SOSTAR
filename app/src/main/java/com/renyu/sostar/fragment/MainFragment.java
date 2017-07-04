@@ -462,55 +462,59 @@ public class MainFragment extends BaseFragment {
         avatarMarker = (Marker) (mBaiduMap.addOverlay(oo));
     }
 
-    private synchronized void addEmployeeOverLay(EmployeeIndexResponse value) {
-        for (Marker allOrdersMarker : allMarkers) {
-            allOrdersMarker.remove();
-        }
-        allMarkers.clear();
-        EmployeeIndexResponse.OrdersBean[] beans=new EmployeeIndexResponse.OrdersBean[value.getOrders().size()];
-        for (int i = 0; i < value.getOrders().size(); i++) {
-            beans[i]=value.getOrders().get(i);
-        }
-        bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
-        Observable.fromArray(beans).map(ordersBean -> {
-            if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
-                return false;
+    private void addEmployeeOverLay(EmployeeIndexResponse value) {
+        synchronized (MainFragment.class) {
+            for (Marker allOrdersMarker : allMarkers) {
+                allOrdersMarker.remove();
             }
-            MarkerOptions oo = new MarkerOptions()
-                    .position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude())))
-                    .icon(bd)
-                    .zIndex(Integer.parseInt(ordersBean.getOrderId()));
-            oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
-            return true;
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+            allMarkers.clear();
+            EmployeeIndexResponse.OrdersBean[] beans=new EmployeeIndexResponse.OrdersBean[value.getOrders().size()];
+            for (int i = 0; i < value.getOrders().size(); i++) {
+                beans[i]=value.getOrders().get(i);
+            }
+            bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_comp);
+            Observable.fromArray(beans).map(ordersBean -> {
+                if (TextUtils.isEmpty(ordersBean.getLatitude()) || TextUtils.isEmpty(ordersBean.getLongitude())) {
+                    return false;
+                }
+                MarkerOptions oo = new MarkerOptions()
+                        .position(new LatLng(Double.parseDouble(ordersBean.getLatitude()), Double.parseDouble(ordersBean.getLongitude())))
+                        .icon(bd)
+                        .zIndex(Integer.parseInt(ordersBean.getOrderId()));
+                oo.animateType(MarkerOptions.MarkerAnimateType.grow);
+                allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+                return true;
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 
-        });
+            });
+        }
     }
 
-    private synchronized void addEmployerOverLay(EmployerIndexResponse value) {
-        for (Marker allOrdersMarker : allMarkers) {
-            allOrdersMarker.remove();
-        }
-        allMarkers.clear();
-        EmployerIndexResponse.StaffsBean[] beans=new EmployerIndexResponse.StaffsBean[value.getStaffs().size()];
-        for (int i = 0; i < value.getStaffs().size(); i++) {
-            beans[i]=value.getStaffs().get(i);
-        }
-        bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
-        Observable.fromArray(beans).map(staffsBean -> {
-            if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
-                return false;
+    private void addEmployerOverLay(EmployerIndexResponse value) {
+        synchronized (MainFragment.class) {
+            for (Marker allOrdersMarker : allMarkers) {
+                allOrdersMarker.remove();
             }
-            MarkerOptions oo = new MarkerOptions()
-                    .position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude())))
-                    .icon(bd)
-                    .zIndex(Integer.parseInt(staffsBean.getUserId()));
-            oo.animateType(MarkerOptions.MarkerAnimateType.grow);
-            allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
-            return true;
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+            allMarkers.clear();
+            EmployerIndexResponse.StaffsBean[] beans=new EmployerIndexResponse.StaffsBean[value.getStaffs().size()];
+            for (int i = 0; i < value.getStaffs().size(); i++) {
+                beans[i]=value.getStaffs().get(i);
+            }
+            bd= BitmapDescriptorFactory.fromResource(R.mipmap.ic_main_employee);
+            Observable.fromArray(beans).map(staffsBean -> {
+                if (TextUtils.isEmpty(staffsBean.getLatitude()) || TextUtils.isEmpty(staffsBean.getLongitude())) {
+                    return false;
+                }
+                MarkerOptions oo = new MarkerOptions()
+                        .position(new LatLng(Double.parseDouble(staffsBean.getLatitude()), Double.parseDouble(staffsBean.getLongitude())))
+                        .icon(bd)
+                        .zIndex(Integer.parseInt(staffsBean.getUserId()));
+                oo.animateType(MarkerOptions.MarkerAnimateType.grow);
+                allMarkers.add((Marker) (mBaiduMap.addOverlay(oo)));
+                return true;
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
 
-        });
+            });
+        }
     }
 }
