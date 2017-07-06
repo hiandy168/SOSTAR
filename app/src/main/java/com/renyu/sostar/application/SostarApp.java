@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.alipay.euler.andfix.patch.PatchManager;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.meituan.android.walle.WalleChannelReader;
@@ -16,6 +15,8 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.params.InitParams;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.params.CommonParams;
+import com.taobao.sophix.PatchStatus;
+import com.taobao.sophix.SophixManager;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -29,8 +30,6 @@ import okhttp3.OkHttpClient;
  */
 
 public class SostarApp extends MultiDexApplication {
-
-    public PatchManager mPatchManager;
 
     @Override
     public void onCreate() {
@@ -76,6 +75,7 @@ public class SostarApp extends MultiDexApplication {
             // fresco缓存目录
             InitParams.FRESCO_CACHE_NAME= "fresco_cache";
 
+            // bugly
             // 设置开发设备
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG);
             CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
@@ -89,12 +89,33 @@ public class SostarApp extends MultiDexApplication {
             CrashReport.putUserData(this, "VERSION_CODE", ""+BuildConfig.VERSION_CODE);
             CrashReport.initCrashReport(this, CommonParams.BUGLY_APPID, true, strategy);
 
+            // Sophix初始化
+            SophixManager.getInstance().setContext(this)
+                    .setAppVersion(BuildConfig.VERSION_NAME)
+                    .setAesKey(null)
+                    .setEnableDebug(true)
+                    .setPatchLoadStatusStub((mode, code, info, handlePatchVersion) -> {
+                        // 补丁加载回调通知
+                        if (code == PatchStatus.CODE_LOAD_SUCCESS) {
+                            // 表明补丁加载成功
+                        }
+                        else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
+                            // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
+                            // 建议: 用户可以监听进入后台事件, 然后应用自杀
+                            // SophixManager.getInstance().killProcessSafely();
+                        }
+                        else if (code == PatchStatus.CODE_LOAD_FAIL) {
+                            // 内部引擎异常, 推荐此时清空本地补丁, 防止失败补丁重复加载
+                            // SophixManager.getInstance().cleanPatches();
+                        }
+                        else {
+                            // 其它错误信息, 查看PatchStatus类说明
+                        }
+                    }).initialize();
+            SophixManager.getInstance().queryAndLoadNewPatch();
+
             // 初始化fresco
             Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
-
-            // AndFix初始化
-            mPatchManager = new PatchManager(this);
-            mPatchManager.init(BuildConfig.VERSION_NAME);
 
             // 百度地图初始化
             SDKInitializer.initialize(this);

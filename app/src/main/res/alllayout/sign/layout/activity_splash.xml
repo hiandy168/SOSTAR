@@ -45,7 +45,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="20dip"
         app:text_color="@android:color/white"
-        app:foreground_color="#aa000000"
+        app:foreground_color="@android:color/holo_red_light"
         app:background_color="#b2000000"
         app:stoke_width="2dip"
         android:layout_width="40dip"

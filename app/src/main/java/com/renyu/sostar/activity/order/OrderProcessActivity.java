@@ -98,7 +98,7 @@ public class OrderProcessActivity extends BaseActivity {
             }
 
             // 未支付(只有订单完成的情况下才会出现未支付)
-            if (orderResponse.getPayFlg()==0) {
+            if (orderResponse.getPayFlg()==0 && process==5) {
                 iv_orderprocess.setImageResource(R.mipmap.ic_order_comp);
                 tv_orderprocess.setText("");
                 layout_orderprocess_money.setVisibility(View.VISIBLE);

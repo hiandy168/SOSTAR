@@ -91,5 +91,14 @@
                 <action android:name="com.renyu.sostarjob.NotificationReceiver"></action>
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="24536313-1" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="8857456d35b3960b6829f98febc61a11" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCeJgegkj5TR2zY0pa4F5753hn1lwvwbpGzyu8HDeiCOcH+WjPow7oIRzzPt9n6R4jcLr3o0xJk84mIPUGiCNlaKJb9mlksrtXtJJyFuMa6Xes0Y+INiUkXymTlP6Bsm9vi7cKVKBKXrSRMk8BMSJInZG9sGi5Ft4umsjV9OKebJtJShZ29yfmUfRJeIwCR+QCvve/QMAhnKqwT6Qu5n91t6kccAuUozk1LqIins/nwIjodnU2LipXMmhTO4JnhbcnxI6c1KQvA4hKBLfYNUIC9Y/mlw1C8GpdujH1G9fsdiVi8X6XgkJ64lL6F0oLbW0+MUkMhtyb5VIBvgXkBEkJFAgMBAAECggEAWUpLgCNRwR9Qm1K6+hGMFrOJoJm5ifRDm2l2b1sw7WXC2+L97+uiO05NTVIWZjLBWN+jJbMWbZz7B8reJagtX7QPG/xrYMkNy6iiHvXmbg7c32WNmerrM913/d9gqjGNgqCO/jvz02NUXVAGgItwyYDxT+2wNnidBm8TuDGmn/f0EARO7RdLAtTvDn7r2JP4fn28KJfuyzH0BSOaFunF+B8yYyhtOa34WuxpJfgWNG66chZ/XDQmRADvbaiN0tsqwhsa7jwx7L1lgwXiPcAP3Q0ckcAQD3v7JUZyrJvJQ/MMCuax/uEvUvnI9ikUM4QdTDp1ppOPkXxK9LlPkDqy+QKBgQDlrfAA+zns7x3sjhPg4SWw1+aBSj4Mm0uMIuEhlG4dLlu7KL730tivutAjy6MU7vQ7ZfV1R8t2CfKjoV+/KzIhLGWGsS6AshqR/2gxPNa6tOneSfU3sKD+ABg65abAbFK6o6lLqDr/cqNJnkr5TBVAcgQN9SwfIDp+7+MtQ4eGCwKBgQCwRZqkfDos+359TwAtaCBrJ4OPhbyv9hji3vLN+Ctdr/mg3pZL8HE401rZfWXd7iWvyPWV2wfnZp2C0ODDRqFLm8IXUYVXiSjC2lWHBTwB6Y7kjspV4DTE8L86n8DKh9aaICpXsNjrv+xdc2+cSnzAWn9YE+skX3XvuYLJJi0a7wKBgQC2M/QPcz0SnuaoQFW4siOKVNwBePocWh3mf80FLJDmCV6v7LUCOHu5fIOdwfAPrTiG3m2IqnnXnDCmamBgcU4FTwkDfw+a/K9jXrAzT0YxO0/EDfvAQBiXJ1AReRl90PEYKrkk0cJr3291+WMUvaymQUzCHdrwnkqJZJhd0hJy3QKBgBxLj/9HUa9Wz38d51FinZGVzjCDrz4vqt8AGsmlRJDNZqzEDiwydHpCsxqmXmu5hqMpBwL/Hc2vUylkji/KbqnMXuOPWnAqvDhLA9+gn3lPHHjj0ubmDpJucsPeUPwxwekLsMBSyv9M14xIs2nLKytVW4uv5tb3296XUL8pOaRRAoGAE6+N1yA5KrjH0Dnj5fStglqEs92vikR8lmnN7Vt4LCiNQM+kGT17NRoCP4gc0J9DkUsSr3jSIEM1e6YMoJTqClfXOeoeX6O/9a0huYRFBmF3npmi3dOBD3E5AMVfrfMZwS02rEDVHK73QdkRP3vHJ3oIhmnD5RZIvIN3cpPiviw=" />
     </application>
 </manifest>

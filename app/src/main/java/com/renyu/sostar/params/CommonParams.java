@@ -1,5 +1,7 @@
 package com.renyu.sostar.params;
 
+import com.renyu.sostar.BuildConfig;
+
 /**
  * Created by renyu on 2016/12/26.
  */
@@ -50,7 +52,7 @@ public class CommonParams {
     public static String CITY=null;
 
     // 基础url
-    public static final String BaseUrl="http://106.15.46.51:8080/";
+    public static final String BaseUrl= BuildConfig.SERVER_HOST;
     // 上传url
     public static final String UploadUrl="http://106.15.46.105:9333/";
     // 图片url

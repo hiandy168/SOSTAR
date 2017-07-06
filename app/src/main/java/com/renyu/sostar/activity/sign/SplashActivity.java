@@ -21,12 +21,7 @@ import com.renyu.commonlibrary.views.ProgressCircleView;
 import com.renyu.sostar.BuildConfig;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.index.MainActivity;
-import com.renyu.sostar.application.SostarApp;
 import com.renyu.sostar.params.CommonParams;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,26 +60,6 @@ public class SplashActivity extends BaseActivity {
                 FileUtils.createOrExistsDir(InitParams.FILE_PATH);
                 FileUtils.createOrExistsDir(InitParams.LOG_PATH);
                 FileUtils.createOrExistsDir(InitParams.CACHE_PATH);
-
-                if (ACache.get(SplashActivity.this).getAsString("hotfix_version")!=null &&
-                        !ACache.get(SplashActivity.this).getAsString("hotfix_version").equals(BuildConfig.VERSION_NAME)) {
-                    // 删除老版本的热修复补丁
-                    FileUtils.deleteFilesInDir(InitParams.HOTFIX_PATH);
-                    // 更新热修复补丁版本
-                    ACache.get(SplashActivity.this).put("hotfix_version", BuildConfig.VERSION_NAME);
-                }
-                // 加载热修复补丁
-                ((SostarApp) getApplication()).mPatchManager.loadPatch();
-                List<File> hotfixs = FileUtils.listFilesInDir(InitParams.HOTFIX_PATH);
-                if (hotfixs!=null) {
-                    for (File hotfix : hotfixs) {
-                        try {
-                            ((SostarApp) getApplication()).mPatchManager.addPatch(hotfix.getPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
 
                 valueAnimator=ValueAnimator.ofInt(100, 0);
                 valueAnimator.setDuration(3000);

@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
-import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.blankj.utilcode.util.SizeUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -332,7 +331,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                 // popupWindow的处理
                 View popView = LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.view_pop, null, false);
-                LinearLayout layout_pop= (LinearLayout) popView.findViewById(R.id.layout_pop);
+                LinearLayout layout_pop= popView.findViewById(R.id.layout_pop);
 
                 tv_orderdetail_type.setText(value.getJobType());
                 tv_orderdetail_person.setText(""+value.getStaffAccount()+"人");
@@ -587,7 +586,7 @@ public class OrderDetailActivity extends BaseActivity {
                         ib_nav_right.setVisibility(View.GONE);
                     }
                 }
-                ArrayList<Uri> imagesList=new ArrayList<Uri>();
+                ArrayList<Uri> imagesList=new ArrayList<>();
                 for (String image : value.getPicListArray()) {
                     imagesList.add(Uri.parse(image));
                 }
@@ -615,11 +614,8 @@ public class OrderDetailActivity extends BaseActivity {
 
                             }
                         })
-                        .setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
+                        .setOnItemClickListener(position -> {
 
-                            }
                         });
 
                 initPop(popView);
