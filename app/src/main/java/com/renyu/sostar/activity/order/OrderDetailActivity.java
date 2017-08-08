@@ -34,7 +34,6 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.LocalImageHolderView;
@@ -47,6 +46,7 @@ import com.renyu.sostar.bean.ReleaseOrderRequest;
 import com.renyu.sostar.bean.StaffSignRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+import com.renyu.sostar.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -351,7 +351,14 @@ public class OrderDetailActivity extends BaseActivity {
                         long startTime=format.parse(currentTime.split(" ")[0]+" "+value.getStartTime()).getTime();
                         long endTime=format.parse(currentTime.split(" ")[0]+" "+value.getEndTime()).getTime();
                         // 计算每天工作时间
-                        double workTime=((double) (endTime-startTime)/1000)/3600;
+                        double workTime=0;
+                        if (startTime>endTime) {
+                            // 跨天订单
+                            workTime=((double) (24*3600*1000+endTime-startTime)/1000)/3600;
+                        }
+                        else {
+                            workTime=((double) (endTime-startTime)/1000)/3600;
+                        }
                         BigDecimal bigDecimal1 = new BigDecimal(""+dayNum);
                         BigDecimal bigDecimal2 = new BigDecimal(value.getUnitPrice());
                         BigDecimal bigDecimal3 = new BigDecimal(""+value.getStaffAccount());
@@ -364,7 +371,15 @@ public class OrderDetailActivity extends BaseActivity {
                 String times="";
                 String[] timeTemps=value.getPeriodTime().split(",");
                 for (String timeTemp : timeTemps) {
-                    times+=timeTemp+"  "+value.getStartTime()+"-"+value.getEndTime()+"\n";
+                    int startTime=Integer.parseInt(value.getStartTime().replace(":", ""));
+                    int endTime=Integer.parseInt(value.getEndTime().replace(":", ""));
+                    // 跨天
+                    if (startTime>endTime) {
+                        times+=timeTemp+"  "+value.getStartTime()+"-次日"+value.getEndTime()+"\n";
+                    }
+                    else {
+                        times+=timeTemp+"  "+value.getStartTime()+"-"+value.getEndTime()+"\n";
+                    }
                 }
                 times=times.substring(0, times.length()-1);
                 tv_orderdetail_time.setText(times);

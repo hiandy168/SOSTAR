@@ -20,11 +20,11 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.renyu.commonlibrary.commonutils.ACache;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.MyOrderListResponse;
 import com.renyu.sostar.params.CommonParams;
 import com.renyu.sostar.service.LocationService;
+import com.renyu.sostar.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -68,7 +68,15 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.NotS
         String times="";
         String[] timeTemps=beans.get(position).getPeriodTime().split(",");
         for (String timeTemp : timeTemps) {
-            times+=timeTemp+"  "+beans.get(position).getStartTime()+"-"+beans.get(position).getEndTime()+"\n";
+            int startTime=Integer.parseInt(beans.get(position).getStartTime().replace(":", ""));
+            int endTime=Integer.parseInt(beans.get(position).getEndTime().replace(":", ""));
+            // 跨天
+            if (startTime>endTime) {
+                times+=timeTemp+"  "+beans.get(position).getStartTime()+"-次日"+beans.get(position).getEndTime()+"\n";
+            }
+            else {
+                times+=timeTemp+"  "+beans.get(position).getStartTime()+"-"+beans.get(position).getEndTime()+"\n";
+            }
         }
         times=times.substring(0, times.length()-1);
         holder.tv_orderlist_time.setText(times);

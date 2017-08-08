@@ -1,19 +1,19 @@
 ext {
     compileSdkVersion = 26
-    buildToolsVersion = "26.0.0"
+    buildToolsVersion = "26.0.1"
 
     app = [
             applicationId   : "com.renyu.sostarjob",
             minSdkVersion   : 19,
             targetSdkVersion: 26,
             versionCode     : getVersionCode(),
-            versionName     : "1.0.1"
+            versionName     : "1.0.2"
     ]
 
     dependencies = [
             supportLibraryVersion : "26.+",
-            AndroidCommonLibrary : "v1.3.3",
-            AndroidImageLibrary : "v1.0.10"
+            AndroidCommonLibrary : "v1.4.2",
+            AndroidImageLibrary : "v1.0.11"
     ]
 }
 

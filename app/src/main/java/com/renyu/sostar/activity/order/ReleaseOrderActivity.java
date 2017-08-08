@@ -22,6 +22,7 @@ import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.commonlibrary.views.actionsheet.ActionSheetFragment;
 import com.renyu.commonlibrary.views.wheelview.LoopView;
+import com.renyu.commonlibrary.views.wheelview.OnItemSelectedListener;
 import com.renyu.sostar.R;
 import com.renyu.sostar.activity.other.UpdateAddressInfoActivity;
 import com.renyu.sostar.activity.other.UpdatePayInfoActivity;
@@ -46,6 +47,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -96,6 +98,12 @@ public class ReleaseOrderActivity extends BaseActivity {
     TextView tv_releaseorder_avaliablemoney;
     @BindView(R.id.sb_releaseorder)
     SwitchButton sb_releaseorder;
+
+    LoopView pop_wheel_timelayout_hour_start=null;
+    LoopView pop_wheel_timelayout_minute_start=null;
+    LoopView pop_wheel_timelayout_hour_end=null;
+    LoopView pop_wheel_timelayout_minute_end=null;
+    TextView tv_timelayout_tomorrow=null;
 
     // 旧数据
     OrderResponse orderResponse;
@@ -165,7 +173,20 @@ public class ReleaseOrderActivity extends BaseActivity {
             }
 
             // 设置工作时间
-            tv_releaseorder_worktime.setText(orderResponse.getStartTime()+"-"+orderResponse.getEndTime());
+            SimpleDateFormat format_worktime=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String currentTime=format_worktime.format(new Date());
+            try {
+                long startTime=format_worktime.parse(currentTime.split(" ")[0]+" "+orderResponse.getStartTime()).getTime();
+                long endTime=format_worktime.parse(currentTime.split(" ")[0]+" "+orderResponse.getEndTime()).getTime();
+                if (startTime>endTime) {
+                    tv_releaseorder_worktime.setText(orderResponse.getStartTime()+"-次日"+orderResponse.getEndTime());
+                }
+                else {
+                    tv_releaseorder_worktime.setText(orderResponse.getStartTime()+"-"+orderResponse.getEndTime());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             // 设置需求人数
             tv_releaseorder_person.setText(""+orderResponse.getStaffAccount());
@@ -308,12 +329,28 @@ public class ReleaseOrderActivity extends BaseActivity {
                 ArrayList<String> minutes=new ArrayList<>();
                 minutes.add("00");
                 minutes.add("30");
+                OnItemSelectedListener itemSelectedListener= i -> {
+                    if (Integer.parseInt(hours.get(pop_wheel_timelayout_hour_start.getSelectedItem())+
+                            minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()))>
+                            Integer.parseInt(hours.get(pop_wheel_timelayout_hour_end.getSelectedItem())+
+                                    minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem()))) {
+                        tv_timelayout_tomorrow.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        tv_timelayout_tomorrow.setVisibility(View.INVISIBLE);
+                    }
+                };
                 View view_timechoice= LayoutInflater.from(ReleaseOrderActivity.this)
                         .inflate(R.layout.view_actionsheet_timechoice, null, false);
-                LoopView pop_wheel_timelayout_hour_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_start);
-                LoopView pop_wheel_timelayout_minute_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_start);
-                LoopView pop_wheel_timelayout_hour_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_end);
-                LoopView pop_wheel_timelayout_minute_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_end);
+                pop_wheel_timelayout_hour_start= view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_start);
+                pop_wheel_timelayout_hour_start.setListener(itemSelectedListener);
+                pop_wheel_timelayout_minute_start= view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_start);
+                pop_wheel_timelayout_minute_start.setListener(itemSelectedListener);
+                pop_wheel_timelayout_hour_end= view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_end);
+                pop_wheel_timelayout_hour_end.setListener(itemSelectedListener);
+                pop_wheel_timelayout_minute_end= view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_end);
+                pop_wheel_timelayout_minute_end.setListener(itemSelectedListener);
+                tv_timelayout_tomorrow=view_timechoice.findViewById(R.id.tv_timelayout_tomorrow);
                 ActionSheetFragment.build(getSupportFragmentManager())
                         .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
                         .setTitle("请选择用工时间")
@@ -321,17 +358,27 @@ public class ReleaseOrderActivity extends BaseActivity {
                         .setCancelTitle("取消")
                         .setOnOKListener(value -> {
                             if (Integer.parseInt(hours.get(pop_wheel_timelayout_hour_start.getSelectedItem())+
-                                    minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()))>=
+                                    minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()))==
                                     Integer.parseInt(hours.get(pop_wheel_timelayout_hour_end.getSelectedItem())+
                                             minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem()))) {
-                                Toast.makeText(this, "用工开始时间不能晚于用工结束时间", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "用工开始时间不能与用工结束时间相同", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                String temp=hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
-                                        minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "-" +
-                                        hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
-                                        minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem());
-                                tv_releaseorder_worktime.setText(temp);
+                                if (Integer.parseInt(hours.get(pop_wheel_timelayout_hour_start.getSelectedItem())+ minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()))>
+                                        Integer.parseInt(hours.get(pop_wheel_timelayout_hour_end.getSelectedItem())+ minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem()))) {
+                                    String temp=hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
+                                            minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "-次日" +
+                                            hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
+                                            minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem());
+                                    tv_releaseorder_worktime.setText(temp);
+                                }
+                                else {
+                                    String temp=hours.get(pop_wheel_timelayout_hour_start.getSelectedItem()) + ":" +
+                                            minutes.get(pop_wheel_timelayout_minute_start.getSelectedItem()) + "-" +
+                                            hours.get(pop_wheel_timelayout_hour_end.getSelectedItem()) + ":" +
+                                            minutes.get(pop_wheel_timelayout_minute_end.getSelectedItem());
+                                    tv_releaseorder_worktime.setText(temp);
+                                }
                                 changeUsedMoney();
                             }
                         })
@@ -503,11 +550,20 @@ public class ReleaseOrderActivity extends BaseActivity {
                 // 确保工作时间的存在
                 if (!TextUtils.isEmpty(tv_releaseorder_worktime.getText().toString().trim())) {
                     double hourTime=0;
-                    SimpleDateFormat format=new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    String currentTime=format.format(new Date());
                     try {
-                        long startHour=format.parse(tv_releaseorder_worktime.getText().toString().trim().split("-")[0]).getTime();
-                        long endHour=format.parse(tv_releaseorder_worktime.getText().toString().trim().split("-")[1]).getTime();
-                        hourTime=((double) (endHour-startHour))/(1000*3600);
+                        String workTime=tv_releaseorder_worktime.getText().toString().trim();
+                        workTime=workTime.replace("次日", "");
+                        long startHour=format.parse(currentTime.split(" ")[0]+" "+workTime.split("-")[0]).getTime();
+                        long endHour=format.parse(currentTime.split(" ")[0]+" "+workTime.split("-")[1]).getTime();
+                        if (startHour>endHour) {
+                            // 跨天订单
+                            hourTime=((double) (24*3600*1000+endHour-startHour))/(1000*3600);
+                        }
+                        else {
+                            hourTime=((double) (endHour-startHour))/(1000*3600);
+                        }
                         tv_releaseorder_needmoney.setText(""+allTime*unitPrice*hourTime*Integer.parseInt(tv_releaseorder_person.getText().toString().trim()));
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -652,8 +708,10 @@ public class ReleaseOrderActivity extends BaseActivity {
     private void releaseOrder(ArrayList<String> images, int orderStatus) {
         ReleaseOrderRequest request=new ReleaseOrderRequest();
         ReleaseOrderRequest.ParamBean paramBean=new ReleaseOrderRequest.ParamBean();
-        paramBean.setEndTime(tv_releaseorder_worktime.getText().toString().trim().split("-")[1]);
-        paramBean.setStartTime(tv_releaseorder_worktime.getText().toString().trim().split("-")[0]);
+        String workTime=tv_releaseorder_worktime.getText().toString().trim();
+        workTime=workTime.replace("次日", "");
+        paramBean.setEndTime(workTime.split("-")[1]);
+        paramBean.setStartTime(workTime.split("-")[0]);
         paramBean.setAddress(tv_releaseorder_address.getText().toString().trim());
         paramBean.setConfirmFlg(sb_releaseorder.isChecked()?"1":"0");
         paramBean.setDescription(tv_releaseorder_desp.getText().toString().trim());

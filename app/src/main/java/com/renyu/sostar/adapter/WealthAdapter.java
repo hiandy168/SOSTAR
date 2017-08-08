@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.sostar.R;
 import com.renyu.sostar.bean.FlowResponse;
+import com.renyu.sostar.utils.Utils;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class WealthAdapter extends RecyclerView.Adapter {
                     ((FlowResponse) beans.get(position)).getType().equals("3") ||
                     ((FlowResponse) beans.get(position)).getType().equals("5")) {
                 ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney
-                        .setText("+"+Utils.removeZero(((FlowResponse) beans.get(position)).getCashTotal()));
+                        .setText("+"+ Utils.removeZero(((FlowResponse) beans.get(position)).getCashTotal()));
                 ((WealthInfoViewHolder) holder).tv_wealth_info_addmoney.setTextColor(Color.parseColor("#33acde"));
             }
             else {

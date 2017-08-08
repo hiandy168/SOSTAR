@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 import com.renyu.commonlibrary.baseact.BaseActivity;
 import com.renyu.commonlibrary.commonutils.ACache;
 import com.renyu.commonlibrary.commonutils.BarUtils;
-import com.renyu.commonlibrary.commonutils.Utils;
 import com.renyu.commonlibrary.network.Retrofit2Utils;
 import com.renyu.commonlibrary.network.params.EmptyResponse;
 import com.renyu.sostar.R;
@@ -26,6 +25,7 @@ import com.renyu.sostar.bean.OrderResponse;
 import com.renyu.sostar.bean.OverTimeRequest;
 import com.renyu.sostar.impl.RetrofitImpl;
 import com.renyu.sostar.params.CommonParams;
+import com.renyu.sostar.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
