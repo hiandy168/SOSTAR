@@ -157,13 +157,13 @@ public class MessageListActivity extends BaseActivity {
                         .setTitle("清空消息")
                         .setCustomerView(view_clearmessage)
                         .show();
-                TextView pop_double_choice= view_clearmessage.findViewById(R.id.pop_double_choice);
+                TextView pop_double_choice= (TextView) view_clearmessage.findViewById(R.id.pop_double_choice);
                 pop_double_choice.setText("清空");
                 pop_double_choice.setOnClickListener(v -> {
                     deleteAllMessage();
                     actionSheetFragment.dismiss();
                 });
-                TextView pop_double_cancel= view_clearmessage.findViewById(R.id.pop_double_cancel);
+                TextView pop_double_cancel= (TextView) view_clearmessage.findViewById(R.id.pop_double_cancel);
                 pop_double_cancel.setText("取消");
                 pop_double_cancel.setOnClickListener(v -> actionSheetFragment.dismiss());
                 break;

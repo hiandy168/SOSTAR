@@ -161,7 +161,7 @@ public class OrderProcessActivity extends BaseActivity {
                 });
             }
         }
-        if ((process==4 || process==5 || process==8) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+        if ((process==4 || process==5) && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
             tv_nav_title.setText("订单进度");
 
             // 未支付
@@ -190,34 +190,35 @@ public class OrderProcessActivity extends BaseActivity {
                     }
                 }
             }
-            // 不可支付
-            else {
-                iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
-                tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
+        }
+        if (process==8 && ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("0")) {
+            tv_nav_title.setText("订单进度");
 
-                // 1min刷新一次
-                Observable.timer(1, TimeUnit.MINUTES).observeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        repeatDisposable=d;
-                    }
+            iv_orderprocess.setImageResource(R.mipmap.ic_order_working);
+            tv_orderprocess.setText("订单正在进行中，请再接再厉！\n已工作"+getWorkTime());
 
-                    @Override
-                    public void onNext(Long value) {
-                        getOrderDetail();
-                    }
+            // 1min刷新一次
+            Observable.timer(1, TimeUnit.MINUTES).observeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Long>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    repeatDisposable=d;
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
+                @Override
+                public void onNext(Long value) {
+                    getOrderDetail();
+                }
 
-                    }
+                @Override
+                public void onError(Throwable e) {
 
-                    @Override
-                    public void onComplete() {
+                }
 
-                    }
-                });
-            }
+                @Override
+                public void onComplete() {
+
+                }
+            });
         }
         if (process==9 || process==10 || process==12 || process==13 || process==14) {
             tv_nav_title.setText("订单进度");

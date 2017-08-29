@@ -136,6 +136,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
             }
         }
         tv_updatetimeinfo_start.setOnClickListener(v -> actionSheetFragment=showAfterDateWithoutDismiss(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
+                false,
                 "开始日期",
                 "取消",
                 "完成",
@@ -191,6 +192,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
                     }
                 }));
         tv_updatetimeinfo_end.setOnClickListener(v -> actionSheetFragment=ActionSheetUtils.showAfterDateWithoutDismiss(UpdateTimeInfoActivity.this.getSupportFragmentManager(),
+                false,
                 "结束日期",
                 "取消",
                 "完成",

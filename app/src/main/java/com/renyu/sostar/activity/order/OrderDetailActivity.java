@@ -331,7 +331,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                 // popupWindow的处理
                 View popView = LayoutInflater.from(OrderDetailActivity.this).inflate(R.layout.view_pop, null, false);
-                LinearLayout layout_pop= popView.findViewById(R.id.layout_pop);
+                LinearLayout layout_pop= (LinearLayout) popView.findViewById(R.id.layout_pop);
 
                 tv_orderdetail_type.setText(value.getJobType());
                 tv_orderdetail_person.setText(""+value.getStaffAccount()+"人");

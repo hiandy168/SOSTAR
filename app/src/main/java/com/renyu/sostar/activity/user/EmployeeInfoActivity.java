@@ -168,6 +168,7 @@ public class EmployeeInfoActivity extends BaseActivity {
                 break;
             case R.id.layout_employeeinfo_age:
                 ActionSheetUtils.showBeforeDate(EmployeeInfoActivity.this.getSupportFragmentManager(),
+                        false,
                         "生日",
                         "取消",
                         "完成",
@@ -207,7 +208,7 @@ public class EmployeeInfoActivity extends BaseActivity {
                 startActivityForResult(intent_info, CommonParams.RESULT_UPDATEUSERINFO);
                 break;
             case R.id.tv_employeeinfo_sex:
-                ActionSheetUtils.showList(EmployeeInfoActivity.this.getSupportFragmentManager(), "性别",
+                ActionSheetUtils.showList(EmployeeInfoActivity.this.getSupportFragmentManager(), false, "性别",
                         new String[]{"男", "女"}, position -> updateTextInfo("sex", ""+(position+1)),
                         () -> {
 

@@ -136,11 +136,11 @@ public class MainActivity extends BaseActivity {
         iv_nav_title.setImageResource(R.mipmap.ic_main_logo);
         ib_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_main_menu));
         ib_nav_right.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_main_started_order));
-        ImageButton ib_menu_nav_left= main_menu_layout.findViewById(R.id.ib_nav_left);
+        ImageButton ib_menu_nav_left= (ImageButton) main_menu_layout.findViewById(R.id.ib_nav_left);
         ib_menu_nav_left.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_arrow_black_left));
         ib_menu_nav_left.setOnClickListener(v -> main_dl.closeDrawer(main_menu_layout));
         main_menu_layout.findViewById(R.id.nav_layout).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        TextView tv_menu_nav_title= main_menu_layout.findViewById(R.id.tv_nav_title);
+        TextView tv_menu_nav_title= (TextView) main_menu_layout.findViewById(R.id.tv_nav_title);
         tv_menu_nav_title.setText("我的");
         tv_menu_nav_title.setTextColor(ContextCompat.getColor(this, R.color.colorText1));
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity {
                 int[] realArea=new int[] {3, 5, 10, 0};
                 String[] despArea=new String[] {"3公里", "5公里", "10公里", "不限范围"};
                 if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {
-                    ActionSheetUtils.showList(getSupportFragmentManager(), "发单范围",
+                    ActionSheetUtils.showList(getSupportFragmentManager(), false, "发单范围",
                             new String[]{"3公里", "5公里", "10公里", "不限范围"}, position -> {
                                 tv_main_menu_mycenter_area.setText(despArea[position]);
                                 myCenterEmployerResponse.setRangeArea(""+realArea[position]);
@@ -296,7 +296,7 @@ public class MainActivity extends BaseActivity {
                             });
                 }
                 else {
-                    ActionSheetUtils.showList(getSupportFragmentManager(), "接单范围",
+                    ActionSheetUtils.showList(getSupportFragmentManager(), false, "接单范围",
                             new String[]{"3公里", "5公里", "10公里", "不限范围"}, position -> {
                                 tv_main_menu_mycenter_area.setText(despArea[position]);
                                 myCenterEmployeeResponse.setRangeArea(realArea[position]);

@@ -342,15 +342,15 @@ public class ReleaseOrderActivity extends BaseActivity {
                 };
                 View view_timechoice= LayoutInflater.from(ReleaseOrderActivity.this)
                         .inflate(R.layout.view_actionsheet_timechoice, null, false);
-                pop_wheel_timelayout_hour_start= view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_start);
+                pop_wheel_timelayout_hour_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_start);
                 pop_wheel_timelayout_hour_start.setListener(itemSelectedListener);
-                pop_wheel_timelayout_minute_start= view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_start);
+                pop_wheel_timelayout_minute_start= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_start);
                 pop_wheel_timelayout_minute_start.setListener(itemSelectedListener);
-                pop_wheel_timelayout_hour_end= view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_end);
+                pop_wheel_timelayout_hour_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_hour_end);
                 pop_wheel_timelayout_hour_end.setListener(itemSelectedListener);
-                pop_wheel_timelayout_minute_end= view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_end);
+                pop_wheel_timelayout_minute_end= (LoopView) view_timechoice.findViewById(R.id.pop_wheel_timelayout_minute_end);
                 pop_wheel_timelayout_minute_end.setListener(itemSelectedListener);
-                tv_timelayout_tomorrow=view_timechoice.findViewById(R.id.tv_timelayout_tomorrow);
+                tv_timelayout_tomorrow= (TextView) view_timechoice.findViewById(R.id.tv_timelayout_tomorrow);
                 ActionSheetFragment.build(getSupportFragmentManager())
                         .setChoice(ActionSheetFragment.CHOICE.CUSTOMER)
                         .setTitle("请选择用工时间")
