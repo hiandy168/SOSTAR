@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tv_nav_right)
@@ -49,6 +52,7 @@ public class UpdateTextinfoWithLabelActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("完成");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         et_updatetextinfowithlabel.setText(getIntent().getStringExtra("source"));
     }

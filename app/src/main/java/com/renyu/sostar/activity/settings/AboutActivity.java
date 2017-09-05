@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class AboutActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
 
@@ -33,6 +36,7 @@ public class AboutActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("关于开工啦");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
     }
 
     @Override

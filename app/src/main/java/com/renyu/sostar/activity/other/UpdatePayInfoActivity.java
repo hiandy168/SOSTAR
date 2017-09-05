@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ public class UpdatePayInfoActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_right)
     TextView tv_nav_right;
     @BindView(R.id.ed_updatepayinfo_money)
@@ -47,6 +50,7 @@ public class UpdatePayInfoActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("确认");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         source=getIntent().getStringExtra("source");
         if (source.indexOf("/")!=-1) {

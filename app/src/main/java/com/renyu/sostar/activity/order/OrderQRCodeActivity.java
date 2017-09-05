@@ -1,6 +1,5 @@
 package com.renyu.sostar.activity.order;
 
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageButton;

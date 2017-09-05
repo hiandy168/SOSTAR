@@ -11,6 +11,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,8 @@ public class RechargeActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tv_recharge_lastmoney)
@@ -58,6 +61,7 @@ public class RechargeActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("账户充值");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
         tv_recharge_protocal.setMovementMethod(LinkMovementMethod.getInstance());
         tv_recharge_protocal.setText(new SpanUtils()
                 .append("请以实际到账时间为准  参见").append("《开工啦钱包使用规则》")

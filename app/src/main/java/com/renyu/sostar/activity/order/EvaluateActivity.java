@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class EvaluateActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tv_evaluate_orderinfo)
@@ -63,6 +66,7 @@ public class EvaluateActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("评价");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
         tv_evaluate_orderinfo.setText(getIntent().getStringExtra("userName")+" 订单编号 "+getIntent().getStringExtra("orderId"));
         rb_evaluate.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             EvaluateActivity.this.rating= (int) rating;

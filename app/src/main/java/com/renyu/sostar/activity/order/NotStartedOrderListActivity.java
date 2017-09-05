@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,8 @@ public class NotStartedOrderListActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tab_orderlist)
@@ -53,6 +56,7 @@ public class NotStartedOrderListActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("订单");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         tab_orderlist.setTabGravity(TabLayout.GRAVITY_FILL);
         tab_orderlist.setTabMode(TabLayout.MODE_FIXED);

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class FindPasswordActivity extends BaseActivity {
 
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.et_findpwd_phone)
     ClearEditText et_findpwd_phone;
     @BindView(R.id.et_findpwd_vcode)
@@ -55,6 +58,7 @@ public class FindPasswordActivity extends BaseActivity {
     public void initParams() {
         tv_nav_title.setText("找回密码");
         et_findpwd_phone.setText(getIntent().getStringExtra("phone"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
     }
 
     @Override

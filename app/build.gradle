@@ -38,7 +38,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "SERVER_HOST", "\"http://106.15.43.48:8080/\""
+            buildConfigField "String", "SERVER_HOST", "\"http://106.15.46.51:8080/\""
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -112,6 +112,7 @@ dependencies {
     compile "com.github.r17171709:AndroidImageLibrary:${rootProject.ext.dependencies.AndroidImageLibrary}"
     compile project(':BaiduMapLibrary')
     compile project(':JPushLibrary')
+    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.5.7'
     // freeline
     //    debugCompile project(":runtime:runtime")
 }

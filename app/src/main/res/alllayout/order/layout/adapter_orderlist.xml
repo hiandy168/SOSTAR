@@ -15,9 +15,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:id="@+id/layout_orderlist_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dip"
+                android:layout_marginEnd="12dip"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_orderlist_price"
+                    android:textSize="20sp"
+                    android:textColor="#f97b4f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_orderlist_price_type"
+                    android:textSize="11sp"
+                    android:textColor="#f97b4f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_toLeftOf="@id/layout_orderlist_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginStart="12dip"
+                android:layout_marginEnd="12dip"
                 android:layout_marginTop="15dip"
                 android:layout_marginBottom="10dip"
                 android:orientation="vertical">
@@ -55,26 +79,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dip"
-                android:layout_marginEnd="12dip"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_orderlist_price"
-                    android:textSize="20sp"
-                    android:textColor="#f97b4f"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/tv_orderlist_price_type"
-                    android:textSize="11sp"
-                    android:textColor="#f97b4f"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
         </RelativeLayout>
         <View

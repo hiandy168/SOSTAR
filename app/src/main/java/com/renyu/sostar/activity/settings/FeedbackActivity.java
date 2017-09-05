@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class FeedbackActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.ed_feedback)
@@ -47,6 +50,7 @@ public class FeedbackActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("意见反馈");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
     }
 
     @Override

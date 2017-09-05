@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,8 @@ public class EmployeeAuthActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tv_userauth_name)
@@ -89,6 +92,7 @@ public class EmployeeAuthActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("个人认证");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         if (!TextUtils.isEmpty(myCenterResponse.getName())) {
             tv_userauth_name.setText(myCenterResponse.getName());

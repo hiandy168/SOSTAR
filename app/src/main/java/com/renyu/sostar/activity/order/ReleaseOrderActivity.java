@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,8 @@ public class ReleaseOrderActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.tv_nav_right)
     TextView tv_nav_right;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_releaseorder_type)
     TextView tv_releaseorder_type;
     @BindView(R.id.tv_releaseorder_person)
@@ -117,6 +120,7 @@ public class ReleaseOrderActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("保存");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         picPath=new ArrayList<>();
         timeBeans=new ArrayList<>();

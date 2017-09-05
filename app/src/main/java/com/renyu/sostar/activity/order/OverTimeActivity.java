@@ -64,6 +64,7 @@ public class OverTimeActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("申请加班");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         orderResponse= (OrderResponse) getIntent().getSerializableExtra("params");
         tv_overtime_num.setText(""+orderResponse.getOkStaffAccount());

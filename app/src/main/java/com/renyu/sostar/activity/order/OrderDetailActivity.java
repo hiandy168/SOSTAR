@@ -145,7 +145,7 @@ public class OrderDetailActivity extends BaseActivity {
         tv_nav_title.setText("订单详情");
         ib_nav_right.setImageResource(R.mipmap.ic_order_more);
         ib_nav_right.setVisibility(View.GONE);
-        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_write_left);
 
         btn_orderdetail_commit.setVisibility(View.GONE);
         btn_orderdetail_cancel.setVisibility(View.GONE);

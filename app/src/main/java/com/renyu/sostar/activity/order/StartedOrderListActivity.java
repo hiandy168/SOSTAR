@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ public class StartedOrderListActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
 
@@ -34,6 +37,7 @@ public class StartedOrderListActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("进行中的订单");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         Fragment fragment=null;
         if (ACache.get(this).getAsString(CommonParams.USER_TYPE).equals("1")) {

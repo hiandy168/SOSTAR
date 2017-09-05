@@ -83,6 +83,7 @@ public class OrderProcessActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         if (process==1) {
             iv_orderprocess.setImageResource(R.mipmap.ic_pay_comp);

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -40,6 +41,8 @@ public class UpdateTimeInfoActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.tv_nav_right)
@@ -69,6 +72,7 @@ public class UpdateTimeInfoActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_right.setText("确认");
         tv_nav_right.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         layout_updatetimeinfo_root.post(() -> maxHeight=layout_updatetimeinfo_root.getMeasuredHeight()- SizeUtils.dp2px(122));
         if (beans.size()==0) {

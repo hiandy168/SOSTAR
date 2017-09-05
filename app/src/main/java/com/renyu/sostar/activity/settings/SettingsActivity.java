@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,8 @@ public class SettingsActivity extends BaseActivity {
     RelativeLayout nav_layout;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_settings_cache)
     TextView tv_settings_cache;
     @BindView(R.id.sb_settings_message)
@@ -68,6 +71,7 @@ public class SettingsActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("通用设置");
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         canChangeRole=getIntent().getBooleanExtra("canChangeRole", false);
 

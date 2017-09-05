@@ -58,6 +58,8 @@ public class EmployeeListActivity extends BaseActivity {
     TextView tv_nav_title;
     @BindView(R.id.ib_nav_right)
     ImageButton ib_nav_right;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.rv_employee)
     RecyclerView rv_employee;
     EmployeeListAdapter adapter;
@@ -70,6 +72,7 @@ public class EmployeeListActivity extends BaseActivity {
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
         tv_nav_title.setText("雇员列表");
         ib_nav_right.setImageResource(R.mipmap.ic_order_notification);
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         beans=new ArrayList<>();
         rv_employee.setHasFixedSize(true);

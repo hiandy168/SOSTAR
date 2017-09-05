@@ -142,7 +142,7 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @OnClick({R.id.btn_signup_getvcode, R.id.btn_signup, R.id.btn_signup_protocal})
+    @OnClick({R.id.btn_signup_getvcode, R.id.btn_signup})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_signup_getvcode:
@@ -150,9 +150,6 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.btn_signup:
                 signup();
-                break;
-            case R.id.btn_signup_protocal:
-                startActivity(new Intent(this, ProtocalActivity.class));
                 break;
         }
     }

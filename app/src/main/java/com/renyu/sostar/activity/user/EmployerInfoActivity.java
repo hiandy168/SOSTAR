@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +65,8 @@ public class EmployerInfoActivity extends BaseActivity {
 
     @BindView(R.id.nav_layout)
     RelativeLayout nav_layout;
+    @BindView(R.id.ib_nav_left)
+    ImageButton ib_nav_left;
     @BindView(R.id.tv_nav_title)
     TextView tv_nav_title;
     @BindView(R.id.iv_employerinfo_avatar)
@@ -96,6 +99,7 @@ public class EmployerInfoActivity extends BaseActivity {
         nav_layout.setBackgroundColor(Color.WHITE);
         tv_nav_title.setText("企业资料");
         tv_nav_title.setTextColor(Color.parseColor("#333333"));
+        ib_nav_left.setImageResource(R.mipmap.ic_arrow_black_left);
 
         if (!TextUtils.isEmpty(myCenterResponse.getLogoPath())) {
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(myCenterResponse.getLogoPath()))
