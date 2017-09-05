@@ -38,7 +38,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "SERVER_HOST", "\"http://106.15.46.51:8080/\""
+            buildConfigField "String", "SERVER_HOST", "\"http://106.15.43.48:8080/\""
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
