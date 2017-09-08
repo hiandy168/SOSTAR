@@ -64,7 +64,7 @@ public class LocationService extends Service {
         option.setOpenGps(true);
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
-        option.setOpenAutoNotifyMode(60000, 10, LocationClientOption.LOC_SENSITIVITY_MIDDLE);
+        option.setOpenAutoNotifyMode(120000, 500, LocationClientOption.LOC_SENSITIVITY_MIDDLE);
         option.setIsNeedAddress(true);
         mLocClient.setLocOption(option);
         mLocClient.start();
