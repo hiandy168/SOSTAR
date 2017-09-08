@@ -130,14 +130,14 @@ public class WithdrawalsActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_withdrawals_commit:
+                if (TextUtils.isEmpty(ed_withdrawals_money.getText().toString())) {
+                    Toast.makeText(this, "请输入待提现的金额", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (ed_alipay_account.isEnabled() && ed_alipay_name.isEnabled()) {
                     bindCashInfo();
                 }
                 else {
-                    if (TextUtils.isEmpty(ed_withdrawals_money.getText().toString())) {
-                        Toast.makeText(this, "请输入待提现的金额", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     charge();
                 }
                 break;

@@ -422,9 +422,12 @@ public class ReleaseOrderActivity extends BaseActivity {
             tv_releaseorder_type.setVisibility(View.VISIBLE);
         }
         if (requestCode==CommonParams.RESULT_UPDATEUSERINFO && resultCode==RESULT_OK) {
-            if (data.getStringExtra("param").equals("staffAccount")) {
+            try {
+                Integer.parseInt(data.getStringExtra("value"));
                 tv_releaseorder_person.setText(data.getStringExtra("value"));
                 changeUsedMoney();
+            } catch (Exception e) {
+                Toast.makeText(this, "请填写有效数字", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode==CommonParams.RESULT_UPDATEPICINFO && resultCode==RESULT_OK) {
