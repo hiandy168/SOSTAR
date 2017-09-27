@@ -1005,6 +1005,10 @@ public class OrderDetailActivity extends BaseActivity {
                 int lastStatueTimeHM=Integer.parseInt(lastStateFormat.format(lastStatueDate));
                 int startTimeHM=Integer.parseInt(orderResponse.getStartTime().split(":")[0]+orderResponse.getStartTime().split(":")[1]);
                 int endTimeHM=Integer.parseInt(orderResponse.getEndTime().split(":")[0]+orderResponse.getEndTime().split(":")[1]);
+                // 跨天订单特殊处理
+                if (startTimeHM>endTimeHM) {
+                    endTimeHM=Integer.parseInt((""+(Integer.parseInt(orderResponse.getEndTime().split(":")[0])+24))+orderResponse.getEndTime().split(":")[1]);
+                }
                 // 最后一次状态
                 int lastState=-1;
                 if (lastStatueTimeHM<startTimeHM) {

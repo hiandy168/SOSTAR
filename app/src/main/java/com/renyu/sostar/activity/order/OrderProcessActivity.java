@@ -281,15 +281,37 @@ public class OrderProcessActivity extends BaseActivity {
             String startMinute=orderResponse.getStartTime().split(":")[1];
             String endHour=orderResponse.getEndTime().split(":")[0];
             String endMinute=orderResponse.getEndTime().split(":")[1];
-            double perHour=((double) Integer.parseInt(endHour)-Integer.parseInt(startHour))
-                    +((double) Integer.parseInt(endMinute)-Integer.parseInt(startMinute))/60;
-            double totalHour=perHour*totalWork;
+
             SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
             Calendar cal=Calendar.getInstance();
             int year=cal.get(Calendar.YEAR);
             int month=cal.get(Calendar.MONTH) + 1;
             int day=cal.get(Calendar.DAY_OF_MONTH);
             String endTime=year+"/"+month+"/"+day+" "+orderResponse.getEndTime();
+
+            // 跨天订单特殊处理
+            if (Integer.parseInt(startHour)>Integer.parseInt(endHour)) {
+                endHour=""+(Integer.parseInt(endHour)+24);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                try {
+                    Date date_ = simpleDateFormat.parse(endTime);
+                    Calendar cal_=Calendar.getInstance();
+                    cal_.setTime(date_);
+                    cal_.add(Calendar.DATE, 1);
+                    year=cal_.get(Calendar.YEAR);
+                    month=cal_.get(Calendar.MONTH) + 1;
+                    day=cal_.get(Calendar.DAY_OF_MONTH);
+                    endTime=year+"/"+month+"/"+day+" "+orderResponse.getEndTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            double perHour=((double) Integer.parseInt(endHour)-Integer.parseInt(startHour))
+                    +((double) Integer.parseInt(endMinute)-Integer.parseInt(startMinute))/60;
+            double totalHour=perHour*totalWork;
+
             try {
                 // 今日任务已结束
                 if (currentTime>format.parse(endTime).getTime()) {

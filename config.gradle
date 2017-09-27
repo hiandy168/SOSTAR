@@ -7,12 +7,12 @@ ext {
             minSdkVersion   : 19,
             targetSdkVersion: 26,
             versionCode     : getVersionCode(),
-            versionName     : "1.0.4"
+            versionName     : "1.0.5"
     ]
 
     dependencies = [
             supportLibraryVersion : "25.3.1",
-            AndroidCommonLibrary : "v1.6.3",
+            AndroidCommonLibrary : "v1.6.7",
             AndroidImageLibrary : "v1.1.4"
     ]
 }
